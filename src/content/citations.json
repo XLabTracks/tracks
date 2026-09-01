@@ -548,6 +548,69 @@
       "authors": "Sophia Hatz",
       "container": "arXiv",
       "date": "2025"
+    },
+    "https://fas.org/publication/tracking-hyperscale/": {
+      "title": "Tracking Hyperscale AI Data Center Growth with Satellite Imagery",
+      "about": "A public tracker reading AI datacentre construction from commercial satellite imagery: the overhead-imagery signature practiced for real.",
+      "org": "Federation of American Scientists",
+      "date": "2025"
+    },
+    "https://epoch.ai/latest/introducing-the-frontier-data-centers-hub": {
+      "title": "Introducing the Frontier Data Centers Hub",
+      "about": "The announcement of Epoch's open database tracking frontier AI datacentres from satellite imagery, permits, and public disclosures.",
+      "org": "Epoch AI",
+      "date": "2025"
+    },
+    "https://epoch.ai/data/data-centers-documentation/methodology": {
+      "title": "AI Data Centers Documentation: Methodology",
+      "about": "How the hub's numbers are made: commercial imagery and permitting documents, cooling equipment read off the roof, then modelled power, compute, and cost.",
+      "org": "Epoch AI",
+      "date": "2025"
+    },
+    "https://www.satellitevu.com/news/satvu-releases-first-of-its-kind-thermal-image-revealing-true-operational-activity-inside-major-u-s-data-centre": {
+      "title": "SatVu Releases First-of-its-Kind Thermal Image Revealing True Operational Activity Inside Major U.S. Data Centre",
+      "about": "The thermal signature as a shipping product: heat across rooftop cooling, substations, and electrical yards showing which parts of a datacentre are active.",
+      "org": "SatVu",
+      "date": "2026"
+    },
+    "https://epoch.ai/publications/chip-smuggling": {
+      "title": "Diversion and Resale: Estimating Compute Smuggling to China",
+      "about": "A public estimate of smuggled compute, with a median of about 660,000 H100-equivalents through the end of 2025: the procurement and customs signature quantified.",
+      "org": "Epoch AI",
+      "date": "2025"
+    },
+    "https://www.cnas.org/publications/reports/countering-ai-chip-smuggling-has-become-a-national-security-priority": {
+      "title": "Countering AI Chip Smuggling Has Become a National Security Priority",
+      "about": "The reported evidence of large-scale AI chip smuggling and what enforcement would take: the institutional side of the procurement signature.",
+      "org": "Center for a New American Security",
+      "date": "June 2025"
+    },
+    "https://www.cnas.org/publications/commentary/to-win-the-ai-race-bolster-export-control-enforcement-with-intelligence": {
+      "title": "To Win the AI Race, Bolster Export Control Enforcement with Intelligence",
+      "about": "The case for putting intelligence collection behind export-control enforcement: financial intelligence as an instrument, not an afterthought.",
+      "org": "Center for a New American Security",
+      "date": "Sept. 2025"
+    },
+    "https://isis-online.org/uploads/isis-reports/documents/SyriaReactorReport_12May2008.pdf": {
+      "title": "The Al Kibar Reactor: Extraordinary Camouflage, Troubling Implications",
+      "about": "The imagery-analysis brief on Syria's covert reactor, written as the analysts worked it: an underlying document of the module's case files.",
+      "authors": "David Albright and Paul Brannan",
+      "container": "Institute for Science and International Security",
+      "date": "May 2008"
+    },
+    "https://isis-online.org/isis-reports/revealed-emptying-of-the-iranian-atomic-warehouse-at-turquz-abad": {
+      "title": "Revealed: Emptying of the Iranian “Atomic Warehouse” at Turquz-Abad",
+      "about": "The imagery brief behind the Turquzabad beat: a rival's archive pointing at a site, and the site watched being emptied before sampling.",
+      "authors": "David Albright, Olli Heinonen, Frank Pabian, and Andrea Stricker",
+      "container": "Institute for Science and International Security",
+      "date": "Nov. 2018"
+    },
+    "https://www.cia.gov/resources/csi/books-monographs/psychology-of-intelligence-analysis-2": {
+      "title": "Psychology of Intelligence Analysis",
+      "about": "The cognition primary behind the module's bias vocabulary, free in full from the CIA's own press; Part III is the biases, chapter 8 the analysis of competing hypotheses.",
+      "authors": "Richards J. Heuer, Jr.",
+      "container": "CIA Center for the Study of Intelligence",
+      "date": "1999"
     }
   },
   "pending": [

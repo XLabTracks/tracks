@@ -1867,3 +1867,31 @@ source-faithful feasibility-table rows. The rest of the course's older files
 still carry em dashes and are out of this sweep's scope; they sweep as they
 are edited. The intro's estimate rises to 15 minutes for the cold open
 (2.3 now budgets 485).
+
+## 2026-09-01 — the recommended public readings are carded
+
+Owner approval ("sure you can add it") on the recommendation list. Ten
+public sources join the module, all as Optional reading cards or inline
+links, all in the citations registry, none counted in the eight-hour core:
+
+- 2.3.1 Overhead Imagery: FAS, Tracking Hyperscale AI Data Center Growth
+  with Satellite Imagery (2025), with Epoch's Frontier Data Centers Hub
+  announcement and methodology linked as the tradecraft companion.
+- 2.3.1 Thermal: the HotSat name-check now links SatVu's published thermal
+  image of a live US datacentre.
+- 2.3.1 Procurement: Epoch's Diversion and Resale smuggling estimate
+  (median ~660k H100-equivalents through end 2025), with the two CNAS
+  pieces linked for the institutional side.
+- 2.3.2: the ISIS imagery briefs, verified to the exact documents before
+  carding: Albright and Brannan's Al Kibar Extraordinary Camouflage report
+  (May 2008 PDF) with the Turquz-Abad Atomic Warehouse brief (Nov 2018)
+  linked inside. The Baker card stays first; the ISIS card is optional.
+- 2.3.3: Heuer's Psychology of Intelligence Analysis (CIA CSI, free full
+  text), the cognition primary the design's gaps list said was owed; and
+  the "dead wrong" phrase in The Progression now links the Silberman–Robb
+  WMD Commission report it comes from. The SSCI 2004 report is deliberately
+  not linked: no URL was verified, and a guessed link is worse than none.
+- 2.3.4: the two papers the module quotes constantly finally get cards:
+  Six Layers (read Layer 6) and Scher and Thiergart (the source of every
+  feasibility rating and of the feasibility cards' table). The bare
+  Six Layers bullet is gone; the Baker §2.3.3 bullet stays.

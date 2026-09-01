@@ -919,3 +919,18 @@ which kept serving the older designs.
   (title text-sm, role text-xs).
 - **prevention.mdx loses its last four em dashes**, per the standing
   no-em-dash rule; the sweep had happened on the branch only.
+
+## 2026-09-01 — the em-dash removal is reversed, on the owner's ruling
+
+The last bullet of the entry above is cancelled. Course owner, same day:
+*"i want everything to be grammatically correct changing em dashes should be
+stylistic choice not feature."* Em dashes are correct grammar; taking one out
+is a per-sentence stylistic choice made while editing that sentence, never a
+rule to sweep a file with. The 2026-08-20 no-em-dash rule (a shared-branch
+CLAUDE.md rule; it was never in main's) is void.
+
+`prevention.mdx` gets its two sentences back as first written — "public
+perception—or lack thereof—" and "exponentially increasing—and we are
+notoriously terrible". The wider sweep this bullet was the main-side edge of
+had happened on the 2.3 preview branch, and is reversed there in the same
+ruling (its module-2 log carries that entry).

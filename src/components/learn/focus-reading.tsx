@@ -157,8 +157,17 @@ export function FocusReadingControl({
 
              100dvh, not 100vh: on iOS the large viewport is what vh reports,
              so a panel sized by it is taller than what the collapsing toolbars
-             actually leave visible. */
-          className="border-border bg-card shadow-soft-lg fixed inset-x-3 bottom-3 z-50 max-h-[80dvh] w-auto overflow-y-auto rounded-xl border p-4 text-left sm:absolute sm:inset-x-auto sm:top-9 sm:right-0 sm:bottom-auto sm:z-20 sm:max-h-[calc(100dvh-6rem)] sm:w-[min(30rem,calc(100vw-2rem))]"
+             actually leave visible.
+
+             z-50 on both sides, not z-20 on the wide one. Both headers are
+             sticky at z-40, and the panel's top sits inside the band the
+             header paints over: 41px of it at the default text size, and
+             119px once the reader enlarges the text, because the header grows
+             with it. So "Reading settings" and the whole Text size row were
+             behind the header — on screen, in the layout, and invisible. The
+             phone path was already z-50, which is why this only ever showed
+             up on a wide window. */
+          className="border-border bg-card shadow-soft-lg fixed inset-x-3 bottom-3 z-50 max-h-[80dvh] w-auto overflow-y-auto rounded-xl border p-4 text-left sm:absolute sm:inset-x-auto sm:top-9 sm:right-0 sm:bottom-auto sm:z-50 sm:max-h-[calc(100dvh-6rem)] sm:w-[min(30rem,calc(100vw-2rem))]"
         >
           <p className="text-sm font-semibold">Reading settings</p>
 

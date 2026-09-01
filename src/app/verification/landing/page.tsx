@@ -121,7 +121,12 @@ export default function Page() {
                     arm from the hub — the module&apos;s own shape, not a
                     dependency
                   </span>
-                  <span>click a star or a key row to pin it</span>
+                  <span className="on-hover">
+                    click a star or a key row to pin it
+                  </span>
+                  <span className="on-touch">
+                    tap a star or a key row to pin it
+                  </span>
                 </div>
                 <ol className="sky-key" id="skyKey"></ol>
               </div>

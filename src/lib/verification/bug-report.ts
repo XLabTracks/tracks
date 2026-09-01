@@ -6,10 +6,11 @@ export interface BugReportForm {
 }
 
 export const BUG_REPORT_FORM: BugReportForm = {
-  viewformUrl: "",
-  quoteField: "",
-  pageField: "",
-  urlField: "",
+  viewformUrl:
+    "https://docs.google.com/forms/d/e/1FAIpQLSf65LCFFRvpU8cGAQOTyxbWO30yZpf0Y2s4S4W-Js6gHzjAHA/viewform",
+  quoteField: "entry.805073738",
+  pageField: "entry.568752826",
+  urlField: "entry.1180304402",
 };
 
 export const QUOTE_LIMIT = 1200;

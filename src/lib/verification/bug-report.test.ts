@@ -22,18 +22,47 @@ const ctx = {
   url: "https://aisafetytracks.com/tracks/verification/why-verification/building-intuitions",
 };
 
+const blank: BugReportForm = {
+  viewformUrl: "",
+  quoteField: "",
+  pageField: "",
+  urlField: "",
+};
+
 describe("isBugReportConfigured", () => {
-  it("is false until the form is filled in, so the action never appears half-wired", () => {
-    expect(isBugReportConfigured(BUG_REPORT_FORM)).toBe(false);
+  it("is false for a half-filled form, so the action never appears half-wired", () => {
+    expect(isBugReportConfigured(blank)).toBe(false);
     expect(isBugReportConfigured(form({ viewformUrl: "" }))).toBe(false);
     expect(isBugReportConfigured(form({ quoteField: "  " }))).toBe(false);
     expect(isBugReportConfigured(form())).toBe(true);
+  });
+
+  it("the shipped form is wired, so the action is actually reachable", () => {
+    expect(isBugReportConfigured(BUG_REPORT_FORM)).toBe(true);
+    expect(BUG_REPORT_FORM.viewformUrl).toMatch(
+      /^https:\/\/docs\.google\.com\/forms\/d\/e\/[\w-]+\/viewform$/,
+    );
+    for (const field of [
+      BUG_REPORT_FORM.quoteField,
+      BUG_REPORT_FORM.pageField,
+      BUG_REPORT_FORM.urlField,
+    ])
+      expect(field).toMatch(/^entry\.\d+$/);
+  });
+
+  it("gives each answer its own field rather than collapsing two into one", () => {
+    const fields = [
+      BUG_REPORT_FORM.quoteField,
+      BUG_REPORT_FORM.pageField,
+      BUG_REPORT_FORM.urlField,
+    ];
+    expect(new Set(fields).size).toBe(fields.length);
   });
 });
 
 describe("bugReportHref", () => {
   it("returns null when unconfigured rather than a broken link", () => {
-    expect(bugReportHref(ctx, BUG_REPORT_FORM)).toBeNull();
+    expect(bugReportHref(ctx, blank)).toBeNull();
   });
 
   it("prefills the quote, the page name and the page URL", () => {

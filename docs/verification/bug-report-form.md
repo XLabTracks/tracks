@@ -5,10 +5,30 @@ Highlight, Define and Add to notebook: **Report a bug**. It opens a Google
 Form in a new tab with the passage and the page already filled in, so the
 reporter only writes what is wrong.
 
-**It is off until the form is configured**, and it fails closed rather than
-half-wired: `isBugReportConfigured()` is false while the config is blank, the
-action never appears, and the toolbar is the three it always was. Nothing to
-undo if the form is never made.
+The form is live and wired:
+<https://forms.gle/cHcPDncBBB6tjZQx7>. What follows is how it was set up and
+what to redo if its questions ever change.
+
+It fails closed rather than half-wired: `isBugReportConfigured()` is false
+while the config is blank, and the action simply does not render.
+
+## The form as it stands
+
+| Question | Type | Field | Filled by |
+|---|---|---|---|
+| Selected text | Paragraph | `entry.805073738` | the page |
+| Page | Short answer | `entry.568752826` | the page |
+| Link | Short answer | `entry.1180304402` | the page |
+| Comment | Paragraph | `entry.692528752` | the reporter |
+
+None is required, which is right: a required question that arrives prefilled
+is fine until a prefill fails, and then the reporter is stuck on a field they
+cannot answer and the report is lost rather than imperfect.
+
+Two things still worth doing to it: the form is titled "Untitled form", which
+is what a reporter sees when they land on it from a course page; and the
+three prefilled questions read as questions, so titling them "Selected text
+(filled in automatically)" and the like tells people not to rewrite them.
 
 ## Making the form
 

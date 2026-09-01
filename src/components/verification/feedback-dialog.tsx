@@ -14,28 +14,14 @@ export interface FeedbackTarget {
 
 type Phase = "editing" | "sending" | "sent" | "failed";
 
-const SHOT_MAX_WIDTH = 1400;
+const IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp"];
 
-async function capture(): Promise<Blob | null> {
-  try {
-    const { toBlob } = await import("html-to-image");
-    return await toBlob(document.body, {
-      pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
-      canvasWidth: Math.min(document.documentElement.clientWidth, SHOT_MAX_WIDTH),
-      filter: (node) =>
-        !(node instanceof HTMLElement && node.dataset.noScreenshot === "true"),
-    });
-  } catch {
-    return null;
-  }
-}
-
-async function upload(blob: Blob): Promise<string | undefined> {
+async function upload(file: Blob): Promise<string | undefined> {
   try {
     const res = await fetch("/api/verification/feedback/screenshot", {
       method: "POST",
-      headers: { "content-type": "image/png" },
-      body: blob,
+      headers: { "content-type": file.type || "image/png" },
+      body: file,
     });
     if (!res.ok) return undefined;
     const data = (await res.json()) as { url?: string };
@@ -43,6 +29,21 @@ async function upload(blob: Blob): Promise<string | undefined> {
   } catch {
     return undefined;
   }
+}
+
+function imageFrom(items: DataTransferItemList | FileList | null): File | null {
+  if (!items) return null;
+  const list = "length" in items ? Array.from(items as ArrayLike<unknown>) : [];
+  for (const raw of list) {
+    const file =
+      raw instanceof File
+        ? raw
+        : (raw as DataTransferItem)?.kind === "file"
+          ? (raw as DataTransferItem).getAsFile()
+          : null;
+    if (file && IMAGE_TYPES.includes(file.type)) return file;
+  }
+  return null;
 }
 
 export function FeedbackDialog({
@@ -55,11 +56,24 @@ export function FeedbackDialog({
   const [comment, setComment] = useState("");
   const [email, setEmail] = useState("");
   const [quote, setQuote] = useState(target.quote);
-  const [withShot, setWithShot] = useState(true);
+  const [shot, setShot] = useState<File | null>(null);
+  const [shotUrl, setShotUrl] = useState<string | null>(null);
   const [phase, setPhase] = useState<Phase>("editing");
   const [problem, setProblem] = useState<string | null>(null);
   const boxRef = useRef<HTMLDivElement>(null);
   const firstRef = useRef<HTMLTextAreaElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const attach = useCallback((file: File | null) => {
+    if (!file) return;
+    setShot(file);
+    setShotUrl((old) => {
+      if (old) URL.revokeObjectURL(old);
+      return URL.createObjectURL(file);
+    });
+  }, []);
+
+  useEffect(() => () => { if (shotUrl) URL.revokeObjectURL(shotUrl); }, [shotUrl]);
 
   useEffect(() => {
     firstRef.current?.focus();
@@ -75,11 +89,7 @@ export function FeedbackDialog({
     setPhase("sending");
     setProblem(null);
 
-    let screenshotUrl: string | undefined;
-    if (withShot) {
-      const blob = await capture();
-      if (blob) screenshotUrl = await upload(blob);
-    }
+    const screenshotUrl = shot ? await upload(shot) : undefined;
 
     try {
       const res = await fetch("/api/verification/feedback", {
@@ -99,7 +109,7 @@ export function FeedbackDialog({
       setProblem("Could not reach the form.");
       setPhase("failed");
     }
-  }, [comment, email, phase, quote, target, withShot]);
+  }, [comment, email, phase, quote, shot, target]);
 
   const fallback = bugReportHref({ quote, page: target.page, url: target.url });
 
@@ -116,6 +126,10 @@ export function FeedbackDialog({
         role="dialog"
         aria-modal="true"
         aria-label="Send feedback"
+        onPaste={(e) => {
+          const file = imageFrom(e.clipboardData.items);
+          if (file) { e.preventDefault(); attach(file); }
+        }}
         className="border-border bg-card shadow-soft-lg max-h-[92dvh] w-full max-w-[30rem] overflow-y-auto rounded-xl border p-4"
       >
         <div className="flex items-start justify-between gap-3">
@@ -197,15 +211,57 @@ export function FeedbackDialog({
               question. It is collected only while the course is in playtesting.
             </p>
 
-            <label className="mt-3 flex items-center gap-2 text-sm">
+            <div
+              className="border-border mt-3 rounded-lg border border-dashed p-3"
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => {
+                e.preventDefault();
+                attach(imageFrom(e.dataTransfer.items));
+              }}
+            >
+              {shotUrl ? (
+                <div className="flex items-start gap-3">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={shotUrl}
+                    alt="The screenshot attached to this report"
+                    className="border-border max-h-24 rounded border"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => { setShot(null); setShotUrl(null); }}
+                    className="text-muted-foreground hover:text-foreground ml-auto -m-1 p-1"
+                    aria-label="Remove the screenshot"
+                  >
+                    <X className="size-4" aria-hidden />
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <p className="text-sm font-medium">Screenshot</p>
+                  <p className="text-muted-foreground mt-0.5 text-xs leading-relaxed">
+                    Take one the way you normally would, then paste it here,
+                    drop it in, or choose it.
+                  </p>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    className="mt-2"
+                    onClick={() => fileRef.current?.click()}
+                  >
+                    Choose an image
+                  </Button>
+                </>
+              )}
               <input
-                type="checkbox"
-                checked={withShot}
-                onChange={(e) => setWithShot(e.target.checked)}
-                className="size-4"
+                ref={fileRef}
+                type="file"
+                accept="image/png,image/jpeg,image/webp"
+                className="hidden"
+                onChange={(e) => attach(imageFrom(e.target.files))}
               />
-              Include a picture of this page
-            </label>
+            </div>
 
             {problem ? (
               <div className="border-border bg-muted/40 mt-3 rounded-lg border p-3">

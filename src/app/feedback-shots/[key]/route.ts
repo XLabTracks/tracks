@@ -15,7 +15,12 @@ interface R2Bucket {
   get(key: string): Promise<R2ObjectBody | null>;
 }
 
-const KEY_RE = /^[0-9a-f-]{36}\.png$/;
+const KEY_RE = /^[0-9a-f-]{36}\.(png|jpg|webp)$/;
+const TYPES: Record<string, string> = {
+  png: "image/png",
+  jpg: "image/jpeg",
+  webp: "image/webp",
+};
 
 export async function GET(
   _request: Request,
@@ -38,7 +43,7 @@ export async function GET(
 
   return new Response(object.body, {
     headers: {
-      "content-type": "image/png",
+      "content-type": TYPES[key.split(".").pop()!] ?? "image/png",
       "cache-control": "public, max-age=31536000, immutable",
       etag: object.httpEtag,
     },

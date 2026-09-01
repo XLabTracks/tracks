@@ -1,9 +1,11 @@
 # Report a bug from a selection
 
 Selecting text anywhere in the course reading offers a fourth action beside
-Highlight, Define and Add to notebook: **Report a bug**. It opens a Google
-Form in a new tab with the passage and the page already filled in, so the
-reporter only writes what is wrong.
+Highlight, Define and Add to notebook: **Report a bug**. It opens a dialog on
+the page — the passage, a comment, an email and a screenshot — and posts to
+the Google Form without the reader leaving the lesson. When the form refuses
+an anonymous post it says so and offers the real form with the passage and
+page carried over, so no report is lost.
 
 The form is live and wired:
 <https://forms.gle/cHcPDncBBB6tjZQx7>. What follows is how it was set up and
@@ -84,14 +86,54 @@ any restructuring.
 `pageField` and `urlField` may be left `""` if you would rather not collect
 them; the quote and the form URL are the only two the action needs.
 
+## Screenshots are the reporter's own, not the page's
+
+The dialog takes a real screenshot by having the reporter paste, drop or
+choose one. That is not a fallback for something better — it *is* the better
+option:
+
+- **A page cannot photograph itself.** No browser gives a document access to
+  its own pixels. Chrome's own "Send feedback" can, because it is browser
+  chrome, not a page.
+- **`getDisplayMedia` is the only real-pixel API a page can reach**, and it
+  opens a "choose what to share" picker on every use and does not exist on
+  iOS Safari at all.
+- **Rendering the DOM to a canvas was tried and removed.** `html-to-image` on
+  the attack-trees lesson dropped every node box and every connecting line and
+  left the labels floating loose over the dot grid — precisely the diagram
+  somebody would be filing a bug about. A 520KB dependency that fails hardest
+  on the pages most likely to need it.
+
+The image does not go into the form either: a file-upload question makes
+Google require a signed-in Google session from every responder. It is stored
+under a `feedback/` prefix in the R2 bucket that already holds the videos, and
+the form carries its URL. Uploading requires an app sign-in, which is the
+whole rate limit — an endpoint that turns a POST into a public URL is an open
+file host otherwise. A signed-out reporter still sends their report, without a
+picture.
+
+## Three settings that each force a Google sign-in
+
+Any one of these makes the form reject an anonymous post with 401, and the
+dialog can only hand off to Google. All three must be clear:
+
+1. **Collect email addresses** set to `Verified`. Use `Responder input`, which
+   is an ordinary question the dialog can fill.
+2. **A file-upload question.** Delete it; the screenshot has its own home
+   above, and a short-answer question holds the link.
+3. **Limit to 1 response.**
+
+If the form is owned by a Workspace, "restrict to users in this organisation"
+does the same thing.
+
 ## Notes
 
-- **It collects a verified email, and that is deliberate: the audience is
-  playtesters** (course owner, 2026-09-01). It means a reporter has to be
-  signed in to Google, which would be the wrong trade for an open cohort but
-  is the right one for a named group whose reports you want to be able to
-  follow up. Do not "fix" this by turning email collection off; if the
-  audience ever widens to the public, that is the moment to revisit it.
+- **Collecting an email is deliberate: the audience is playtesters** (course
+  owner, 2026-09-01), and a named group whose reports you can follow up is
+  worth the field. Collect it as a **question** (`Responder input`), not as
+  the `Verified` setting — verified means Google, not the reporter, supplies
+  it, and that forces a sign-in the dialog cannot satisfy. Delete the question
+  when the audience widens past playtesting; that is the whole removal.
 - A selection longer than 1200 characters is truncated with an ellipsis
   (`QUOTE_LIMIT`). The prefill travels in a URL, and a whole chapter in a
   query string is refused by the browser before it ever reaches Google.

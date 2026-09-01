@@ -32,8 +32,13 @@ interface R2Bucket {
   ): Promise<unknown>;
 }
 
-const MAX_BYTES = 4 * 1024 * 1024;
+const MAX_BYTES = 8 * 1024 * 1024;
 const PREFIX = "feedback/";
+const TYPES: Record<string, string> = {
+  "image/png": "png",
+  "image/jpeg": "jpg",
+  "image/webp": "webp",
+};
 
 export async function POST(request: Request) {
   let user;
@@ -43,8 +48,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, reason: "signed-out" }, { status: 401 });
   }
 
-  const type = request.headers.get("content-type") ?? "";
-  if (!type.startsWith("image/png")) {
+  const type = (request.headers.get("content-type") ?? "").split(";")[0]!.trim();
+  if (!TYPES[type]) {
     return NextResponse.json({ ok: false, reason: "bad-type" }, { status: 415 });
   }
 
@@ -65,9 +70,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, reason: "no-store" }, { status: 503 });
   }
 
-  const key = `${PREFIX}${crypto.randomUUID()}.png`;
+  const key = `${PREFIX}${crypto.randomUUID()}.${TYPES[type]}`;
   await bucket.put(key, bytes, {
-    httpMetadata: { contentType: "image/png", cacheControl: "public, max-age=31536000" },
+    httpMetadata: { contentType: type, cacheControl: "public, max-age=31536000" },
     customMetadata: { userId: user.id },
   });
 

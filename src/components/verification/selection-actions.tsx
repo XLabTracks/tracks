@@ -7,6 +7,16 @@ import {
   ACTION_LABELS,
   type SelectionActionId,
 } from "@/lib/verification/selection-actions";
+import {
+  bugReportHref,
+  isBugReportConfigured,
+} from "@/lib/verification/bug-report";
+
+const SITE_SUFFIX = /\s+@\s+Tracks\s*$/;
+
+function pageName(): string {
+  return document.title.replace(SITE_SUFFIX, "").split("\u00b7")[0]!.trim();
+}
 
 const SETTLE_MS = 200;
 const POINTER_MS = 40;
@@ -69,6 +79,7 @@ export function SelectionActions() {
         inReading,
         highlightSupported: !!window.VTHighlight?.supported,
         overlapsHighlight: (window.VTHighlight?.idsInSelection?.() ?? []).length > 0,
+        reportSupported: isBugReportConfigured(),
       });
       if (!actions.length) return setAt(null);
 
@@ -153,11 +164,14 @@ export function SelectionActions() {
       } else if (id === "unhighlight") {
         window.VTHighlight?.removeIds?.(window.VTHighlight?.idsInSelection?.() ?? []);
       } else if (id === "notebook") {
-        window.VTNotebook?.addQuote?.(
-          place.text,
-          document.title.split("·")[0].trim(),
-          location.href,
-        );
+        window.VTNotebook?.addQuote?.(place.text, pageName(), location.href);
+      } else if (id === "report") {
+        const href = bugReportHref({
+          quote: place.text,
+          page: pageName(),
+          url: location.href,
+        });
+        if (href) window.open(href, "_blank", "noopener,noreferrer");
       } else if (id === "define") {
         window.VTVocab?.define?.(place.text, {
           bottom: place.top - 8 - window.scrollY,

@@ -148,7 +148,7 @@ export default function Page() {
             page. */}
         <section className="band">
           <div className="wrap">
-            <h2 data-reveal>What this course is</h2>
+            <h2 data-reveal>About</h2>
             <CourseOverview />
           </div>
         </section>

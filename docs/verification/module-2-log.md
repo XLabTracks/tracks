@@ -1895,3 +1895,56 @@ links, all in the citations registry, none counted in the eight-hour core:
   Six Layers (read Layer 6) and Scher and Thiergart (the source of every
   feasibility rating and of the feasibility cards' table). The bare
   Six Layers bullet is gone; the Baker §2.3.3 bullet stays.
+
+## 2026-09-01 — the redundancy pass: eight cuts, owner-approved
+
+A pedagogy audit ("think hard about what needs to be deleted") followed by
+owner approval of the full list. The test applied: does the item make the
+learner think, or re-hear something from one scroll ago?
+
+- **Closing Retrieval and the seeds paragraph are gone** (2.3.5). All three
+  items were third-or-fourth same-page exposures of things the checkpoint
+  had just tested; same-page "spacing" is not spacing, and /review is the
+  platform's real spaced system. The seeds paragraph promised 3.1/3.2 hooks
+  that do not exist yet. Orphaned vt-marks keys: check:intel-close-*.
+- **The five signature-cards are gone from the 2.3.1 bench; the Fermi bench
+  stays.** In the playground the cards were the catalog; in the app the
+  prose catalog sits one scroll above, so the prediction was 30-second
+  recall and the reveal a re-paste. The anatomy keeps its real tests
+  (ledger, desk, checkpoint). Deck retitled "Drill Bench: Power to Compute";
+  the id drills-intel-signatures is permanent and unchanged, so progress
+  keys survive.
+- **The Dumb-Questions Battery is gone** (2.3.4). Two of its three questions
+  were answered by the same page minutes later; the survivor ("what breaks
+  if tips must be public?") is now an optional fifth question in the
+  ntm-redline workspace, so the memo brief's "your four answers" stays
+  exact: four required, one optional.
+- **Two checkpoint items cut** (sibling-cloud, human-layer): ledger rows
+  verbatim, same options and explanation. The checkpoint is eight items;
+  the bar line reads seven of eight.
+- **The Wasil SourceQuote in The Bounds, in Sum is gone**: the paragraph
+  under it quotes the same sentence, and the ledger carries it a third time.
+- **Debate 1 is gone** (not a debate: the paragraph handed the resolution,
+  and the refs-eval flagged the existing six for exactly this). Five
+  debates remain, renumbered. Its Lowenthal citation was orphaned and its
+  registry entry removed. Candidate swap-in, not done: verification-primacy
+  versus political-primacy from the refs-eval's new list.
+- **Design vocabulary rewritten off learner pages**: "the module's boundary
+  contract" (three places), "the arc is the spacing instrument," "a
+  deliverable, not a warm-up." Same category as the banned Bloom labels.
+- **Trims**: Recording What You Did Not Resolve is two sentences (the desk
+  enforces the discipline with lints; prose that pre-explains the exercise
+  is scaffolding); the Epoch hub-announcement link is gone from the FAS
+  card (methodology and dataset links remain), its registry entry removed.
+
+Net: about 1,000 words and ten redundant exercise items off the module.
+2.3.1 drops to 70 minutes; the module still budgets 480. Checked and kept,
+so the next pass does not re-litigate: the four-families section (the
+collection map keys on it), the desk's reference drawer, the cold open,
+autopsy, ledger, clause and who-watches benches, and the exemplar.
+
+Still open, owner's call: the last Unfinished-writing callout (2.3.1
+open-sources card). It is an IOU for distilling "Signals in the Noise"
+(arXiv 2606.20610), named in the module draft but dropped from the in-app
+transcription. Either distill that paper into the card and delete the
+callout, or delete the callout and accept the short card as final weighting.

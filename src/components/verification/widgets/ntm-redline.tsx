@@ -19,7 +19,8 @@ export function NtmRedline({ onComplete }: VerificationWidgetProps) {
         <div className="border-border bg-card space-y-3 rounded-xl border p-5">
           <p className="text-sm">
             Go through the verbatim text above with a pencil, as a lawyer
-            preparing for negotiations would. Answer all four questions.
+            preparing for negotiations would. Answer the four required questions; the
+            fifth is a shorter, optional one.
           </p>
           <p className="text-muted-foreground text-sm">
             Your four answers are the starting material for the written output

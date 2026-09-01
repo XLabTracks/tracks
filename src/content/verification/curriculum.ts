@@ -494,7 +494,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-intel-intro",
     title: "2.3.1 Observable signatures of undeclared AI development",
     contentRef: "verification/intelligence-signatures",
-    estimatedMinutes: 75,
+    estimatedMinutes: 70,
   },
   {
     id: "v-intel-anchor",

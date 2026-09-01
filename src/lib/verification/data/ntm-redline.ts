@@ -52,4 +52,15 @@ export const NTM_REDLINE_QUESTIONS: readonly WorkspaceQuestion[] = [
       },
     ],
   },
+  {
+    id: "tips-public",
+    n: 5,
+    title: "What breaks if tips must be public?",
+    requirement: "optional",
+    body: [
+      {
+        text: "The article's silence on sharing is the datum. Suppose a redraft obliged parties to publish their tips: what breaks, and for whom?",
+      },
+    ],
+  },
 ];

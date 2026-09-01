@@ -30,16 +30,12 @@ tip opened the file and IAEA complementary access resolved it.
 
 ## Recording What You Did Not Resolve
 
-The step that gets skipped. Whatever the chosen action, the record should carry:
-
-- The **confidence** attached to the assessment;
-- Any **dissent** among the analysts;
-- The **unresolved blind spots**: what nobody could see, as distinct from what
-  was looked at and found clean.
-
-An assessment that hides its own uncertainty is worth less than one that states
-it, because the next decision-maker cannot calibrate on it. Dissent is data.
-This is the same discipline as the evidence standards in the capstone.
+Whatever the chosen action, the record carries the confidence attached to
+the assessment, any dissent among the analysts, and the unresolved blind
+spots: what nobody could see, as distinct from what was looked at and found
+clean. An assessment that hides its own uncertainty is worth less than one
+that states it, because the next decision-maker cannot calibrate on it, and
+the desk below makes all three records mandatory.
 
 ## The Analyst Desk
 
@@ -181,23 +177,7 @@ winning. If you want a live opponent, spar one pole against an AI tutor
 arguing the other, and have it press on your weakest link before you write
 the commit.
 
-**1. Is intelligence decisive evidence, or only a lead?** The cautionary
-pole: the 2002 to 2003 Iraq WMD estimate, where the US intelligence
-community was "dead wrong" in almost every judgment
-([the Robb–Silberman report](https://irp.fas.org/offdocs/wmd_report.pdf)):
-high-confidence claims resting on a single fabricator (Curveball), misread
-aluminium tubes, and forged Niger documents, all presented to the UN as
-decisive. The counter-pole
-([Baker](https://arxiv.org/abs/2304.04123),
-[*Six Layers*](https://arxiv.org/abs/2507.15916)): intelligence as lead
-generation and tripwire still works. In the IAEA record, tips identified the
-undeclared facilities and the regime resolved them. The module's resolution
-is the identify/resolve split: the failure mode is treating a lead as a
-verdict, not using leads at all. The discipline's own corollary: analysis is
-about "portraying uncertainty," not manufacturing certainty
-([Lowenthal](https://collegepublishing.sagepub.com/products/intelligence-10-288967)).
-
-**2. How much verification is enough: "adequate" or "effective"?**
+**1. How much verification is enough: "adequate" or "effective"?**
 Carter-era doctrine required adequate verification (detect militarily
 significant cheating in time to respond); the Reagan administration raised
 the bar to effective verification, which Paul Nitze operationalized as "high
@@ -213,7 +193,7 @@ burden is not worth it
 For an AI pause you must pick a defensible confidence target and own its
 false-positive and false-negative tradeoff.
 
-**3. NTM sufficiency versus the necessity of intrusive access.**
+**2. NTM sufficiency versus the necessity of intrusive access.**
 [National technical means](https://en.wikipedia.org/wiki/National_technical_means_of_verification)
 (satellites, SIGINT) were sufficient to count large fixed objects, silos and
 launchers, and treaty law protected them with noninterference clauses. But
@@ -225,7 +205,7 @@ had to be invented. Verifying correctness of a declaration is easy;
 verifying completeness, that nothing undeclared exists, is the hard problem,
 and it is the AI-pause problem.
 
-**4. Commercial-satellite transparency: democratizing boon or spoofable
+**3. Commercial-satellite transparency: democratizing boon or spoofable
 liability?** The boon: commercial Earth observation has exploded, many firms
 now sell frequent sub-5-metre optical and radar imagery, the IAEA runs a
 [Satellite Imagery Analysis Unit](https://www.iaea.org/publications/magazines/bulletin/57-2/completing-the-picture-using-satellite-imagery-to-enhance-iaea-safeguards-capabilities),
@@ -240,7 +220,7 @@ neutral, since firms
 (shutter control); and AI-generated satellite imagery threatens the
 evidentiary value of the pictures themselves.
 
-**5. Sources-and-methods versus sharing, and the credibility problem.**
+**4. Sources-and-methods versus sharing, and the credibility problem.**
 Sharing a tip with a rival or an international body risks burning the
 collection that produced it, so arms-control treaties impose no duty to
 share; sharing is voluntary and inconsistent
@@ -248,9 +228,9 @@ share; sharing is voluntary and inconsistent
 fake": the Niger forgeries are the standing warning. For a US–China pause
 the design question is how to make a tip credible to Beijing without
 exposing how you know, the bridge to the confidentiality module's
-cryptographic tools (a pointer only, per the boundary contract).
+cryptographic tools (a pointer only; the machinery lives in 2.0).
 
-**6. Meta-debate: is the nuclear analogy the right frame at all?** Arms
+**5. Meta-debate: is the nuclear analogy the right frame at all?** Arms
 control is the richest verification precedent we have, and this module leans
 on it. But a serious critique holds the nuclear frame is
 [misleading for AI](https://ai-frontiers.org/articles/nuclear-non-proliferation-is-the-wrong-framework-for-ai-governance):
@@ -265,8 +245,9 @@ reason with analogies as scaffolds, never as proofs.
 
 ## Mastery Checkpoint
 
-Ten items over the module's objectives. Treat nine of ten as the bar; a miss
-earns a targeted corrective naming what to revisit; revisit, then try again.
+Eight items over the module's objectives. Treat seven of eight as the bar; a
+miss earns a targeted corrective naming what to revisit; revisit, then try
+again.
 
 <Check
   id="intel-gate-sanitize"
@@ -372,76 +353,3 @@ earns a targeted corrective naming what to revisit; revisit, then try again.
   why="The bounds-in-sum beat: Wasil’s honest-bounds sentence names distribution explicitly."
 />
 
-<Check
-  id="intel-gate-sibling-cloud"
-  q="Training disguised as inference inside a declared datacenter is best caught by which sibling mechanism?"
-  options={[
-    "2.4 whistleblowers",
-    "The cloud layer: provider reporting and workload telemetry (2.2)",
-    "More satellite passes",
-    "4.1 layering",
-  ]}
-  answer={1}
-  why="The limitations ledger, row five: inside a declared facility, the provider is the layer that can see a workload."
-/>
-
-<Check
-  id="intel-gate-human-layer"
-  q="What the company believed, and what leadership was warned about, is revealed by which layer?"
-  options={[
-    "The hardware layer",
-    "The intelligence layer",
-    "The human layer (2.4)",
-    "The cloud layer",
-  ]}
-  answer={2}
-  why="The boundary contract: humans reveal what hardware, cloud, and intelligence cannot."
-/>
-
-## Closing Retrieval
-
-Three items re-tested: the arc is the spacing instrument.
-
-<Check
-  id="intel-close-resolves"
-  q="Intelligence identifies. What resolves?"
-  options={[
-    "A second intelligence service",
-    "The regime’s treaty tools: access, sampling, adjudication",
-    "A kinetic strike",
-    "Commercial imagery",
-  ]}
-  answer={1}
-  why="The module’s core distinction, one last time: tips find, treaty tools adjudicate. A strike can level a facility; it cannot establish a violation."
-/>
-
-<Check
-  id="intel-close-arithmetic"
-  q="~500-site haystack, a rule that false-alarms on 1% of innocents per year. About how many false alarms is that, against how many genuine covert programs expected in a given year?"
-  options={[
-    "~50 false vs ~5 true",
-    "~5 false vs ~0 true",
-    "~1 false vs ~1 true",
-    "~0 false vs ~5 true",
-  ]}
-  answer={1}
-  why="The bench arithmetic: an escalation threshold has to clear the base rate, not merely feel careful."
-/>
-
-<Check
-  id="intel-close-clauses"
-  q="In an NTM article, which clause is the easy part and which is where drafting dies?"
-  options={[
-    "Sharing is easy; noninterference dies",
-    "Both are easy",
-    "Noninterference is easy; sharing is where drafting dies",
-    "Both are impossible",
-  ]}
-  answer={2}
-  why="Noninterference is decades-old boilerplate; no treaty has ever obligated sharing: your red-line just met the reason."
-/>
-
-Two items from this module are banked for spaced checks: the signature anatomy
-returns in 3.1's per-strategy detection columns, and the base-rate arithmetic
-returns in 3.2's compliance judgments. The sealed Module-2 stream ranking
-unseals in 4.1.

@@ -469,13 +469,6 @@
       "org": "Commission on the Intelligence Capabilities of the United States Regarding Weapons of Mass Destruction",
       "date": "2005"
     },
-    "https://collegepublishing.sagepub.com/products/intelligence-10-288967": {
-      "title": "Intelligence: From Secrets to Policy",
-      "about": "The standard intelligence-studies text; frames analysis as 'portraying uncertainty', the antidote to intelligence-as-verdict.",
-      "authors": "Mark M. Lowenthal",
-      "container": "CQ Press / SAGE, 10th ed.",
-      "date": "2025"
-    },
     "https://www.everycrsreport.com/reports/R41201.html": {
       "title": "Monitoring and Verification in Arms Control",
       "about": "The Congressional Research Service report carrying the adequate-versus-effective verification standard and Nitze's 'high confidence, not perfect confidence' formulation.",
@@ -553,12 +546,6 @@
       "title": "Tracking Hyperscale AI Data Center Growth with Satellite Imagery",
       "about": "A public tracker reading AI datacentre construction from commercial satellite imagery: the overhead-imagery signature practiced for real.",
       "org": "Federation of American Scientists",
-      "date": "2025"
-    },
-    "https://epoch.ai/latest/introducing-the-frontier-data-centers-hub": {
-      "title": "Introducing the Frontier Data Centers Hub",
-      "about": "The announcement of Epoch's open database tracking frontier AI datacentres from satellite imagery, permits, and public disclosures.",
-      "org": "Epoch AI",
       "date": "2025"
     },
     "https://epoch.ai/data/data-centers-documentation/methodology": {

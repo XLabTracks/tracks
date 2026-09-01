@@ -80,7 +80,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
       label: "Limitations ledger",
       name: "The limitations ledger",
       kicker:
-        "One row per signature family: commit the canonical failure case and the sibling mechanism that covers the gap. The sibling owners are the module's boundary contract: every bound named here is owned somewhere else in the course.",
+        "One row per signature family: commit the canonical failure case and the sibling mechanism that covers the gap. Every bound named here is covered by another layer of the course; the second half of each row is naming which.",
       time: "~10 min",
       steps: [
         {

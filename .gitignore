@@ -47,7 +47,10 @@ next-env.d.ts
 .dev.vars*
 cloudflare-env.d.ts
 
-.claude/
+# Local Claude state stays out; the committed skills ride along (the owner's
+# ponytail-on-everything instruction, 2026-08-20).
+.claude/*
+!.claude/skills/
 .netlify/
 .agents/
 scrap

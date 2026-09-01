@@ -1987,3 +1987,46 @@ Owner, shown the paper's actual scope: it is not needed there. The callout is
 deleted; the open-source card stays deliberately short and hedged, classed
 with the supplemental mechanisms as *Six Layers* has it. Nothing else moves —
 the callout carried no links, so the citations registry is untouched.
+
+## 2026-09-01 — the 2.3 written output is re-commissioned, on the owner's instruction
+
+The owner re-scoped the module's written output in review: three hours, with
+internet research as part of the task, and the genre changed from red-lining
+treaty text to the memo a notional RAND sponsor would actually commission —
+an overview of the intelligence mechanisms that exist today for telling what
+is happening in AI training. Her definition of the reader, verbatim in
+intent: someone trying to understand what we can actually track, and what we
+cannot.
+
+What changed, and where everything went:
+
+- **The memo slot** (`memos.ts`) is now "What we can see today": survey the
+  mechanisms, one honest sentence each on what it establishes and what
+  defeats it; at least three self-found public artifacts from the last two
+  years, cited by link; bottom line first (the two mechanisms you would
+  weight most); end on the worst blind spot and which other layer covers it.
+  900 words, peer-reviewed, five new criteria. The slot id was renamed
+  `m2-3-ntm-redline` → `m2-3-intel-overview` — safe only because the branch
+  is an unmerged preview and no learner drafts exist under the old key; on a
+  shipped surface the id would have been permanent.
+- **The red-line did not die; it went home to 2.3.4.** The workspace was
+  always there; the source packet (MIRI mark-up text, NSS 2025, PRC GAIGI,
+  Kissinger), the draft-from-scratch option, and the annotated exemplar fold
+  moved from 2.3.5 to sit directly under it, with seam edits only ("After
+  you file" → "After you commit"; the rule line now says the exemplar, not
+  the written output, tests your answers). Every packet link moved with its
+  text, so the citations registry needed no change.
+- **2.3.5's Written Output section** now carries the commission and a packet
+  of the module's four papers plus the open web. Cross-references retargeted:
+  2.3.2's sharing extension "feeds 2.3.4" (not the memo), 2.3.4's two
+  carry-this-forward lines point at the mark-up below, and the who-watches
+  drill kicker likewise.
+- **Time**: `v-intel-action` 180 → 240 minutes; the module totals 540 (nine
+  hours), above the owner's eight-hour floor. Generators re-run
+  (`memos.js`, `course.js`).
+
+The constructive-alignment note: the spec's Create-level objective was
+two-part — draft the NTM article, and produce a monitoring-recommendation
+memo naming residual blind spots and their sibling owners. The written
+output now examines the second part; the first stays examined by the 2.3.4
+workspace and its exemplar, un-graded.

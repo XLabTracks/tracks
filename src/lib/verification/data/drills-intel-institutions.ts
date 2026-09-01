@@ -92,7 +92,7 @@ export const DRILLS_INTEL_INSTITUTIONS: DrillDeck = {
             "Solved in New START via a joint intelligence commission",
           ],
           right: 1,
-          why: "Baker §2.3.3: sharing is unobligated, voluntary, inconsistent — the regime leans on intelligence it has no right to demand. Kissinger's disclosure paradox is the general form. Your red-line meets this clause head-on in the written output.",
+          why: "Baker §2.3.3: sharing is unobligated, voluntary, inconsistent — the regime leans on intelligence it has no right to demand. Kissinger's disclosure paradox is the general form. Your red-line meets this clause head-on at the mark-up below.",
         },
       ],
     },

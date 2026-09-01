@@ -100,21 +100,21 @@ window.VERIFICATION_MEMOS = [
     "peerReviewed": false
   },
   {
-    "id": "m2-3-ntm-redline",
+    "id": "m2-3-intel-overview",
     "module": 2,
     "unit": "2.3",
-    "title": "Red-line the NTM article",
+    "title": "What we can see today",
     "status": "specified",
-    "genre": "redline",
-    "brief": "Work from the verbatim MIRI text you annotated in 2.3.4: Definition 17 plus the noninterference and no-deliberate-concealment articles. Mark at least three gaps or ambiguities, starting from your four answers if you like, and redraft the one provision whose failure you judge most consequential. Then confront the question the historical record says drafters avoid: write the sharing clause the text lacks, or defend its absence in three sentences. Test whatever you write against 2.3.4’s rule, that states sign what is symmetric, cheap, and checkable, and finish with the both-capitals test: one paragraph on why Washington accepts your article, one on why Beijing does.",
-    "audience": "The drafters of a US–China agreement, read in both capitals.",
-    "words": 700,
+    "genre": "memo",
+    "brief": "The sponsor’s question arrives in one line: if a state were training a frontier model covertly right now, what could we actually see from outside? Write the overview a decision-maker reads in ten minutes. Survey the mechanisms that exist today — overhead and thermal imagery, power and grid analysis, procurement, customs and financial tracking, open sources — and give each one honest sentence on what it establishes and one on what defeats it. Research is part of the task: find at least three public artifacts from the last two years yourself — a commercial satellite product, an enforcement action, a public tracker or filing — and cite them by link. The module’s papers set the frame, but the memo must show the world as it is this year, not as the literature described it. Lead with the bottom line: the two mechanisms you would weight most, and why. End with the blind spot that worries you most, and which other verification layer covers it. No treaty language — that work is done at the red-line desk in 2.3.4.",
+    "audience": "A policymaker trying to understand what we can actually track, and what we cannot.",
+    "words": 900,
     "peerReviewed": true,
     "criteria": [
-      "Fidelity to what signatures can actually establish",
-      "Precedent-consistent language",
-      "Honesty about sharing",
-      "Plausibility in both capitals",
+      "Fidelity to what each mechanism can actually establish",
+      "Currency — cited public artifacts the author found, not recalled",
+      "Bounds carried in the papers’ own modality — reduces, never defeats",
+      "A defended prioritization, not a catalog recital",
       "Named blind spots, each with the sibling mechanism that covers it"
     ]
   },

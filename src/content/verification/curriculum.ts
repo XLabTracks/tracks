@@ -530,7 +530,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-intel-intro",
     title: "2.3.5 From intelligence lead to verification action",
     contentRef: "verification/intelligence-action",
-    estimatedMinutes: 180,
+    estimatedMinutes: 240,
   },
   {
     id: "v-research-tips",

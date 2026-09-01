@@ -149,17 +149,17 @@ function Intro({ resumable, onStart }: { resumable: boolean; onStart: () => void
       <p className="eyebrow text-muted-foreground">The Analyst Desk</p>
       <p className="text-sm leading-relaxed">
         You are the treaty organization’s duty analyst. For each signal in the
-        queue: run up to two investigation moves (evidence has a price;
+        queue: run up to two investigation moves (evidence has a price —
         choose), then commit a disposition, a confidence, your reasoning, the
         strongest dissent against your own call, and the blind spot you cannot
-        close from here. All three records are required: that is what a
+        close from here. All three records are required — that is what a
         professional assessment looks like on paper. The queue ends at
         recommendations: executing an inspection belongs to the human layer
         (2.4).
       </p>
       <p className="text-muted-foreground text-sm leading-relaxed">
         How this is scored: on calibration, not paranoia. A thin-evidence
-        inspection demand costs you what it costs the regime: credibility. A
+        inspection demand costs you what it costs the regime — credibility. A
         missed strong lead costs the treaty. Confidence is scored too: wrong
         and loud is the failure mode this desk exists to break.
       </p>
@@ -176,9 +176,9 @@ function ReferenceDrawer() {
       <p className="font-medium">The ladder</p>
       <p className="text-muted-foreground">
         Anomaly → verification lead → evidence of suspected non-compliance.
-        Each promotion is earned by corroboration across evidence kinds
-        (physical, procurement, financial, digital, organizational), which
-        fail differently, so their agreement means something.
+        Each promotion is earned by corroboration across evidence kinds —
+        physical, procurement, financial, digital, organizational — which fail
+        differently, so their agreement means something.
       </p>
       <p className="font-medium">The signature anatomy</p>
       <p className="text-muted-foreground">
@@ -226,11 +226,11 @@ function SignalScreen({
   if (record.reasoning.trim().length < 20) lints.push("reasoning under 20 chars");
   if (record.dissent.trim().length < DESK_MIN_DISSENT)
     lints.push(
-      `dissent under ${DESK_MIN_DISSENT} chars: steelman the other call, or say why it fails`,
+      `dissent under ${DESK_MIN_DISSENT} chars — steelman the other call, or say why it fails`,
     );
   if (record.blind.trim().length < DESK_MIN_BLIND)
     lints.push(
-      `blind spot under ${DESK_MIN_BLIND} chars: name what you can't see from here`,
+      `blind spot under ${DESK_MIN_BLIND} chars — name what you can't see from here`,
     );
   const ready = lints.length === 0;
 
@@ -276,7 +276,7 @@ function SignalScreen({
           Signal {index + 1} of {DESK_SIGNALS.length}
         </h4>
         <p className="text-muted-foreground text-xs">
-          {doneCount(saved)} committed · no take-backs: calibration is the point
+          {doneCount(saved)} committed · no take-backs — calibration is the point
         </p>
       </div>
       <SegMeter
@@ -302,7 +302,7 @@ function SignalScreen({
           aria-expanded={drawerOpen}
           className="text-muted-foreground hover:text-foreground text-xs underline underline-offset-4"
         >
-          {drawerOpen ? "Close the reference drawer" : "Open the reference drawer: the ladder and the anatomy"}
+          {drawerOpen ? "Close the reference drawer" : "Open the reference drawer — the ladder and the anatomy"}
         </button>
         {drawerOpen ? (
           <div className="mt-2">
@@ -316,7 +316,7 @@ function SignalScreen({
         <p className="text-muted-foreground mt-1 text-xs">
           {movesLeft > 0
             ? `${movesLeft} of ${DESK_MAX_MOVES} moves left. Each reveals what it actually establishes.`
-            : "No moves left: commit below."}
+            : "No moves left — commit below."}
         </p>
         <div className="mt-2 space-y-2">
           {(Object.keys(signal.moves) as DeskMoveId[]).map((moveId) => {
@@ -400,7 +400,7 @@ function SignalScreen({
         </div>
 
         <label className="mt-4 block text-sm font-medium" htmlFor={`reason-${signal.id}`}>
-          Reasoning: make it visible
+          Reasoning — make it visible
         </label>
         <Textarea
           id={`reason-${signal.id}`}
@@ -411,18 +411,18 @@ function SignalScreen({
         />
 
         <label className="mt-3 block text-sm font-medium" htmlFor={`dissent-${signal.id}`}>
-          Dissent (required): the strongest argument against your own disposition
+          Dissent (required) — the strongest argument against your own disposition
         </label>
         <Textarea
           id={`dissent-${signal.id}`}
           value={record.dissent}
           onChange={(e) => update({ dissent: e.target.value })}
-          placeholder="Steelman the other call. If the counter-argument is genuinely weak, say so and say why: that is also a dissent record."
+          placeholder="Steelman the other call. If the counter-argument is genuinely weak, say so and say why — that is also a dissent record."
           className="mt-1.5 min-h-14"
         />
 
         <label className="mt-3 block text-sm font-medium" htmlFor={`blind-${signal.id}`}>
-          Blind spot (required): what can’t you see from here, and what would change your mind
+          Blind spot (required) — what can’t you see from here, and what would change your mind
         </label>
         <Textarea
           id={`blind-${signal.id}`}
@@ -597,16 +597,16 @@ function Report({
   }
 
   let reading = flatDisposition
-    ? `Flat run detected: "${flatDisposition}" on ${dispositionCounts.get(flatDisposition)} of ${DESK_SIGNALS.length} signals. A constant disposition is not calibration: it is one judgment repeated, and the queue was built so that every rung is the best call somewhere. Whatever the score says, this run avoided the decisions the desk exists to practice. Reset and read the dossiers.`
+    ? `Flat run detected: "${flatDisposition}" on ${dispositionCounts.get(flatDisposition)} of ${DESK_SIGNALS.length} signals. A constant disposition is not calibration — it is one judgment repeated, and the queue was built so that every rung is the best call somewhere. Whatever the score says, this run avoided the decisions the desk exists to practice. Reset and read the dossiers.`
     : burns > 0 && misses > 0
-      ? "Both failure modes fired: thin-evidence escalation AND a missed strong lead. Re-read the ladder: promotion is earned by corroboration, and silence is also a decision."
+      ? "Both failure modes fired: thin-evidence escalation AND a missed strong lead. Re-read the ladder — promotion is earned by corroboration, and silence is also a decision."
       : burns > 0
-        ? "Your error leans paranoid: inspection demands the evidence had not earned. The base rate is the discipline: ~5 false alarms wait for every real program."
+        ? "Your error leans paranoid: inspection demands the evidence had not earned. The base rate is the discipline — ~5 false alarms wait for every real program."
         : misses > 0
           ? "Your error leans quiet: a corroborated lead got logged. False alarms cost credibility, but the miss costs the treaty."
-          : "No burns, no misses: the queue was read calibrated. The remaining spread is confidence discipline.";
+          : "No burns, no misses — the queue was read calibrated. The remaining spread is confidence discipline.";
   if (flatConfidence) {
-    reading += ` Confidence was "${flatConfidence}" on every signal; a flat confidence carries no information, and the record is supposed to say where you would bet and where you would hedge.`;
+    reading += ` Confidence was "${flatConfidence}" on every signal — a flat confidence carries no information; the record is supposed to say where you would bet and where you would hedge.`;
   }
   if (dissents === 0) {
     reading +=
@@ -677,7 +677,7 @@ function Report({
           Review the debriefs
         </Button>
         <p className="text-muted-foreground text-xs">
-          The desk ends at recommendations: execution is 2.4’s material. Next
+          The desk ends at recommendations — execution is 2.4’s material. Next
           in the module: the written output.
         </p>
       </div>

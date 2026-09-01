@@ -1948,3 +1948,19 @@ open-sources card). It is an IOU for distilling "Signals in the Noise"
 (arXiv 2606.20610), named in the module draft but dropped from the in-app
 transcription. Either distill that paper into the card and delete the
 callout, or delete the callout and accept the short card as final weighting.
+
+## 2026-09-01 — the em-dash sweep is reversed, on the owner's ruling
+
+Owner: "I want everything to be grammatically correct; changing em dashes
+should be a stylistic choice, not a feature." That reverses the 2026-08-20
+no-em-dash rule recorded on the shared branch (its module-0 log, "The
+owner's 0.1 batch"), which this module's sweep had been enforcing. Em dashes
+are permitted; removing one is a per-sentence editorial judgement, never a
+mechanical pass.
+
+Every surviving conversion from the 2.3 sweep is restored from the recorded
+before/after pairs: 246 line conversions plus 49 hand-fixes reversed, and
+the Iraq-estimate sentence restored by hand. Not restored, deliberately:
+lines that no longer exist (the redundancy cuts) and the sections rewritten
+in that pass, which were composed naturally rather than converted. The
+companion change on main restores prevention.mdx's four lines from PR #55.

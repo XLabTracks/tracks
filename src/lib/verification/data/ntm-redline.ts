@@ -15,7 +15,7 @@ export const NTM_REDLINE_QUESTIONS: readonly WorkspaceQuestion[] = [
     requirement: "required",
     body: [
       {
-        text: "Read the definition against the signature catalog from 2.3.1. Which collection that a watcher actually uses is not named, and what does each omission cost at the first dispute?",
+        text: "Read the definition against the signature catalog from 2.3.1. Which collection that a watcher actually uses is not named — and what does each omission cost at the first dispute?",
       },
     ],
   },

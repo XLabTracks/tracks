@@ -24,7 +24,7 @@ export function NtmRedline({ onComplete }: VerificationWidgetProps) {
           </p>
           <p className="text-muted-foreground text-sm">
             Your four answers are the starting material for the written output
-            in 2.3.5: the red-line memo works from exactly this text.
+            in 2.3.5 — the red-line memo works from exactly this text.
           </p>
         </div>
       }

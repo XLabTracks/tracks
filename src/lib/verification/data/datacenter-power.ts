@@ -18,7 +18,7 @@ export const DCP_FACILITIES: DcpFacility[] = [
     id: "colossus2",
     name: "Colossus 2 (xAI)",
     mw: 946,
-    note: "Memphis, TN, the largest current draw in the database",
+    note: "Memphis, TN — the largest current draw in the database",
   },
   {
     id: "carlisle",
@@ -37,7 +37,7 @@ export const DCP_FACILITIES: DcpFacility[] = [
     id: "abilene",
     name: "OpenAI Stargate Abilene",
     mw: 421,
-    note: "Texas, Oracle-built",
+    note: "Texas — Oracle-built",
   },
   {
     id: "h100k",
@@ -67,13 +67,13 @@ export const DCP_COUNTRIES: DcpCountry[] = [
     name: "Iceland",
     gw: 2.2,
     twh: 19.5,
-    dc: "grid dominated by aluminium smelters; the comparable-load case MIRI Appendix D names",
+    dc: "grid dominated by aluminium smelters — the comparable-load case MIRI Appendix D names",
   },
   {
     name: "Ireland",
     gw: 3.8,
     twh: 33.3,
-    dc: "datacentres already take ~20% of national electricity; the canonical visible-in-the-grid case",
+    dc: "datacentres already take ~20% of national electricity — the canonical visible-in-the-grid case",
   },
   { name: "Denmark", gw: 4.0, twh: 35.0, dc: "hyperscale cloud presence" },
   {
@@ -98,7 +98,7 @@ export const DCP_BIG_GRIDS: DcpCountry[] = [
     name: "United States",
     gw: 487,
     twh: 4270,
-    dc: "~10.1 GW of tracked AI datacentre draw, 90% of the world total (Epoch)",
+    dc: "~10.1 GW of tracked AI datacentre draw — 90% of the world total (Epoch)",
     us: true,
   },
 ];

@@ -31,7 +31,7 @@ export function DatacenterPower() {
           into a lineup of national grids: each bar is a country’s average
           continuous electricity draw, and the marker is the facility you
           picked. Then look at what a watcher can and cannot read off that
-          draw (the load shape) and how fast the whole signature is
+          draw — the load shape — and how fast the whole signature is
           shrinking.
         </p>
       </div>
@@ -118,15 +118,15 @@ export function DatacenterPower() {
           </svg>
         </div>
         <p className="text-muted-foreground mt-2 text-xs">
-          {facility.name}: {facility.mw} MW. {facility.note}.
+          {facility.name}: {facility.mw} MW — {facility.note}.
         </p>
         <p className="text-muted-foreground mt-2 text-xs leading-relaxed">
           Amber bars are grids the selected facility out-draws. Off this chart:
           Poland {DCP_BIG_GRIDS[0]!.gw} GW, France {DCP_BIG_GRIDS[1]!.gw} GW,
           Germany {DCP_BIG_GRIDS[2]!.gw} GW, United States {DCP_BIG_GRIDS[3]!.gw}{" "}
-          GW, where {DCP_META.usMW / 1000 >= 10 ? "~10.1" : ""} GW of tracked AI
+          GW — where {DCP_META.usMW / 1000 >= 10 ? "~10.1" : ""} GW of tracked AI
           datacentre draw already sits (90% of the world total). Ireland is the
-          canonical visible-in-the-grid case, where datacentres already take ~20% of
+          canonical visible-in-the-grid case — datacentres already take ~20% of
           national electricity; Iceland’s smelter-dominated grid is the
           comparable-load case MIRI’s Appendix D names.
         </p>
@@ -135,7 +135,7 @@ export function DatacenterPower() {
       <div className="border-border rounded-xl border p-4">
         <p className="text-sm font-medium">What the draw looks like over a day</p>
         <p className="text-muted-foreground mt-1 text-xs leading-relaxed">
-          Stylised load shapes, not measured traces: the point is the shape.
+          Stylised load shapes, not measured traces — the point is the shape.
           Training holds a narrow band around the clock; inference follows
           human demand. A flat line at constant temperature is the thing the
           thermal card watches for.
@@ -184,10 +184,10 @@ export function DatacenterPower() {
                 .join(" ")}
             />
             <text x={46} y={34} className="fill-amber-500" style={{ fontSize: 11, fontWeight: 600 }}>
-              training: flat, around the clock
+              training — flat, around the clock
             </text>
             <text x={46} y={96} className="fill-sky-600" style={{ fontSize: 11, fontWeight: 600 }}>
-              inference: follows human demand
+              inference — follows human demand
             </text>
           </svg>
         </div>
@@ -247,7 +247,7 @@ export function DatacenterPower() {
           </svg>
         </div>
         <p className="text-muted-foreground mt-2 text-xs leading-relaxed">
-          Six years in, the same run hides under 15 MW: below the ~10 MW
+          Six years in, the same run hides under 15 MW — below the ~10 MW
           haystack floor is within sight. “Below threshold” is a date, not a
           fact, and the energy signature is the module’s most perishable tool.
         </p>
@@ -263,7 +263,7 @@ export function DatacenterPower() {
         >
           Epoch AI, AI Data Centers
         </a>{" "}
-        (open database; CSV pulled {DCP_META.pulled}; {DCP_META.facilities}{" "}
+        (open database; CSV pulled {DCP_META.pulled} — {DCP_META.facilities}{" "}
         tracked facilities, ~{(DCP_META.totalMW / 1000).toFixed(1)} GW current
         draw). Country figures: 2023 national electricity consumption
         (Ember/IEA yearbooks, approximate), converted to average continuous

@@ -1802,3 +1802,22 @@ shipped there and never crossed, so main kept rendering the error card the
 owner had screenshotted. Ported verbatim in this change, guard test included:
 main's 2403.08501v2 artifact still carries `ax-references` only as a landmark
 class, so without the fallback the embed still resolved to nothing.
+
+## 2026-09-01 — 2.3 owner review, first pass
+
+Owner instructions on the preview, applied:
+
+- **The submodule is "2.3 Intelligence"** — the ": watching without
+  permission" tail is gone from the app title; the static site's unit list
+  already said just "Intelligence".
+- **The intro's two vocabulary PopUps and the whole Retrieval Opener are
+  deleted** ("delete those, delete retrieval"). The intro is now the six
+  transcribed paragraphs and nothing else. The four opener Checks' vt-marks
+  keys (`check:intel-opener-*`) are orphaned, not reused.
+- **2.3 budgets eight hours, by instruction** ("2.3 total is 8 hours should
+  be — if it's less we are not doing it right"), with the red-line memo
+  assumed at two hours on the memo desk. Minutes now run
+  10 / 75 / 60 / 80 / 75 / 180 across 2.3.0–2.3.5 (the 180 is 120 for the
+  memo plus the Desk, exemplar, checkpoint and closing).
+- **The Power Signature's facility caption sits below the chart**, not
+  between the picker and the bars.

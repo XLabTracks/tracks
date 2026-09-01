@@ -56,9 +56,6 @@ export function DatacenterPower() {
             </button>
           ))}
         </div>
-        <p className="text-muted-foreground mt-2 text-xs">
-          {facility.name}: {facility.mw} MW — {facility.note}.
-        </p>
 
         <div className="mt-3 overflow-x-auto">
           <svg
@@ -120,6 +117,9 @@ export function DatacenterPower() {
             </text>
           </svg>
         </div>
+        <p className="text-muted-foreground mt-2 text-xs">
+          {facility.name}: {facility.mw} MW — {facility.note}.
+        </p>
         <p className="text-muted-foreground mt-2 text-xs leading-relaxed">
           Amber bars are grids the selected facility out-draws. Off this chart:
           Poland {DCP_BIG_GRIDS[0]!.gw} GW, France {DCP_BIG_GRIDS[1]!.gw} GW,

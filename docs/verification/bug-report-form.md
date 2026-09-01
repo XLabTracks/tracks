@@ -86,8 +86,12 @@ them; the quote and the form URL are the only two the action needs.
 
 ## Notes
 
-- The form must be open to whoever you expect to report — a form restricted
-  to one Google Workspace will bounce a signed-out learner.
+- **It collects a verified email, and that is deliberate: the audience is
+  playtesters** (course owner, 2026-09-01). It means a reporter has to be
+  signed in to Google, which would be the wrong trade for an open cohort but
+  is the right one for a named group whose reports you want to be able to
+  follow up. Do not "fix" this by turning email collection off; if the
+  audience ever widens to the public, that is the moment to revisit it.
 - A selection longer than 1200 characters is truncated with an ellipsis
   (`QUOTE_LIMIT`). The prefill travels in a URL, and a whole chapter in a
   query string is refused by the browser before it ever reaches Google.

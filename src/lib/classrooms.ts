@@ -37,6 +37,26 @@ export async function isFacilitator(userId: string): Promise<boolean> {
   return membership !== null;
 }
 
+/**
+ * Throw unless the user is an instructor of this classroom. Every classroom
+ * mutation re-checks through here because server actions are reachable by
+ * direct POST. It lives in this plain module rather than an actions file:
+ * exporting it from a "use server" module would publish it as a POSTable
+ * endpoint of its own.
+ */
+export async function requireInstructor(
+  userId: string,
+  classroomId: string,
+): Promise<void> {
+  const membership = await prisma.classroomMembership.findUnique({
+    where: { classroomId_userId: { classroomId, userId } },
+    select: { role: true },
+  });
+  if (membership?.role !== "instructor") {
+    throw new Error("Forbidden");
+  }
+}
+
 export async function getClassroom(classroomId: string) {
   return prisma.classroom.findUnique({
     where: { id: classroomId },

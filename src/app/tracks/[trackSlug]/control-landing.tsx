@@ -175,7 +175,7 @@ export function ControlTrackLanding({
                       {meta}
                     </p>
                   )}
-                  {isFirst && items.length > 0 && (
+                  {items.length > 0 && (
                     <ModuleItemsTable track={track} module={module} items={items} />
                   )}
                 </div>

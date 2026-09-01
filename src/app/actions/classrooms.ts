@@ -6,6 +6,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { isUniqueViolation, prisma } from "@/lib/db";
 import { getTrackById } from "@/lib/content";
 import { isStorableText } from "@/lib/content/exercise-view";
+import { requireInstructor } from "@/lib/classrooms";
 
 export interface ClassroomActionState {
   error?: string;
@@ -42,16 +43,6 @@ function generateJoinCode(length = 10): string {
 // The retry loops below exist only to dodge a joinCode unique collision
 // (isUniqueViolation); retry that, but never swallow connection/validation
 // errors.
-
-async function requireInstructor(userId: string, classroomId: string) {
-  const membership = await prisma.classroomMembership.findUnique({
-    where: { classroomId_userId: { classroomId, userId } },
-    select: { role: true },
-  });
-  if (membership?.role !== "instructor") {
-    throw new Error("Forbidden");
-  }
-}
 
 // A classroom must always keep at least one instructor — otherwise its
 // roster, join code, and stored key become permanently unreachable (nobody

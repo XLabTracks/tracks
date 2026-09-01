@@ -34,15 +34,16 @@ model User {
   // and re-validated at grade time — a stale value falls back to automatic.
   graderKeyPref String?
 
-  lessonProgress    LessonProgress[]
-  submissions       Submission[]
-  memberships       ClassroomMembership[]
-  createdClassrooms Classroom[]           @relation("ClassroomCreatedBy")
-  apiKeys           UserApiKey[]
-  reviewCards       ReviewCard[]
-  highlights        Highlight[]
-  gradingAttempts   GradingAttempt[]
-  verificationState VerificationState?
+  lessonProgress     LessonProgress[]
+  submissions        Submission[]
+  memberships        ClassroomMembership[]
+  createdClassrooms  Classroom[]           @relation("ClassroomCreatedBy")
+  createdAssignments Assignment[]          @relation("AssignmentCreatedBy")
+  apiKeys            UserApiKey[]
+  reviewCards        ReviewCard[]
+  highlights         Highlight[]
+  gradingAttempts    GradingAttempt[]
+  verificationState  VerificationState?
 
   verificationApplications VerificationApplication[]   @relation("VerificationApplicant")
   verificationDecisions    VerificationApplication[]   @relation("VerificationApplicationDecider")
@@ -337,6 +338,7 @@ model Classroom {
 
   memberships ClassroomMembership[]
   apiKeys     ClassroomApiKey[]
+  assignments Assignment[]
 }
 
 model ClassroomMembership {
@@ -350,4 +352,33 @@ model ClassroomMembership {
 
   @@unique([classroomId, userId])
   @@index([userId])
+}
+
+// An instructor's assignment to a classroom: a selection of module items
+// (lessons and papers) with an optional due date. `contentIds` is an ordered
+// JSON array of content-graph ids — code-defined string ids with no FK, the
+// LessonProgress.lessonId convention — validated against the graph by the
+// action before it is stored. Completion is never stored here: it is derived
+// at read time from the students' existing LessonProgress rows
+// (src/lib/assignments.ts), so an assignment can never disagree with the
+// progress the track pages show. The SQL migration adds length/size CHECKs
+// backstopping the action's caps.
+model Assignment {
+  id          String    @id @default(cuid())
+  classroomId String
+  classroom   Classroom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+  // Kept for display in multi-instructor rooms; the author's departure must
+  // not take the classroom's assignments with it.
+  createdById String?
+  createdBy   User?     @relation("AssignmentCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  title       String
+  note        String?
+  contentIds  Json
+  // Midnight UTC of the chosen due date; "past due" means the whole UTC day
+  // has ended (isPastDue in src/lib/assignments.ts).
+  dueAt       DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([classroomId])
 }

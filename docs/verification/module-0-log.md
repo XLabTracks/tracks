@@ -919,3 +919,17 @@ which kept serving the older designs.
   (title text-sm, role text-xs).
 - **prevention.mdx loses its last four em dashes**, per the standing
   no-em-dash rule; the sweep had happened on the branch only.
+
+## 2026-09-01 — the reading-settings panel could open off screen, locking the text size
+
+Owner, with a screenshot at 200% text: the panel showed only its Focus
+reading tail below the header, and the text-size slider was unreachable — a
+reader who had enlarged the text had no way back. The focus panel positions
+`sm:absolute sm:top-9` against the nearest positioned ancestor; the parts
+reader's control row is `relative` and its comment says that is the anchor,
+but `ReadingSurface`'s row (the live, unchunked reader) was not, so the
+panel resolved against the page column: measured 281px above its own button
+at rest, and fully above the viewport once the reader had scrolled — which
+at 200% they have. One class (`relative` on the row) makes the row the
+anchor, as in the parts reader. Verified with Playwright at 200%: slider on
+screen under the button, arrow keys walk the scale back down.

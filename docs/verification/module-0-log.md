@@ -934,3 +934,17 @@ perception—or lack thereof—" and "exponentially increasing—and we are
 notoriously terrible". The wider sweep this bullet was the main-side edge of
 had happened on the 2.3 preview branch, and is reversed there in the same
 ruling (its module-2 log carries that entry).
+
+## 2026-09-01 — the reading-settings panel could open off screen, locking the text size
+
+Owner, with a screenshot at 200% text: the panel showed only its Focus
+reading tail below the header, and the text-size slider was unreachable — a
+reader who had enlarged the text had no way back. The focus panel positions
+`sm:absolute sm:top-9` against the nearest positioned ancestor; the parts
+reader's control row is `relative` and its comment says that is the anchor,
+but `ReadingSurface`'s row (the live, unchunked reader) was not, so the
+panel resolved against the page column: measured 281px above its own button
+at rest, and fully above the viewport once the reader had scrolled — which
+at 200% they have. One class (`relative` on the row) makes the row the
+anchor, as in the parts reader. Verified with Playwright at 200%: slider on
+screen under the button, arrow keys walk the scale back down.

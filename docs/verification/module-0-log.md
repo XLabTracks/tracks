@@ -919,3 +919,32 @@ which kept serving the older designs.
   (title text-sm, role text-xs).
 - **prevention.mdx loses its last four em dashes**, per the standing
   no-em-dash rule; the sweep had happened on the branch only.
+
+## 2026-09-01 — the em-dash removal is reversed, on the owner's ruling
+
+The last bullet of the entry above is cancelled. Course owner, same day:
+*"i want everything to be grammatically correct changing em dashes should be
+stylistic choice not feature."* Em dashes are correct grammar; taking one out
+is a per-sentence stylistic choice made while editing that sentence, never a
+rule to sweep a file with. The 2026-08-20 no-em-dash rule (a shared-branch
+CLAUDE.md rule; it was never in main's) is void.
+
+`prevention.mdx` gets its two sentences back as first written — "public
+perception—or lack thereof—" and "exponentially increasing—and we are
+notoriously terrible". The wider sweep this bullet was the main-side edge of
+had happened on the 2.3 preview branch, and is reversed there in the same
+ruling (its module-2 log carries that entry).
+
+## 2026-09-01 — the reading-settings panel could open off screen, locking the text size
+
+Owner, with a screenshot at 200% text: the panel showed only its Focus
+reading tail below the header, and the text-size slider was unreachable — a
+reader who had enlarged the text had no way back. The focus panel positions
+`sm:absolute sm:top-9` against the nearest positioned ancestor; the parts
+reader's control row is `relative` and its comment says that is the anchor,
+but `ReadingSurface`'s row (the live, unchunked reader) was not, so the
+panel resolved against the page column: measured 281px above its own button
+at rest, and fully above the viewport once the reader had scrolled — which
+at 200% they have. One class (`relative` on the row) makes the row the
+anchor, as in the parts reader. Verified with Playwright at 200%: slider on
+screen under the button, arrow keys walk the scale back down.

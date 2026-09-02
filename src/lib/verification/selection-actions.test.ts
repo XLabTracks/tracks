@@ -19,6 +19,31 @@ describe("actionsFor", () => {
     expect(actionsFor(facts())).toEqual(["highlight", "define", "notebook"]);
   });
 
+  it("adds Report a bug last, and only once a form is configured", () => {
+    expect(actionsFor(facts())).not.toContain("report");
+    expect(actionsFor(facts({ reportSupported: true }))).toEqual([
+      "highlight",
+      "define",
+      "notebook",
+      "report",
+    ]);
+  });
+
+  it("offers Report a bug on a passage too, not just a short phrase", () => {
+    const passage = "a".concat(" b".repeat(SHORT_WORDS + 4));
+    expect(actionsFor(facts({ text: passage, reportSupported: true }))).toEqual([
+      "highlight",
+      "notebook",
+      "report",
+    ]);
+  });
+
+  it("stays silent outside the reading column even with a form configured", () => {
+    expect(
+      actionsFor(facts({ inReading: false, reportSupported: true })),
+    ).toEqual([]);
+  });
+
   it("drops Define once the selection is a passage rather than a term", () => {
     const long = "a".concat(" b".repeat(SHORT_WORDS));
     expect(wordCount(long)).toBe(SHORT_WORDS + 1);

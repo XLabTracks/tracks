@@ -588,6 +588,25 @@ add must reduce the duplication, never widen it.
   798 it had been given. Guard on `[data-widget]` and NOT on `.not-prose`: a
   fold or a callout holding authored sentences is still reading, and exempting
   it widens that prose past the measure.
+- **The tap-target floor beats a utility `min-w-*`, so never size a widget
+  control with one.** `app-bridge.css` gives every control inside
+  `[data-widget]` `min-inline-size: 44px` under `(max-width: 720px), (pointer:
+  coarse)`. It is a logical property at higher specificity than a Tailwind
+  utility, so `min-w-[104px]` on a flex item computes to **44px** on a phone —
+  a floor silently acting as a ceiling. The pipeline chips in
+  `interactive-map` were laid out `min-w-[104px] flex-1`, so on a 390px phone
+  they resolved to 47px boxes holding words that need 65px, and every label
+  painted out over its neighbour. Size such a control with its **flex basis**
+  (`flex-[1_1_104px]`), which the floor does not touch and which makes the row
+  wrap instead of crushing: the tap-target rule is right and the layout has to
+  work with it.
+- **A control's instructions must not assume a mouse.** Copy that says
+  "Hover", "Click to pin", "Click a stage" is wrong on a phone, and a hover
+  card is worse than wrong there — a tap fires one synthetic mousemove, so it
+  raises a card the reader cannot scroll, dismiss, or fit on screen. Gate
+  hover affordances on `(hover: hover) and (pointer: fine)`, give the copy a
+  `…Touch` twin in the widget's data file, and make the tap do the thing the
+  click does. `interactive-map` is the reference for both halves.
 - **Optional material is marked one way: `Optional:` in front of the
   header.** Course owner, 2026-08-20 ("I like Optional: in header more than
   chip"). Muted weight, at the FRONT of the title, never a chip beside it,

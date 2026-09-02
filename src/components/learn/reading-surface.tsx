@@ -65,7 +65,7 @@ export function ReadingSurface({ children }: { children: ReactNode }) {
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-end">
+      <div className="relative mb-4 flex items-center justify-end">
         <FocusReadingControl settings={focus} onChange={applyFocus} />
       </div>
       <div ref={hostRef} data-reading-surface="" className={focusClassName(focus)}>

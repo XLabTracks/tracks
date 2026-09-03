@@ -2236,3 +2236,25 @@ left with the institutions section; the entry above stands as the record of
 what that packet was. The one historical example that remains in the debates
 fold — the Niger forgeries, as the standing warning that shared documents
 might be fake — is Baker's point and is cited to Baker.
+
+## 2026-09-02 — the collection map is labelled the way the references label it
+
+Course owner, on the map's copy ("Eight ways a watcher sees… those that
+collect language and records, and those that collect physics"): this is
+model-speak; look at how such taxonomies are labelled where people wrote the
+text. Checked against three human-written references: the Naval War College
+library guide ("There are five main ways of collecting intelligence that are
+often referred to as 'intelligence collection disciplines' or the 'INTs'"),
+the ODNI definitions of the disciplines, and Clark's *Intelligence
+Collection*, whose Part I is "Literal collection" (OSINT, HUMINT, COMINT,
+cyber) and Part II "Nonliteral collection" (imaging, radar, MASINT) — the
+division the map already used under invented names. The map is now titled
+"Intelligence collection disciplines", its lede states the division in
+Clark's terms and credits him, the family labels are "Literal collection" and
+"Nonliteral collection", the card definitions follow the ODNI/NWC wording
+(SIGINT as COMINT and ELINT; MASINT as technically derived intelligence other
+than imagery and signals; GEOINT as the analysis and visual representation of
+activity on the earth; FININT as intelligence gathered from the analysis of
+monetary transactions), the field labels are "What it collects" and
+"Limitations", and the legend is an instruction. The head lesson's section
+and the closing summary line use the same terms.

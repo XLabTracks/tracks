@@ -10,16 +10,21 @@ export interface CollectionDiscipline {
 }
 
 export const COLLECTION_COPY = {
-  title: "The collection map",
+  title: "Intelligence collection disciplines",
   lede:
-    "Eight ways a watcher sees. The disciplines split into two families: those " +
-    "that collect language and records, and those that collect physics. Open " +
-    "each one.",
-  literal: "Collects language and records",
-  technical: "Collects physics",
-  legend: "Click a discipline to read what it is.",
-  seenLabel: "Picks up",
-  limitLabel: "Characteristic limit",
+    "Intelligence is collected in a small number of ways, usually called the " +
+    "collection disciplines or the INTs, each named for its source. Clark's " +
+    "textbook divides them into literal collection, whose sources yield " +
+    "information in a form people use to communicate, and nonliteral " +
+    "collection, whose sources yield images and measurements that need " +
+    "technical processing before an analyst can read them. The eight " +
+    "disciplines that matter for watching AI development are listed below in " +
+    "that division.",
+  literal: "Literal collection",
+  technical: "Nonliteral collection",
+  legend: "Select a discipline for its definition.",
+  seenLabel: "What it collects",
+  limitLabel: "Limitations",
 } as const;
 
 export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
@@ -29,13 +34,11 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     name: "Open-source intelligence",
     kind: "literal",
     what:
-      "Anything published or otherwise available without concealment: permits, " +
-      "corporate filings, hiring, supplier disclosures, interconnect queues and " +
-      "power-purchase records.",
-    seen: "Organizational and facility signatures, before anything is built.",
+      "Publicly available information: media reporting, government and corporate filings, permits, professional and academic records, and public data.",
+    seen:
+      "Organizational and facility signatures — permits, filings, hiring, supplier disclosures, interconnect and power-purchase records — often before anything is built.",
     limit:
-      "Six Layers classes it with the supplemental mechanisms — it rarely " +
-      "settles a question on its own.",
+      "Six Layers classes it with the supplemental mechanisms: it rarely settles a question on its own, and it is the first stream a program sanitizes.",
   },
   {
     id: "humint",
@@ -43,12 +46,11 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     name: "Human intelligence",
     kind: "literal",
     what:
-      "Collection from people — sources inside an organization, defectors, " +
-      "contractors, and anyone with placement and access.",
-    seen: "Intent and internal knowledge, which no sensor reads.",
+      "Information collected from people, openly or clandestinely: sources inside an organization, defectors, contractors, and anyone with placement and access.",
+    seen:
+      "Intent and internal knowledge, which no sensor records.",
     limit:
-      "Slow, unschedulable, and dependent on a person choosing to talk; it " +
-      "cannot be tasked the way a satellite can.",
+      "Slow and unschedulable: it depends on a person choosing to talk, and cannot be tasked the way a satellite can.",
   },
   {
     id: "sigint",
@@ -56,12 +58,11 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     name: "Signals intelligence",
     kind: "literal",
     what:
-      "Interception of communications and electronic emissions — who is talking " +
-      "to whom, and sometimes what they said.",
-    seen: "Organizational and operational signatures.",
+      "Intelligence derived from intercepted electronic transmissions: communications (COMINT) and non-communications signals (ELINT).",
+    seen:
+      "Organizational and operational signatures — who is in contact with whom, and sometimes what was said.",
     limit:
-      "The most sources-and-methods-sensitive stream, which is exactly why it " +
-      "is the hardest to share with a treaty verifier.",
+      "The most sources-and-methods-sensitive discipline, and therefore the hardest to share with a treaty verifier.",
   },
   {
     id: "cyber",
@@ -69,12 +70,11 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     name: "Cyber intelligence",
     kind: "literal",
     what:
-      "Collection from networks and systems themselves. MIRI's Definition 17 " +
-      "names it inside national technical means.",
-    seen: "Operational signatures — what a facility is actually running.",
+      "Collection from computer networks and systems themselves. MIRI's Definition 17 names cyber inside national technical means.",
+    seen:
+      "Operational signatures — what a facility is actually running.",
     limit:
-      "Its inclusion in a treaty definition is contested: read as legalized " +
-      "collection by one party and as a license to hack by the other.",
+      "Its place in a treaty definition is contested: one party reads it as legalized collection, the other as a licence to hack.",
   },
   {
     id: "finint",
@@ -82,16 +82,11 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     name: "Financial intelligence",
     kind: "literal",
     what:
-      "Money as evidence: transaction records, suspicious-activity reports, " +
-      "export licences, customs filings, and the procurement trail behind " +
-      "chips, components and construction.",
+      "Intelligence gathered from the analysis of monetary transactions: bank records, suspicious-activity reports, export licences, customs filings, and the procurement trail behind chips, components, and construction.",
     seen:
-      "Resource-flow signatures — what was bought, from whom, and who paid. " +
-      "Scher and Thiergart rate it High feasibility within a year: covert AI " +
-      "projects are very expensive and leave a substantial money trail.",
+      "Resource-flow signatures — what was bought, from whom, and who paid. Scher and Thiergart rate it High feasibility within a year.",
     limit:
-      "Dual-use purchases blur the signal, and domestic chip manufacturing " +
-      "erodes the customs half of the trail.",
+      "Dual-use purchases blur the signal, and domestic chip manufacturing erodes the customs half of the trail.",
   },
   {
     id: "imint",
@@ -99,12 +94,11 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     name: "Imagery intelligence",
     kind: "technical",
     what:
-      "Overhead and aerial imagery: building footprint, electrical substations, " +
-      "cooling plant, security perimeter.",
-    seen: "Facility signatures, and construction while it is happening.",
+      "Intelligence from satellite and aerial imagery, formerly called photo intelligence: building footprint, substations, cooling plant, security perimeter.",
+    seen:
+      "Facility signatures, and construction while it is under way.",
     limit:
-      "Unlikely to separate an AI datacenter from any other datacenter — " +
-      "cooling is the differentiator — and defeated by underground siting.",
+      "Unlikely to tell an AI datacenter from any other — cooling is the differentiator — and defeated by underground siting.",
   },
   {
     id: "geoint",
@@ -112,9 +106,9 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     name: "Geospatial intelligence",
     kind: "technical",
     what:
-      "Imagery placed in geographic and temporal context — terrain, " +
-      "infrastructure, transmission lines, and change over time.",
-    seen: "Resource-flow signatures: the grid connection a large site needs.",
+      "The analysis and visual representation of activity on the earth: imagery placed in geographic and temporal context — terrain, infrastructure, transmission lines, change over time.",
+    seen:
+      "Resource-flow signatures: the grid connection a large site needs.",
     limit:
       "Reads the surroundings well and the activity inside poorly.",
   },
@@ -124,13 +118,10 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     name: "Measurement and signature intelligence",
     kind: "technical",
     what:
-      "The physics a facility emits — thermal, effluent, radar and geophysical " +
-      "signatures. Clark's technical-collection reference is the one on this.",
+      "Technically derived intelligence other than imagery and signals: the distinctive physical signatures of a target — thermal, acoustic, seismic, radio-frequency, materials.",
     seen:
-      "Waste heat and the narrow temperature band of constant chip operation; " +
-      "geophysical methods are already used against underground construction.",
+      "Waste heat and the narrow temperature band of constant chip operation; geophysical methods are already used against underground construction.",
     limit:
-      "The signature it reads is shrinking: performance-per-watt improves about " +
-      "1.6x a year, so a fixed quantity of compute emits less each year.",
+      "The signature it reads is shrinking: performance per watt improves about 1.6× a year, so a fixed quantity of compute emits less each year.",
   },
 ];

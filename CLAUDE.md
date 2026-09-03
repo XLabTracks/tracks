@@ -495,12 +495,32 @@ add must reduce the duplication, never widen it.
   are authored content, so they were kept rather than deleted. Either port
   them to React widgets under `src/components/verification/widgets/` or
   retire them deliberately — do not leave them drifting a third time.
-- **Learner state belongs to the account.** `VerificationState`
-  (`/api/verification/state`) holds completed unit ids and the notebook as one
-  JSON document per user; `localStorage` is the signed-out fallback and the
+- **Learner state belongs to the account, and the device is wiped on the
+  way out.** `VerificationState` (`/api/verification/state`) holds one JSON
+  document per user with six stores — progress, notebook, highlights, memo
+  drafts, the Field Map, and `widgets`, a map of every app widget's storage
+  key to `{ value, updatedAt }`, merged key by key
+  (`state-document.ts`). `localStorage` is the signed-out fallback and the
   offline cache, never the source of truth. Signed out returns 401 and the
   pages carry on — that is a supported mode, not an error, and must never be
-  reported as one. **The table needs
+  reported as one. Course owner, 2026-09-03: **no learner work may be
+  device-only**. A widget never calls `localStorage` for learner work; it
+  reads and writes through `src/components/verification/kit/stored.ts`
+  (`readStored`/`writeStored`/`removeStored`), which stamps the key in
+  `vt-widget-stamps.v1` and announces `vt-widget-change`, and `sync.js`
+  carries the stamped keys to the account as the `widgets` store (adopting
+  newer account copies with its one-per-tab reload). Preferences — theme,
+  text scale, reading mode, sidebar width, the `tracks:*` toggles — stay on
+  the device. `src/lib/verification/device-storage.ts` is the other half:
+  `AccountStorageGuard` (mounted in `AppHeader`, so on every page) keys the
+  device to one account under `tracks:account` and purges every learner-work
+  key when the account changes or the session is gone, and the account menu's
+  Sign out flushes the sync, purges, then ends the session — so the next
+  person at the keyboard sees nothing of the last one, and nothing of theirs
+  is pushed into the wrong account. `isLearnerWorkKey` is the list; a new
+  storage key for learner work is added there or it survives sign-out.
+  `sync.js` waits for the guard (`tracks-account-settled`) before it adopts
+  or pushes. **The table needs
   `db/migrations/20260805120000_verification_state.sql` applied with the admin
   role before any of this works.**
 - **A body may repeat its own title; the reader drops it.** The item page owns
@@ -852,8 +872,9 @@ verification:capstones` (`-- --check` covers both; never hand-edit either).
   **above** the words — reproduce only what a source's terms allow, and say so
   in a comment above the lesson), `<Src>` (a citation riding with its
   passage). They came from the retired static player; `<Check>`/`<GapFill>`
-  are learner work that feeds no meter, kept in `localStorage` under
-  `vt-marks.v1` and read through `useSyncExternalStore` so the server snapshot
+  are learner work that feeds no meter, kept under `vt-marks.v1` through the
+  `stored.ts` shim (so it reaches the account and leaves the device on
+  sign-out) and read through `useSyncExternalStore` so the server snapshot
   is the empty state. A block's `id` is its storage key and is permanent.
 - **Enrolling is an app route, not a static page**, because it needs a session
   and a row: `/verification/enroll` (apply, edit, withdraw) and

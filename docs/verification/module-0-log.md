@@ -948,3 +948,38 @@ at rest, and fully above the viewport once the reader had scrolled — which
 at 200% they have. One class (`relative` on the row) makes the row the
 anchor, as in the parts reader. Verified with Playwright at 200%: slider on
 screen under the button, arrow keys walk the scale back down.
+
+## 2026-09-03 — learner work lives in the account; the device is wiped on sign-out
+
+Course owner: save all of it through the account, not the device, so that
+signing out never leaves a device showing somebody's long text. Two halves,
+platform-wide:
+
+1. Every app widget that kept its state in `localStorage` (the `v-*` keys,
+   the drill decks, the workspaces, the marking keys, the context distiller,
+   the reader marks) now reads and writes through one shim,
+   `src/components/verification/kit/stored.ts`, which stamps the key and
+   announces the write; `sync.js` composes those keys into a sixth store,
+   `widgets`, in the account document and merges it key by key on both
+   ends (`state-document.ts`; nine new tests). Nothing changed in any
+   widget's own parsing or shape — the change is the storage call — so no
+   stored value needed migrating. Notebook, memo drafts, highlights,
+   progress and the Field Map were already synced by `sync.js`.
+2. `src/lib/verification/device-storage.ts` keys the device to one account
+   (`tracks:account`) and purges every learner-work key when the account
+   changes or is gone; `AccountStorageGuard` runs it on every page from
+   `AppHeader`, and Sign out flushes the sync, purges, then ends the session.
+   `sync.js` waits for the guard so the old account's local copies can never
+   be adopted into, or pushed from, the new one — which was a live
+   cross-account leak before, not only a display problem: with A's newer
+   local memo on the device, B's sign-in would have pushed A's draft into
+   B's account. Preferences stay on the device; the list of what counts as
+   learner work is `isLearnerWorkKey`.
+
+Not done, and named: the Control track's threat bench (`bench:*`) and the
+papers' gate responses (`xlab-sec-*`) are purged on sign-out but are not yet
+carried to the account; they are outside the Verification document and
+would need the same shim plus a store of their own. The signed-in
+end-to-end path (write, sign out, sign in on another device) was not
+exercised in the build sandbox, which has no database; the merge logic is
+unit-tested and the device half is unit-tested against a fake storage.

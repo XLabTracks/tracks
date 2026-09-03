@@ -25,6 +25,7 @@ import {
 import { STANDARD_OF_PROOF_KEY } from "@/lib/verification/data/marking-keys";
 import { MarkingKeyPanel } from "../kit/marking-key";
 import type { VerificationWidgetProps } from "../kit/types";
+import { readStored, writeStored } from "@/components/verification/kit/stored";
 
 interface Saved {
   moves: Record<string, ProofMoveId>;
@@ -78,7 +79,7 @@ export function StandardOfProof({
   useEffect(() => {
     let restored = EMPTY;
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = readStored(STORAGE_KEY);
       if (raw) restored = prune(JSON.parse(raw));
     } catch {
     }
@@ -91,7 +92,7 @@ export function StandardOfProof({
   const persist = useCallback((next: Saved) => {
     setSaved(next);
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      writeStored(STORAGE_KEY, JSON.stringify(next));
     } catch {
     }
   }, []);

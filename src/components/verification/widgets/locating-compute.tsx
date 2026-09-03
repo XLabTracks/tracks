@@ -124,14 +124,14 @@ export function LocatingCompute(_: VerificationWidgetProps) {
     return (
       <div className="not-prose my-6 space-y-4">
         <div className="border-border bg-card rounded-xl border p-5">
-          <p className="eyebrow text-muted-foreground">Rate it before the field does</p>
+          <p className="eyebrow text-muted-foreground">Rate each mechanism before seeing the field&rsquo;s rating</p>
           <p className="mt-2 text-sm leading-relaxed">
-            Building blocks for one job: locating the world&rsquo;s AI compute,
-            the first thing any verification regime has to do. For each card,
-            commit a feasibility rating and a timeline on the report&rsquo;s own
-            scale, answer one short question that makes your reasoning visible,
-            and only then see the field&rsquo;s rating. Where you differ, you
-            argue the evidence.
+            Each card is one building block for a single job: locating the
+            world&rsquo;s AI compute, which is the first thing any verification
+            regime has to do. For each card, commit a feasibility rating and a
+            timeline on the report&rsquo;s own scale, answer one short question
+            that makes your reasoning visible, and only then see the
+            field&rsquo;s rating. Where you differ, argue from the evidence.
           </p>
           <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
             The ratings you are about to argue with come from{" "}
@@ -161,11 +161,11 @@ export function LocatingCompute(_: VerificationWidgetProps) {
             ) : null}
           </div>
           <p className="text-muted-foreground mt-3 text-xs leading-relaxed">
-            The intelligence deck is this module&rsquo;s slice: the eight
-            mechanisms a state can run without the other side&rsquo;s
-            cooperation. The full table (hardware, inspections, export
-            controls) is the extension run and good preparation for unsealing
-            your Module-2 ranking in 4.1.
+            The intelligence deck covers this module&rsquo;s mechanisms: the
+            eight a state can run without the other side&rsquo;s cooperation.
+            The full table (hardware, inspections, export controls) is optional
+            further practice, and preparation for 4.1, where you unseal your
+            Module-2 ranking.
           </p>
         </div>
       </div>
@@ -263,10 +263,11 @@ export function LocatingCompute(_: VerificationWidgetProps) {
 
         <div className="border-border bg-card rounded-xl border p-5">
           <p className="text-sm font-medium">
-            Synthesis, and it is the deliverable: an emergency three-month
-            pause starts in six months. Pick TWO building blocks to fund now
-            and defend the pick in about three sentences. If you rated anything
-            differently than the report, use at least one of those.
+            Synthesis, and this is the deliverable. An emergency three-month
+            pause starts in six months. Choose two building blocks to fund now
+            and defend the choice in about three sentences. If you rated any
+            block differently from the report, use at least one of those in
+            your answer.
           </p>
           <textarea
             rows={4}
@@ -292,9 +293,9 @@ export function LocatingCompute(_: VerificationWidgetProps) {
             </span>
           </div>
           <p className="text-muted-foreground mt-3 text-xs leading-relaxed">
-            Remember the frame: these ratings are the field&rsquo;s preliminary
-            estimates, and your sealed Module-2 stream ranking is still waiting
-            in 4.1. This exercise is practice for unsealing it.
+            Keep the frame in mind: these ratings are the field&rsquo;s
+            preliminary estimates, and your sealed Module-2 stream ranking is
+            still waiting in 4.1. This exercise is practice for unsealing it.
           </p>
         </div>
       </div>

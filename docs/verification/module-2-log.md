@@ -2174,3 +2174,52 @@ Left alone, on purpose: `data/exercises.js`'s orphaned `ex-evasion` table
 still names "these four layers" — its own four columns (hardware, cloud,
 intelligence, human) feed the capstone red-team table, and collapsing them
 is a content decision for the owner, recorded here rather than made.
+
+## 2026-09-02 — task statements rewritten as tasks, on the owner's instruction
+
+Course owner, on 2.3.10's standard-of-proof exercise ("One allegation. Four
+dockets — the evidence in front of an institution, and the institution
+holding it."): the phrasing is bad, and every task in the module is to be
+formulated the way a task-setting centre would formulate it — what is given,
+what to do, what counts as done — with no fragments for effect, no
+unexplained metaphors, no nonsense terms. The pass covered every exercise
+the merged 2.3 embeds — data files, widget copy, marking key, lesson
+lead-ins, checkpoint correctives, and the memo brief.
+
+What changed, by exercise:
+
+- **Standard of proof**: "docket" (a court-calendar term used to mean a
+  case) is gone from the data, the widget, and the marking key; the intro
+  states the setup plainly (one allegation received four times, each case
+  pairing evidence with the institution that must act on it); the task is
+  "choose the institution's next step, then justify it in three parts"; the
+  reveal states the hidden 2×2 in plain words; case titles read "Converging
+  evidence" and "A single channel". The code identifiers followed
+  (`PROOF_CASES`, `ProofCase`).
+- **Missing board**: "Aim for around a few sentences" became "two to four
+  sentences per station"; the finder and judge prompts say whose part is
+  being cast; the closing prompt and the strain prompt are plain questions.
+- **Construct a case**: the reveal kickers are "Failure point: …"; the
+  heading "Where a report can die" is "Where a report can fail".
+- **Inspection order** (policy labs): the instruction names Project Lattice
+  and says what to decide instead of "set the ceiling imposed by access".
+- **Drill benches**: the Fermi bench drops "Derive, never plug in" and
+  "Derive it; don't receive it" for "work the numbers out yourself;
+  reference values appear only after you commit"; the assessment deck drops
+  "prices the base rate", "places every bound with its sibling owner",
+  "canonical failure case", "the bias menu's words", and "calibrated
+  verdict" for plain statements of the same tasks.
+- **Feasibility cards**: the widget's eyebrow and paragraphs, the lesson
+  fold, and the red-team prompt say what to do in order ("commit a rating
+  and a timeline with a short reason before the field's rating is shown,
+  then compare").
+- **Lead-ins and the memo**: the power-explainer lead-in drops "the decay
+  clock running against the whole signature"; the assessment lead-in drops
+  "a question the module refuses to answer for you"; the written-output
+  lead-in and the memo brief are stated as tasks (the brief also lists human
+  sources among the mechanisms, since the human layer now sits in 2.3); two
+  checkpoint correctives drop "beat" and "carries this exact trade".
+
+Explanatory reveal prose (the missing-board commentary, the drill reveals,
+the power explainer's captions) was left in its register: it explains,
+it does not set a task. The same pass has not been made over modules 0–2.2.

@@ -35,7 +35,7 @@ export const LC_PROMPTS = [
   {
     key: "redteam",
     label: "Red team",
-    q: "You run the evader’s program with a state budget. What is your first move against this mechanism?",
+    q: "You are running the covert program, with a state’s budget. What is your first move against this mechanism?",
   },
 ];
 

@@ -4,14 +4,14 @@ export const DRILLS_INTEL_SIGNATURES: DrillDeck = {
   id: "drills-intel-signatures",
   title: "Drill Bench: Power to Compute",
   blurb:
-    "Derive the power-to-compute conversion from two atomic facts, scale it to a real cluster, then triage three sites on draw alone. Derive, never plug in.",
+    "Derive the power-to-compute conversion from two basic facts, scale it to a real cluster, then classify three sites from their power draw alone. Work the numbers out yourself; reference values appear only after you commit.",
   benches: [
     {
       id: "fermi-bench",
       label: "Fermi bench",
       name: "Fermi bench",
       kicker:
-        "Derive it; don't receive it. The reference value appears only as the check on your own derivation, never as an input.",
+        "Work the numbers out yourself. The reference value is shown only after you commit, as a check on your derivation, never as an input.",
       time: "~10 min",
       steps: [
         {
@@ -25,7 +25,7 @@ export const DRILLS_INTEL_SIGNATURES: DrillDeck = {
         },
         {
           type: "pick",
-          q: "Scale it: a ~130 MW site (the scale of a 100k-accelerator cluster). Order-of-magnitude compute bound?",
+          q: "Scale it up: a site drawing about 130 MW, the scale of a 100,000-accelerator cluster. What is its compute bound, to an order of magnitude?",
           opts: ["~10¹⁷ FLOP/s", "~10²⁰ FLOP/s", "~10²³ FLOP/s"],
           right: 1,
           why: "1.3×10⁸ W × 10¹² FLOP/s per watt ≈ 10²⁰ FLOP/s. Count the zeros — that is the whole method. Power bounds compute; it never reveals what the compute computes.",

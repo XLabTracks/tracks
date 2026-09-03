@@ -51,7 +51,7 @@ export const AUDITS_INSPECTIONS_LAB: HumanPolicyLab = {
   eyebrow: "Audits and inspections · 2.3.9",
   title: "Build the inspection order",
   instruction:
-    "A power anomaly has raised a concrete concern. Choose the mechanism, set the ceiling imposed by access, and write an order that can survive both evasion and a legitimate confidentiality objection.",
+    "A power anomaly has raised a specific concern about Project Lattice. Choose the right mechanism, state what conclusions the available level of access allows, and write an inspection order that holds up against both evasion and a legitimate confidentiality objection.",
   caseTitle: "Project Lattice",
   caseBody:
     "A declared data center reports no training run above the treaty threshold. Independently obtained power-allocation and procurement records show a six-week expansion under the same project code. The records identify a facility and time period but not the workload. The agreement permits periodic inspections and a short-notice inspection when a specific concern cannot be resolved through consultation.",
@@ -427,7 +427,7 @@ export const INSTITUTIONS_JUDGMENT_LAB: HumanPolicyLab = {
   eyebrow: "Institutions and policy judgment · 2.3.10",
   title: "Audit the verifier",
   instruction:
-    "Inspect the institution before relying on its finding. Then separate what the human record establishes from what still requires technical or physical evidence, and match each decision to its legal and evidentiary threshold.",
+    "Assess the institution before relying on its finding. Then separate what the human record establishes from what still requires technical or physical evidence, and match each decision to its legal and evidentiary threshold.",
   caseTitle: "The International AI Verification Office",
   caseBody:
     "The Office is examining Project Lattice. Two engineers independently report that management approved a concealed run after receiving a safety warning. Authenticated messages show the warning reached the relevant executives. Power and procurement records corroborate the project code and dates. The developer refuses raw scheduler logs and chip inventory, although the treaty mandate expressly requires both. A council—not the Office—has authority to impose sanctions.",

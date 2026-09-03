@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { countWords } from "../kit/constructed-response";
 import {
   PROOF_ALLEGATION,
-  PROOF_DOCKETS,
+  PROOF_CASES,
   PROOF_FINAL,
   PROOF_FINAL_MAX_WORDS,
   PROOF_INTRO,
@@ -50,13 +50,13 @@ function prune(raw: unknown): Saved {
   ) as Partial<Saved>;
   const moves: Saved["moves"] = {};
   const answers: Saved["answers"] = {};
-  for (const docket of PROOF_DOCKETS) {
-    const m = box.moves?.[docket.id];
+  for (const item of PROOF_CASES) {
+    const m = box.moves?.[item.id];
     if (typeof m === "string" && MOVE_IDS.has(m as ProofMoveId)) {
-      moves[docket.id] = m as ProofMoveId;
+      moves[item.id] = m as ProofMoveId;
     }
-    const a = box.answers?.[docket.id];
-    if (typeof a === "string" && a.trim()) answers[docket.id] = a;
+    const a = box.answers?.[item.id];
+    if (typeof a === "string" && a.trim()) answers[item.id] = a;
   }
   return {
     moves,
@@ -98,7 +98,7 @@ export function StandardOfProof({
 
   if (!hydrated) return <div className="not-prose my-6 min-h-64" aria-busy />;
 
-  const ready = PROOF_DOCKETS.every(
+  const ready = PROOF_CASES.every(
     (d) => saved.moves[d.id] && (saved.answers[d.id] ?? "").trim(),
   );
   const finalWords = countWords(saved.final);
@@ -108,7 +108,7 @@ export function StandardOfProof({
       <div className="bg-background sticky top-0 z-10 rounded-xl">
         <section className="border-primary/40 bg-primary/5 rounded-xl border p-4">
           <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
-            The allegation, over every docket
+            The allegation, common to all four cases
           </p>
           <p className="mt-2 leading-relaxed font-medium">
             &ldquo;{PROOF_ALLEGATION}&rdquo;
@@ -132,30 +132,30 @@ export function StandardOfProof({
       </div>
 
       <div className="space-y-3">
-        {PROOF_DOCKETS.map((docket) => (
+        {PROOF_CASES.map((item) => (
           <section
-            key={docket.id}
+            key={item.id}
             className="panel"
           >
             <p className="text-sm font-semibold">
-              {docket.letter} · {docket.title}
+              {item.letter} · {item.title}
             </p>
             <p className="text-muted-foreground mt-2 text-[11px] tracking-[0.12em] uppercase">
-              The institution holding it
+              The institution
             </p>
-            <p className="mt-1 text-sm leading-relaxed">{docket.institution}</p>
+            <p className="mt-1 text-sm leading-relaxed">{item.institution}</p>
             <p className="text-muted-foreground mt-2 text-[11px] tracking-[0.12em] uppercase">
               The evidence
             </p>
             <ul className="mt-1 list-disc space-y-1 pl-5 text-sm leading-relaxed">
-              {docket.evidence.map((line) => (
+              {item.evidence.map((line) => (
                 <li key={line}>{line}</li>
               ))}
             </ul>
 
-            <div className="mt-3 flex flex-wrap gap-1.5" role="group" aria-label={`Next move for docket ${docket.letter}`}>
+            <div className="mt-3 flex flex-wrap gap-1.5" role="group" aria-label={`Next step for case ${item.letter}`}>
               {PROOF_MOVES.map((move) => {
-                const picked = saved.moves[docket.id] === move.id;
+                const picked = saved.moves[item.id] === move.id;
                 return (
                   <button
                     key={move.id}
@@ -165,7 +165,7 @@ export function StandardOfProof({
                     onClick={() =>
                       persist({
                         ...saved,
-                        moves: { ...saved.moves, [docket.id]: move.id },
+                        moves: { ...saved.moves, [item.id]: move.id },
                       })
                     }
                     className={cn(
@@ -186,19 +186,19 @@ export function StandardOfProof({
             <div className="mt-3">
               <label
                 className="text-muted-foreground text-[11px] tracking-[0.12em] uppercase"
-                htmlFor={`proof-${docket.id}`}
+                htmlFor={`proof-${item.id}`}
               >
                 Your analysis
               </label>
               <textarea
-                id={`proof-${docket.id}`}
+                id={`proof-${item.id}`}
                 rows={3}
                 readOnly={saved.submitted}
-                value={saved.answers[docket.id] ?? ""}
+                value={saved.answers[item.id] ?? ""}
                 onChange={(e) =>
                   persist({
                     ...saved,
-                    answers: { ...saved.answers, [docket.id]: e.target.value },
+                    answers: { ...saved.answers, [item.id]: e.target.value },
                   })
                 }
                 className={cn(
@@ -214,8 +214,8 @@ export function StandardOfProof({
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-muted-foreground text-xs">
           {saved.submitted
-            ? "Submitted. The four dockets are frozen."
-            : "Submit opens once every docket carries a move and an analysis."}
+            ? "Submitted. The four cases are locked."
+            : "Submit becomes available once every case has a chosen step and an analysis."}
         </p>
         {saved.submitted ? (
           <Button size="sm" variant="outline" onClick={() => persist(EMPTY)}>

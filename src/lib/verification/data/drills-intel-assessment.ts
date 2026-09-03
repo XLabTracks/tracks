@@ -7,14 +7,14 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
   id: "drills-intel-assessment",
   title: "Drill Bench: Judgment Under Uncertainty",
   blurb:
-    "Three benches over 2.3.11: the false-alarm bench prices the base rate, the autopsy takes apart a high-confidence-but-wrong assessment, and the limitations ledger places every bound with its sibling owner.",
+    "Three benches for 2.3.11. The false-alarm bench turns the base rate into arithmetic; the autopsy takes apart an assessment that was confident and wrong; the limitations ledger names, for each signature family, its standard failure case and the mechanism elsewhere in the course that covers it.",
   benches: [
     {
       id: "false-alarm",
       label: "False-alarm bench",
       name: "The false-alarm bench",
       kicker:
-        "Price the alarm before you trust it — the base rate made arithmetic, in three commits.",
+        "Before trusting an alarm, work out how often it fires on innocent sites. Three steps; commit each before the next.",
       time: "~5 min",
       steps: [
         {
@@ -34,7 +34,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
         },
         {
           type: "text",
-          q: "Each empty challenge-inspection demand spends regime credibility that does not come back — and discounts the next alarm even when it is true. Given ~5 false to at most 1 true, what must an escalation threshold clear before you recommend inspection? Two sentences.",
+          q: "Every challenge inspection that finds nothing costs the regime credibility it does not get back, and makes the next alarm easier to dismiss even when it is true. Given about five false alarms for at most one true one, what condition must a signal meet before you recommend an inspection? Answer in two sentences.",
           minLen: 60,
           reveal:
             "The threshold must clear the base rate, not merely feel careful: a signal justifies escalation only when corroboration across independent evidence kinds makes THIS alarm more likely true than the base rate makes it false. That is what calibration means here: escalation earned by corroboration, not paranoia.",
@@ -46,7 +46,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
       label: "Intelligence autopsy",
       name: "The intelligence autopsy",
       kicker:
-        "A component drill in diagnosis, isolated from escalation: a synthetic assessment, high confidence and wrong, modeled on the patterns the Iraq post-mortems documented. Bias menu — use its words: single-source dependence · circular corroboration · dual-use misread · unauthenticated documents · confirming-evidence bias · mirror-imaging · groupthink · base-rate neglect.",
+          "A diagnosis drill, kept separate from the question of escalation. Below is an invented assessment, written with high confidence and wrong, built from the failure patterns the Iraq post-mortems documented. Name its failures using the terms in this list: single-source dependence · circular corroboration · dual-use misread · unauthenticated documents · confirming-evidence bias · mirror-imaging · groupthink · base-rate neglect.",
       time: "~15 min",
       steps: [
         {
@@ -68,7 +68,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
         {
           type: "text",
           brief: AUTOPSY_DOSSIER,
-          q: "Name the failure mode(s), in the bias menu's words — and write the one-line calibrated verdict this evidence would actually support.",
+          q: "Name the failure mode or modes, using the terms from the list, and write the one-line verdict this evidence actually supports, with its confidence level.",
           minLen: 60,
           reveal:
             "A calibrated verdict: \"Anomaly, promotable to verification lead. Task imagery and grid data on Karsu Ridge; request clarification against the declared cloud-hub filing; seek an evidence kind that does not pass through the logistics source. Confidence: low-to-moderate. Dissent: partner corroboration is not independent. Blind spot: if the hub declaration is genuine, everything observed is innocent.\" The tip may still be right — that is what the ladder is for. The failure mode is not using leads; it is dressing a lead as a verdict.",
@@ -80,13 +80,13 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
       label: "Limitations ledger",
       name: "The limitations ledger",
       kicker:
-        "One row per signature family: commit the canonical failure case and the sibling mechanism that covers the gap. Every bound named here is covered by another layer of the course; the second half of each row is naming which.",
+        "One row per signature family. For each family, choose its standard failure case, then choose the mechanism elsewhere in the course that covers what this signature misses.",
       time: "~10 min",
       steps: [
         {
           type: "pick",
           statement: "Overhead imagery",
-          q: "Which is the canonical failure case?",
+          q: "Which is this signature’s standard failure case?",
           opts: [
             "Cloud cover makes optical collection impossible most of the year",
             "Underground or disguised builds — and above ground, AI vs ordinary datacenter is ambiguous (cooling is the only differentiator)",
@@ -99,7 +99,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
         {
           type: "pick",
           statement: "Overhead imagery — the gap's owner",
-          q: "Which sibling mechanism covers what this signature cannot see?",
+          q: "Which mechanism elsewhere in the course covers what this signature cannot see?",
           opts: [
             "2.2 cloud / provider reporting",
             "the human layer, 2.3.7–2.3.10",
@@ -113,7 +113,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
         {
           type: "pick",
           statement: "Energy and thermal",
-          q: "Which is the canonical failure case?",
+          q: "Which is this signature’s standard failure case?",
           opts: [
             "Power draw cannot be measured from outside a facility",
             "Heat signatures are only visible in winter",
@@ -126,7 +126,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
         {
           type: "pick",
           statement: "Energy and thermal — the gap's owner",
-          q: "Which sibling mechanism covers what this signature cannot see?",
+          q: "Which mechanism elsewhere in the course covers what this signature cannot see?",
           opts: [
             "2.2 cloud / provider reporting",
             "the human layer, 2.3.7–2.3.10",
@@ -140,7 +140,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
         {
           type: "pick",
           statement: "Procurement, customs, financial",
-          q: "Which is the canonical failure case?",
+          q: "Which is this signature’s standard failure case?",
           opts: [
             "Trade data is classified in most jurisdictions",
             "Domestic fabrication and dual-use purchasing thin the trail exactly where the program is most self-sufficient",
@@ -153,7 +153,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
         {
           type: "pick",
           statement: "Procurement, customs, financial — the gap's owner",
-          q: "Which sibling mechanism covers what this signature cannot see?",
+          q: "Which mechanism elsewhere in the course covers what this signature cannot see?",
           opts: [
             "2.2 cloud / provider reporting",
             "the human layer, 2.3.7–2.3.10",
@@ -167,7 +167,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
         {
           type: "pick",
           statement: "Open sources and organizational behavior",
-          q: "Which is the canonical failure case?",
+          q: "Which is this signature’s standard failure case?",
           opts: [
             "OSINT is illegal to collect under most treaties",
             "Filings and permits are cheapest to collect — and easiest to sanitize",
@@ -180,7 +180,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
         {
           type: "pick",
           statement: "Open sources — the gap's owner",
-          q: "Which sibling mechanism covers what this signature cannot see?",
+          q: "Which mechanism elsewhere in the course covers what this signature cannot see?",
           opts: [
             "2.2 cloud / provider reporting",
             "the human layer, 2.3.7–2.3.10",
@@ -194,7 +194,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
         {
           type: "pick",
           statement: "The layer as a whole, against software",
-          q: "Which is the canonical failure case?",
+          q: "Which is this signature’s standard failure case?",
           opts: [
             "NTM watches the physical envelope; a workload disguised as inference or \"safety research\" inside a declared site never crosses it",
             "NTM cannot operate over friendly territory",
@@ -207,7 +207,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
         {
           type: "pick",
           statement: "The layer as a whole — the gap's owner",
-          q: "Which sibling mechanism covers what this signature cannot see?",
+          q: "Which mechanism elsewhere in the course covers what this signature cannot see?",
           opts: [
             "2.2 cloud / provider reporting",
             "the human layer, 2.3.7–2.3.10",

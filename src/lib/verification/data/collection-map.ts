@@ -15,7 +15,7 @@ export const COLLECTION_COPY = {
     "Eight ways a watcher sees. The disciplines split into two families: those " +
     "that collect language and records, and those that collect physics. Open " +
     "each one.",
-  literal: "Collects language",
+  literal: "Collects language and records",
   technical: "Collects physics",
   legend: "Click a discipline to read what it is.",
   seenLabel: "Picks up",

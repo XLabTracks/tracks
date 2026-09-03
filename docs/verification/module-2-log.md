@@ -2296,3 +2296,30 @@ placed: Rahman, *Does Distributed Training Undermine Compute Governance?*
 technical governance team; previously Epoch AI); Rahman and Tajdari's
 zero-overhead telemetry paper (June 2026) belongs to the hardware and cloud
 layers, not here.
+
+## 2026-09-03 — Rahman 2026 placed in 2.3.11, whole
+
+Owner, after a chapter-by-chapter retelling of Rahman, *Does Distributed
+Training Undermine Compute Governance?* (arXiv 2605.29359, 28 May 2026;
+13 pages, six of them body): put it in 2.3, in the most suitable section,
+whole — not the partial assignment (abstract, §1, §4, §5.3, §6, Appendix G)
+proposed the day before. It sits in 2.3.11 directly under the bounds
+paragraph whose last sentence it measures ("distributed development spreads
+compute thinner"): the paper's premise (a frontier datacenter cannot hide
+from the grid or the satellite) supports 2.3.2–2.3.3, its evasion (nodes
+below the monitoring threshold are invisible to thermal and electrical
+means) is the blind spot the memo asks for, and its Appendix G names what
+covers it — whistleblowers, financial and procurement intelligence, chip
+registries with a memory threshold, challenge inspections coordinated across
+the suspected network — while grading bandwidth caps and traffic monitoring
+as not holding. Optional, like every paper card in 2.3 except Wasil; 35
+minutes, measured from the 8,300 words of body and appendices without the
+references. One citations-registry entry. The section's minutes are
+unchanged: optional readings are not counted in them.
+
+Registry hygiene found on the way: the Scher 2026 and Scher–Thiergart URLs
+sat in `pending` as well as `entries` (parked by the bulk collector before
+their entries were written, never removed). The appendix printed them
+regardless — it filters on entries and counts only entry-less pending URLs
+as waiting — so nothing was hidden, but a URL belongs in one list, and the
+two pending lines are gone.

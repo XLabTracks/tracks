@@ -157,6 +157,13 @@
       "publisher": "arXiv",
       "date": "27 June 2026"
     },
+    "https://arxiv.org/abs/2605.29359": {
+      "title": "Does Distributed Training Undermine Compute Governance?",
+      "about": "A simulator study finding that low-communication distributed training can cross every existing or proposed compute threshold on nodes below every proposed monitoring threshold, with an appendix grading the countermeasures: whistleblowers, chip registries with a memory threshold, challenge inspections, and financial intelligence hold; bandwidth caps and traffic monitoring do not.",
+      "authors": "Rahman, Robi",
+      "publisher": "arXiv",
+      "date": "28 May 2026"
+    },
     "https://arxiv.org/html/2407.05694v1": {
       "title": "On the Limitations of Compute Thresholds as a Governance Strategy",
       "about": "The counterargument on thresholds: why compute cutoffs are a shaky governance proxy, since the compute-risk relationship is uncertain and moving.",
@@ -697,8 +704,6 @@
     "https://www.ignet.gov/sites/default/files/files/Quality%20Standards%20for%20Investigations%20July-2025.pdf",
     "https://ai-2027.com",
     "https://arxiv.org/abs/2304.04123",
-    "https://arxiv.org/abs/2606.28694",
-    "https://arxiv.org/abs/2506.15867",
     "https://www.eda.admin.ch/content/dam/eda/en/documents/publications/Voelkerrecht/Practice-Guide-to-International-Treatie-2023_EN.pdf",
     "https://www.imf.org/external/Pubs/FT/fandd/basics/66-strategic-thinking.htm",
     "https://plato.stanford.edu/entries/game-theory/",

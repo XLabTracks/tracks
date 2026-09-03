@@ -2263,3 +2263,15 @@ Owner, same day, on the relabelled map: do not credit Clark — the
 literal/nonliteral division is standard across textbooks. The attribution is
 removed from the map's lede, the head lesson's section, and the closing
 summary; the division and its labels stay.
+
+## 2026-09-02 — 2.3.4 gets the Basel Institute material
+
+Owner: the Basel Institute on Governance has good material on this; and add
+a section saying that if you want to spend more time on it, the Institute
+runs free interactive online courses, with links. Two optional reading cards
+(*Quick Guide 15: Following the money*, 1,068 words, ~5 min; *Quick Guide 19:
+Offshore structures and beneficial ownership*, 2,191 words, ~10 min — both
+measured from the PDFs) and an "Optional: Going Further" section pointing at
+Basel LEARN's Operational Analysis and Source and Application of Funds
+courses and the platform. Five citations-registry entries. The IMF and
+Egmont FIU overviews proposed earlier are not used.

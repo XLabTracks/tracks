@@ -198,6 +198,14 @@
       "authors": "Attestable",
       "publisher": "Attestable"
     },
+    "https://baselgovernance.org/resources/publications/quick-guide-19-offshore-structures-and-beneficial-ownership/": {
+      "title": "Quick Guide 19: Offshore Structures and Beneficial Ownership",
+      "about": "How corporate vehicles and offshore structures are used to disguise ownership, with the beneficial-ownership concepts an investigator needs.",
+      "authors": "Atkinson, Phyllis",
+      "container": "Quick Guide series",
+      "publisher": "Basel Institute on Governance",
+      "date": "12 Nov. 2020"
+    },
     "https://brilliant.org/wiki/fermi-estimate/": {
       "title": "Fermi Estimate",
       "about": "A wiki explainer of Fermi estimation — rough order-of-magnitude reasoning with worked examples.",
@@ -327,6 +335,38 @@
       "container": "George Washington Journal of Law & Technology",
       "publisher": "Institute for Law & AI",
       "date": "Feb. 2025"
+    },
+    "https://learn.baselgovernance.org/": {
+      "title": "Basel LEARN",
+      "about": "The Basel Institute on Governance's platform of free self-paced courses on financial investigation, asset tracing, and intelligence gathering.",
+      "authors": "Basel Institute on Governance",
+      "publisher": "Basel Institute on Governance",
+      "date": "n.d.",
+      "standalone": true
+    },
+    "https://learn.baselgovernance.org/course/view.php?id=3": {
+      "title": "Operational Analysis",
+      "about": "A free self-paced course on the operational analysis of suspicious transaction reports, as a financial intelligence unit does it.",
+      "authors": "Basel Institute on Governance",
+      "container": "Basel LEARN",
+      "publisher": "Basel Institute on Governance",
+      "date": "n.d."
+    },
+    "https://learn.baselgovernance.org/course/view.php?id=36": {
+      "title": "Quick Guide 15: Following the Money",
+      "about": "A four-page guide to the follow-the-money method: transactions as a source of information and evidence about a crime, a suspect, and a network.",
+      "authors": "Ratcliffe, Stephen",
+      "container": "Quick Guide series",
+      "publisher": "Basel Institute on Governance",
+      "date": "2020"
+    },
+    "https://learn.baselgovernance.org/enrol/index.php?id=17": {
+      "title": "Source and Application of Funds",
+      "about": "A free self-paced course on tracing a money trail with source-and-application-of-funds analysis.",
+      "authors": "Basel Institute on Governance",
+      "container": "Basel LEARN",
+      "publisher": "Basel Institute on Governance",
+      "date": "n.d."
     },
     "https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260SB53": {
       "title": "SB-53 Artificial Intelligence Models: Large Developers (2025-2026)",

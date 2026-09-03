@@ -2323,3 +2323,21 @@ their entries were written, never removed). The appendix printed them
 regardless — it filters on entries and counts only entry-less pending URLs
 as waiting — so nothing was hidden, but a URL belongs in one list, and the
 two pending lines are gone.
+
+## 2026-09-03 — 2.3.1 gets a fact-checking card and a "Going Further" pointer
+
+Owner: add Research Clinic to OSINT's "if you want to learn more", and an
+optional card to an outside resource, GIJN's fact-checking chapter. Both
+placed at the end of 2.3.1. The card is *Introduction to Investigative
+Journalism: Fact-Checking* (Mariam Elba, Global Investigative Journalism
+Network, 26 Nov. 2024), about 2,000 words, 10 minutes, optional: internal
+pre-publication checking — annotate every statement of fact with its
+source, prefer primary documents, archive links, the fact-checking desk's
+questions. gijn.org blocks the build sandbox (Cloudflare challenge, then
+connection resets, the Wayback copy too); the text was read through a text
+relay and the authorship and date corroborated on Margot Williams's Substack
+repost of the chapter ("with permission from GIJN"). The pointer section is
+"Going Further", the 2.3.4 format: Research Clinic, Paul Myers's link
+library kept since 2003 alongside his training courses, free, a directory
+rather than a course. Two registry entries; the registry's entries are
+back in URL order (the Rahman entry had been inserted after the Scher one).

@@ -136,6 +136,13 @@
       "container": "arXiv",
       "date": "May 2026"
     },
+    "https://arxiv.org/abs/2605.29359": {
+      "title": "Does Distributed Training Undermine Compute Governance?",
+      "about": "A simulator study finding that low-communication distributed training can cross every existing or proposed compute threshold on nodes below every proposed monitoring threshold, with an appendix grading the countermeasures: whistleblowers, chip registries with a memory threshold, challenge inspections, and financial intelligence hold; bandwidth caps and traffic monitoring do not.",
+      "authors": "Rahman, Robi",
+      "publisher": "arXiv",
+      "date": "28 May 2026"
+    },
     "https://arxiv.org/abs/2606.05433": {
       "title": "Zero knowledge verification for frontier AI training is possible",
       "about": "The 2026 proposal estimating a future ZK system could verify dense frontier training at roughly 2–10 percent overhead — while naming thirteen unresolved technical problems and the training architectures it does not yet cover.",
@@ -156,13 +163,6 @@
       "authors": "Scher, Aaron",
       "publisher": "arXiv",
       "date": "27 June 2026"
-    },
-    "https://arxiv.org/abs/2605.29359": {
-      "title": "Does Distributed Training Undermine Compute Governance?",
-      "about": "A simulator study finding that low-communication distributed training can cross every existing or proposed compute threshold on nodes below every proposed monitoring threshold, with an appendix grading the countermeasures: whistleblowers, chip registries with a memory threshold, challenge inspections, and financial intelligence hold; bandwidth caps and traffic monitoring do not.",
-      "authors": "Rahman, Robi",
-      "publisher": "arXiv",
-      "date": "28 May 2026"
     },
     "https://arxiv.org/html/2407.05694v1": {
       "title": "On the Limitations of Compute Thresholds as a Governance Strategy",
@@ -322,6 +322,14 @@
       "container": "Effective Altruism Forum",
       "date": "28 Dec. 2019"
     },
+    "https://gijn.org/resource/introduction-investigative-journalism-fact-checking/": {
+      "title": "Introduction to Investigative Journalism: Fact-Checking",
+      "about": "A working fact-checker's chapter on internal, pre-publication checking: annotate every statement of fact with its source, prefer primary documents, archive links, and put weak claims through a fact-checking desk's questions.",
+      "authors": "Elba, Mariam",
+      "container": "Introduction to Investigative Journalism",
+      "publisher": "Global Investigative Journalism Network",
+      "date": "26 Nov. 2024"
+    },
     "https://intelligence.org/2015/07/24/four-background-claims/": {
       "title": "Four Background Claims",
       "about": "MIRI's statement of the four background claims behind its case that smarter-than-human AI matters.",
@@ -434,6 +442,14 @@
       "title": "The ITN Framework: A Tool for Prioritizing Global Problems",
       "about": "An explainer of the importance-tractability-neglectedness framework for prioritizing problems.",
       "org": "Probably Good"
+    },
+    "https://researchclinic.net/": {
+      "title": "Research Clinic",
+      "about": "Paul Myers's link library for internet research, kept since 2003 alongside his training courses: search engines, social-media research, people and company finders, domain and IP lookups, government and charity registers, geolocation, and verification tools.",
+      "authors": "Myers, Paul",
+      "publisher": "Research Clinic",
+      "date": "n.d.",
+      "standalone": true
     },
     "https://slowfoodusa.org/theory-of-change/": {
       "title": "Our Theory of Change",

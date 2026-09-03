@@ -143,6 +143,11 @@ const MissingBoard = dynamic<VerificationWidgetProps>(
   { loading: WidgetLoading },
 );
 
+const The2026Audit = dynamic<VerificationWidgetProps>(
+  () => import("./the-2026-audit").then((module) => module.The2026Audit),
+  { loading: WidgetLoading },
+);
+
 export const verificationWidgets: Record<
   string,
   ComponentType<VerificationWidgetProps>
@@ -177,4 +182,5 @@ export const verificationWidgets: Record<
   "cloud-evidence-drill": CloudEvidenceDrill,
   "standard-of-proof": StandardOfProof,
   "missing-board": MissingBoard,
+  "the-2026-audit": The2026Audit,
 };

@@ -34,6 +34,7 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "standard-of-proof", title: "The Standard of Proof", bridged: false },
   { id: "missing-board", title: "The Missing Board", bridged: false },
   { id: "cloud-evidence-drill", title: "Cloud Evidence Drill", bridged: true },
+  { id: "the-2026-audit", title: "The 2026 Audit", bridged: true },
 ];
 export function getVerificationExercise(id: string): VerificationExerciseDef | undefined {
   return verificationExercises.find((e) => e.id === id);

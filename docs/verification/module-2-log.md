@@ -1601,3 +1601,102 @@ rule, which is how every other two-column table in the course reads.
   authorization chain", "bilateral pilot review", "buy assurance with a
   verification budget"). The doc specifies them as work the learner does;
   none is a widget yet.
+
+## 2026-09-03 — 2.1.R "The 2026 audit" built as a native widget
+
+The first of 2.1's activities to become a widget (the "Still owed on 2.1" item
+above named four prose activities; this is a fifth activity, specified
+separately by the course team, and it does not close any of those four).
+
+### What was built
+
+- `src/lib/verification/data/audit-2026.ts` — the whole content pool and answer
+  key, transcribed verbatim from the team's build brief for reading unit 2.1.R.
+  `RETRIEVAL` at the top carries the per-source retrieval dates the brief
+  supplied. Nothing in the file was written by this session: every figure,
+  quotation, title, date and reveal paragraph is the brief's own text.
+- `src/components/verification/widgets/the-2026-audit.tsx` — three phases.
+  Rebuild sorts six mechanisms into Shavit's scheme or out of it and tags the
+  three kept ones with the five hardware functions. Audit runs six dated
+  developments (December 2024 to August 2026) against five named assumptions,
+  each needing two commitments before its reveal unlocks. Verdict ranks the
+  five assumptions, picks one of four developments that would change the
+  assessment, and takes one free-text sentence.
+- Registered in `widgets/registry.tsx` and `lib/verification/exercises.ts`
+  (`the-2026-audit`, bridged), embedded at the end of
+  `hardware-reconstructing-run.mdx` (2.1.7).
+
+### Placement, and what the brief asked for
+
+The brief homes this at reading unit **2.1.R**, which the curriculum does not
+have — the brief calls the number a placeholder for the team to assign. Rather
+than invent a unit, it went into 2.1.7, the extension on reconstructing a
+declared training run: that lesson already carries Shavit 2303.11341, the
+proof-of-learning history behind evidence card E3, and the zero-knowledge cost
+behind the `zkproof` distractor. Moving it to a real 2.1.R later is one MDX
+line in each direction.
+
+The brief's cross-references to other units are kept verbatim in the reveal
+text and **do not all match the shipped numbering**: it cites 2.1.0 for the five
+functions, 2.1.4 for Petrie's offline licensing and the IAPS delay-based
+location proposal, and 2.1.6 for the cost of proving training in zero
+knowledge. The graph numbers those 2.1 (submodule intro), 2.1.5
+(Authorization, licensing, and control) and 2.1.7. Reconciling them is a
+content decision for whoever assigns the slot, not one to take silently inside
+an answer key.
+
+### Deviations from the brief, and why
+
+- **The brief specifies a standalone single-file HTML artifact** talking to an
+  iframe host over `postMessage` (`xlab:notebook:write`, `xlab:progress`,
+  `xlab:resize`), and forbids browser storage. Its own section 5 says to match
+  the repo's established pattern instead where the repo uses a component
+  framework, which this one does. So it is a React widget, and the three
+  transport rules resolve to their in-repo equivalents: no host implements
+  `xlab:*` and the widget is not framed, so those messages are not posted;
+  learner work persists under `localStorage` key `v-audit-2026:v1`, the house
+  channel for widget state; and each phase completion writes a plain-text
+  record through `window.VTNotebook.addNote`, the notebook these routes
+  actually carry. The notebook call is best-effort and silent when absent,
+  which is what the brief asked the transport to be.
+- **Facilitator mode is `?mode=facilitator` as specified**, read from
+  `window.location.search`. It is ungated, unlike `/facilitator`. That is
+  defensible here because the key is client-side content that every learner
+  reaches by committing, so the query string leaks nothing the widget does not
+  hand out; it is worth a second look if the answer key ever stops being
+  learner-visible.
+- **Two strings are not the brief's**, both flagged there as permitted when a
+  state needs copy the document does not specify: the skip control on phase 1
+  reads `Skip to the evidence`, and the free-text counter reads
+  `<n> characters · aim for 140 to 280`. Both are written to the brief's voice
+  rules and want a human read.
+- Headings inside the widget keep the brief's sentence case rather than the
+  Title Case standing instruction, because the brief supplies them verbatim and
+  its acceptance criteria check them character for character.
+
+### Verification performed
+
+- `npm run typecheck`, `npm run lint` (no new warnings), `npm run test`
+  (99 files, 1173 tests) all clean, including `comment-policy.test.ts` and the
+  registry/exercise wiring in `widgets.test.ts`.
+- Driven in a browser at 1440×1000 and 360×800 through all three phases: the
+  commit gates, the per-card reveals, the all-weakens nudge (fires once, never
+  blocks), keyboard-only sorting and ranking, the argued-ranking reveal, and
+  the notebook write. Day, night and high-contrast themes; no horizontal
+  overflow at 360px; no console output from the widget (the signed-out `401`
+  and, without a database, the `500` from `/api/verification/state` are the
+  documented environment noise).
+- The register is a rail beside the cards when the widget's own column is at
+  least 56rem and a disclosure drawer above them below that, so it follows the
+  column rather than the viewport. The lesson column is 960px, so a lesson
+  gets the rail.
+- With JavaScript disabled the widget renders a `<noscript>` reference: the
+  five assumptions and all six evidence cards with their date and source lines.
+
+### Still owed on this artifact
+
+- The 2.1.R slot number, and the cross-reference reconciliation above.
+- A human read of the two non-brief strings.
+- The brief's own source list says Shavit's quotations were confirmed by two
+  automated retrievals on 2026-08-17 and that house rule wants a hand-check
+  against the PDF. That hand-check is not recorded as done.

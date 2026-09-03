@@ -187,7 +187,7 @@ window.COURSE = {
           "id": "2.3",
           "title": "Intelligence",
           "kind": "explainer",
-          "mins": "580 min",
+          "mins": "605 min",
           "href": "/tracks/verification/verification-infrastructure/intelligence-intro",
           "lessons": [
             "intelligence-intro",

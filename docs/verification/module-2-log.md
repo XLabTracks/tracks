@@ -2371,3 +2371,36 @@ reading, ODNI's "Background: The Analytic Process and Cyber Incident
 Attribution" with Annex B as the short second) and which exercise ("Two
 capitals" from the Def 17 paragraph; "Natanz through the inspectors' eyes"
 from ISIS 2010 and Langner; a Q Model ledger from Rid and Buchanan).
+
+## 2026-09-03 — 2.3.5 gets its reading and its exercise
+
+Owner: Warner as the section's reading, "if it is about the capabilities of
+cyber as such — go ahead"; and the exercise is the question itself, "in
+bullet points, sketch how cyber could be used in the context of
+verification". Placed: *Intelligence in Cyber—and Cyber in Intelligence*
+(Michael Warner, ch. 1 of *Understanding Cyber Conflict: Fourteen Analogies*,
+Georgetown UP 2017; the free chapter PDF Carnegie hosts, 14 pages, ~6,900
+words, 30 minutes), required. Honest note on the owner's condition: the
+chapter argues that cyber operations are intelligence in nature and history
+(espionage and counterespionage moved into cyberspace intact; common roots in
+signals intelligence, computer security and electronic warfare; what is new
+is scale and the permanence of data; blown collection ends in a purge, not a
+war; spying and attacking were always blurry), and states capabilities in
+passing rather than as a catalogue. It is the right frame for the section's
+question and not a capabilities text; the card says what to read it for.
+
+The exercise is an `understanding-check` (`v-intel-cyber-uses`, the first in
+the Verification track; the platform's write-then-compare card, not
+persisted): the prompt asks for five to eight bullets, each saying what is
+collected, against whom, and what a finding settles. The sample answer is
+eight bullets assembled from sources the module already carries — Scher and
+Thiergart's row; Scher 2026 §3.1 (known and unknown targets) and §3.4 (weights
+security); Rahman 2026 (the sub-threshold fallback and the very-low rating
+for traffic monitoring); *Six Layers* (supplemental mechanisms paired with
+inspections); Definition 17 and the NTM precedent; Baker §2.3.3; Warner on
+provocation and the spying/attacking line — nothing asserted beyond what
+those say, and one gap stated as a gap (Rahman does not rate collection from
+inside systems). Section minutes 20 → 45 (prose, the reading, the exercise);
+unit 2.3 meta 580 → 605. ODNI's attribution background and Annex B, the
+Kello review of Buchanan, and the Stoll and NOVA cards remain proposed, not
+placed.

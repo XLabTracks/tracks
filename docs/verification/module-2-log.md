@@ -2573,3 +2573,62 @@ dev server with the new headings.
 Correction, same day, owner: "Intelligence based очень важные слова" — the
 head's first heading is "Intelligence-Based Mechanisms", not "Definition".
 The list above is otherwise as applied.
+
+## 2026-09-03 — one objectives block for all of 2.3, in the head
+
+Owner: learning objectives for the whole of 2.3, in 2.3 only, and done
+properly. Before drafting, what had been planned was collected: the
+playground's 2.3 design spec ("by the end of the module the learner can"
+paragraph and its five-level outcome map), the owner's goal sentence at the
+end of the outline's 2.3 intro ("say three things about it: what it
+establishes, what else would explain it, and what it justifies doing next"),
+module 2's own block in 2.0 (the costly-vs-cheap-signals bullet), the skill
+map's Intelligence-sources goals, and the owner's four human-layer
+objectives that had opened 2.3.6. No per-section objectives for
+2.3.1–2.3.5, 2.3.10 or 2.3.11 existed anywhere.
+
+The block: `<Objectives scope="this submodule">` in `intelligence-intro.mdx`,
+placed directly after the owner's goal sentence so that sentence introduces
+it. The 2.3.6 block is removed; its four objectives are carried into the
+head verbatim as items 4–7 (moved, not reworded). Nothing else in 2.3 states
+objectives: 2.3.6's "In 2.3.6–2.3.9, you will learn…" is the owner's
+opening prose and stays; the skill map's goals are the map's own surface,
+not lesson objectives, and stay; 2.0's module-level block covers all of
+module 2 and stays.
+
+Method, so the next edit can argue with it rather than re-derive it:
+
+- Verb first, at the level the section actually assesses, then the object,
+  then the condition or standard. No "understand", "know", "be familiar
+  with".
+- Every objective is taught in a named section and assessed by a named
+  instrument in the module. Optional material (Rahman, the feasibility
+  cards, the debates, Basel LEARN, GIJN) generates no objective.
+- Order follows the module, so the list is a map: technical layer (1–3),
+  human layer (4–7), assessment and response (8–9), written output (10).
+  Items 1, 8 and 9 are the owner's three things, itemised: what a signal
+  establishes, what else would explain it, what it justifies doing next.
+- Vocabulary is the lessons' own (signature families, collection
+  disciplines, verification lead, suspected non-compliance, challenge
+  inspection), so each objective can be found in the text.
+- One sentence each, under forty words; the owner's four are as supplied.
+
+Alignment, objective → taught in → assessed by:
+
+| # | Taught in | Assessed by |
+| --- | --- | --- |
+| 1 signatures and disciplines | 2.3 Signatures, collection map; 2.3.1–2.3.5 | collection map; the four write-then-compare exercises (`v-intel-osint-fas`, `v-intel-imagery-al-kibar`, `v-intel-finint-smuggling`, `v-intel-cyber-uses`); review questions 1, 5 |
+| 2 power to compute | 2.3.3 | `drills-intel-signatures` (Fermi estimate: conversion, 130 MW scale-up, three-site triage); the power-signature explainer's decay panel |
+| 3 identifies, does not resolve; limits | 2.3 Intelligence-Based Mechanisms (Baker's tips); 2.3.5 Limits (sources and methods, voluntary sharing); 2.3.10 Limits of the Layer | review questions 2, 7; the cyber exercise's last bullet |
+| 4–7 human layer (owner's) | 2.3.6–2.3.9 | `human-insiders`, `human-reporting-protection`, `whistleblower-levers`, `human-institutions-judgment`, `human-audits-inspections`, `standard-of-proof`, `missing-board` |
+| 8 place a signal with confidence | 2.3.10 Sources of Error, Evaluating a Source, From Anomaly to Suspected Non-Compliance | `drills-intel-assessment` (False alarms, Post-mortem); review questions 3, 4, 6 |
+| 9 proportionate response, the record | 2.3.11 Comparison with Declarations, Escalation, The Record | Post-mortem step 3 (the calibrated verdict with its next steps); review question 4; the memo's bottom line |
+| 10 the overview memo | 2.3.11 Written Output | memo slot `m2-3-intel-overview`, its five criteria |
+
+Flagged, not changed: the owner's goal sentence ends "by the end you should
+be able to" and the component's fixed lead then says "By the end of this
+submodule, you will be able to:"; two "by the end" in a row. Cutting the
+sentence is her call (it was flagged once before, 2026-08-13, and kept).
+Checked: content, MDX and verification suites (480), and both pages
+rendered on a dev server: the block appears once, in the head, and 2.3.6
+opens on the owner's paragraph.

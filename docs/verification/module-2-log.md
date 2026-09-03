@@ -2442,3 +2442,12 @@ again; the same holds for any other Kaspersky material. The remaining
 "capabilities in the wild" candidates, if one is ever wanted, are the CrySyS
 Lab (Budapest University of Technology) *sKyWIper* summary and Citizen
 Lab's Pegasus reporting.
+
+## 2026-09-03 — the memo's budget is two hours
+
+Owner: cut the memo to 120 minutes. The slot has no time field; the budget
+lives in 2.3.11's Written Output prose ("Budget three hours" → "Budget two
+hours") and in the section's minutes (200 → 140; the memo was 180 of them).
+Unit 2.3 meta 590 → 530. The brief's length (900 words) and its research
+requirement (three public artifacts found by the author) are unchanged
+pending the owner's word: they were set against three hours.

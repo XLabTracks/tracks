@@ -2404,3 +2404,32 @@ inside systems). Section minutes 20 → 45 (prose, the reading, the exercise);
 unit 2.3 meta 580 → 605. ODNI's attribution background and Annex B, the
 Kello review of Buchanan, and the Stoll and NOVA cards remain proposed, not
 placed.
+
+## 2026-09-03 — 2.3.5: Lin is the required reading; Warner moves to optional
+
+Owner, after a search for texts about cyber collection's capabilities as
+such: use Lin, make it required, and move the reading about the field's
+motivation to optional. Placed: Herbert S. Lin, *Offensive Cyber Operations
+and the Use of Force*, Journal of National Security Law & Policy 4 (2010),
+the Georgetown PDF; the assignment is Parts I and II, pp. 63–70, 3,443
+words measured from the PDF, 15 minutes, required. It gives what Warner did
+not: vulnerability, access and payload; easy targets on the Internet and
+difficult ones that need close access, with an adversary's important systems
+in the difficult class; exploitation against confidentiality versus attack
+against integrity, authenticity and availability; and the objectives list
+(traffic read for keywords, his examples "nuclear" and "plutonium";
+exfiltration of plans and passwords; network mapping by traffic analysis).
+Warner's chapter stays as the optional second card. The exercise's sample
+answer gains a ninth bullet from Lin, on access being physical and handing
+over to the human layer. Section minutes 45 → 30 (optional reading not
+counted); unit 2.3 meta 605 → 590. One registry entry.
+
+Searched and not placed, for the record: Kaspersky's *Equation Group:
+Questions and Answers* (2015; CNE since 2001, hard-drive firmware
+persistence, the Fanny air-gap worm; pp. 3–22, ~15 min) and the CrySyS
+*sKyWIper* (Flame) report's four-page summary — the "capabilities in the
+wild" pair, offered and awaiting a word; Rovner's intelligence-contest essay;
+Buchanan's *Legend of Sophistication*; Rid 2012's espionage section; the CRS
+cyberspace-operations primer. Unreachable from the sandbox: the NRC 2009
+report itself (Lin's article is its public account), the ISC 2015 report,
+Der Spiegel's TAO article.

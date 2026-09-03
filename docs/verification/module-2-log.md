@@ -2569,3 +2569,7 @@ owner's wording and stands; only its five criteria were reworded. Checked:
 content, MDX and verification suites (480 tests), typecheck, eslint on the
 touched files, memos.js regenerated, and all nine 2.3 pages rendered on a
 dev server with the new headings.
+
+Correction, same day, owner: "Intelligence based очень важные слова" — the
+head's first heading is "Intelligence-Based Mechanisms", not "Definition".
+The list above is otherwise as applied.

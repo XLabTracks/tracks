@@ -2,7 +2,7 @@
 title: A Reporting Channel an Insider Would Actually Use
 track: Verification
 status: draft
-summary: Module 2.4 says the human layer reveals what hardware and intelligence cannot — if evidence reaches a verifier. Design the channel, against the NDAs and equity that stop it.
+summary: Module 2.3 says the human layer reveals what hardware and technical intelligence cannot — if evidence reaches a verifier. Design the channel, against the NDAs and equity that stop it.
 team: 1-2
 effort_hours: 12-18
 duration: 3 weeks
@@ -12,7 +12,7 @@ deliverable_type: spec
 mentor: recommended
 audience: The regulator or oversight body that wants insider evidence and currently receives none.
 skills: [institutional design, incentive analysis, evidence standards, protective-regime drafting]
-prerequisites: [Verification 1 — actors, Verification 2.4 — the human layer]
+prerequisites: [Verification 1 — actors, Verification 2.3 — intelligence and the human layer]
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 20: AI and whistleblowing](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
 updated: 2026-08-04
@@ -20,8 +20,8 @@ updated: 2026-08-04
 
 ## The brief
 
-Module 2.4 makes the case and states the problem in the same breath: humans
-reveal what the other three layers cannot — what the company believed, what
+Module 2.3's human-layer sections (2.3.7–2.3.10) make the case and state the
+problem in the same breath: humans reveal what the other evidence streams cannot — what the company believed, what
 leadership was warned about, what was suppressed — and frontier AI adds
 secrecy, NDAs, equity incentives and race pressure on top. Whether that
 evidence reaches a verifier depends on reporting channels, anti-retaliation
@@ -51,7 +51,7 @@ Design one channel, properly.
 
 ## Why it exists
 
-The human layer is where the track's realism lives. The other three layers can
+The human layer is where the track's realism lives. The other evidence streams can
 be improved with engineering; this one runs on whether a specific person, with
 a mortgage and a non-disparagement clause, decides to speak. Designing for that
 is a different discipline from designing a telemetry rule, and learners who can

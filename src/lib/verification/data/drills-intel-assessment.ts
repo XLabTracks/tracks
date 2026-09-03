@@ -7,7 +7,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
   id: "drills-intel-assessment",
   title: "Drill Bench: Judgment Under Uncertainty",
   blurb:
-    "Three benches over 2.3.3: the false-alarm bench prices the base rate, the autopsy takes apart a high-confidence-but-wrong assessment, and the limitations ledger places every bound with its sibling owner.",
+    "Three benches over 2.3.11: the false-alarm bench prices the base rate, the autopsy takes apart a high-confidence-but-wrong assessment, and the limitations ledger places every bound with its sibling owner.",
   benches: [
     {
       id: "false-alarm",
@@ -37,7 +37,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
           q: "Each empty challenge-inspection demand spends regime credibility that does not come back — and discounts the next alarm even when it is true. Given ~5 false to at most 1 true, what must an escalation threshold clear before you recommend inspection? Two sentences.",
           minLen: 60,
           reveal:
-            "The threshold must clear the base rate, not merely feel careful: a signal justifies escalation only when corroboration across independent evidence kinds makes THIS alarm more likely true than the base rate makes it false. That is exactly what the Analyst Desk scores — calibration, not paranoia.",
+            "The threshold must clear the base rate, not merely feel careful: a signal justifies escalation only when corroboration across independent evidence kinds makes THIS alarm more likely true than the base rate makes it false. That is what calibration means here: escalation earned by corroboration, not paranoia.",
         },
       ],
     },
@@ -102,13 +102,13 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
           q: "Which sibling mechanism covers what this signature cannot see?",
           opts: [
             "2.2 cloud / provider reporting",
-            "2.4 human layer",
+            "the human layer, 2.3.7–2.3.10",
             "Hardware layer (chip-level tracking)",
             "3.1 evasion scenarios",
             "3.2 combining evidence",
           ],
           right: 1,
-          why: "MIRI's draft names military and hardened facilities the blind spot; what the roof hides, people inside can reveal — whistleblowers and inspectors are the 2.4 human layer.",
+          why: "MIRI's draft names military and hardened facilities the blind spot; what the roof hides, people inside can reveal — whistleblowers and inspectors are the human layer, 2.3.7–2.3.10.",
         },
         {
           type: "pick",
@@ -129,7 +129,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
           q: "Which sibling mechanism covers what this signature cannot see?",
           opts: [
             "2.2 cloud / provider reporting",
-            "2.4 human layer",
+            "the human layer, 2.3.7–2.3.10",
             "Hardware layer (chip-level tracking)",
             "3.1 evasion scenarios",
             "3.2 combining evidence",
@@ -156,7 +156,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
           q: "Which sibling mechanism covers what this signature cannot see?",
           opts: [
             "2.2 cloud / provider reporting",
-            "2.4 human layer",
+            "the human layer, 2.3.7–2.3.10",
             "Hardware layer (chip-level tracking)",
             "3.1 evasion scenarios",
             "3.2 combining evidence",
@@ -183,13 +183,13 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
           q: "Which sibling mechanism covers what this signature cannot see?",
           opts: [
             "2.2 cloud / provider reporting",
-            "2.4 human layer",
+            "the human layer, 2.3.7–2.3.10",
             "Hardware layer (chip-level tracking)",
             "3.1 evasion scenarios",
             "3.2 combining evidence",
           ],
           right: 1,
-          why: "A sanitized paper trail still passes through people. What the filings hide — what the company believed, what leadership was warned about — is exactly what the 2.4 human layer reveals.",
+          why: "A sanitized paper trail still passes through people. What the filings hide — what the company believed, what leadership was warned about — is exactly what the human layer, 2.3.7–2.3.10, reveals.",
         },
         {
           type: "pick",
@@ -210,7 +210,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
           q: "Which sibling mechanism covers what this signature cannot see?",
           opts: [
             "2.2 cloud / provider reporting",
-            "2.4 human layer",
+            "the human layer, 2.3.7–2.3.10",
             "Hardware layer (chip-level tracking)",
             "3.1 evasion scenarios",
             "3.2 combining evidence",

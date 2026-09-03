@@ -12,7 +12,7 @@ deliverable_type: spec
 mentor: recommended
 audience: The regulator writing a security condition, and the lab that has to pass an audit against it.
 skills: [security requirement design, threat tiering, auditability analysis, cost-of-compliance analysis]
-prerequisites: [Verification 2.4 — the human layer, Verification 3 — covert development, Verification 4.1 — feasibility and layering]
+prerequisites: [Verification 2.3 — intelligence and the human layer, Verification 3 — covert development, Verification 4.1 — feasibility and layering]
 sources:
   - "[Open Problems in Technical AI Governance — Reuel et al. (2025), security questions: what infrastructure-level cybersecurity measures protect model weights from theft; how can models be protected from inference attacks reproducing weights](https://arxiv.org/abs/2407.14981)"
 updated: 2026-08-04
@@ -39,7 +39,7 @@ against is a requirement that exists only in the recital.
   establish it is in place — and not merely documented. This is the section
   that decides whether the baseline is real, and the one most security policies
   skip.
-- **The human layer.** Module 2.4's territory. Most exfiltration paths run
+- **The human layer.** Module 2.3's human-layer territory (2.3.7–2.3.10). Most exfiltration paths run
   through people with legitimate access, and technical controls that ignore
   that are ignoring the main route. Say how your baseline handles the insider
   who is authorised.

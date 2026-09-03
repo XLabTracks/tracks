@@ -2107,3 +2107,39 @@ CYBER 10; insiders 35; reporting 60; audits 30; institutions 25; assessment
 kept widget are unchanged; the five removed widgets are unregistered and their
 files deleted. Citations: the PRC GAIGI entry left with the packet that cited
 it; the GAO entry is new.
+
+## 2026-09-02 — consistency pass: the human layer is addressed as 2.3 everywhere
+
+Course owner, on the merge above: the human layer must be addressed as part
+of 2.3, not as a layer that happens to sit inside it — check consistency. The
+sweep found the footprint of "2.4" well beyond the four lessons:
+
+- **The unit folds too.** The four human lessons now join unit `2.3`
+  (`verificationUnitOfLesson`); unit `2.4` and its meta row are gone, and
+  course.js draws one unit. Cost, stated: a static-site learner who had
+  marked unit 2.4 complete keeps an inert id in their store — app progress
+  is per lesson id, and none of those changed. Skill-map rung tags on `2.4`
+  retag to `2.3` in both `data/skills.js` and its TS mirror (`incentives`,
+  `confverif`, `human`); the compound rung is `2.1–2.3` over three buckets;
+  the map's `rev` and `SKILLS_REV` bump to 3 together, as their comment asks.
+- **A dead link.** 2.0.1 (`mechanism-privacy.mdx`) pointed "Module 2.4" at the
+  retired `human-intro` slug — a 404 since the merge. It now sends readers
+  to 2.3's human-layer sections at `human-insiders`.
+- **Widget chrome and drill copy** carried the old numbers: the eyebrows
+  "· 2.4.1" to "· 2.4.4" in the insiders and reporting widgets and the
+  policy labs; the missing-board and policy-on-paper reveals; the limitations
+  ledger's sibling-owner option "2.4 human layer" (now "the human layer,
+  2.3.7–2.3.10") and a reveal that still scored against the Analyst Desk;
+  the assessment deck's own "2.3.3" intro. All renumbered.
+- **The lessons address themselves by number**: 2.3.7's opener reads "In
+  2.3.7–2.3.10, you will learn…" with the objectives scoped to those
+  sections; 2.3.10 opens "In 2.3.10, the last of the human-layer sections";
+  the head says the human layer is read "here, as 2.3.7–2.3.10".
+- **Module 2 has three buckets now**, and its summary says so. The capstone
+  briefs that named "Verification 2.4 — the human layer" as a prerequisite
+  name "Verification 2.3 — intelligence and the human layer"; the ones that
+  said "the four layers" of Module 2 say "the evidence layers" (label
+  `Verification 2.x — the evidence layers`); the whistleblower brief's
+  "Module 2.4 says…" reads "Module 2.3's human-layer sections say…". The bank
+  is regenerated from the briefs. The context distiller's "2.4.1"/"2.4.4"
+  are sections of the fictional system card it distills, and stay.

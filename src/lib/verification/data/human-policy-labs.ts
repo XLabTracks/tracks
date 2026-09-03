@@ -48,7 +48,7 @@ const BAKER_PERSONNEL = "https://arxiv.org/html/2507.15916#S4.SS3";
 
 export const AUDITS_INSPECTIONS_LAB: HumanPolicyLab = {
   id: "audits-inspections",
-  eyebrow: "Audits and inspections · 2.4.3",
+  eyebrow: "Audits and inspections · 2.3.9",
   title: "Build the inspection order",
   instruction:
     "A power anomaly has raised a concrete concern. Choose the mechanism, set the ceiling imposed by access, and write an order that can survive both evasion and a legitimate confidentiality objection.",
@@ -424,7 +424,7 @@ export const AUDITS_INSPECTIONS_LAB: HumanPolicyLab = {
 
 export const INSTITUTIONS_JUDGMENT_LAB: HumanPolicyLab = {
   id: "institutions-judgment",
-  eyebrow: "Institutions and policy judgment · 2.4.4",
+  eyebrow: "Institutions and policy judgment · 2.3.10",
   title: "Audit the verifier",
   instruction:
     "Inspect the institution before relying on its finding. Then separate what the human record establishes from what still requires technical or physical evidence, and match each decision to its legal and evidentiary threshold.",

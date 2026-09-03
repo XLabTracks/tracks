@@ -45,7 +45,7 @@ deliverable_type: spec           # memo | analysis | spec | dossier | notebook |
 mentor: optional                 # none | optional | recommended | required
 audience: The negotiating team that has to sign it.
 skills: [regime design, threat modelling, evidence standards]
-prerequisites: [Verification 2.x — the four layers, Verification 4.1]
+prerequisites: [Verification 2.x — the evidence layers, Verification 4.1]
 sources:
   - "[Open Problems in Technical AI Governance — Reuel et al. (2025)](https://arxiv.org/abs/2407.14981)"
   - verification-track-outline.md §4.2

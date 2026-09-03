@@ -90,7 +90,7 @@ export function HumanReportingProtection({
     <section className="not-prose border-border bg-card shadow-soft my-6 overflow-hidden rounded-xl border text-sm">
       <header className="border-border border-b p-5 sm:p-6">
         <p className="text-muted-foreground font-sans text-xs font-medium tracking-[0.01em] uppercase">
-          Reporting and protection · 2.4.2
+          Reporting and protection · 2.3.8
         </p>
         <h3 className="mt-3 text-2xl font-semibold tracking-tight">
           Follow the report

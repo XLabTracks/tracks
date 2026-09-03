@@ -150,7 +150,7 @@ export function HumanInsiders({
       <header className="border-border border-b p-5 sm:p-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="text-muted-foreground font-sans text-xs font-medium tracking-[0.01em] uppercase">
-            Source assessment · 2.4.1
+            Source assessment · 2.3.7
           </p>
         </div>
         <h3 className="mt-3 text-2xl font-semibold tracking-tight">

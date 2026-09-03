@@ -12,7 +12,7 @@ deliverable_type: analysis
 mentor: recommended
 audience: The team that published the proposal you are attacking.
 skills: [red-teaming, attack trees, detection reasoning, adversarial cost modelling]
-prerequisites: [Verification 2.x — the four layers, Verification 3 — covert development]
+prerequisites: [Verification 2.x — the evidence layers, Verification 3 — covert development]
 updated: 2026-08-04
 ---
 

@@ -113,10 +113,10 @@ describe("skillSummary", () => {
     expect(summary.inProgress).toBeGreaterThan(0);
   });
 
-  it("the compound rung fills by quarters and masters only complete", () => {
-    const nearly = new Set(["2.0", "2.1", "2.2", "2.3", "3.0", "4.1"]);
-    expect(skillSummary(nearly).mastered).toBe(6);
-    expect(skillSummary(new Set([...nearly, "2.4"])).mastered).toBe(8);
+  it("the compound rung fills by thirds and masters only complete", () => {
+    const nearly = new Set(["2.0", "2.1", "2.2", "3.0", "4.1"]);
+    expect(skillSummary(nearly).mastered).toBe(5);
+    expect(skillSummary(new Set([...nearly, "2.3"])).mastered).toBe(8);
   });
 });
 

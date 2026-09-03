@@ -991,3 +991,16 @@ load, and notebook.js loads before the guard's effect runs, so without the
 reload the panel could show the purged text until the next navigation. The
 reload cannot loop: a purge only happens on a marker mismatch, and the
 marker is reconciled before the reload.
+
+## 2026-09-03 — peer review removed from the course's written outputs
+
+Owner: stop adding "goes through peer review" to tasks; the course is
+self-paced. Removed everywhere, not only from the 2.3 memo where it had
+been added: the `peerReviewed` field is gone from `memos.ts` and the
+generated `memos.js`; the memo card no longer prints "Goes through peer
+review" and its criteria eyebrow reads "Judged on"; the desk's rail says
+"Judge the draft on the outline's criteria for this slot" and its
+no-checks note names the slot's criteria; the About page no longer says
+outputs are put through peer review; the module 3 gap text and the 4.1
+criteria line lose the phrase. Criteria stay: they are what the writer
+judges their own draft on.

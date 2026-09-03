@@ -474,6 +474,10 @@ add must reduce the duplication, never widen it.
   the course again. `status` is load-bearing: `specified` quotes the outline,
   `named` and `unspecified` must carry a `gap` saying what is missing, and
   filling one in yourself is a content decision that is not yours to make.
+  **No peer review anywhere in the course** (owner, 2026-09-03: it is
+  self-paced): no slot, card, desk rail or page says a draft goes through
+  peer review, and there is no `peerReviewed` field — criteria are what the
+  writer judges their own draft on.
 - **`verificationUnitOfLesson` in curriculum.ts is the join.** The static
   site and `data/skills.js` key on outline numbers (`0.1`, `2.3`); the graph
   keys on `v-<name>`. Several lessons may share one unit — module 0's seven

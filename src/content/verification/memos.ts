@@ -22,7 +22,6 @@ export interface MemoSlot {
   brief: string | null;
   audience: string | null;
   words: number;
-  peerReviewed: boolean;
   gap?: string;
   criteria?: string[];
 }
@@ -49,7 +48,6 @@ export const memoSlots: MemoSlot[] = [
     audience:
       "Decision-makers asking whether the verification regime is strong enough to rely on as written.",
     words: 600,
-    peerReviewed: true,
   },
   {
     id: "m0-success-scenario",
@@ -64,7 +62,6 @@ export const memoSlots: MemoSlot[] = [
       "Describe your own plausible success scenario for advanced AI governance. Think several steps beyond any single verification mechanism: what does a world that has successfully managed the relevant risks actually look like, and what agreement or institutional arrangement gets us there? Keep this essay. You will return to it at the end of the track and see what, if anything, you would now change.",
     audience: null,
     words: 800,
-    peerReviewed: false,
   },
   {
     id: "m1-stakeholder-map",
@@ -78,7 +75,6 @@ export const memoSlots: MemoSlot[] = [
       "For a hypothetical pause treaty, place every relevant actor on the supply chain, annotate each with its most likely incentive class and the leverage it holds, and mark the two or three actors whose defection would collapse the regime.",
     audience: "The drafting team for a hypothetical pause treaty.",
     words: 800,
-    peerReviewed: true,
   },
   {
     id: "m1-case-briefing",
@@ -90,7 +86,6 @@ export const memoSlots: MemoSlot[] = [
     brief: null,
     audience: null,
     words: 600,
-    peerReviewed: false,
     gap: "Named in the module timing table as a 15–20 minute written exercise. No brief, audience or rubric is drafted.",
   },
   {
@@ -104,7 +99,6 @@ export const memoSlots: MemoSlot[] = [
     brief: "Actor–authority–evidence map for any element of the supply chain.",
     audience: null,
     words: 700,
-    peerReviewed: false,
     gap: "The artifact is named; length, audience and review criteria are not drafted.",
   },
   {
@@ -118,7 +112,6 @@ export const memoSlots: MemoSlot[] = [
     brief: null,
     audience: null,
     words: 600,
-    peerReviewed: false,
     gap: 'A "[Optional] Written output:" marker sits after the supply-chain actor list with nothing under it.',
   },
   {
@@ -133,7 +126,6 @@ export const memoSlots: MemoSlot[] = [
     audience:
       "A named national delegation or joint drafting session considering a three-month U.S.–China pause.",
     words: 1000,
-    peerReviewed: false,
   },
   {
     id: "m2-3-intel-overview",
@@ -148,7 +140,6 @@ export const memoSlots: MemoSlot[] = [
     audience:
       "A policymaker trying to understand what we can actually track, and what we cannot.",
     words: 900,
-    peerReviewed: true,
     criteria: [
       "Fidelity to what each mechanism can actually establish",
       "Currency — cited public artifacts the author found, not recalled",
@@ -167,8 +158,7 @@ export const memoSlots: MemoSlot[] = [
     brief: null,
     audience: null,
     words: 800,
-    peerReviewed: true,
-    gap: "The track’s module anatomy gives every module one written output that goes through peer review. Module 3 is the one module for which the outline never says which.",
+    gap: "The track’s module anatomy gives every module one written output. Module 3 is the one module for which the outline never says which.",
   },
   {
     id: "m4-0-ranking-memo",
@@ -182,8 +172,7 @@ export const memoSlots: MemoSlot[] = [
     audience:
       "Whoever acts on the 4.2 capstone — the portfolio is handed forward, not filed.",
     words: 900,
-    peerReviewed: true,
-    criteria: ["Peer review against the rubric"],
+    criteria: ["Judged against the rubric"],
   },
 ];
 

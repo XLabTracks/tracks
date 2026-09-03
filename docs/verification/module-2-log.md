@@ -2451,3 +2451,55 @@ hours") and in the section's minutes (200 → 140; the memo was 180 of them).
 Unit 2.3 meta 590 → 530. The brief's length (900 words) and its research
 requirement (three public artifacts found by the author) are unchanged
 pending the owner's word: they were set against three hours.
+
+## 2026-09-03 — 2.3.1, 2.3.2, 2.3.4 get required readings and exercises; six repetitions fixed
+
+Owner, on the three sections whose minutes had nothing required behind
+them: make the readings required, or build exercises on them inside those
+minutes. Done both, minutes unchanged (25/25/20). Each card now names the
+assigned part, and each part was measured from the page or PDF:
+
+- 2.3.1: FAS, *Tracking Hyperscale AI Data Center Growth with Satellite
+  Imagery* — Christina Krawec, 12 May 2026 (the card had said "Federation
+  of American Scientists, 2025, 10 min"; the whole piece is ~8,900 words).
+  Assigned: Case Study 2 (Colossus feature identification) and the Key
+  Takeaways, ~2,900 words, 13 min. Exercise `v-intel-osint-fas`: what each
+  of the four sources established (the utility's annotation, the permit, the
+  civil-society flight, the October 2025 image) and what none could. GIJN
+  stays optional, as placed.
+- 2.3.2: Epoch's hub post required (5 min) and now carrying the methodology
+  link; ISIS, *The Al Kibar Reactor* required — assigned the introduction
+  (pp. 1–3) and "Summary and Lessons" (pp. 28–30), ~2,600 words, 12 min (the
+  card had said 15 min for the whole; the whole is ~5,600 words, 24 min).
+  Exercise `v-intel-imagery-al-kibar`: the expected signatures and how each
+  was hidden, what imagery alone established, what settled it (photographs
+  from a friendly service — human intelligence).
+- 2.3.4: Epoch, *Diversion and Resale* — Isabel Juniewicz, 29 Apr. 2026 (the
+  card had said "Epoch AI, 2025, 12 min"; whole ~4,100 words). Assigned Key
+  takeaways through Combined results, ~2,500 words, 11 min. Exercise
+  `v-intel-finint-smuggling`: the two evidence streams, and that none of the
+  section's named streams (customs, licences, financial intelligence) is
+  among them. Basel cards stay optional.
+
+All three exercises are `understanding-check` cards with sample answers
+drawn from the assigned pages only. Registry entries for FAS and Epoch
+smuggling corrected (author, date).
+
+Repetitions, per the owner's "давай починим":
+1. The *Six Layers* national-intelligence paragraph is no longer quoted in
+   the head; a sentence states its placement and points at 2.3.6, which
+   reproduces §4.3 whole. 2.3.5 now refers to "the paragraph 2.3.6
+   reproduces". 2.3.6's intro gains one seam sentence: the third category is
+   the layer 2.3.1–2.3.5 just walked; this section and the next three take
+   the first two.
+2. "Supplemental": the collection map's OSINT card no longer restates the
+   *Six Layers* classification, and 2.3.1's lede refers to the module's
+   opening instead of restating it. It is stated in the head, summed in
+   2.3.10's Bounds, and recapped in Eight Lines.
+3. Epoch's method is stated once, in 2.3.2's hub card (with the methodology
+   link); 2.3.1's prose and its FAS card no longer repeat it.
+4. The ~500-site count is sourced to 2.3.3; 2.3.10's base-rate bullet says
+   so. The bench's own use and the recap stay.
+5. 2.3.5's two sources-and-methods paragraphs are one.
+6. The limitations ledger is named as the memo's middle in draft, in 2.3.10's
+   bench intro and in 2.3.11's Written Output.

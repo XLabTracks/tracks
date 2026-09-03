@@ -32,7 +32,7 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     seen:
       "Organizational and facility signatures — permits, filings, hiring, supplier disclosures, interconnect and power-purchase records — often before anything is built.",
     limit:
-      "Six Layers classes it with the supplemental mechanisms: it rarely settles a question on its own, and it is the first stream a program sanitizes.",
+      "Rarely settles a question on its own, and the first stream a program sanitizes.",
   },
   {
     id: "humint",

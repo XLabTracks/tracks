@@ -313,15 +313,17 @@
     },
     "https://epoch.ai/publications/chip-smuggling": {
       "title": "Diversion and Resale: Estimating Compute Smuggling to China",
-      "about": "A public estimate of smuggled compute, with a median of about 660,000 H100-equivalents through the end of 2025: the procurement and customs signature quantified.",
-      "org": "Epoch AI",
-      "date": "2025"
+      "about": "A public estimate of smuggled compute — median about 660,000 H100-equivalents through the end of 2025, 90% interval 290,000 to 1.6 million — built from indictments and investigative reporting on diversion and on China's grey market, with the detection rate as its largest uncertainty.",
+      "authors": "Juniewicz, Isabel",
+      "publisher": "Epoch AI",
+      "date": "29 Apr. 2026"
     },
     "https://fas.org/publication/tracking-hyperscale/": {
       "title": "Tracking Hyperscale AI Data Center Growth with Satellite Imagery",
-      "about": "A public tracker reading AI datacentre construction from commercial satellite imagery: the overhead-imagery signature practiced for real.",
-      "org": "Federation of American Scientists",
-      "date": "2025"
+      "about": "A trained imagery analyst's method for reading AI datacentre construction from commercial satellite imagery, with two case studies (Ajman, Colossus) and the open sources — utility annotations, permits, a civil-society flight — read beside the images.",
+      "authors": "Krawec, Christina",
+      "publisher": "Federation of American Scientists",
+      "date": "12 May 2026"
     },
     "https://forum.effectivealtruism.org/posts/AP9FowhqT7MXDSm5P/learning-to-ask-action-relevant-questions-1": {
       "title": "Learning to Ask Action-Relevant Questions",

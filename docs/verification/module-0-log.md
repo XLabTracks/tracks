@@ -983,3 +983,11 @@ would need the same shim plus a store of their own. The signed-in
 end-to-end path (write, sign out, sign in on another device) was not
 exercised in the build sandbox, which has no database; the merge logic is
 unit-tested and the device half is unit-tested against a fake storage.
+
+Addendum, same day: when the guard purges on page load (a session that
+expired, or an account that changed without the Sign out button), it reloads
+the page once. The legacy scripts read their stores into memory as they
+load, and notebook.js loads before the guard's effect runs, so without the
+reload the panel could show the purged text until the next navigation. The
+reload cannot loop: a purge only happens on a marker mismatch, and the
+marker is reconciled before the reload.

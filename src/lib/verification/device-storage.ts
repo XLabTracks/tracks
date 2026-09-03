@@ -92,7 +92,11 @@ export function settleAccountOnDevice(userId: string | null): void {
   const storage = local();
   if (storage) {
     const { purged } = reconcileAccountMarker(userId, storage);
-    if (purged) clearAdoptedFlag();
+    if (purged) {
+      clearAdoptedFlag();
+      window.location.reload();
+      return;
+    }
   }
   const w = window as unknown as { __tracksAccountSettled?: boolean };
   w.__tracksAccountSettled = true;

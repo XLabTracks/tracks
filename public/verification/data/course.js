@@ -195,7 +195,6 @@ window.COURSE = {
             "intelligence-imagery",
             "intelligence-masint",
             "intelligence-finint",
-            "intelligence-sigint",
             "intelligence-cyber",
             "human-insiders",
             "human-reporting-protection",

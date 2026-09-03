@@ -2341,3 +2341,33 @@ repost of the chapter ("with permission from GIJN"). The pointer section is
 library kept since 2003 alongside his training courses, free, a directory
 rather than a course. Two registry entries; the registry's entries are
 back in URL order (the Rahman entry had been inserted after the Scher one).
+
+## 2026-09-03 — SIGINT merged into cyber; 2.3 is eleven sections
+
+Owner ("Да сливаем"), after the inventory showed 2.3.5 Signals intelligence
+as 290 words of prose with nothing to read and nothing to do: the
+literature never separates signals from cyber (one row in Scher and
+Thiergart, one list in *Six Layers*, both words in Definition 17), so the two
+sections are one — "2.3.5 Signals and cyber intelligence", at the cyber
+lesson's id, slug and file, 20 minutes (the two sections' sum, until its
+readings and exercise are chosen). The SIGINT lesson's two usable paragraphs
+moved over: the arms-control NTM precedent (satellites and signals counted
+silos and launchers, noninterference clauses) and the sources-and-methods
+limit (Baker §2.3.3), which the cyber prose had been restating as "everything
+2.3.5 said, with more force". `intelligence-sigint.mdx` and the
+`v-intel-sigint` entry are gone (recoverable at 00df3d2c). The sections after
+it move down one: 2.3.6 Insiders, 2.3.7 Reporting and protection, 2.3.8 Audits
+and inspections, 2.3.9 Institutions, 2.3.10 Assessment, 2.3.11 Summary and
+written output. Every cross-reference by number was swept — head lesson,
+Objectives scope, widget eyebrows, drill copy, the capstone briefs, the module
+1 privacy lesson's link, CLAUDE.md — and course.js and the capstone bank
+regenerated. Unit minutes unchanged at 580. Not renumbered on purpose:
+`context-distiller.ts`'s `sec` fields (system-card section numbers, not
+ours) and the historical outline spec.
+
+Still open for the merged section, per the owner: which reading (Warner's
+"Intelligence in Cyber, and Cyber in Intelligence" proposed as the section's
+reading, ODNI's "Background: The Analytic Process and Cyber Incident
+Attribution" with Annex B as the short second) and which exercise ("Two
+capitals" from the Def 17 paragraph; "Natanz through the inspectors' eyes"
+from ISIS 2010 and Langner; a Q Model ledger from Rid and Buchanan).

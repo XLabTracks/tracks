@@ -166,7 +166,7 @@ export const POLICY_COMPANIES: PolicyCompany[] = [
         text: "Whistleblowers filed a complaint with the securities regulator, alleging that the agreements required employees to waive their federal right to a whistleblower award and barred them from giving information to federal authorities without the company’s permission.",
         kind: "prior-practice",
         cite: FILES,
-        note: "What happened, and is documented, is the filing. What the complaint says happened is an allegation inside it, which no regulator has ruled on. Marking the allegation as practice is the error 2.3.9 spends ten minutes on — evidence of a claim is not evidence that the claim is true — so the row states the filing and leaves the allegation as its content.",
+        note: "What happened, and is documented, is the filing. What the complaint says happened is an allegation inside it, which no regulator has ruled on. Marking the allegation as practice is the error 2.3.8 spends ten minutes on — evidence of a claim is not evidence that the claim is true — so the row states the filing and leaves the allegation as its content.",
       },
       {
         id: "b-grade",

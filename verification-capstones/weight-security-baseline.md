@@ -39,7 +39,7 @@ against is a requirement that exists only in the recital.
   establish it is in place — and not merely documented. This is the section
   that decides whether the baseline is real, and the one most security policies
   skip.
-- **The human layer.** Module 2.3's human-layer territory (2.3.7–2.3.10). Most exfiltration paths run
+- **The human layer.** Module 2.3's human-layer territory (2.3.6–2.3.9). Most exfiltration paths run
   through people with legitimate access, and technical controls that ignore
   that are ignoring the main route. Say how your baseline handles the insider
   who is authorised.

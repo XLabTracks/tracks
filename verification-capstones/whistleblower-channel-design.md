@@ -20,7 +20,7 @@ updated: 2026-08-04
 
 ## The brief
 
-Module 2.3's human-layer sections (2.3.7–2.3.10) make the case and state the
+Module 2.3's human-layer sections (2.3.6–2.3.9) make the case and state the
 problem in the same breath: humans reveal what the other evidence streams cannot — what the company believed, what
 leadership was warned about, what was suppressed — and frontier AI adds
 secrecy, NDAs, equity incentives and race pressure on top. Whether that

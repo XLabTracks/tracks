@@ -650,7 +650,7 @@ rose`, or Okabe–Ito). Those read as stock AI slop against the maroon, which is
   lesson's subtitles a different size from its neighbours'. When touching a
   lesson, bring its headings and its PageBreak titles (the part-strip labels)
   up to this rather than matching whatever mixed case sits nearby. The former 2.4
-  (now 2.3.7–2.3.10) is conformed; sweep others as they are edited.
+  (now 2.3.6–2.3.9) is conformed; sweep others as they are edited.
 
 Traps that cost time already, so they are written down:
 

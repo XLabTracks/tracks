@@ -27,7 +27,7 @@ export const BOARD_STATIONS: BoardStation[] = [
     nuclear:
       "The Board of Governors decides whether the facts constitute noncompliance — a judgment, Carlson insists, not a checklist.",
     prompt:
-      "Who could play the Board of Governors’ part for AI: a body legitimate enough that rivals accept its findings, and independent enough that none of the four forms of capture described in 2.3.10 owns it?",
+      "Who could play the Board of Governors’ part for AI: a body legitimate enough that rivals accept its findings, and independent enough that none of the four forms of capture described in 2.3.9 owns it?",
   },
   {
     id: "enforcer",

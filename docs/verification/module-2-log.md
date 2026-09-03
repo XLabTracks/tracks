@@ -2223,3 +2223,16 @@ What changed, by exercise:
 Explanatory reveal prose (the missing-board commentary, the drill reveals,
 the power explainer's captions) was left in its register: it explains,
 it does not set a task. The same pass has not been made over modules 0–2.2.
+
+## 2026-09-02 — the red-line packet's sources are gone with it
+
+Owner, reading the 2026-09-01 packet entry above ("Kissinger's World Order is
+cited with page locators…"): if the module does not use Kissinger, it must
+not cite him. Checked against the live content after the deletions: no
+lesson, data file, widget, memo brief, or citations entry in 2.3 names
+Kissinger, *World Order*, NSS 2025, the PRC Global AI Governance Initiative,
+Gottemoeller, or Glaser. They were the source packet of the red-line memo and
+left with the institutions section; the entry above stands as the record of
+what that packet was. The one historical example that remains in the debates
+fold — the Niger forgeries, as the standing warning that shared documents
+might be fake — is Baker's point and is cited to Baker.

@@ -1,0 +1,73 @@
+Two disciplines the AI-verification literature never separates: it says
+"satellite imagery" and means both. IMINT is the picture; GEOINT is the
+picture placed — terrain, grid connection, and change over time. The cards keep
+them apart because they fail differently, and this section walks them
+together.
+
+## Overhead Imagery
+
+Building footprint, electrical substations, cooling equipment, security
+perimeter. Facilities above roughly 10,000 H100-equivalents typically occupy
+substantial footprints with characteristic features (MIRI, Appendix D.3.5; a
+2025 snapshot).
+
+The historical hook: the IAEA only began using satellite imagery in the 1990s,
+after failures to detect undeclared facilities under declared-facility
+safeguards.
+
+Caveats: imagery is unlikely to distinguish AI from non-AI datacenters
+(cooling is the key differentiator), it struggles with industrial look-alikes,
+and it can be defeated by underground or camouflaged construction.
+
+## The Grid Connection
+
+Where imagery becomes geospatial: not the building but what has to run to it.
+
+<SourceQuote
+  t="An International Agreement to Prevent the Premature Creation of Artificial Superintelligence"
+  url="https://arxiv.org/abs/2511.10783"
+  what="Appendix D — methods for chip tracking and consolidation"
+  by="Scher, Abecassis, Barnett, and Abeyta | MIRI (2025)"
+>
+
+Facilities with this sort of power draw require specialized electricity
+infrastructure, such as large transmission lines. This electricity
+infrastructure can easily be seen via satellite; even publicly available
+satellite imagery reveals transmission lines for facilities like aluminum
+smelters and desalination plants which have comparable power requirements. It
+is possible to bury transmission lines, but this construction effort would
+take a long time and would itself be visible to satellites.
+
+</SourceQuote>
+
+That is the sentence that makes the stream quantitative: city-scale draw needs
+a city-scale connection, and hiding the connection is itself a slow,
+satellite-visible construction project. What the draw means in compute is
+2.3.3's arithmetic.
+
+## What Imagery Settles
+
+Cover stories are falsifiable: Iran's denial of activity at a site was
+contradicted by commercially available satellite imagery. Whether commercial
+transparency is a democratizing boon or a spoofable liability — shutter
+control, hard physical limits, AI-generated imagery — is one of the module's
+open debates, kept for 2.3.12.
+
+<ReadingCard
+  id="intel-isis-al-kibar"
+  href="https://isis-online.org/uploads/isis-reports/documents/SyriaReactorReport_12May2008.pdf"
+  title="The Al Kibar Reactor: Extraordinary Camouflage, Troubling Implications"
+  author="Albright and Brannan | Institute for Science and International Security"
+  year="2008"
+  mins="15 min"
+  optional
+>
+
+Two undeclared sites, as the imagery analysts wrote them up. The Turquzabad
+companion is
+[Revealed: Emptying of the Iranian "Atomic Warehouse" at Turquz Abad](https://isis-online.org/isis-reports/revealed-emptying-of-the-iranian-atomic-warehouse-at-turquz-abad)
+(Albright, Heinonen, Pabian, and Stricker, 2018): a rival's seized archive
+pointed at coordinates, commercial imagery watched the site being emptied, and
+environmental samples did the resolving.
+
+</ReadingCard>

@@ -2030,3 +2030,80 @@ two-part — draft the NTM article, and produce a monitoring-recommendation
 memo naming residual blind spots and their sibling owners. The written
 output now examines the second part; the first stays examined by the 2.3.4
 workspace and its exemplar, un-graded.
+
+## 2026-09-02 — 2.4 folds into 2.3, and 2.3 is reorganised by collection discipline
+
+Course owner, in review, after the literature check: the four core papers keep
+human sources inside the intelligence-based family (Wasil files whistleblowers
+under national technical means; *Six Layers* makes national intelligence one of
+its three personnel-based layers, §4.3; Scher and Thiergart's intelligence
+block carries HUMINT; Baker pairs agency tips with whistleblowers), so the
+human layer is read inside 2.3 rather than as a submodule of its own. The new
+spine is the collection map's disciplines, one section each, with the human
+layer as the HUMINT sections and the access-dependent remainder placed at the
+end of the walk. Everything the owner ruled out is in git at `9b329f2a`, the
+last commit before this one.
+
+The owner's rulings, applied one by one:
+
+- **Structure by discipline**, head first: what intelligence-based mechanisms
+  are, plus the collection map. Then OSINT, IMINT/GEOINT, MASINT, FININT,
+  SIGINT, CYBER, the human layer, audits and inspections, assessment, and a
+  closing section that is a summary and the memo.
+- **FININT is the eighth discipline** (owner: yes). The collection map gains a
+  card; financial intelligence is the field's highest-rated stream (Scher and
+  Thiergart: High, under a year) and was missing from the seven.
+- **IMINT and GEOINT read as one section**: the AI-verification literature
+  says "satellite imagery" and never separates them.
+- **The empirical anchor section is deleted** (owner: the IAEA cases are
+  already covered in earlier modules — precedents.mdx). Baker's finding
+  survives as one paragraph at the head of the module; the case-files drill,
+  the Baker reading card, and the caveats section go.
+- **Intelligence institutions and treaty design is deleted** (owner: "this
+  has no place in 2.3"). Definition 17, the NTM red-line workspace, its
+  exemplar, the sharing/protection/architecture sections, and the
+  clause-anatomy and who-watches benches go with it. Where that material
+  should live, if anywhere, is an open question for the owner.
+- **The Analyst Desk is deleted** (owner: throw it out; the last section is
+  only a summary and the memo). The Cold Open goes with it — it existed only
+  to be unsealed at the desk.
+- **Assessment stays**, checked against modules 0 and 1 for repeats: the
+  1991 Iraq nuclear program is theirs; the 2002–03 Iraq WMD estimate, base
+  rates, Heuer, and the false-alarm arithmetic are not, so nothing was cut.
+  The feasibility-cards fold moved here from the old signatures section.
+- **All of 2.4's material and exercises are preserved** (owner: "I still want
+  to keep our exercises and materials from 2.4"). The four lessons keep their
+  files, slugs, exercises, and unit `2.4` in the join — so learner progress and
+  the skill map's rung tags survive — and renumber to 2.3.7–2.3.10. The old 2.4
+  intro's paragraph and objectives block now open 2.3.7; seam edits only ("In
+  this module" → "In this part of the module"; the objectives scope reads "the
+  human layer"; 2.3.10's "final section of this module" → "final section on
+  the human layer").
+- **No source packet for the memo** (owner: it does not exist; learners use
+  the course or search). The packet list is gone from the written-output
+  section; the brief's red-line sentence is replaced. The GAO report the owner
+  approved (GAO-23-105698, *U.S. May Face Challenges in Verifying Future Treaty
+  Goals*) is a reading card beside the desk, as the genre done for real.
+- **The mastery checkpoint drops the NTM-obligations item** (its material left
+  the module) and is seven items, six the bar; the remaining correctives point
+  at the renumbered sections.
+
+New text is assembled from what the module already carried plus verbatim
+passages from the two committed artifacts: *Six Layers* §4.4's OSINT entry and
+§4.3.1's national-intelligence paragraph, the MIRI draft's transmission-lines
+passage (Appendix D) and its "fund pilot verification efforts using open-source
+intelligence or satellite data" recommendation, and three rows of Scher and
+Thiergart's locating-compute table from the ported data (FININT, underground
+construction, cyber operations and communication surveillance). SIGINT and
+CYBER are reading sections and say so: the AI-verification literature gives
+them a sentence each. A CYBER exercise is still to be discussed with the
+owner. OSINT harvest, for the record: Wasil treats no open-source method
+(customs data is the nearest) and Scher and Thiergart's table has no OSINT
+row; the OSINT section states that rather than papering over it.
+
+Minutes: head 20; OSINT 25; imagery 25; MASINT 40; FININT 20; SIGINT 10;
+CYBER 10; insiders 35; reporting 60; audits 30; institutions 25; assessment
+80; summary and memo 200 — 580 in all. Exercise ids and storage keys of every
+kept widget are unchanged; the five removed widgets are unregistered and their
+files deleted. Citations: the PRC GAIGI entry left with the packet that cited
+it; the GAO entry is new.

@@ -145,11 +145,6 @@ const DrillsIntelSignatures = dynamic<VerificationWidgetProps>(
     ),
   { loading: WidgetLoading },
 );
-const DrillsIntelAnchor = dynamic<VerificationWidgetProps>(
-  () =>
-    import("./drills-intel-anchor").then((module) => module.DrillsIntelAnchor),
-  { loading: WidgetLoading },
-);
 const DrillsIntelAssessment = dynamic<VerificationWidgetProps>(
   () =>
     import("./drills-intel-assessment").then(
@@ -157,27 +152,8 @@ const DrillsIntelAssessment = dynamic<VerificationWidgetProps>(
     ),
   { loading: WidgetLoading },
 );
-const DrillsIntelInstitutions = dynamic<VerificationWidgetProps>(
-  () =>
-    import("./drills-intel-institutions").then(
-      (module) => module.DrillsIntelInstitutions,
-    ),
-  { loading: WidgetLoading },
-);
-const AnalystDesk = dynamic<VerificationWidgetProps>(
-  () => import("./analyst-desk").then((module) => module.AnalystDesk),
-  { loading: WidgetLoading },
-);
 const DatacenterPower = dynamic<VerificationWidgetProps>(
   () => import("./datacenter-power").then((module) => module.DatacenterPower),
-  { loading: WidgetLoading },
-);
-const NtmRedline = dynamic<VerificationWidgetProps>(
-  () => import("./ntm-redline").then((module) => module.NtmRedline),
-  { loading: WidgetLoading },
-);
-const ColdOpen = dynamic<VerificationWidgetProps>(
-  () => import("./cold-open").then((module) => module.ColdOpen),
   { loading: WidgetLoading },
 );
 const LocatingCompute = dynamic<VerificationWidgetProps>(
@@ -199,13 +175,8 @@ export const verificationWidgets: Record<
   "drills-primers": DrillsPrimers,
   "drills-games": DrillsGames,
   "drills-intel-signatures": DrillsIntelSignatures,
-  "drills-intel-anchor": DrillsIntelAnchor,
   "drills-intel-assessment": DrillsIntelAssessment,
-  "drills-intel-institutions": DrillsIntelInstitutions,
-  "analyst-desk": AnalystDesk,
   "datacenter-power": DatacenterPower,
-  "ntm-redline": NtmRedline,
-  "cold-open": ColdOpen,
   "locating-compute": LocatingCompute,
   "policy-cost": PolicyCost,
   "mechanism-sort": MechanismSort,

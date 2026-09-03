@@ -1,0 +1,100 @@
+The physics a facility cannot help emitting: the heat it dumps and the power it
+draws. This is the module's most quantitative stream and its most perishable.
+
+## Thermal
+
+Waste heat, and the narrow temperature band of constant chip operation. Infrared
+imaging, or heat inferred from rooftops where snow never accumulates in winter
+(Baker, footnote 127). Sensing capability is actively improving — HotSat-class
+commercial thermal satellites are the current example, and SatVu has published
+a [thermal image of a live US datacentre](https://www.satellitevu.com/news/satvu-releases-first-of-its-kind-thermal-image-revealing-true-operational-activity-inside-major-u-s-data-centre),
+rooftop cooling, substations, and electrical yards read as active or dormant
+from orbit.
+
+## Energy and the Power Grid
+
+Measured energy delivery can be converted into an approximate FLOP count,
+which makes large unauthorized runs detectable from power draw — coarse
+violations only (Wasil et al.). The grid connection that draw requires, and
+what it looks like from orbit, is 2.3.2's picture; this section is the number.
+
+Against that, Scher and Thiergart rate power-grid analysis only **Medium**
+feasibility — their sole non-High intelligence mechanism. Three reasons:
+
+- Covert generation at the roughly 130 MW scale of a 100k-H100 cluster is
+  plausible, comparable to military naval reactors.
+- Around 500 datacenters worldwide exceed 10 MW — a large haystack (2024–25
+  figures).
+- Chip performance-per-watt improves about 1.6× a year, steadily shrinking the
+  energy signature of any fixed quantity of compute.
+
+Real-world colour: the xAI Memphis behind-the-meter gas turbines were surfaced
+by aerial thermal imaging — the signature and the workaround in one case.
+
+<Callout variant="note" title="Architecture changes the picture">
+
+Power consumption is architecture-dependent, so the same facility can change
+signature without changing size. Scaling an existing architecture by adding
+layers and shifting to a new architecture with a different compute profile
+produce different curves, and inference and training draw differently again.
+See Scher et al., *An International Agreement to Prevent the Premature Creation
+of Artificial Superintelligence*, Appendix D — and connect it back to the
+development picture from Module 1.
+
+</Callout>
+
+## Underground Construction
+
+Scher and Thiergart carry one more measurement row, rated High feasibility
+within a year: geophysical methods already in use to detect underground
+construction, applied to the case of a datacenter built out of sight.
+
+<SourceQuote
+  t="Mechanisms to Verify International Agreements About AI Development"
+  url="https://arxiv.org/abs/2506.15867"
+  what="the locating-compute appendix (pp. 67–80) — the underground-construction row"
+  by="Scher and Thiergart | MIRI (2024)"
+>
+
+Various approaches are already in use to detect underground construction
+(National MASINT Office, 2022). Applying them could reduce the likelihood of
+underground data centers being built secretively.
+
+</SourceQuote>
+
+Their own caveat travels with it: these approaches may not, on their own,
+differentiate a datacenter from any other underground construction.
+
+## The Power Signature, Live
+
+Explore the numbers live, built from
+[Epoch's data-centre dataset](https://epoch.ai/data/ai-data-centers): a real
+facility dropped into a lineup of national grids, the load shape a watcher can
+and cannot read, and the decay clock running against the whole signature.
+
+<VerificationExercise id="datacenter-power" />
+
+## Drill Bench
+
+The Fermi bench makes power quantitative: derive the power-to-compute
+conversion from two atomic facts, scale it to a real cluster, then triage
+three sites on draw alone. Derive, never plug in.
+
+<VerificationExercise id="drills-intel-signatures" />
+
+## Reading
+
+<ReadingCard
+  id="intel-miri-appendix-d"
+  href="https://arxiv.org/abs/2511.10783"
+  title="An International Agreement to Prevent the Premature Creation of Artificial Superintelligence"
+  author="Scher, Abecassis, Barnett, and Abeyta | MIRI"
+  year="2025"
+  mins="4 min"
+>
+
+Appendix D — the data-centre signature: satellite, thermal, and power
+monitoring, and the architecture-dependent power consumption the callout above
+points into.
+
+</ReadingCard>

@@ -1,6 +1,8 @@
 A lead has arrived and been assessed. This section is about what the regime
 does next — and about doing it proportionately, which is the part that decides
-whether a verification regime survives its first ambiguous case.
+whether a verification regime survives its first ambiguous case. Then the
+module closes the way it opened: with the picture as a whole, written down for
+somebody who has to act on it.
 
 ## Comparing Against Declarations
 
@@ -16,7 +18,7 @@ When clarification does not resolve it, the ladder runs roughly:
 - **Task additional collection** — look again, with a different stream.
 - **Seek corroboration** — find an independent source that sees the same thing.
 - **Trigger an audit or challenge inspection** — the treaty's own tools, which
-  is where identification hands off to resolution.
+  is where identification hands off to resolution (2.3.9).
 
 Each rung costs more, politically and diplomatically, than the one below.
 Thresholds are priced by both error costs: a false alarm spends regime
@@ -34,38 +36,56 @@ Whatever the chosen action, the record carries the confidence attached to
 the assessment, any dissent among the analysts, and the unresolved blind
 spots: what nobody could see, as distinct from what was looked at and found
 clean. An assessment that hides its own uncertainty is worth less than one
-that states it, because the next decision-maker cannot calibrate on it, and
-the desk below makes all three records mandatory.
+that states it, because the next decision-maker cannot calibrate on it.
 
-## The Analyst Desk
+## The Module in Eight Lines
 
-The full run: six signals, worked one at a time under the ladder's discipline.
-At most two collection moves per signal, then a disposition committed with
-confidence, dissent, and a blind spot on the record. The debrief prices each
-call; the report at the end reads your pattern, not just your score.
-
-<VerificationExercise id="analyst-desk" />
+- Intelligence identifies; the regime resolves. A tip is not a finding.
+- The layer works without permission and without new machinery — Wasil's
+  national technical means, *Six Layers*' Layer 6, Scher and Thiergart's
+  national-intelligence building blocks.
+- Eight disciplines in two families: those that collect language and records
+  (OSINT, HUMINT, SIGINT, CYBER, FININT) and those that collect physics
+  (IMINT, GEOINT, MASINT).
+- The technical signatures are supplemental in *Six Layers*' scheme —
+  circumventable alone, but circumvention trips the other layers.
+- Power is the most quantitative signature and the most perishable: about
+  1.6× performance-per-watt a year, a roughly 500-site haystack, and covert
+  generation plausible at the 130 MW scale.
+- Money is the stream the field rates highest; open sources are the one it
+  has written least about.
+- People are the most enforceable and least reliable mechanism in the course,
+  and whether an insider reports is decided by the channel built for them.
+- Corroboration across evidence kinds is what promotes an anomaly, and base
+  rates decide whether an alarm means anything at all.
 
 ## Written Output
 
-The commission: the watching picture as it stands this year, written for
-someone who has read none of this module. Budget three hours; the open web is
-part of the packet, and the memo desk carries the brief.
+The commission: the watching picture as it stands this year — what works,
+what is missing, and what could be built — written for someone who has read
+none of this module. Budget three hours. There is no source packet: the
+module is your packet, and the open web is part of the task.
 
 <MemoDesk lesson="intelligence-action" />
 
-The source packet:
+Before you start, read the genre done for real:
 
-- [Wasil et al., pp. 5–7](https://arxiv.org/abs/2408.16074) — the NTM
-  category, method by method.
-- [Scher and Thiergart](https://arxiv.org/abs/2506.15867) — the feasibility
-  ratings, and the locating-compute appendix behind the cards you rated.
-- [*Six Layers*](https://arxiv.org/abs/2507.15916) — the
-  supplemental-mechanisms discussion.
-- [MIRI, Appendix D](https://arxiv.org/abs/2511.10783) — the data-centre
-  signature in numbers.
-- The open web — the part that is the point: at least three citations must be
-  public artifacts from the last two years that you found yourself.
+<ReadingCard
+  id="intel-gao-verification"
+  href="https://www.gao.gov/assets/gao-23-105698.pdf"
+  title="Nuclear Arms Control: U.S. May Face Challenges in Verifying Future Treaty Goals"
+  author="U.S. Government Accountability Office"
+  year="2023"
+  mins="20 min"
+  optional
+>
+
+An audit office asking, of the treaty goals that follow New START, what the
+United States could actually verify, with which methods, and where the gaps
+are — the memo's question at full scale. Read the highlights page first: what
+the office says can be verified, what cannot, and what it recommends.
+
+</ReadingCard>
 
 <Fold label="Optional: The Debates">
 
@@ -149,7 +169,7 @@ reason with analogies as scaffolds, never as proofs.
 
 ## Mastery Checkpoint
 
-Eight items over the module's objectives. Treat seven of eight as the bar; a
+Seven items over the module's objectives. Treat six of seven as the bar; a
 miss earns a targeted corrective naming what to revisit; revisit, then try
 again.
 
@@ -163,7 +183,7 @@ again.
     "Procurement and customs",
   ]}
   answer={1}
-  why="Revisit the signature cards — the open-sources card carries this exact trade."
+  why="Revisit the open-sources section — it carries this exact trade."
 />
 
 <Check
@@ -176,20 +196,7 @@ again.
     "Self-reporting by the violator",
   ]}
   answer={2}
-  why="Reopen the case files — the tips, not the safeguards, found the sites."
-/>
-
-<Check
-  id="intel-gate-oblige"
-  q="Standard arms-control treaties oblige parties to do which of the following about NTM?"
-  options={[
-    "Share intelligence with the verification body",
-    "Not interfere with other parties’ NTM and not deliberately conceal",
-    "Disclose their collection methods on request",
-    "Submit imagery for joint authentication",
-  ]}
-  answer={1}
-  why="Reread 2.3.4 — protection is boilerplate; sharing is never obligated."
+  why="The module's opening — the tips, not the safeguards, found the sites."
 />
 
 <Check
@@ -202,7 +209,7 @@ again.
     "suspicion → inspection → verdict",
   ]}
   answer={2}
-  why="The 2.3.3 explainer — each promotion is earned by corroboration across evidence kinds."
+  why="The 2.3.11 explainer — each promotion is earned by corroboration across evidence kinds."
 />
 
 <Check
@@ -228,7 +235,7 @@ again.
     "Financial intelligence",
   ]}
   answer={1}
-  why="The energy signature card — the Memphis pattern: off-grid generation is itself an anomaly with a heat plume."
+  why="The measurement section — the Memphis pattern: off-grid generation is itself an anomaly with a heat plume."
 />
 
 <Check
@@ -256,4 +263,3 @@ again.
   answer={0}
   why="The bounds-in-sum beat — Wasil’s honest-bounds sentence names distribution explicitly."
 />
-

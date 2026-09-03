@@ -12,8 +12,9 @@ export interface CollectionDiscipline {
 export const COLLECTION_COPY = {
   title: "The collection map",
   lede:
-    "Seven ways a watcher sees. The disciplines split into two families: those " +
-    "that collect language, and those that collect physics. Open each one.",
+    "Eight ways a watcher sees. The disciplines split into two families: those " +
+    "that collect language and records, and those that collect physics. Open " +
+    "each one.",
   literal: "Collects language",
   technical: "Collects physics",
   legend: "Click a discipline to read what it is.",
@@ -74,6 +75,23 @@ export const COLLECTION_DISCIPLINES: CollectionDiscipline[] = [
     limit:
       "Its inclusion in a treaty definition is contested: read as legalized " +
       "collection by one party and as a license to hack by the other.",
+  },
+  {
+    id: "finint",
+    abbr: "FININT",
+    name: "Financial intelligence",
+    kind: "literal",
+    what:
+      "Money as evidence: transaction records, suspicious-activity reports, " +
+      "export licences, customs filings, and the procurement trail behind " +
+      "chips, components and construction.",
+    seen:
+      "Resource-flow signatures — what was bought, from whom, and who paid. " +
+      "Scher and Thiergart rate it High feasibility within a year: covert AI " +
+      "projects are very expensive and leave a substantial money trail.",
+    limit:
+      "Dual-use purchases blur the signal, and domestic chip manufacturing " +
+      "erodes the customs half of the trail.",
   },
   {
     id: "imint",

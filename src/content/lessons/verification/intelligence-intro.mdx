@@ -7,18 +7,180 @@ A state can lie in its declarations. It cannot opt out of thermodynamics, custom
 
 That independence is what earns this layer its place next to hardware as one of the two the track weights most. The mechanisms in 2.1 mostly need chips designed or retrofitted for the job, and the ones in 2.2 see whatever passes through a covered provider. Intelligence is how you watch the actor who signed nothing, declared nothing, or is lying, and it requires no buildout: the satellites are already flying, the customs data already accumulates, the analysts are already at their desks. If an emergency pause started tomorrow, this layer would be the one working by evening.
 
-The real problem here is ambiguity. A hundred-megawatt building full of accelerators might be a covert training site, or it might be a video-streaming company’s new region, and from the outside they can look identical. Several hundred data centers in the world are large enough to be candidates. So the questions that organize this section are the ones a working analyst faces in order: which traces are worth watching, and what does each one actually establish (2.3.1)? Has this kind of watching ever really caught a covert program (2.3.2, and the answer is yes, with some fine print)? How do you read ambiguous traces without fooling yourself, which turns out to be the hardest part of the job (2.3.3)? Whose satellites are these, and what do treaties let them do (2.3.4)? And when you finally see something that worries you, what exactly do you do about it (2.3.5)?
+The real problem here is ambiguity. A hundred-megawatt building full of accelerators might be a covert training site, or it might be a video-streaming company’s new region, and from the outside they can look identical. Several hundred data centers in the world are large enough to be candidates. So the questions that organize this section are the ones a working analyst faces in order: which traces are worth watching, and what does each one actually establish, taken one collection discipline at a time (2.3.1–2.3.5)? Who can see a program from inside it, and what makes them talk (2.3.6–2.3.7)? What does granted access add that watching cannot (2.3.8–2.3.9)? How do you read ambiguous traces without fooling yourself, which turns out to be the hardest part of the job (2.3.10)? And when you have the picture, what do you tell the person who has to act on it (2.3.11)?
 
 The goal is that by the end you should be able to take signals, whether they’re thermal plumes, an import spike, a suspicious hiring wave, and say three things about it: what it establishes, what else would explain it, and what it justifies doing next.
 
-<PopUp label="“National technical means”">
+<Objectives scope="this submodule">
+1. For a frontier training run, name the signatures it leaves and the collection discipline that reads each, and state for any one of them what it establishes, what access it requires, and its main caveat.
+2. Convert a facility's power draw into an order-of-magnitude bound on its compute, classify a site from its draw alone, and state how fast that signature decays as performance per watt improves.
+3. Explain why intelligence identifies violations but does not resolve them: what national intelligence found that safeguards missed, why sharing with a verifier stays voluntary, and the limits the literature agrees on.
+4. Identify who in the AI supply chain could observe which activities, and why and how they could be incentivized to reveal, hide, or obfuscate that information.
+5. Trace the path information takes from reporter to verifier, and judge whether a proposed reporting channel would probabilistically motivate an insider to use it.
+6. Compare and contrast audits and inspections, including analyzing the knowledge boundaries of an audit or inspection regime.
+7. Assess the levels of independence and reliability of a verifying institution.
+8. Place an ambiguous signal on the sequence from anomaly to verification lead to suspected non-compliance, with a stated confidence, after evaluating its sources, weighing the base rate, and ruling out the analytic failures that make a confident assessment wrong.
+9. Choose the proportionate regime response to a lead, from clarification to challenge inspection, weighing the cost of a false alarm against the cost of a miss, and record the confidence, dissent, and blind spots the decision rests on.
+10. Write, for a decision-maker who has not taken the module, an overview of what intelligence-based mechanisms can see this year: current public artifacts, limits stated as the papers state them, and each blind spot with the mechanism that covers it.
+</Objectives>
 
-The treaty term for a state’s own collection: reconnaissance satellites, signals interception, remote sensors. The phrase entered treaty law with SALT I and the ABM Treaty in 1972, chosen because neither superpower would write “spy satellites” into a legal document. When the readings say NTM, read: our own intelligence, which we decline to describe.
+## Intelligence-Based Mechanisms
 
-</PopUp>
+The mechanisms in 2.1 and 2.2 assume cooperation: hardware roots of trust
+need chips built or retrofitted for the purpose, and provider reporting covers
+only what passes through a covered provider. Intelligence-based mechanisms do
+not. The question for this module is how states can identify possible
+undeclared frontier-AI development without the monitored actor's cooperation,
+and what a watcher can conclude from what it sees.
 
-<PopUp label="One vocabulary note">
+The layer has two properties: it works without the monitored actor's
+permission, and it needs no new hardware or treaty machinery. The three papers
+this module draws on name it differently. Wasil et al. call it the national
+technical means (NTM) category, *Six Layers* calls it Layer 6, and Scher and
+Thiergart call it the national-intelligence building blocks.
 
-Wasil and coauthors, whose taxonomy you’ll read in 2.3.1, count whistleblowers among national technical means. This course teaches the whistleblower in 2.4 instead, because a tip’s content and the person who risks carrying it raise different questions. When the two carve differently, follow the course’s numbering and cite the paper’s.
+<SourceQuote
+  t="Verification methods for international AI agreements"
+  url="https://arxiv.org/abs/2408.16074"
+  what="p. 1, the abstract — the three-category definition"
+  by="Wasil, Reed, Miller, and Barnett (2024)"
+>
 
-</PopUp>
+We divide the verification methods into three categories: (a) national
+technical means (methods requiring minimal or no access from suspected
+non-compliant nations), (b) access-dependent methods (methods that require
+approval from the nation suspected of unauthorized activities), and (c)
+hardware-dependent methods (methods that require rules around advanced
+hardware).
+
+</SourceQuote>
+
+NTM is defined by what it does not need: access. That is why it is the
+fallback when a suspected state refuses to cooperate. Wasil's NTM list is
+remote sensing, whistleblowers, energy monitoring, customs-data analysis, and
+financial intelligence. Human sources are part of the category from the start,
+which is why the human layer is covered in this module, as 2.3.6–2.3.9, rather
+than as a module of its own.
+
+*Six Layers* places national intelligence activities (human, signals, and
+cyber intelligence) among its personnel-based layers, as mechanisms that may
+be effective without the Prover's cooperation, and notes that states with weak
+intelligence capabilities could rely on stronger states'. The passage is
+reproduced in full in 2.3.6, with the rest of §4.3.
+
+*Six Layers* classes the technical streams of this module (satellite imagery,
+open sources, and financial audits) as "merely supplemental": limited in scope
+or circumventable on their own. It adds that an attempt to circumvent them
+tends to trigger the other layers. Its example: hiding a datacenter underwater
+means contracting one of the few firms that can build one, which exposes the
+program to those firms' whistleblowers and to intelligence.
+
+The precedent: of the four states the IAEA investigated for undeclared
+facilities (the cases in the track's nuclear-precedents section), three
+investigations began mainly or entirely with national-intelligence tips and
+none through the agency's own safeguards; Baker concludes that the tips
+"appear to be irreplaceable"
+([Baker, pp. 14–15](https://doi.org/10.48550/arXiv.2304.04123)). Baker also
+records the limit: intelligence evidence is characteristically suggestive
+rather than decisive or internationally credible, because satellite images
+are ambiguous and shared documents may be forged. A regime therefore treats a
+tip as the start of a process, not as a verdict.
+
+The distinction that runs through the module: intelligence identifies, the
+regime resolves. A tip is not a finding.
+
+## Signatures
+
+Each signature in this module is described in the same three parts: what it
+tells a verifier, what access it requires, and its main caveat. One question
+applies to every signature: would it survive an adversary who knows it is
+being watched?
+
+Signatures fall into four families:
+
+- **Facility signatures** — what the building is and looks like.
+- **Resource-flow signatures** — power, water, chips, money moving in.
+- **Organizational signatures** — who is hired, who contracts with whom.
+- **Operational signatures** — what the site does, and when.
+
+Provider-reported utilization belongs to 2.2, the declared side. This layer
+covers what never enters a report.
+
+## The Collection Disciplines
+
+Intelligence is collected in a small number of ways, usually called the
+collection disciplines or the INTs, each named for its source. The map lists
+the eight this module uses, divided into literal and nonliteral collection.
+Open each card; sections 2.3.1–2.3.5 cover the disciplines one at a time.
+
+<VerificationExercise id="collection-map" />
+
+## Readings
+
+<ReadingCard
+  id="intel-wasil-ntm"
+  href="https://arxiv.org/abs/2408.16074"
+  title="Verification methods for international AI agreements"
+  author="Wasil, Reed, Miller, and Barnett"
+  year="2024"
+  mins="7 min"
+>
+
+Read pp. 5–7, the national technical means category, method by method. Two
+questions to answer while reading:
+
+- Why does the word “unilaterally” matter in the definition of NTM?
+- Which listed method did you not expect, and why?
+
+</ReadingCard>
+
+<ReadingCard
+  id="intel-six-layers"
+  href="https://arxiv.org/abs/2507.15916"
+  title="Verifying International Agreements on AI: Six Layers of Verification for Rules on Large-Scale AI Development and Deployment"
+  author="Baker, Kulp, Marks, Brundage, and Heim | RAND"
+  year="2025"
+  mins="25 min"
+  optional
+>
+
+Read §4.3, the personnel-based layers (whistleblowers, interviews, and
+national intelligence: HUMINT, SIGINT, cyber), and §4.4, the supplemental
+mechanisms (imagery, open sources, financial audits). The module cites this
+paper for the classification of each stream.
+
+</ReadingCard>
+
+<ReadingCard
+  id="intel-scher-thiergart"
+  href="https://arxiv.org/abs/2506.15867"
+  title="Mechanisms to Verify International Agreements About AI Development"
+  author="Scher and Thiergart | MIRI"
+  year="2024"
+  mins="30 min"
+  optional
+>
+
+Read the national-intelligence building blocks and the locating-compute
+appendix (pp. 67–80), the source of the feasibility ratings quoted in the
+module and of the feasibility cards in 2.3.10.
+
+</ReadingCard>
+
+<ReadingCard
+  id="intel-scher-research-restrictions"
+  href="https://arxiv.org/abs/2606.28694"
+  title="Verifying Restrictions on Frontier AI Research"
+  author="Aaron Scher | MIRI"
+  year="2026"
+  mins="10 min"
+  optional
+>
+
+A catalogue of 28 mechanisms for verifying restrictions on AI research rather
+than on compute. Read the "Covert projects" subsection: it lists open sources,
+signals and communications intelligence, and human sources as the methods
+that detected covert WMD programs, and says which kind of violator each can
+catch.
+
+</ReadingCard>

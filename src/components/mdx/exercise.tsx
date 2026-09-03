@@ -283,16 +283,29 @@ export async function Exercise({ id }: ExerciseProps) {
           onSubmit={submitWriting.bind(null, exercise.id, "exercise", exercise.format)}
           onReopen={reopenWriting.bind(null, exercise.id, "exercise")}
         />
-        {submission?.status === "submitted" && (
-          <div className="not-prose my-6">
-            <TransparencyFeedback
-              contentId={exercise.id}
-              kind="exercise"
-              keyView={(await getGraderKeyView(user.id)) ?? undefined}
-              {...storedGradeProps(submission)}
-            />
-          </div>
-        )}
+        {submission?.status === "submitted" &&
+          (exercise.sampleAnswer ? (
+            <aside className="not-prose border-border bg-muted/40 my-6 rounded-xl border p-5">
+              <p className="text-muted-foreground mb-1.5 text-xs font-medium tracking-wide uppercase">
+                Sample answer
+              </p>
+              <div
+                className="space-y-3 text-sm leading-relaxed [&_li]:mt-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_ul]:list-disc [&_ul]:pl-5"
+                dangerouslySetInnerHTML={{
+                  __html: writingPromptHtml(exercise.sampleAnswer),
+                }}
+              />
+            </aside>
+          ) : (
+            <div className="not-prose my-6">
+              <TransparencyFeedback
+                contentId={exercise.id}
+                kind="exercise"
+                keyView={(await getGraderKeyView(user.id)) ?? undefined}
+                {...storedGradeProps(submission)}
+              />
+            </div>
+          ))}
       </>
     );
   }

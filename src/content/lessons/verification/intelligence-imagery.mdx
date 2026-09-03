@@ -1,0 +1,101 @@
+The AI-verification literature does not separate these two disciplines: it
+says "satellite imagery" and means both. IMINT is the image; GEOINT is the
+image in its geographic and temporal context: terrain, grid connection, change
+over time. The collection map keeps them apart because they fail differently;
+this section covers them together.
+
+## Overhead Imagery
+
+Building footprint, electrical substations, cooling equipment, security
+perimeter. Facilities above roughly 10,000 H100-equivalents typically occupy
+substantial footprints with characteristic features (MIRI, Appendix D.3.5; a
+2025 snapshot).
+
+Historical note: the IAEA began using satellite imagery only in the 1990s,
+after undeclared facilities went undetected under safeguards that covered
+declared facilities.
+
+Caveats: imagery is unlikely to distinguish AI from non-AI datacenters
+(cooling is the key differentiator), it struggles with industrial look-alikes,
+and it can be defeated by underground or camouflaged construction.
+
+## The Grid Connection
+
+Imagery becomes geospatial when the object is not the building but the
+infrastructure that must reach it.
+
+<SourceQuote
+  t="An International Agreement to Prevent the Premature Creation of Artificial Superintelligence"
+  url="https://arxiv.org/abs/2511.10783"
+  what="Appendix D — methods for chip tracking and consolidation"
+  by="Scher, Abecassis, Barnett, and Abeyta | MIRI (2025)"
+>
+
+Facilities with this sort of power draw require specialized electricity
+infrastructure, such as large transmission lines. This electricity
+infrastructure can easily be seen via satellite; even publicly available
+satellite imagery reveals transmission lines for facilities like aluminum
+smelters and desalination plants which have comparable power requirements. It
+is possible to bury transmission lines, but this construction effort would
+take a long time and would itself be visible to satellites.
+
+</SourceQuote>
+
+A city-scale power draw needs a city-scale connection, and hiding the
+connection is itself a slow construction project visible from orbit.
+Converting the draw into compute is the arithmetic of 2.3.3.
+
+## Evidential Value
+
+Imagery can falsify a cover story: Iran's denial of activity at a site was
+contradicted by commercially available satellite imagery. Whether commercial
+imagery is a net gain for verification or a liability (shutter control,
+physical limits, AI-generated imagery) is one of the debates in 2.3.11.
+
+<ReadingCard
+  id="intel-isis-al-kibar"
+  href="https://isis-online.org/uploads/isis-reports/documents/SyriaReactorReport_12May2008.pdf"
+  title="The Al Kibar Reactor: Extraordinary Camouflage, Troubling Implications"
+  author="Albright and Brannan | Institute for Science and International Security"
+  year="2008"
+  mins="12 min"
+>
+
+Read the introduction (pp. 1–3) and "Summary and Lessons" (pp. 28–30); the
+sections between them are annotated images and can be skimmed. ISIS located
+the bombed building from commercial imagery in October 2007 and identified it
+as a reactor; the IAEA's imagery experts, reading the same images, judged that
+unlikely. Every signature the skeptics expected (physical protection, a tall
+reactor hall, power lines, cooling, a stack, transport, housing) had been
+concealed: a remote canyon, a building partly underground, a false roof that
+turned a Yongbyon-shaped structure into a box. Imagery did not settle the
+question. A related case is Turquzabad,
+[Revealed: Emptying of the Iranian "Atomic Warehouse" at Turquz Abad](https://isis-online.org/isis-reports/revealed-emptying-of-the-iranian-atomic-warehouse-at-turquz-abad)
+(Albright, Heinonen, Pabian, and Stricker, 2018): a rival's seized archive
+pointed at coordinates, commercial imagery showed the site being emptied, and
+environmental samples settled it.
+
+</ReadingCard>
+
+<ReadingCard
+  id="intel-epoch-frontier-hub"
+  href="https://epoch.ai/latest/introducing-the-frontier-data-centers-hub"
+  title="Introducing the Frontier Data Centers Hub"
+  author="Epoch AI"
+  year="2025"
+  mins="5 min"
+>
+
+Epoch's description of its own method: satellite images (cooling equipment
+counted and measured on the roof), building permits, and public documents,
+combined into power, compute, and construction timelines for thirteen US
+datacenters, about 15% of the world's delivered compute as of late 2025. Note
+the stated uncertainty: the cooling-based estimates can be off by a factor of
+two in either direction. The full method is on the hub's
+[methodology page](https://epoch.ai/data/data-centers-documentation/methodology).
+
+</ReadingCard>
+
+## Exercise
+
+<Exercise id="v-intel-imagery-al-kibar" />

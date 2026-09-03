@@ -138,6 +138,28 @@ const MissingBoard = dynamic<VerificationWidgetProps>(
   () => import("./missing-board").then((module) => module.MissingBoard),
   { loading: WidgetLoading },
 );
+const DrillsIntelSignatures = dynamic<VerificationWidgetProps>(
+  () =>
+    import("./drills-intel-signatures").then(
+      (module) => module.DrillsIntelSignatures,
+    ),
+  { loading: WidgetLoading },
+);
+const DrillsIntelAssessment = dynamic<VerificationWidgetProps>(
+  () =>
+    import("./drills-intel-assessment").then(
+      (module) => module.DrillsIntelAssessment,
+    ),
+  { loading: WidgetLoading },
+);
+const DatacenterPower = dynamic<VerificationWidgetProps>(
+  () => import("./datacenter-power").then((module) => module.DatacenterPower),
+  { loading: WidgetLoading },
+);
+const LocatingCompute = dynamic<VerificationWidgetProps>(
+  () => import("./locating-compute").then((module) => module.LocatingCompute),
+  { loading: WidgetLoading },
+);
 
 export const verificationWidgets: Record<
   string,
@@ -152,6 +174,10 @@ export const verificationWidgets: Record<
   "context-distiller": ContextDistiller,
   "drills-primers": DrillsPrimers,
   "drills-games": DrillsGames,
+  "drills-intel-signatures": DrillsIntelSignatures,
+  "drills-intel-assessment": DrillsIntelAssessment,
+  "datacenter-power": DatacenterPower,
+  "locating-compute": LocatingCompute,
   "policy-cost": PolicyCost,
   "mechanism-sort": MechanismSort,
   "mechanism-sort-reveal": MechanismSortReveal,

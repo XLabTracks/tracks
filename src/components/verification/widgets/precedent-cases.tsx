@@ -12,6 +12,7 @@ import {
 import { PrecedentCaseDiagram } from "./precedent-case-diagrams";
 import type { VerificationWidgetProps } from "../kit/types";
 import { SegMeter } from "../kit/seg-meter";
+import { readStored, writeStored } from "@/components/verification/kit/stored";
 
 type Calls = Record<string, PrecedentOutcome>;
 
@@ -37,7 +38,7 @@ export function PrecedentCases({ onComplete }: VerificationWidgetProps) {
   useEffect(() => {
     let restored: Calls = {};
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = readStored(STORAGE_KEY);
       if (raw) restored = pruneCalls(JSON.parse(raw));
     } catch {
     }
@@ -52,7 +53,7 @@ export function PrecedentCases({ onComplete }: VerificationWidgetProps) {
   const persist = useCallback((next: Calls) => {
     setCalls(next);
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      writeStored(STORAGE_KEY, JSON.stringify(next));
     } catch {
     }
   }, []);

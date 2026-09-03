@@ -70,7 +70,7 @@ window.VTMemoDesk = (function () {
       title: 'Title — the provision you are redrafting',
       checks: 'none',
       steelman: false,
-      hint: 'This output is a red-line, not a memo: mark the article’s gaps and redraft the provision, following the brief above. The memo’s letterhead and its two desk questions are off; peer review runs on the criteria in the check rail.',
+      hint: 'This output is a red-line, not a memo: mark the article’s gaps and redraft the provision, following the brief above. The memo’s letterhead and its two desk questions are off; judge the draft on the criteria in the check rail.',
     },
   };
   function genreOf(s) { return (s && GENRE[s.genre]) || GENRE.memo; }
@@ -158,7 +158,7 @@ window.VTMemoDesk = (function () {
           '<span class="rk-note">rule-based heuristics, every rule named — the rubric is the judge, not this rail</span></p>',
           '<div id="lint"></div></div>',
         '<div class="rail-card" id="criteriaCard" hidden>',
-          '<p class="rk">Peer review runs on <span class="rk-note">the outline\'s criteria for this slot</span></p>',
+          '<p class="rk">Judge the draft on <span class="rk-note">the outline\'s criteria for this slot</span></p>',
           '<ul id="criteriaList" style="margin-left:18px;font-size:13px;line-height:1.6"></ul></div>',
         '<div class="rail-card" id="steelmanCard"><p class="rk">Steelman deck <span class="rk-note">contested claims get challenged, not narrated</span></p>',
           '<p class="deck-card" id="deckCard">Draw a challenge and answer it inside the memo — or in what would change your mind.</p>',
@@ -312,8 +312,7 @@ window.VTMemoDesk = (function () {
       s.unit + ' — ' + (s.optional ? 'Optional: ' : '') + s.title;
     el('slotMeta').innerHTML =
       '<span><b>M' + s.module + '</b> ' + esc(MODULES[s.module] || '') + '</span>' +
-      '<span class="status ' + s.status + '">' + STATUS_WORD[s.status] + '</span>' +
-      (s.peerReviewed ? '<span>peer reviewed</span>' : '');
+      '<span class="status ' + s.status + '">' + STATUS_WORD[s.status] + '</span>';
 
     var host = el('slotBrief');
     var out = '';
@@ -386,10 +385,10 @@ window.VTMemoDesk = (function () {
     var row = function (sev, html) { out.push({ sev: sev, html: html }); };
 
     /* A map — or any genre the desk has no automated read on — is judged by
-       its brief and the peer-review criteria, not by prose heuristics. */
+       its brief and the slot's criteria, not by prose heuristics. */
     if (CHECKS === 'none') {
       el('lint').innerHTML =
-        '<p class="rk-note">No automated checks for this genre — the brief and the peer-review criteria are the judge.</p>';
+        '<p class="rk-note">No automated checks for this genre — the brief and the slot\'s criteria are the judge.</p>';
       return;
     }
 
@@ -574,9 +573,9 @@ window.VTMemoDesk = (function () {
     lines.push(F.body.value.trim(), '');
 
     /* The two questions are not part of the memo, and the export is also how a
-       draft reaches a peer reviewer — dropping them would lose the writer's
-       work, printing them inline would teach the thing the desk exists to
-       unteach. So: below the document, behind a rule, named as notes. */
+       draft leaves the desk — dropping them would lose the writer's work,
+       printing them inline would teach the thing the desk exists to unteach.
+       So: below the document, behind a rule, named as notes. */
     if (g.questions && (F.decision.value.trim() || F.falsifier.value.trim())) {
       lines.push(
         '---',

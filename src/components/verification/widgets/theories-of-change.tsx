@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import type { VerificationWidgetProps } from "../kit/types";
+import { readStored, writeStored } from "@/components/verification/kit/stored";
 
 interface ToCBox {
   id: string;
@@ -55,7 +56,7 @@ export function TheoriesOfChange(_: VerificationWidgetProps) {
   useEffect(() => {
     let restored: Stored = { org: "", boxes: {} };
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = readStored(STORAGE_KEY);
       if (raw) restored = prune(JSON.parse(raw));
     } catch {
     }
@@ -70,7 +71,7 @@ export function TheoriesOfChange(_: VerificationWidgetProps) {
 
   const persist = useCallback((next: Stored) => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      writeStored(STORAGE_KEY, JSON.stringify(next));
     } catch {
     }
   }, []);

@@ -27,12 +27,20 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "drills-games", title: "Drill Bench: Evasion, Regime, Position", bridged: true },
   { id: "human-insiders", title: "Insider Report", bridged: false },
   { id: "human-reporting-protection", title: "On Paper", bridged: false },
-  { id: "whistleblower-levers", title: "Four Levers, One Each", bridged: false },
+  { id: "whistleblower-levers", title: "Four Levers", bridged: false },
   { id: "human-audits-inspections", title: "Four Sources", bridged: false },
   { id: "human-institutions-judgment", title: "Companies A and B", bridged: true },
   { id: "standard-of-proof", title: "The Standard of Proof", bridged: false },
   { id: "missing-board", title: "The Missing Board", bridged: false },
   { id: "cloud-evidence-drill", title: "Cloud Evidence Drill", bridged: true },
+  { id: "drills-intel-signatures", title: "Drill Bench: Power to Compute", bridged: true },
+  {
+    id: "drills-intel-assessment",
+    title: "Drill Bench: Assessment",
+    bridged: true,
+  },
+  { id: "datacenter-power", title: "The Power Signature", bridged: false },
+  { id: "locating-compute", title: "The Feasibility Cards", bridged: false },
 ];
 export function getVerificationExercise(id: string): VerificationExerciseDef | undefined {
   return verificationExercises.find((e) => e.id === id);

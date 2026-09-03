@@ -1,0 +1,123 @@
+Open-source intelligence is collected from public records: permits, filings,
+hiring, supplier disclosures, published interconnect and power-purchase
+records. It is the cheapest stream to collect. It is also the easiest to
+circumvent on its own (the classification in the module's opening), and the
+first stream a program sanitizes.
+
+## In the Literature
+
+The fullest treatment of open sources in the core literature is one entry
+in *Six Layers*:
+
+<SourceQuote
+  t="Verifying International Agreements on AI: Six Layers of Verification for Rules on Large-Scale AI Development and Deployment"
+  url="https://arxiv.org/abs/2507.15916"
+  what="§4.4, the supplementary verification mechanisms — the OSINT entry"
+  by="Baker, Kulp, Marks, Brundage, and Heim | RAND (2025)"
+>
+
+Open-source intelligence (OSINT): Open-source information, such as social
+media posts and news reports, could reveal information such as hidden data
+center constructions, especially in combination with inspections of suspect
+sites (“Inspections for undeclared AI clusters” above). Open-source
+information could also find signs of non-compliant AI deployment, e.g.,
+through its economic, scientific, or military impacts. However, these impacts
+might not be evident before the deployment causes harm or yields an unfair
+advantage.
+
+</SourceQuote>
+
+The entry names two uses: finding a facility while it is being built, and
+noticing a deployment by its effects, which the paper itself says may come
+late. A footnote adds a third: publication records and social media are how a
+verifier confirms that the people a Prover puts forward for interviews exist
+and know what their roles require. Open sources therefore also serve the human
+layer (2.3.6).
+
+The MIRI draft agreement lists open-source intelligence among the methods for
+locating chips, beside supply-chain tracking, mandatory reporting, state
+intelligence, power monitoring, challenge inspections, and whistleblowers
+(*The Agreement*, Appendix D), and recommends it among the measures available
+before any agreement exists:
+
+<SourceQuote
+  t="An International Agreement to Prevent the Premature Creation of Artificial Superintelligence"
+  url="https://arxiv.org/abs/2511.10783"
+  what="What can we do today? — the recommended measures"
+  by="Scher, Abecassis, Barnett, and Abeyta | MIRI (2025)"
+>
+
+Invest in verification expertise and know-how, for instance by funding pilot
+verification efforts using open-source intelligence or satellite data.
+
+</SourceQuote>
+
+The other two core papers have no entry for open sources. Wasil et al.'s
+nearest method is customs-data analysis, which reads import and export records
+for unexplained movements of hardware, equipment, or raw materials; those are
+official records, not open ones. Scher and Thiergart's locating-compute table
+has no OSINT row. Note this for the memo: the field has written little about
+open sources.
+
+## In Practice
+
+Several public trackers now do what the papers describe. The FAS report below
+is one; the power explainer in 2.3.3 runs on Epoch's datacentre dataset, which
+is built the same way (2.3.2 describes the method).
+
+<ReadingCard
+  id="intel-fas-hyperscale"
+  href="https://fas.org/publication/tracking-hyperscale/"
+  title="Tracking Hyperscale AI Data Center Growth with Satellite Imagery"
+  author="Christina Krawec | Federation of American Scientists"
+  year="2026"
+  mins="13 min"
+>
+
+Read Case Study 2 (feature identification at the Colossus site) and the Key
+Takeaways & Analysis that follow. The author, an imagery analyst, identifies
+the Memphis site's features one by one and shows which open sources confirm
+each: the utility's annotated Google Earth image, which located two
+substations and stated their capacities; the permit that limited the turbines
+to fifteen; the civil-society flight that counted thirty-five; the October
+2025 satellite image that counted twelve. The takeaways state the method's
+limits: better for construction than for ongoing activity, useful as a check
+on announcements, blind to the inside of a finished building. The conclusion
+this section rests on: imagery "should be analyzed in conjunction with other
+publicly-available information sources."
+
+</ReadingCard>
+
+## Exercise
+
+<Exercise id="v-intel-osint-fas" />
+
+<ReadingCard
+  id="intel-gijn-fact-checking"
+  href="https://gijn.org/resource/introduction-investigative-journalism-fact-checking/"
+  title="Introduction to Investigative Journalism: Fact-Checking"
+  author="Mariam Elba | Global Investigative Journalism Network"
+  year="2024"
+  mins="10 min"
+  optional
+>
+
+How investigative journalism, which works from open sources, checks its own
+work before publication: record the source of every statement of fact, prefer
+primary documents to anything that does not cite its source, archive every
+link because pages change, and test each weak claim with the questions a
+fact-checking desk asks: can we say this with confidence, and can we show a
+skeptic the evidence. The same discipline applies to a verification file.
+
+</ReadingCard>
+
+## Going Further
+
+If you want to spend more time on this,
+[Research Clinic](https://researchclinic.net/) is a library of internet-research
+links that Paul Myers, an internet-research specialist, has maintained since
+2003 for his training courses: search engines and academic sources,
+social-media research, people and company finders, domain and IP lookups,
+government and charity registers, geolocation and mapping, verification tools.
+The site is free. It is a directory, not a course: go to the category your
+question belongs to.

@@ -75,6 +75,35 @@ describe("verification state documents", () => {
     expect(normalized.updatedAt).toBe(75);
   });
 
+  it("merges widget states key by key, newest wins", () => {
+    const current = {
+      version: 2,
+      widgets: {
+        "v-standard-of-proof:v1": { value: { a: 1 }, updatedAt: 100 },
+        "v-missing-board:v1": { value: { b: 1 }, updatedAt: 500 },
+      },
+    };
+    const incoming = {
+      version: 2,
+      widgets: {
+        "v-standard-of-proof:v1": { value: { a: 2 }, updatedAt: 200 },
+        "v-missing-board:v1": { value: { b: 0 }, updatedAt: 400 },
+        "v-drills:intel:v1": { value: null, updatedAt: 300 },
+      },
+    };
+
+    const result = mergeVerificationStateDocuments(current, incoming);
+
+    expect(result.acceptedStores).toEqual(["widgets"]);
+    expect(result.document.widgets).toEqual({
+      "v-standard-of-proof:v1": { value: { a: 2 }, updatedAt: 200 },
+      "v-missing-board:v1": { value: { b: 1 }, updatedAt: 500 },
+      "v-drills:intel:v1": { value: null, updatedAt: 300 },
+    });
+    expect(result.document.stamps.widgets).toBe(500);
+    expect(mergeVerificationStateDocuments(result.document, current).changed).toBe(false);
+  });
+
   it("accepts an equal-stamped retry idempotently", () => {
     const value = {
       version: 2,
@@ -83,7 +112,8 @@ describe("verification state documents", () => {
       highlights: null,
       memos: null,
       fieldMap: null,
-      stamps: { progress: 0, notebook: 10, highlights: 0, memos: 0, fieldMap: 0 },
+      widgets: null,
+      stamps: { progress: 0, notebook: 10, highlights: 0, memos: 0, fieldMap: 0, widgets: 0 },
       updatedAt: 10,
     };
 

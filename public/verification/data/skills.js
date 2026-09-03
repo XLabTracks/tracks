@@ -11,7 +11,7 @@
    site to match is a separate, deliberate act, not a build step.
 
    A rung is [unitId, "what this unit adds"], and unit ids are the progress
-   keys. The one compound rung ("2.1–2.4") fills a quarter per evidence
+   keys. The one compound rung ("2.1–2.3") fills a third per evidence
    bucket. `mod` indexes moduleNames, `r` is the row band inside that module,
    `lo` indexes objectives, `bloom` is [start, end] on Bloom's taxonomy
    (carried in data; the learner UI does not print Bloom levels — that rule
@@ -24,7 +24,7 @@
    Edit both together, and bump rev when the graph changes shape. */
 
 window.SKILLS = {
-  rev: 2,
+  rev: 3,
   /* The graph's own module taxonomy — the owner's band names, which are the
      static site's module chrome. The app track names its modules differently
      (curriculum.ts); verificationUnitOfLesson is the join. */
@@ -35,8 +35,8 @@ window.SKILLS = {
     "Covert development",
     "Capstone",
   ],
-  compoundRung: "2.1–2.4",
-  compoundUnits: ["2.1", "2.2", "2.3", "2.4"],
+  compoundRung: "2.1–2.3",
+  compoundUnits: ["2.1", "2.2", "2.3"],
   /* Single-quoted on purpose: overview.test.ts parses these six labels out
      of this file with a quote-sensitive regex to keep them in step with the
      landing overview's outcomes list. */
@@ -81,7 +81,7 @@ window.SKILLS = {
         ["0.1", "Nuclear: averted nuclear war, and the decades it took to build the verification apparatus."],
         ["0.3", "IAEA safeguards; what it takes to catch a Chinchilla; Iraq and undeclared infrastructure."],
         ["1.2", "The empty institutional shelf: is there a WHO for AI, an IAEA? — what the nuclear institutions hold that AI's don't."],
-        ["2.3", "Empirical anchor: what national intelligence found that routine safeguards missed."]
+        ["2.3", "What national intelligence found that routine safeguards missed."]
       ] },
     { id: "failure", label: "Identifying failure modes", mod: 0, unit: "0.2", r: 1, lo: [3, 5], bloom: [2, 5],
       goals: [
@@ -93,7 +93,7 @@ window.SKILLS = {
       rungs: [
         ["0.2", "Stress-test Plan A: strongest mechanism, weakest link."],
         ["1.1", "Ambiguities, loopholes, and evasion strategies in a real provision."],
-        ["2.1–2.4", "Per bucket: name where it breaks and what it leaves uncovered — the residual another stream must corroborate."],
+        ["2.1–2.3", "Per bucket: name where it breaks and what it leaves uncovered — the residual another stream must corroborate."],
         ["3.0", "The stack as a whole, and attacks on its machinery: vulnerable premises, the transition where the conclusion doesn't follow."]
       ] },
     { id: "timely", label: "Timeliness", mod: 0, unit: "0.2", r: 1, lo: [3, 5], bloom: [2, 5],
@@ -104,7 +104,7 @@ window.SKILLS = {
       ],
       rungs: [
         ["0.2", "Root — verification has to beat the clock: stress-test the timeline."],
-        ["2.1–2.4", "How fast this bucket sees it."],
+        ["2.1–2.3", "How fast this bucket sees it."],
         ["3.0", "The pipeline has a clock: from activity on monitored hardware to a released evaluation result."],
         ["4.0", "How fast a regime has to detect for the finding to still matter — timely vs. obsolete."]
       ] },
@@ -186,7 +186,7 @@ window.SKILLS = {
       rungs: [
         ["0.4", "Root — two-level games, win-sets, veto players."],
         ["1.2", "States, regulators, intelligence agencies, international bodies; who controls the decision."],
-        ["2.1–2.4", "Who must authorize it, who runs it."],
+        ["2.1–2.3", "Who must authorize it, who runs it."],
         ["2.3", "Sharing institutions, sources and methods, treaty provisions for national technical means."],
         ["4.1", "The political-feasibility metric: would the parties whose cooperation is required adopt and enforce it."]
       ] },
@@ -200,7 +200,7 @@ window.SKILLS = {
       rungs: [
         ["0.4", "Root — information asymmetry, costly signaling."],
         ["1.2", "Cooperate, defect, conceal, exaggerate, free-ride."],
-        ["2.4", "Why an insider reports, or doesn't."],
+        ["2.3", "Why an insider reports, or doesn't."],
         ["3.0", "The low-trust assumption itself: what a malicious prover, and a malicious verifier, would each try."]
       ] },
     { id: "supply", label: "Supply chain", mod: 1, unit: "1.2", r: 1, lo: [2], bloom: [2, 4],
@@ -269,7 +269,7 @@ window.SKILLS = {
         ["0.2", "Intro — what evidence inspectors can collect, how much of the ecosystem must remain visible."],
         ["2.0", "The confidentiality cost inside political feasibility: intrusiveness as the price of evidence."],
         ["2.1", "What attestation and confidential computing protect — and the confidentiality dependencies a hardware role carries."],
-        ["2.4", "Managed access, refusal, delay."],
+        ["2.3", "Managed access, refusal, delay."],
         ["4.2", "The access regime you are proposing."]
       ] },
     { id: "hardware", label: "Hardware mechanisms", mod: 2, unit: "2.1", r: 1, lo: [2, 3], bloom: [2, 3],
@@ -297,13 +297,13 @@ window.SKILLS = {
       rungs: [
         ["2.2", "What the provider position sees; KYC, beneficial ownership, reporting."]
       ] },
-    { id: "human", label: "Human sources", mod: 2, unit: "2.4", r: 2, lo: [3, 5], bloom: [2, 3],
+    { id: "human", label: "Human sources", mod: 2, unit: "2.3", r: 2, lo: [3, 5], bloom: [2, 3],
       goals: [
         [0, "Understand the mechanisms of insider access, declarations, interviews, routine audits vs. challenge inspections, and reporting protections"],
         [0, "In evasion or covert development scenarios, identify which link(s) — reporter, intermediary transmitter, verifier — are affected"]
       ],
       rungs: [
-        ["2.4", "Insider access, declarations, interviews, routine audits vs. challenge inspections, protections."]
+        ["2.3", "Insider access, declarations, interviews, routine audits vs. challenge inspections, protections."]
       ] },
 
     /* ---- Module 3 · Covert development ---- */
@@ -365,7 +365,7 @@ window.SKILLS = {
       ],
       rungs: [
         ["2.0", "The four metrics: technical, political, effectiveness, durability; sealed ranking — reopened in 4.1."],
-        ["2.1–2.4", "What it establishes vs. what it's claimed to establish; readiness, cost, durability — per bucket."],
+        ["2.1–2.3", "What it establishes vs. what it's claimed to establish; readiness, cost, durability — per bucket."],
         ["3.0", "Q8's ladder: established capability, proof of concept, inference from related tech, untested proposal, aspiration."],
         ["4.1", "The four metrics applied with discernment; which beliefs carry an as-of date."]
       ] },

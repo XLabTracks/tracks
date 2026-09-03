@@ -27,7 +27,7 @@
   let litLo = 0;
 
   /* Which unit page teaches a rung. Compound rungs point at 2.1, the first
-     of the four evidence buckets. */
+     of the three evidence buckets. */
   const unitHref = tag => {
     const id = tag === S.compoundRung ? S.compoundUnits[0] : tag;
     for (const m of C.modules) {

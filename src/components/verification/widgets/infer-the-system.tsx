@@ -17,6 +17,7 @@ import {
 } from "@/lib/verification/data/infer-the-system";
 import type { VerificationWidgetProps } from "../kit/types";
 import { writingArea, writingCardFocus } from "../kit/writing-surface";
+import { readStored, writeStored } from "@/components/verification/kit/stored";
 
 interface Row {
   rules: number[];
@@ -72,7 +73,7 @@ export function InferTheSystem({
   useEffect(() => {
     let restored = EMPTY;
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = readStored(STORAGE_KEY);
       if (raw) restored = prune(JSON.parse(raw));
     } catch {
     }
@@ -85,7 +86,7 @@ export function InferTheSystem({
   const persist = useCallback((next: Saved) => {
     setSaved(next);
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      writeStored(STORAGE_KEY, JSON.stringify(next));
     } catch {
     }
   }, []);

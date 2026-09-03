@@ -51,8 +51,8 @@ export default function Page() {
               the design of a regime that has to work without trust. Modules 0 and 1
               are the conceptual on-ramp: why anyone should care, and who holds the
               decisions and the evidence. Module 2 covers the verification
-              infrastructure itself across the hardware, cloud, intelligence and
-              human layers. Module 3 red-teams that whole stack through evasion
+              infrastructure itself across the hardware, cloud and intelligence
+              layers, with the human layer read inside intelligence. Module 3 red-teams that whole stack through evasion
               scenarios. Module 4 asks how to layer imperfect mechanisms into
               something realistic, and ends in the capstone.
             </p>
@@ -75,9 +75,9 @@ export default function Page() {
             </p>
             <p>
               Most modules end in one short written output — a memo, brief, critique
-              or design note — applied to a concrete verification problem and put
-              through peer review. The <a href="/verification/memo-desk">memo desk</a> is
-              where you draft them, brief beside the page.
+              or design note — applied to a concrete verification problem. The
+              <a href="/verification/memo-desk">memo desk</a> is where you draft them,
+              brief beside the page.
             </p>
 
             <h2>Taking it</h2>

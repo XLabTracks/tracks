@@ -3,7 +3,7 @@ export const BOARD_INTRO =
   "In the nuclear regime, the inspection institution has four major steps: inspectors find, the Director-General reports, the Board of Governors judges, and the Security Council enforces. The AI verification regime has no such established process.";
 export const BOARD_TASK_LEAD =
   "In this exercise, you will build a similar pipeline for frontier AI inspections, drawing direct parallels with each step in the nuclear inspection process.";
-export const BOARD_LIMIT = "Aim for around a few sentences for each section.";
+export const BOARD_LIMIT = "Write two to four sentences for each station.";
 
 export interface BoardStation {
   id: string;
@@ -19,7 +19,7 @@ export const BOARD_STATIONS: BoardStation[] = [
     nuclear:
       "IAEA inspectors, and the safeguards analysis behind them, establish the facts and report them up.",
     prompt:
-      "Who finds for AI — and what access would they need for their facts to hold up later?",
+      "Who plays the inspectors’ part for AI — who establishes the facts — and what access would they need for those facts to hold up later?",
   },
   {
     id: "judge",
@@ -27,7 +27,7 @@ export const BOARD_STATIONS: BoardStation[] = [
     nuclear:
       "The Board of Governors decides whether the facts constitute noncompliance — a judgment, Carlson insists, not a checklist.",
     prompt:
-      "Who could hold Board-like standing for AI: legitimate enough that rivals accept its findings, independent enough that none of 2.4.4’s captures owns it?",
+      "Who could play the Board of Governors’ part for AI: a body legitimate enough that rivals accept its findings, and independent enough that none of the four forms of capture described in 2.3.9 owns it?",
   },
   {
     id: "enforcer",
@@ -48,7 +48,7 @@ export const BOARD_STATIONS: BoardStation[] = [
 ];
 
 export const BOARD_STRAIN_PROMPT =
-  "Where does the nuclear analogy strain hardest across these four stations? Name the station and the reason.";
+  "At which of the four stations does the nuclear analogy fit worst? Name the station and give the reason.";
 
 export const BOARD_COMMENTARY: { title: string; body: string }[] = [
   {
@@ -70,5 +70,5 @@ export const BOARD_COMMENTARY: { title: string; body: string }[] = [
 ];
 
 export const BOARD_FINAL =
-  "Carlson argues the system’s credibility rides on consistency. In no more than 50 words: what one guideline would you bind your AI board to before its first case?";
+  "Carlson argues that the system’s credibility depends on consistency. In no more than 50 words, state one rule you would bind your AI board to before it decides its first case.";
 export const BOARD_FINAL_MAX_WORDS = 50;

@@ -22,8 +22,7 @@ window.VERIFICATION_MEMOS = [
     "genre": "essay",
     "brief": "Write one of two open-ended essay prompts, consisting of shorter, prompted questions linking into a more cohesive essay at the end. A: stress-test the Plan A verification supplement — how robust is Plan A's verification regime, and where is it most likely to fail? End on one of three recommendations: adopt largely as written, adopt only with significant amendments, or reject in favor of a different approach (400–600 words). Or B: compare Plan A (verified slowdown) and Plan S (complete shutdown) — which creates the more robust verification regime? Make a recommendation (400–500 words).",
     "audience": "Decision-makers asking whether the verification regime is strong enough to rely on as written.",
-    "words": 600,
-    "peerReviewed": true
+    "words": 600
   },
   {
     "id": "m0-success-scenario",
@@ -35,8 +34,7 @@ window.VERIFICATION_MEMOS = [
     "optional": true,
     "brief": "Describe your own plausible success scenario for advanced AI governance. Think several steps beyond any single verification mechanism: what does a world that has successfully managed the relevant risks actually look like, and what agreement or institutional arrangement gets us there? Keep this essay. You will return to it at the end of the track and see what, if anything, you would now change.",
     "audience": null,
-    "words": 800,
-    "peerReviewed": false
+    "words": 800
   },
   {
     "id": "m1-stakeholder-map",
@@ -47,8 +45,7 @@ window.VERIFICATION_MEMOS = [
     "genre": "map",
     "brief": "For a hypothetical pause treaty, place every relevant actor on the supply chain, annotate each with its most likely incentive class and the leverage it holds, and mark the two or three actors whose defection would collapse the regime.",
     "audience": "The drafting team for a hypothetical pause treaty.",
-    "words": 800,
-    "peerReviewed": true
+    "words": 800
   },
   {
     "id": "m1-case-briefing",
@@ -59,7 +56,6 @@ window.VERIFICATION_MEMOS = [
     "brief": null,
     "audience": null,
     "words": 600,
-    "peerReviewed": false,
     "gap": "Named in the module timing table as a 15–20 minute written exercise. No brief, audience or rubric is drafted."
   },
   {
@@ -72,7 +68,6 @@ window.VERIFICATION_MEMOS = [
     "brief": "Actor–authority–evidence map for any element of the supply chain.",
     "audience": null,
     "words": 700,
-    "peerReviewed": false,
     "gap": "The artifact is named; length, audience and review criteria are not drafted."
   },
   {
@@ -85,7 +80,6 @@ window.VERIFICATION_MEMOS = [
     "brief": null,
     "audience": null,
     "words": 600,
-    "peerReviewed": false,
     "gap": "A \"[Optional] Written output:\" marker sits after the supply-chain actor list with nothing under it."
   },
   {
@@ -96,26 +90,24 @@ window.VERIFICATION_MEMOS = [
     "status": "specified",
     "brief": "A bounded hardware assurance brief. The point is not forecasting the correct future — it is making the assessment conditional on visible facts: coverage, fidelity, time to deployment, and the preferred corroborating layer.",
     "audience": "A named national delegation or joint drafting session considering a three-month U.S.–China pause.",
-    "words": 1000,
-    "peerReviewed": false
+    "words": 1000
   },
   {
-    "id": "m2-3-ntm-redline",
+    "id": "m2-3-intel-overview",
     "module": 2,
     "unit": "2.3",
-    "title": "Red-line the NTM article",
+    "title": "What we can see today",
     "status": "specified",
-    "genre": "redline",
-    "brief": "Work from the verbatim MIRI text you annotated in 2.3.4: Definition 17 plus the noninterference and no-deliberate-concealment articles. Mark at least three gaps or ambiguities, starting from your four answers if you like, and redraft the one provision whose failure you judge most consequential. Then confront the question the historical record says drafters avoid: write the sharing clause the text lacks, or defend its absence in three sentences. Test whatever you write against 2.3.4’s rule, that states sign what is symmetric, cheap, and checkable, and finish with the both-capitals test: one paragraph on why Washington accepts your article, one on why Beijing does.",
-    "audience": "The drafters of a US–China agreement, read in both capitals.",
-    "words": 700,
-    "peerReviewed": true,
+    "genre": "memo",
+    "brief": "The question: if a state were covertly training a frontier model right now, what could outside observers actually see? Write an overview a decision-maker can read in ten minutes. Cover each mechanism that exists today — overhead and thermal imagery, power and grid analysis, procurement, customs and financial tracking, open sources, human sources — with one sentence on what it establishes and one on what defeats it. Research is part of the task: find at least three public artifacts from the last two years yourself (a commercial satellite product, an enforcement action, a public tracker or filing) and cite each with a link. Open with the bottom line: the two mechanisms you would rely on most, and why. Close with the blind spot that concerns you most and the other verification layer that covers it. Do not draft treaty language: the question is what can be seen, not what should be signed.",
+    "audience": "A policymaker trying to understand what we can actually track, and what we cannot.",
+    "words": 900,
     "criteria": [
-      "Fidelity to what signatures can actually establish",
-      "Precedent-consistent language",
-      "Honesty about sharing",
-      "Plausibility in both capitals",
-      "Named blind spots, each with the sibling mechanism that covers it"
+      "Accuracy about what each mechanism can establish",
+      "Currency: public artifacts from the last two years, found and cited with links",
+      "Limits stated as the papers state them: the layer reduces cheating and does not defeat it",
+      "A prioritization with reasons, not a list of mechanisms",
+      "Named blind spots, each with the mechanism elsewhere in the course that covers it"
     ]
   },
   {
@@ -127,8 +119,7 @@ window.VERIFICATION_MEMOS = [
     "brief": null,
     "audience": null,
     "words": 800,
-    "peerReviewed": true,
-    "gap": "The track’s module anatomy gives every module one written output that goes through peer review. Module 3 is the one module for which the outline never says which."
+    "gap": "The track’s module anatomy gives every module one written output. Module 3 is the one module for which the outline never says which."
   },
   {
     "id": "m4-0-ranking-memo",
@@ -139,9 +130,8 @@ window.VERIFICATION_MEMOS = [
     "brief": "Produce the defended-ranking memo: a recommended mechanism portfolio for one named policy goal, with residual blind spots and their owners — the artifact the 4.2 capstone receives. Defend the ranking against both your own initial guesses and the field’s published ratings.",
     "audience": "Whoever acts on the 4.2 capstone — the portfolio is handed forward, not filed.",
     "words": 900,
-    "peerReviewed": true,
     "criteria": [
-      "Peer review against the rubric"
+      "Judged against the rubric"
     ]
   }
 ];

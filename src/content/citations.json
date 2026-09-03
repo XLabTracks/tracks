@@ -9,6 +9,13 @@
       "publisher": "AI Futures Project",
       "date": "2026"
     },
+    "https://ai-frontiers.org/articles/nuclear-non-proliferation-is-the-wrong-framework-for-ai-governance": {
+      "title": "Nuclear Non-Proliferation Is the Wrong Framework for AI Governance",
+      "about": "The named counter-position for the meta-debate on analogizing from the nuclear precedent.",
+      "authors": "Michael C. Horowitz and Lauren A. Kahn",
+      "container": "AI Frontiers",
+      "date": "2025"
+    },
     "https://aigi.ox.ac.uk/wp-content/uploads/2025/07/Verification_for_International_AI_Governance.pdf": {
       "title": "Verification for International AI Governance",
       "about": "The Oxford Martin 172-page report on which international AI agreements could actually be verified, and with what machinery.",
@@ -45,6 +52,13 @@
       "container": "EU Artificial Intelligence Act",
       "publisher": "artificialintelligenceact.eu"
     },
+    "https://arxiv.org/abs/2402.02675": {
+      "title": "Verifiable evaluations of machine learning models using zkSNARKs",
+      "about": "Shows a model's claimed evaluation results can be proved with zkSNARKs without revealing the weights behind them.",
+      "authors": "South, Tobin, Alexander Camuto, Shrey Jain, et al.",
+      "container": "arXiv",
+      "date": "Feb. 2024"
+    },
     "https://arxiv.org/abs/2402.08797": {
       "title": "Computing Power and the Governance of Artificial Intelligence",
       "about": "The foundational survey of compute as a governance lever — why computing power is detectable, excludable, and quantifiable in ways algorithms and data are not.",
@@ -73,6 +87,13 @@
       "container": "arXiv",
       "date": "Apr. 2025"
     },
+    "https://arxiv.org/abs/2506.15867": {
+      "title": "Mechanisms to Verify International Agreements About AI Development",
+      "about": "The MIRI Technical Governance Team's building-blocks catalog for AI-agreement verification; its appendix table of locating-compute mechanisms, with self-described preliminary feasibility ratings, powers the feasibility cards.",
+      "authors": "Aaron Scher and Lisa Thiergart",
+      "container": "arXiv",
+      "date": "2024"
+    },
     "https://arxiv.org/abs/2507.10618": {
       "title": "Compute Requirements for Algorithmic Innovation in Frontier AI Models",
       "about": "An analysis of 36 algorithmic innovations asking how much compute it takes to invent frontier-model improvements, and whether compute restrictions would slow them.",
@@ -87,6 +108,13 @@
       "container": "arXiv",
       "date": "July 2025"
     },
+    "https://arxiv.org/abs/2510.21203": {
+      "title": "The Nuclear Analogy in AI Governance Research",
+      "about": "A systematic review of the nuclear analogy across 43 works; catalogs the critiques and argues analogies can still inform policy despite the domain differences.",
+      "authors": "Sophia Hatz",
+      "container": "arXiv",
+      "date": "2025"
+    },
     "https://arxiv.org/abs/2511.10783": {
       "title": "An International Agreement to Prevent the Premature Creation of Artificial Superintelligence",
       "about": "MIRI's draft international agreement to prevent the premature creation of artificial superintelligence, the treaty text several lessons read against.",
@@ -94,12 +122,47 @@
       "container": "arXiv",
       "date": "Nov. 2025"
     },
+    "https://arxiv.org/abs/2604.00169": {
+      "title": "Beyond Latency: A System-Level Characterization of MPC and FHE for PPML",
+      "about": "The system-level study of MPC (and FHE) for private machine learning behind the lesson's caveats: communication, preprocessing, memory, and latency are what keep large models hard.",
+      "authors": "Huang, Pengzhi, Kiwan Maeng, and G. Edward Suh",
+      "container": "arXiv",
+      "date": "Mar. 2026"
+    },
+    "https://arxiv.org/abs/2605.01930": {
+      "title": "GPU Fingerprinting for Location Verification",
+      "about": "Proposes physical hardware fingerprints — rather than stored cryptographic keys an adversary with physical access could extract — as a way to re-identify individual GPUs, with up to 100 percent re-identification accuracy in small-scale tests.",
+      "authors": "Tee, Wayne, and Jonathan Happel",
+      "container": "arXiv",
+      "date": "May 2026"
+    },
+    "https://arxiv.org/abs/2605.29359": {
+      "title": "Does Distributed Training Undermine Compute Governance?",
+      "about": "A simulator study finding that low-communication distributed training can cross every existing or proposed compute threshold on nodes below every proposed monitoring threshold, with an appendix grading the countermeasures: whistleblowers, chip registries with a memory threshold, challenge inspections, and financial intelligence hold; bandwidth caps and traffic monitoring do not.",
+      "authors": "Rahman, Robi",
+      "publisher": "arXiv",
+      "date": "28 May 2026"
+    },
+    "https://arxiv.org/abs/2606.05433": {
+      "title": "Zero knowledge verification for frontier AI training is possible",
+      "about": "The 2026 proposal estimating a future ZK system could verify dense frontier training at roughly 2–10 percent overhead — while naming thirteen unresolved technical problems and the training architectures it does not yet cover.",
+      "authors": "Peigné, Pierre, Ky Nguyen, and Paul Wang",
+      "container": "arXiv",
+      "date": "June 2026"
+    },
     "https://arxiv.org/abs/2606.19262": {
       "title": "Detecting Hidden ML Training With Zero-Overhead Telemetry",
       "about": "A study classifying GPU workloads from privacy-preserving telemetry, reporting 98.2 percent accuracy at spotting concealed training runs.",
       "authors": "Rahman, Robi, and Sabiha Tajdari",
       "container": "arXiv",
       "date": "June 2026"
+    },
+    "https://arxiv.org/abs/2606.28694": {
+      "title": "Verifying Restrictions on Frontier AI Research",
+      "about": "A catalogue of 28 mechanisms for verifying restrictions on AI research under a halt, including open-source, signals, and human intelligence against covert projects.",
+      "authors": "Scher, Aaron",
+      "publisher": "arXiv",
+      "date": "27 June 2026"
     },
     "https://arxiv.org/html/2407.05694v1": {
       "title": "On the Limitations of Compute Thresholds as a Governance Strategy",
@@ -111,6 +174,13 @@
     "https://arxiv.org/html/2408.16074": {
       "title": "Verification Methods for International AI Agreements",
       "about": "Wasil et al. survey verification methods available to an international AI agreement, from national technical means to personnel-based routes.",
+      "authors": "Wasil, Akash R., Tom Reed, Jack William Miller, et al.",
+      "container": "arXiv",
+      "date": "Aug. 2024"
+    },
+    "https://arxiv.org/html/2408.16074v2#Sx5.SSx1.SSSx2": {
+      "title": "Verification Methods for International AI Agreements — Whistleblowers",
+      "about": "The paper's whistleblowers section: five ways a government could incentivize insiders to come forward, and why incentives alone fail when an employer can block contact with the verifier.",
       "authors": "Wasil, Akash R., Tom Reed, Jack William Miller, et al.",
       "container": "arXiv",
       "date": "Aug. 2024"
@@ -136,11 +206,40 @@
       "container": "arXiv",
       "date": "June 2025"
     },
+    "https://attestable.com/blog/model-weights-security": {
+      "title": "From Verifiability to Model-Weight Security",
+      "about": "The company's own account of using sampled zero-knowledge output proofs to shrink a datacenter's security dependencies — early implementation evidence, as the lesson flags.",
+      "authors": "Attestable",
+      "publisher": "Attestable"
+    },
+    "https://baselgovernance.org/resources/publications/quick-guide-19-offshore-structures-and-beneficial-ownership/": {
+      "title": "Quick Guide 19: Offshore Structures and Beneficial Ownership",
+      "about": "How corporate vehicles and offshore structures are used to disguise ownership, with the beneficial-ownership concepts an investigator needs.",
+      "authors": "Atkinson, Phyllis",
+      "container": "Quick Guide series",
+      "publisher": "Basel Institute on Governance",
+      "date": "12 Nov. 2020"
+    },
     "https://brilliant.org/wiki/fermi-estimate/": {
       "title": "Fermi Estimate",
       "about": "A wiki explainer of Fermi estimation — rough order-of-magnitude reasoning with worked examples.",
       "container": "Brilliant Math & Science Wiki",
       "publisher": "Brilliant.org"
+    },
+    "https://carnegieendowment.org/files/GUP_Perkovich_Levite_UnderstandingCyberConflict_Ch1.pdf": {
+      "title": "Intelligence in Cyber—and Cyber in Intelligence",
+      "about": "The historian of US Cyber Command on cyber as an intelligence discipline: espionage and counterespionage moved into cyberspace intact, what is new is scale and the permanence of data, and the line between spying and attacking was always blurry. Chapter 1 of Understanding Cyber Conflict: Fourteen Analogies, edited by George Perkovich and Ariel E. Levite.",
+      "authors": "Warner, Michael",
+      "container": "Understanding Cyber Conflict: Fourteen Analogies",
+      "publisher": "Georgetown University Press",
+      "date": "2017"
+    },
+    "https://carnegieendowment.org/research/2024/08/chinas-views-on-ai-safety-are-changing-quickly": {
+      "title": "China’s Views on AI Safety Are Changing—Quickly",
+      "about": "Sheehan reads the July 2024 Third Plenum decision — the first major CCP policy document to call for an AI safety supervision and regulation system — as evidence of Beijing’s accelerating turn toward frontier-AI safety oversight. Cited in 4.1 as direct data that political feasibility moves.",
+      "authors": "Sheehan, Matt",
+      "publisher": "Carnegie Endowment for International Peace",
+      "date": "Aug. 2024"
     },
     "https://cset.georgetown.edu/publication/the-semiconductor-supply-chain/": {
       "title": "The Semiconductor Supply Chain: Assessing National Competitiveness",
@@ -155,6 +254,12 @@
       "about": "NVIDIA's documentation of its attestation architecture — how clients, cloud services, and GPU hardware form a verifiable chain of trust.",
       "org": "NVIDIA Corporation",
       "container": "NVIDIA Attestation Suite Documentation"
+    },
+    "https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/hopper_single_gpu.html": {
+      "title": "Hopper Single GPU Attestation Example",
+      "about": "NVIDIA's own quick-start walkthrough of remotely attesting an H100 GPU in Confidential Computing mode — the working evidence that remote attestation already ships on AI hardware.",
+      "container": "NVIDIA Attestation Tools documentation",
+      "publisher": "NVIDIA"
     },
     "https://doi.org/10.48550/arXiv.2304.04123": {
       "title": "Nuclear Arms Control Verification and Lessons for AI Treaties",
@@ -175,6 +280,12 @@
       "org": "Wikipedia contributors",
       "container": "Wikipedia, The Free Encyclopedia"
     },
+    "https://en.wikipedia.org/wiki/National_technical_means_of_verification": {
+      "title": "National technical means of verification",
+      "about": "Where 'national technical means' enters treaty law: the ABM Treaty's Article XII (1972) and the SALT I Interim Agreement, with binding noninterference and non-concealment clauses.",
+      "container": "Wikipedia",
+      "date": "current"
+    },
     "https://en.wikipedia.org/wiki/Theory_of_change": {
       "title": "Theory of Change",
       "about": "The encyclopedia article on theory of change, the planning methodology that maps activities to intended outcomes.",
@@ -187,12 +298,47 @@
       "org": "Epoch AI",
       "date": "continuously updated"
     },
+    "https://epoch.ai/data/data-centers-documentation/methodology": {
+      "title": "AI Data Centers Documentation: Methodology",
+      "about": "How the hub's numbers are made: commercial imagery and permitting documents, cooling equipment read off the roof, then modelled power, compute, and cost.",
+      "org": "Epoch AI",
+      "date": "2025"
+    },
+    "https://epoch.ai/latest/introducing-the-frontier-data-centers-hub": {
+      "title": "Introducing the Frontier Data Centers Hub",
+      "about": "Epoch AI's write-up of its open-source method for tracking large AI datacenters — satellite imagery, permits, and public documents combined into power, compute, and construction timelines.",
+      "authors": "Epoch AI",
+      "publisher": "Epoch AI",
+      "date": "4 Nov. 2025"
+    },
+    "https://epoch.ai/publications/chip-smuggling": {
+      "title": "Diversion and Resale: Estimating Compute Smuggling to China",
+      "about": "A public estimate of smuggled compute — median about 660,000 H100-equivalents through the end of 2025, 90% interval 290,000 to 1.6 million — built from indictments and investigative reporting on diversion and on China's grey market, with the detection rate as its largest uncertainty.",
+      "authors": "Juniewicz, Isabel",
+      "publisher": "Epoch AI",
+      "date": "29 Apr. 2026"
+    },
+    "https://fas.org/publication/tracking-hyperscale/": {
+      "title": "Tracking Hyperscale AI Data Center Growth with Satellite Imagery",
+      "about": "A trained imagery analyst's method for reading AI datacentre construction from commercial satellite imagery, with two case studies (Ajman, Colossus) and the open sources — utility annotations, permits, a civil-society flight — read beside the images.",
+      "authors": "Krawec, Christina",
+      "publisher": "Federation of American Scientists",
+      "date": "12 May 2026"
+    },
     "https://forum.effectivealtruism.org/posts/AP9FowhqT7MXDSm5P/learning-to-ask-action-relevant-questions-1": {
       "title": "Learning to Ask Action-Relevant Questions",
       "about": "A post on testing research questions by asking what would change in the world if they were answered.",
       "authors": "Lutz, Ronja",
       "container": "Effective Altruism Forum",
       "date": "28 Dec. 2019"
+    },
+    "https://gijn.org/resource/introduction-investigative-journalism-fact-checking/": {
+      "title": "Introduction to Investigative Journalism: Fact-Checking",
+      "about": "A working fact-checker's chapter on internal, pre-publication checking: annotate every statement of fact with its source, prefer primary documents, archive links, and put weak claims through a fact-checking desk's questions.",
+      "authors": "Elba, Mariam",
+      "container": "Introduction to Investigative Journalism",
+      "publisher": "Global Investigative Journalism Network",
+      "date": "26 Nov. 2024"
     },
     "https://intelligence.org/2015/07/24/four-background-claims/": {
       "title": "Four Background Claims",
@@ -201,6 +347,26 @@
       "container": "Machine Intelligence Research Institute",
       "date": "24 July 2015"
     },
+    "https://irp.fas.org/offdocs/wmd_report.pdf": {
+      "title": "Report to the President of the United States",
+      "about": "The WMD Commission (Robb–Silberman) report: the US intelligence community was 'dead wrong' on Iraq WMD, with the failure located in tradecraft and groupthink; Curveball and the aluminum tubes. The cautionary case.",
+      "org": "Commission on the Intelligence Capabilities of the United States Regarding Weapons of Mass Destruction",
+      "date": "2005"
+    },
+    "https://isis-online.org/isis-reports/revealed-emptying-of-the-iranian-atomic-warehouse-at-turquz-abad": {
+      "title": "Revealed: Emptying of the Iranian “Atomic Warehouse” at Turquz-Abad",
+      "about": "The imagery brief behind the Turquzabad beat: a rival's archive pointing at a site, and the site watched being emptied before sampling.",
+      "authors": "David Albright, Olli Heinonen, Frank Pabian, and Andrea Stricker",
+      "container": "Institute for Science and International Security",
+      "date": "Nov. 2018"
+    },
+    "https://isis-online.org/uploads/isis-reports/documents/SyriaReactorReport_12May2008.pdf": {
+      "title": "The Al Kibar Reactor: Extraordinary Camouflage, Troubling Implications",
+      "about": "The imagery-analysis brief on Syria's covert reactor, written as the analysts worked it: the imagery card practiced on a real undeclared site.",
+      "authors": "David Albright and Paul Brannan",
+      "container": "Institute for Science and International Security",
+      "date": "May 2008"
+    },
     "https://law-ai.org/the-role-of-compute-thresholds-for-ai-governance/": {
       "title": "The Role of Compute Thresholds for AI Governance",
       "about": "A law-journal article on how training-compute thresholds work as a regulatory trigger for frontier models.",
@@ -208,6 +374,38 @@
       "container": "George Washington Journal of Law & Technology",
       "publisher": "Institute for Law & AI",
       "date": "Feb. 2025"
+    },
+    "https://learn.baselgovernance.org/": {
+      "title": "Basel LEARN",
+      "about": "The Basel Institute on Governance's platform of free self-paced courses on financial investigation, asset tracing, and intelligence gathering.",
+      "authors": "Basel Institute on Governance",
+      "publisher": "Basel Institute on Governance",
+      "date": "n.d.",
+      "standalone": true
+    },
+    "https://learn.baselgovernance.org/course/view.php?id=3": {
+      "title": "Operational Analysis",
+      "about": "A free self-paced course on the operational analysis of suspicious transaction reports, as a financial intelligence unit does it.",
+      "authors": "Basel Institute on Governance",
+      "container": "Basel LEARN",
+      "publisher": "Basel Institute on Governance",
+      "date": "n.d."
+    },
+    "https://learn.baselgovernance.org/course/view.php?id=36": {
+      "title": "Quick Guide 15: Following the Money",
+      "about": "A four-page guide to the follow-the-money method: transactions as a source of information and evidence about a crime, a suspect, and a network.",
+      "authors": "Ratcliffe, Stephen",
+      "container": "Quick Guide series",
+      "publisher": "Basel Institute on Governance",
+      "date": "2020"
+    },
+    "https://learn.baselgovernance.org/enrol/index.php?id=17": {
+      "title": "Source and Application of Funds",
+      "about": "A free self-paced course on tracing a money trail with source-and-application-of-funds analysis.",
+      "authors": "Basel Institute on Governance",
+      "container": "Basel LEARN",
+      "publisher": "Basel Institute on Governance",
+      "date": "n.d."
     },
     "https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260SB53": {
       "title": "SB-53 Artificial Intelligence Models: Large Developers (2025-2026)",
@@ -223,6 +421,33 @@
       "publisher": "Center on Long-Term Risk",
       "date": "16 June 2024"
     },
+    "https://media.nti.org/pdfs/The_Opportunities_and_Limits_of_Societal_Verification.pdf": {
+      "title": "The Opportunities and Limits of Societal Verification",
+      "about": "Crowd and open-source ('societal') verification and its limits: the NGO-monitoring frame.",
+      "authors": "Jane Hartigan and Corey Hinderstein",
+      "container": "Nuclear Threat Initiative",
+      "date": "2013"
+    },
+    "https://nationalsecurity.law.georgetown.edu/wp-content/uploads/2010/08/06_Lin.pdf": {
+      "title": "Offensive Cyber Operations and the Use of Force",
+      "about": "The National Research Council study director's public account of what cyber operations require and can do: vulnerability, access, and payload; easy and difficult targets; cyberexploitation against confidentiality versus attack against integrity, authenticity, and availability; and the objectives each can pursue.",
+      "authors": "Lin, Herbert S.",
+      "container": "Journal of National Security Law & Policy",
+      "date": "2010"
+    },
+    "https://nonproliferation.org/op-44-eyes-on-u-opportunities-challenges-and-limits-of-remote-sensing-for-monitoring-uranium-mining-and-milling/": {
+      "title": "Eyes on U: Opportunities, Challenges and Limits of Remote Sensing for Monitoring Uranium Mining and Milling",
+      "about": "The hard limits of imagery: uranium mines look like copper mines, in-situ leaching leaves a minimal footprint, and thermal readings throw false positives from terrain and weather.",
+      "authors": "Liu, Rodgers, Milne, Rowland, McIntosh, Best, Lepinard, and Hanham",
+      "container": "CNS Occasional Paper 44, Middlebury Institute",
+      "date": "2019"
+    },
+    "https://nuke.fas.org/control/ttbt/intro.htm": {
+      "title": "Threshold Test Ban Treaty",
+      "about": "The FAS primer on the 1974 treaty’s 150-kiloton cap on underground tests: verification by seismic measurement, and the 1990 protocol’s calibration and on-site hydrodynamic measures. Cited in 1.0.1’s fuzzy-numbers fold.",
+      "authors": "Federation of American Scientists",
+      "publisher": "Federation of American Scientists"
+    },
     "https://ourworldindata.org/brief-history-of-ai": {
       "title": "The Brief History of Artificial Intelligence: The World Has Changed Fast — What Might Be Next?",
       "about": "The Our World in Data article whose two charts 0.1 reproduces: the timeline of notable AI systems, and test scores of AI systems relative to human performance.",
@@ -235,10 +460,34 @@
       "about": "An explainer of the importance-tractability-neglectedness framework for prioritizing problems.",
       "org": "Probably Good"
     },
+    "https://researchclinic.net/": {
+      "title": "Research Clinic",
+      "about": "Paul Myers's link library for internet research, kept since 2003 alongside his training courses: search engines, social-media research, people and company finders, domain and IP lookups, government and charity registers, geolocation, and verification tools.",
+      "authors": "Myers, Paul",
+      "publisher": "Research Clinic",
+      "date": "n.d.",
+      "standalone": true
+    },
     "https://slowfoodusa.org/theory-of-change/": {
       "title": "Our Theory of Change",
       "about": "The source page of the one-page infographic 0.1.2 reproduces — an organization's whole theory of change made legible on a single sheet.",
       "org": "Slow Food USA"
+    },
+    "https://techcrunch.com/2025/06/18/xai-is-facing-a-lawsuit-for-operating-over-400-mw-of-gas-turbines-without-permits/": {
+      "title": "xAI Is Facing a Lawsuit for Operating over 400 MW of Gas Turbines without Permits",
+      "about": "How aerial and thermal photography commissioned by the Southern Environmental Law Center established the number of gas turbines running at xAI's Memphis site.",
+      "authors": "De Chant, Tim",
+      "container": "TechCrunch",
+      "publisher": "TechCrunch",
+      "date": "18 June 2025"
+    },
+    "https://techcrunch.com/2025/07/03/xai-gets-permits-for-15-natural-gas-generators-at-memphis-data-center/": {
+      "title": "xAI Gets Permits for 15 Natural Gas Generators at Memphis Data Center",
+      "about": "The Shelby County air permit that followed the Memphis turbine dispute: 15 generators, up to 247 MW.",
+      "authors": "De Chant, Tim",
+      "container": "TechCrunch",
+      "publisher": "TechCrunch",
+      "date": "3 July 2025"
     },
     "https://techgov.intelligence.org/blog/catch-up-algorithmic-progress-might-actually-be-60x-per-year": {
       "title": "Catch-Up Algorithmic Progress Might Actually Be 60x per Year",
@@ -288,6 +537,38 @@
       "publisher": "Apollo Research",
       "date": "13 Nov. 2023"
     },
+    "https://www.armscontrol.org/act/2004-09/issue-briefs/trust-dont-verify": {
+      "title": "Trust, but Don't Verify",
+      "about": "The provocation in the adequacy debate: the limits of insisting on airtight verification.",
+      "authors": "Daryl G. Kimball",
+      "container": "Arms Control Today",
+      "date": "2004"
+    },
+    "https://www.armscontrol.org/factsheets/iaea-safeguards-agreements-glance": {
+      "title": "IAEA Safeguards Agreements at a Glance",
+      "about": "The Additional Protocol assures the absence of undeclared nuclear material and activities: the response to the declared-versus-undeclared gap exposed by Iraq and North Korea. Primary text: IAEA INFCIRC/540.",
+      "org": "Arms Control Association",
+      "date": "2024"
+    },
+    "https://www.cia.gov/resources/csi/books-monographs/psychology-of-intelligence-analysis-2": {
+      "title": "Psychology of Intelligence Analysis",
+      "about": "The cognition primary behind the module's bias vocabulary, free in full from the CIA's own press; Part III is the biases, chapter 8 the analysis of competing hypotheses.",
+      "authors": "Richards J. Heuer, Jr.",
+      "container": "CIA Center for the Study of Intelligence",
+      "date": "1999"
+    },
+    "https://www.cnas.org/publications/commentary/to-win-the-ai-race-bolster-export-control-enforcement-with-intelligence": {
+      "title": "To Win the AI Race, Bolster Export Control Enforcement with Intelligence",
+      "about": "The case for putting intelligence collection behind export-control enforcement: financial intelligence as an instrument, not an afterthought.",
+      "org": "Center for a New American Security",
+      "date": "Sept. 2025"
+    },
+    "https://www.cnas.org/publications/reports/countering-ai-chip-smuggling-has-become-a-national-security-priority": {
+      "title": "Countering AI Chip Smuggling Has Become a National Security Priority",
+      "about": "The reported evidence of large-scale AI chip smuggling and what enforcement would take: the institutional side of the procurement signature.",
+      "org": "Center for a New American Security",
+      "date": "June 2025"
+    },
     "https://www.cnas.org/publications/reports/technology-to-secure-the-ai-chip-supply-chain-a-primer": {
       "title": "Technology to Secure the AI Chip Supply Chain: A Working Paper",
       "about": "Argues that export controls on AI chips are hard to enforce and easy to evade through shell companies, and proposes hardware-enabled mechanisms instead. Cited in 1.2.1 for the fact that US controls now reach all chips using advanced high-bandwidth memory.",
@@ -295,12 +576,33 @@
       "publisher": "Center for a New American Security",
       "date": "2024"
     },
+    "https://www.everycrsreport.com/reports/R41201.html": {
+      "title": "Monitoring and Verification in Arms Control",
+      "about": "The Congressional Research Service report carrying the adequate-versus-effective verification standard and Nitze's 'high confidence, not perfect confidence' formulation.",
+      "authors": "Amy F. Woolf",
+      "container": "Congressional Research Service, R41201",
+      "date": "2011"
+    },
+    "https://www.gao.gov/assets/gao-23-105698.pdf": {
+      "title": "Nuclear Arms Control: U.S. May Face Challenges in Verifying Future Treaty Goals",
+      "about": "GAO-23-105698: what the United States could verify under the treaty goals that follow New START, with which methods, and where the gaps are.",
+      "authors": "U.S. Government Accountability Office",
+      "publisher": "U.S. Government Accountability Office",
+      "date": "28 Sept. 2023",
+      "standalone": true
+    },
     "https://www.governance.ai/research-paper/training-compute-thresholds-features-and-functions-in-ai-regulation": {
       "title": "Training Compute Thresholds: Features and Functions in AI Regulation",
       "about": "GovAI's analysis of how US and EU regulators use compute thresholds to pick out models warranting oversight — and where the metric strains.",
       "authors": "Heim, Lennart, and Leonie Koessler",
       "publisher": "Centre for the Governance of AI",
       "date": "7 Aug. 2024"
+    },
+    "https://www.iaea.org/publications/magazines/bulletin/57-2/completing-the-picture-using-satellite-imagery-to-enhance-iaea-safeguards-capabilities": {
+      "title": "Completing the Picture: Using Satellite Imagery to Enhance IAEA Safeguards Capabilities",
+      "about": "Imagery as complement, not determinant, across safeguards activities; the Satellite Imagery Analysis Unit, established 2001, and denied-access monitoring.",
+      "container": "IAEA Bulletin 57-2",
+      "date": "2016"
     },
     "https://www.leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?article=&chapter=5.1.&division=2.&lawCode=LAB&part=3.&title=": {
       "title": "Whistleblower Protections: Catastrophic Risks in AI Foundation Models, Labor Code §§ 1107–1107.2",
@@ -342,11 +644,24 @@
       "about": "A reference page on the SSC's 1993 cancellation, mirroring the Wikipedia article's Cancellation section under Creative Commons.",
       "org": "LiquiSearch"
     },
+    "https://www.opcw.org/chemical-weapons-convention/annexes/verification-annex/part-x-challenge-inspections-pursuant": {
+      "title": "Verification Annex, Part X: Challenge Inspections Pursuant to Article IX",
+      "about": "The CWC's managed-access rules: how an inspected state may shroud sensitive equipment and restrict analyses while challenge inspectors still resolve compliance questions.",
+      "container": "Chemical Weapons Convention",
+      "publisher": "Organisation for the Prohibition of Chemical Weapons"
+    },
     "https://www.pacingthefrontier.com/": {
       "title": "Pacing the Frontier",
       "about": "An open letter from employees of frontier AI companies asking the U.S. government to support an international effort to build the technical and governance tools needed to deliberately pace automated AI development.",
       "authors": "Employees of frontier AI companies",
       "date": "July 2026"
+    },
+    "https://www.princeton.edu/~ota/disk2/1988/8838/8838.PDF": {
+      "title": "Seismic Verification of Nuclear Testing Treaties",
+      "about": "The OTA’s 1988 assessment of how well seismology could verify nuclear test-ban limits, including why converting a seismic signal into a yield estimate carries uncertainty. Cited in 1.0.1 for the disputed US estimates of Soviet yields.",
+      "authors": "U.S. Congress, Office of Technology Assessment",
+      "publisher": "U.S. Government Printing Office",
+      "date": "May 1988"
     },
     "https://www.rfc-editor.org/rfc/rfc9334.html": {
       "title": "Remote ATtestation ProcedureS (RATS) Architecture",
@@ -355,6 +670,19 @@
       "container": "RFC 9334",
       "publisher": "RFC Editor",
       "date": "Jan. 2023"
+    },
+    "https://www.satellitevu.com/news/satvu-releases-first-of-its-kind-thermal-image-revealing-true-operational-activity-inside-major-u-s-data-centre": {
+      "title": "SatVu Releases First-of-its-Kind Thermal Image Revealing True Operational Activity Inside Major U.S. Data Centre",
+      "about": "The thermal signature as a shipping product: heat across rooftop cooling, substations, and electrical yards showing which parts of a datacentre are active.",
+      "org": "SatVu",
+      "date": "2026"
+    },
+    "https://www.sipri.org/sites/default/files/files/books/SIPRI85Krass/SIPRI85Krass03.pdf": {
+      "title": "Verification: How Much Is Enough?",
+      "about": "The classic statement that 'how much verification is enough' has no objective technical answer; the threshold is a political judgment.",
+      "authors": "Allan S. Krass",
+      "container": "SIPRI / Taylor & Francis",
+      "date": "1985"
     },
     "https://www.stat.berkeley.edu/~aldous/157/Papers/Tradecraft%20Primer-apr09.pdf": {
       "title": "A Tradecraft Primer: Structured Analytic Techniques for Improving Intelligence Analysis",
@@ -370,85 +698,18 @@
       "container": "The Atlantic",
       "date": "15 Sept. 2025"
     },
+    "https://www.timesofisrael.com/satellite-firm-says-its-indefinitely-withholding-iran-war-images-at-us-request/": {
+      "title": "Satellite firm says it is indefinitely withholding Iran war images at US request",
+      "about": "'Open' commercial imagery is not neutral: shutter control and withholding at government request, the transparency double edge.",
+      "container": "The Times of Israel",
+      "date": "2026"
+    },
     "https://www.wired.com/story/openai-didnt-notice-its-ai-agents-using-a-message-board-to-plan-their-hacking-spree/": {
       "title": "OpenAI Didn’t Notice Its AI Agents Using a Message Board to Plan Their Hacking Spree",
       "about": "WIRED's reporting from Black Hat on details OpenAI disclosed about its agents going rogue and hacking other companies unnoticed — the press account beside the labs' own write-ups of the same summer.",
       "authors": "Newman, Lily Hay",
       "container": "WIRED",
       "date": "5 Aug. 2026"
-    },
-    "https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/hopper_single_gpu.html": {
-      "title": "Hopper Single GPU Attestation Example",
-      "about": "NVIDIA's own quick-start walkthrough of remotely attesting an H100 GPU in Confidential Computing mode — the working evidence that remote attestation already ships on AI hardware.",
-      "container": "NVIDIA Attestation Tools documentation",
-      "publisher": "NVIDIA"
-    },
-    "https://arxiv.org/abs/2605.01930": {
-      "title": "GPU Fingerprinting for Location Verification",
-      "about": "Proposes physical hardware fingerprints — rather than stored cryptographic keys an adversary with physical access could extract — as a way to re-identify individual GPUs, with up to 100 percent re-identification accuracy in small-scale tests.",
-      "authors": "Tee, Wayne, and Jonathan Happel",
-      "container": "arXiv",
-      "date": "May 2026"
-    },
-    "https://attestable.com/blog/model-weights-security": {
-      "title": "From Verifiability to Model-Weight Security",
-      "about": "The company's own account of using sampled zero-knowledge output proofs to shrink a datacenter's security dependencies — early implementation evidence, as the lesson flags.",
-      "authors": "Attestable",
-      "publisher": "Attestable"
-    },
-    "https://arxiv.org/abs/2606.05433": {
-      "title": "Zero knowledge verification for frontier AI training is possible",
-      "about": "The 2026 proposal estimating a future ZK system could verify dense frontier training at roughly 2–10 percent overhead — while naming thirteen unresolved technical problems and the training architectures it does not yet cover.",
-      "authors": "Peigné, Pierre, Ky Nguyen, and Paul Wang",
-      "container": "arXiv",
-      "date": "June 2026"
-    },
-    "https://arxiv.org/abs/2402.02675": {
-      "title": "Verifiable evaluations of machine learning models using zkSNARKs",
-      "about": "Shows a model's claimed evaluation results can be proved with zkSNARKs without revealing the weights behind them.",
-      "authors": "South, Tobin, Alexander Camuto, Shrey Jain, et al.",
-      "container": "arXiv",
-      "date": "Feb. 2024"
-    },
-    "https://arxiv.org/abs/2604.00169": {
-      "title": "Beyond Latency: A System-Level Characterization of MPC and FHE for PPML",
-      "about": "The system-level study of MPC (and FHE) for private machine learning behind the lesson's caveats: communication, preprocessing, memory, and latency are what keep large models hard.",
-      "authors": "Huang, Pengzhi, Kiwan Maeng, and G. Edward Suh",
-      "container": "arXiv",
-      "date": "Mar. 2026"
-    },
-    "https://www.opcw.org/chemical-weapons-convention/annexes/verification-annex/part-x-challenge-inspections-pursuant": {
-      "title": "Verification Annex, Part X: Challenge Inspections Pursuant to Article IX",
-      "about": "The CWC's managed-access rules: how an inspected state may shroud sensitive equipment and restrict analyses while challenge inspectors still resolve compliance questions.",
-      "container": "Chemical Weapons Convention",
-      "publisher": "Organisation for the Prohibition of Chemical Weapons"
-    },
-    "https://arxiv.org/html/2408.16074v2#Sx5.SSx1.SSSx2": {
-      "title": "Verification Methods for International AI Agreements — Whistleblowers",
-      "about": "The paper's whistleblowers section: five ways a government could incentivize insiders to come forward, and why incentives alone fail when an employer can block contact with the verifier.",
-      "authors": "Wasil, Akash R., Tom Reed, Jack William Miller, et al.",
-      "container": "arXiv",
-      "date": "Aug. 2024"
-    },
-    "https://carnegieendowment.org/research/2024/08/chinas-views-on-ai-safety-are-changing-quickly": {
-      "title": "China’s Views on AI Safety Are Changing—Quickly",
-      "about": "Sheehan reads the July 2024 Third Plenum decision — the first major CCP policy document to call for an AI safety supervision and regulation system — as evidence of Beijing’s accelerating turn toward frontier-AI safety oversight. Cited in 4.1 as direct data that political feasibility moves.",
-      "authors": "Sheehan, Matt",
-      "publisher": "Carnegie Endowment for International Peace",
-      "date": "Aug. 2024"
-    },
-    "https://nuke.fas.org/control/ttbt/intro.htm": {
-      "title": "Threshold Test Ban Treaty",
-      "about": "The FAS primer on the 1974 treaty’s 150-kiloton cap on underground tests: verification by seismic measurement, and the 1990 protocol’s calibration and on-site hydrodynamic measures. Cited in 1.0.1’s fuzzy-numbers fold.",
-      "authors": "Federation of American Scientists",
-      "publisher": "Federation of American Scientists"
-    },
-    "https://www.princeton.edu/~ota/disk2/1988/8838/8838.PDF": {
-      "title": "Seismic Verification of Nuclear Testing Treaties",
-      "about": "The OTA’s 1988 assessment of how well seismology could verify nuclear test-ban limits, including why converting a seismic signal into a yield estimate carries uncertainty. Cited in 1.0.1 for the disputed US estimates of Soviet yields.",
-      "authors": "U.S. Congress, Office of Technology Assessment",
-      "publisher": "U.S. Government Printing Office",
-      "date": "May 1988"
     }
   },
   "pending": [
@@ -476,8 +737,6 @@
     "https://www.ignet.gov/sites/default/files/files/Quality%20Standards%20for%20Investigations%20July-2025.pdf",
     "https://ai-2027.com",
     "https://arxiv.org/abs/2304.04123",
-    "https://arxiv.org/abs/2606.28694",
-    "https://arxiv.org/abs/2506.15867",
     "https://www.eda.admin.ch/content/dam/eda/en/documents/publications/Voelkerrecht/Practice-Guide-to-International-Treatie-2023_EN.pdf",
     "https://www.imf.org/external/Pubs/FT/fandd/basics/66-strategic-thinking.htm",
     "https://plato.stanford.edu/entries/game-theory/",

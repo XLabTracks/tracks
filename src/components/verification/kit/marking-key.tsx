@@ -7,6 +7,7 @@ import {
   keyTotal,
   type MarkingKey as Key,
 } from "@/lib/verification/data/marking-keys";
+import { readStored, writeStored } from "@/components/verification/kit/stored";
 
 export function MarkingKeyPanel({
   storageKey,
@@ -22,7 +23,7 @@ export function MarkingKeyPanel({
   useEffect(() => {
     let restored: number[] = [];
     try {
-      const raw = localStorage.getItem(storageKey);
+      const raw = readStored(storageKey);
       const parsed: unknown = raw ? JSON.parse(raw) : null;
       if (Array.isArray(parsed)) {
         restored = parsed.filter(
@@ -42,7 +43,7 @@ export function MarkingKeyPanel({
     (next: number[]) => {
       setTicked(next);
       try {
-        localStorage.setItem(storageKey, JSON.stringify(next));
+        writeStored(storageKey, JSON.stringify(next));
       } catch {
       }
     },

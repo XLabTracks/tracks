@@ -1665,6 +1665,135 @@ Not a defect, checked while there: Table 4 in that slot is 2,716px wide in a
 which is the house rule — `document.body.scrollWidth` equals the viewport, so
 the page does not move sideways.
 
+## 2026-08-25 — 2.3 built out from the playground draft: six lessons carry the full learner path
+
+The owner's instruction: make 2.3 as good as the other module-2 sections,
+using the playground build
+(`playground-tracks.netlify.app/verification-module-2-3-intelligence`) as the
+source — with the correction, mid-task, that the playground is the old draft
+and the module lives in the app at
+`/tracks/verification/verification-infrastructure/intelligence-intro`. So this
+is a port: the playground's assembled learner path (its data file carries all
+prose, exercises, and reading excerpts) transcribed into the six existing
+`intelligence-*.mdx` lessons and the house machinery, resolving each lesson's
+"Unfinished writing" callout. Nothing here is newly invented curriculum; the
+one sentence composed for a cross-reference is noted below.
+
+### What was added, per lesson
+
+- **2.3.0 intro** — the retrieval opener: four `<Check>` blocks (Module 1 /
+  2.2 retrievals), verbatim stems, options, and whys.
+- **2.3.1 signatures** — the Wasil three-category definition as a
+  `<SourceQuote>`; the Power Signature explainer
+  (`datacenter-power`, non-bridged widget: facility-vs-national-grids bars,
+  training-vs-inference load shapes, the 1.6×/yr decay clock; data from
+  Epoch's AI-datacenters CSV as packaged by the playground, pulled
+  2026-07-13); the signature-cards predict-before-reveal bench and the Fermi
+  bench (`drills-intel-signatures`); the boundary line to 2.2; readings as
+  `ReadingCard`s with the playground's page-pinned read lists. The callout
+  shrinks to the one still-owed item: distilling the open-sources treatment.
+- **2.3.2 anchor** — Baker's irreplaceable-tips passage as a `<SourceQuote>`;
+  the four case files as a drill bench (`drills-intel-anchor`, eight
+  identified?/resolved? commits with the record as reveals); the Baker
+  `ReadingCard` (pp. 14–15, 18–19, plus the §2.3.3 sharing extension). The
+  callout is gone: the case briefs are built; the essay task and prompt
+  randomizer do not exist in the final playground design — superseded by the
+  red-line memo as the module's single written output. Owner can reverse.
+- **2.3.3 assessment** — corroboration-across-kinds, the Iraq "dead wrong"
+  cautionary beat, and the base-rate teaser feeding the bench
+  (`drills-intel-assessment`: false-alarm arithmetic, the Karsu Ridge
+  intelligence autopsy with the bias menu, the limitations ledger with
+  sibling owners); the bounds-in-sum section (Wasil honest-bounds sentence as
+  `<SourceQuote>` + the four-paper convergence and reframe paragraphs); CIA
+  Tradecraft Primer as an optional `ReadingCard`. The callout is gone: the
+  design supersedes build-a-case-brief-from-a-packet with the autopsy
+  (diagnosis) plus the Analyst Desk (full run) — logged here, reversible.
+- **2.3.4 institutions** — the NSS-2025 sovereignty-compatibility paragraph
+  and the Kissinger disclosure-paradox line (*World Order* pp. 199–201; short
+  quote with citation); the dumb-questions battery (three questions, plain
+  list — the playground gave them jot boxes; the notebook covers that here,
+  a deliberate simplification); the clause-anatomy and who-watches benches
+  (`drills-intel-institutions`); the Al-Kibar/Turquzabad
+  tips-must-be-checkable beats; Definition 17 and the noninterference article
+  verbatim as `<SourceQuote>`s (CC BY arXiv text); and `ntm-redline` — a
+  `QuestionWorkspace` widget with the four analysis questions the memo brief
+  already referenced ("your four answers"). The callout is gone: the Six
+  Layers treatment is written against its named supports and the analysis
+  questions exist. One sentence was composed rather than transcribed: "states
+  sign what is symmetric, cheap, and checkable" is surfaced in 2.3.4 because
+  the owner's memo brief cites it as "2.3.4's rule" and the rule had no home.
+- **2.3.5 action** — threshold pricing and strike-is-not-a-rung paragraphs;
+  the Analyst Desk (`analyst-desk`, bridged: six signals, ≤2 moves each,
+  disposition + confidence + required dissent and blind spot, scored on
+  calibration, flat-run detection in the report); the written-output section
+  around the existing memo card with the source packet; the annotated
+  exemplar in a `<Fold>` (six red-line rows, both model capitals paragraphs,
+  five criterion notes — honor-gated "open after you file", since the memo
+  desk's state is not visible to lesson content); the ten-item mastery
+  checkpoint and three-item closing retrieval as `<Check>` blocks with the
+  correctives as whys; the seeds paragraph. The proposed-not-settled callout
+  is gone — the memo slot in `memos.ts` has been `specified` by the owner all
+  along.
+
+### Decisions a later session should not re-derive
+
+- **The gate's pass-9 mechanic was dropped deliberately.** The playground
+  locks step 16 until 9/10; the house has no score gates (nothing
+  auto-completes, `<Check>` feeds no meter), so the checkpoint states the bar
+  in prose and each miss names its corrective. Same for the cold open
+  (playground step 2 serves Desk signal 1 unaided and seals it until step
+  13): cross-lesson sealed state has no house mechanism, and the Desk serves
+  s1 with full mechanics — not ported, noted here.
+- **Kissinger is cited, never reproduced.** The playground packaged two
+  *World Order* digests and the full PDF; the book is all-rights-reserved, so
+  the packet here cites the book with page locators (pp. 133, 135–136,
+  199–201) and reproduces nothing. The two arXiv sources are CC BY 4.0 and
+  quoted with attribution-first `<SourceQuote>`s; the PRC Global AI
+  Governance Initiative is linked at the MFA's official English page and
+  quoted as a government primary. NSS 2025 is named without a link — no
+  verified URL was at hand, and a guessed link is worse than none.
+- **Exercise ids and storage keys are permanent**: decks
+  `drills-intel-{signatures,anchor,assessment,institutions}` (progress under
+  `v-drills:<deck>:v1`), `analyst-desk` (`v-analyst-desk:v1`),
+  `ntm-redline` (`v-ntm-redline:v1`), `datacenter-power` (stateless), and the
+  `<Check>`/`ReadingCard` ids (`intel-opener-*`, `intel-gate-*`,
+  `intel-close-*`, `intel-{wasil-ntm,miri-appendix-d,baker-appendix-e,
+  cia-tradecraft,miri-definition-17}`) on the vt-marks store.
+- **Estimated minutes** now follow the playground budget: 10/35/25/30/40/90
+  across 2.3.0–2.3.5 (was 5/10/5/5/5/90).
+- Headings across the six lessons were conformed to Title Case per the
+  standing 2026-08-18 instruction.
+
+### Still owed on 2.3
+
+- The open-sources card's dedicated treatment, still to be distilled (the one
+  surviving callout).
+- The extension menu was not ported: the locating-compute feasibility cards
+  (built in the playground over Scher & Thiergart's table, with the
+  evidence-critique micro-task) and the debate protocol are real designed
+  material with no home yet — porting the cards as a widget is the natural
+  next piece.
+- The seeds paragraph promises returns in 3.1/3.2 and the 4.1 unseal; modules
+  3–4 are still title-only, so those hooks land when their prose does.
+
+### Verification performed (2026-08-25)
+
+- `npm run typecheck` clean; full suite **100 files, 1179 tests, all pass**
+  (the widgets registry⇄MDX parity test was red mid-build until every
+  registered exercise was embedded; the citations tests forced the PRC MFA
+  registry entry and caught the Epoch cite dropped with the old callout —
+  restored in the widget lead-in). `npm run lint`: 0 errors (the nine
+  unescaped-quote errors in the two new widgets were fixed); warnings
+  pre-existing.
+- `verification:course -- --check` and `verification:memos -- --check` clean.
+- **Driven against a running dev server**: all six 2.3 routes return 200 and
+  render, console clean apart from the documented signed-out 401. The Analyst
+  Desk was driven through a full signal (moves → reveal → disposition →
+  three records → commit → debrief → next signal). Visual pass at 1440px on
+  the opener, power widget, benches, treaty workspace, memo card + packet
+  (the packet list takes the house 4-item slab treatment — deliberate,
+  documented in app-bridge.css), the exemplar fold, and the checkpoint.
+
 ## 2026-09-01 — the 2.2.1 fix above reaches main
 
 The entry above was written on the shared verification branch on 2026-08-20;
@@ -1673,3 +1802,833 @@ shipped there and never crossed, so main kept rendering the error card the
 owner had screenshotted. Ported verbatim in this change, guard test included:
 main's 2403.08501v2 artifact still carries `ax-references` only as a landmark
 class, so without the fallback the embed still resolved to nothing.
+
+## 2026-09-01 — 2.3 owner review, first pass
+
+Owner instructions on the preview, applied:
+
+- **The submodule is "2.3 Intelligence"** — the ": watching without
+  permission" tail is gone from the app title; the static site's unit list
+  already said just "Intelligence".
+- **The intro's two vocabulary PopUps and the whole Retrieval Opener are
+  deleted** ("delete those, delete retrieval"). The intro is now the six
+  transcribed paragraphs and nothing else. The four opener Checks' vt-marks
+  keys (`check:intel-opener-*`) are orphaned, not reused.
+- **2.3 budgets eight hours, by instruction** ("2.3 total is 8 hours should
+  be — if it's less we are not doing it right"), with the red-line memo
+  assumed at two hours on the memo desk. Minutes now run
+  10 / 75 / 60 / 80 / 75 / 180 across 2.3.0–2.3.5 (the 180 is 120 for the
+  memo plus the Desk, exemplar, checkpoint and closing).
+- **The Power Signature's facility caption sits below the chart**, not
+  between the picker and the bars.
+
+## 2026-09-01 — the four unported exercises land, and 2.3 goes em-dash-free
+
+Owner instruction on the preview: "adapt to style guides of our platform and
+port." All four remaining designed exercises from the playground are now in,
+house-styled:
+
+- **The feasibility cards** (`locating-compute`, unbridged, in a
+  "Optional: The Feasibility Cards" fold at the end of 2.3.1). The full
+  37-row Locating Compute Building Blocks table from Scher and Thiergart
+  (arXiv 2506.15867, appendix pp. 67–80) was converted mechanically from the
+  playground data file, row text verbatim. The engine is the playground's
+  commit-then-compare contract: rating and timeline on the report's own
+  scale, one rotating visible-reasoning prompt (assumption / cooperation /
+  red team), reveal with their note and previous work, argued pushback
+  required on any disagreement, calibration tally plus the two-blocks-to-fund
+  synthesis, and a copy-all export. Two decks: the eight-card intelligence
+  slice and the full table as the extension run. Unbridged per the
+  theories-of-change precedent: an optional fold must never gate the lesson.
+- **The cold open** (`cold-open`, bridged, closing 2.3.0). Desk signal s1
+  served unaided: disposition plus confidence, committed and sealed under
+  `v-intel-cold-open:v1`. The Analyst Desk's s1 debrief unseals it beside
+  the informed call (the mechanism-sort seal-and-unseal pattern, across
+  lessons via the storage key). The playground's step-2 beat, previously
+  dropped for mechanics, now ported.
+- **The debates** ("Optional: The Debates" fold in 2.3.5, before the
+  checkpoint). The module page's six staged controversies transcribed with
+  their sources as links, plus the design's solo protocol (two-sided memo:
+  steelman both poles, commit a position, name what would move you). The
+  fourteen debate sources are new citations-registry entries, several of
+  them the very public readings the owner asked after: Robb–Silberman, CRS
+  R41201, Krass, Kimball, the IAEA Bulletin imagery piece, NTI societal
+  verification, CNS Eyes on U, the Times of Israel shutter-control case,
+  Horowitz and Kahn, and the Hatz systematic review.
+- **The draft-from-scratch variant** of the NTM article: one Optional line
+  in 2.3.5's Written Output, from the extension menu.
+
+Also in this pass, per the standing 2026-08-20 rule: **the em-dash sweep of
+2.3's authored copy** — all six lessons plus the module's widget and data
+files, roughly 290 occurrences rewritten with commas, colons, semicolons,
+parentheses, or shorter sentences, with a hand pass over every conversion.
+Verbatim reproductions keep their punctuation: SourceQuote bodies and the
+source-faithful feasibility-table rows. The rest of the course's older files
+still carry em dashes and are out of this sweep's scope; they sweep as they
+are edited. The intro's estimate rises to 15 minutes for the cold open
+(2.3 now budgets 485).
+
+## 2026-09-01 — the recommended public readings are carded
+
+Owner approval ("sure you can add it") on the recommendation list. Ten
+public sources join the module, all as Optional reading cards or inline
+links, all in the citations registry, none counted in the eight-hour core:
+
+- 2.3.1 Overhead Imagery: FAS, Tracking Hyperscale AI Data Center Growth
+  with Satellite Imagery (2025), with Epoch's Frontier Data Centers Hub
+  announcement and methodology linked as the tradecraft companion.
+- 2.3.1 Thermal: the HotSat name-check now links SatVu's published thermal
+  image of a live US datacentre.
+- 2.3.1 Procurement: Epoch's Diversion and Resale smuggling estimate
+  (median ~660k H100-equivalents through end 2025), with the two CNAS
+  pieces linked for the institutional side.
+- 2.3.2: the ISIS imagery briefs, verified to the exact documents before
+  carding: Albright and Brannan's Al Kibar Extraordinary Camouflage report
+  (May 2008 PDF) with the Turquz-Abad Atomic Warehouse brief (Nov 2018)
+  linked inside. The Baker card stays first; the ISIS card is optional.
+- 2.3.3: Heuer's Psychology of Intelligence Analysis (CIA CSI, free full
+  text), the cognition primary the design's gaps list said was owed; and
+  the "dead wrong" phrase in The Progression now links the Silberman–Robb
+  WMD Commission report it comes from. The SSCI 2004 report is deliberately
+  not linked: no URL was verified, and a guessed link is worse than none.
+- 2.3.4: the two papers the module quotes constantly finally get cards:
+  Six Layers (read Layer 6) and Scher and Thiergart (the source of every
+  feasibility rating and of the feasibility cards' table). The bare
+  Six Layers bullet is gone; the Baker §2.3.3 bullet stays.
+
+## 2026-09-01 — the redundancy pass: eight cuts, owner-approved
+
+A pedagogy audit ("think hard about what needs to be deleted") followed by
+owner approval of the full list. The test applied: does the item make the
+learner think, or re-hear something from one scroll ago?
+
+- **Closing Retrieval and the seeds paragraph are gone** (2.3.5). All three
+  items were third-or-fourth same-page exposures of things the checkpoint
+  had just tested; same-page "spacing" is not spacing, and /review is the
+  platform's real spaced system. The seeds paragraph promised 3.1/3.2 hooks
+  that do not exist yet. Orphaned vt-marks keys: check:intel-close-*.
+- **The five signature-cards are gone from the 2.3.1 bench; the Fermi bench
+  stays.** In the playground the cards were the catalog; in the app the
+  prose catalog sits one scroll above, so the prediction was 30-second
+  recall and the reveal a re-paste. The anatomy keeps its real tests
+  (ledger, desk, checkpoint). Deck retitled "Drill Bench: Power to Compute";
+  the id drills-intel-signatures is permanent and unchanged, so progress
+  keys survive.
+- **The Dumb-Questions Battery is gone** (2.3.4). Two of its three questions
+  were answered by the same page minutes later; the survivor ("what breaks
+  if tips must be public?") is now an optional fifth question in the
+  ntm-redline workspace, so the memo brief's "your four answers" stays
+  exact: four required, one optional.
+- **Two checkpoint items cut** (sibling-cloud, human-layer): ledger rows
+  verbatim, same options and explanation. The checkpoint is eight items;
+  the bar line reads seven of eight.
+- **The Wasil SourceQuote in The Bounds, in Sum is gone**: the paragraph
+  under it quotes the same sentence, and the ledger carries it a third time.
+- **Debate 1 is gone** (not a debate: the paragraph handed the resolution,
+  and the refs-eval flagged the existing six for exactly this). Five
+  debates remain, renumbered. Its Lowenthal citation was orphaned and its
+  registry entry removed. Candidate swap-in, not done: verification-primacy
+  versus political-primacy from the refs-eval's new list.
+- **Design vocabulary rewritten off learner pages**: "the module's boundary
+  contract" (three places), "the arc is the spacing instrument," "a
+  deliverable, not a warm-up." Same category as the banned Bloom labels.
+- **Trims**: Recording What You Did Not Resolve is two sentences (the desk
+  enforces the discipline with lints; prose that pre-explains the exercise
+  is scaffolding); the Epoch hub-announcement link is gone from the FAS
+  card (methodology and dataset links remain), its registry entry removed.
+
+Net: about 1,000 words and ten redundant exercise items off the module.
+2.3.1 drops to 70 minutes; the module still budgets 480. Checked and kept,
+so the next pass does not re-litigate: the four-families section (the
+collection map keys on it), the desk's reference drawer, the cold open,
+autopsy, ledger, clause and who-watches benches, and the exemplar.
+
+Still open, owner's call: the last Unfinished-writing callout (2.3.1
+open-sources card). It is an IOU for distilling "Signals in the Noise"
+(arXiv 2606.20610), named in the module draft but dropped from the in-app
+transcription. Either distill that paper into the card and delete the
+callout, or delete the callout and accept the short card as final weighting.
+
+## 2026-09-01 — the em-dash sweep is reversed, on the owner's ruling
+
+Owner: "I want everything to be grammatically correct; changing em dashes
+should be a stylistic choice, not a feature." That reverses the 2026-08-20
+no-em-dash rule recorded on the shared branch (its module-0 log, "The
+owner's 0.1 batch"), which this module's sweep had been enforcing. Em dashes
+are permitted; removing one is a per-sentence editorial judgement, never a
+mechanical pass.
+
+Every surviving conversion from the 2.3 sweep is restored from the recorded
+before/after pairs: 246 line conversions plus 49 hand-fixes reversed, and
+the Iraq-estimate sentence restored by hand. Not restored, deliberately:
+lines that no longer exist (the redundancy cuts) and the sections rewritten
+in that pass, which were composed naturally rather than converted. The
+companion change on main restores prevention.mdx's four lines from PR #55.
+
+## 2026-09-01 — the 2.3.1 open-source IOU is closed by deletion
+
+The playground spec's OSINT bullet carried a pointer: "a dedicated treatment
+now exists (*Signals in the Noise*, arXiv 2606.20610) and should be distilled
+before this card is finalized." The lesson's "Unfinished writing" callout was
+that IOU (the parenthetical naming the paper had been dropped in
+transcription, so the callout pointed at a paper it never named).
+
+Read before deciding, the paper is the neighbouring problem, not this card's:
+*Signals in the Noise: Open Source Intelligence (OSINT) for AI Loss of
+Control Detection* (Bollinger, Aboserie, Coakley, Lee, and Mathlouthi — AI
+Governance Taskforce at Arcadia Impact, 2026) applies OSINT to detecting AI
+systems operating beyond human oversight — transcript collection of
+user-reported behaviour, infrastructure correlation for unexpected
+connections or replication, output analysis for capability concealment. The
+card is OSINT for state-run undeclared development. Method family overlaps;
+target does not.
+
+Owner, shown the paper's actual scope: it is not needed there. The callout is
+deleted; the open-source card stays deliberately short and hedged, classed
+with the supplemental mechanisms as *Six Layers* has it. Nothing else moves —
+the callout carried no links, so the citations registry is untouched.
+
+## 2026-09-01 — the 2.3 written output is re-commissioned, on the owner's instruction
+
+The owner re-scoped the module's written output in review: three hours, with
+internet research as part of the task, and the genre changed from red-lining
+treaty text to the memo a notional RAND sponsor would actually commission —
+an overview of the intelligence mechanisms that exist today for telling what
+is happening in AI training. Her definition of the reader, verbatim in
+intent: someone trying to understand what we can actually track, and what we
+cannot.
+
+What changed, and where everything went:
+
+- **The memo slot** (`memos.ts`) is now "What we can see today": survey the
+  mechanisms, one honest sentence each on what it establishes and what
+  defeats it; at least three self-found public artifacts from the last two
+  years, cited by link; bottom line first (the two mechanisms you would
+  weight most); end on the worst blind spot and which other layer covers it.
+  900 words, peer-reviewed, five new criteria. The slot id was renamed
+  `m2-3-ntm-redline` → `m2-3-intel-overview` — safe only because the branch
+  is an unmerged preview and no learner drafts exist under the old key; on a
+  shipped surface the id would have been permanent.
+- **The red-line did not die; it went home to 2.3.4.** The workspace was
+  always there; the source packet (MIRI mark-up text, NSS 2025, PRC GAIGI,
+  Kissinger), the draft-from-scratch option, and the annotated exemplar fold
+  moved from 2.3.5 to sit directly under it, with seam edits only ("After
+  you file" → "After you commit"; the rule line now says the exemplar, not
+  the written output, tests your answers). Every packet link moved with its
+  text, so the citations registry needed no change.
+- **2.3.5's Written Output section** now carries the commission and a packet
+  of the module's four papers plus the open web. Cross-references retargeted:
+  2.3.2's sharing extension "feeds 2.3.4" (not the memo), 2.3.4's two
+  carry-this-forward lines point at the mark-up below, and the who-watches
+  drill kicker likewise.
+- **Time**: `v-intel-action` 180 → 240 minutes; the module totals 540 (nine
+  hours), above the owner's eight-hour floor. Generators re-run
+  (`memos.js`, `course.js`).
+
+The constructive-alignment note: the spec's Create-level objective was
+two-part — draft the NTM article, and produce a monitoring-recommendation
+memo naming residual blind spots and their sibling owners. The written
+output now examines the second part; the first stays examined by the 2.3.4
+workspace and its exemplar, un-graded.
+
+## 2026-09-02 — 2.4 folds into 2.3, and 2.3 is reorganised by collection discipline
+
+Course owner, in review, after the literature check: the four core papers keep
+human sources inside the intelligence-based family (Wasil files whistleblowers
+under national technical means; *Six Layers* makes national intelligence one of
+its three personnel-based layers, §4.3; Scher and Thiergart's intelligence
+block carries HUMINT; Baker pairs agency tips with whistleblowers), so the
+human layer is read inside 2.3 rather than as a submodule of its own. The new
+spine is the collection map's disciplines, one section each, with the human
+layer as the HUMINT sections and the access-dependent remainder placed at the
+end of the walk. Everything the owner ruled out is in git at `9b329f2a`, the
+last commit before this one.
+
+The owner's rulings, applied one by one:
+
+- **Structure by discipline**, head first: what intelligence-based mechanisms
+  are, plus the collection map. Then OSINT, IMINT/GEOINT, MASINT, FININT,
+  SIGINT, CYBER, the human layer, audits and inspections, assessment, and a
+  closing section that is a summary and the memo.
+- **FININT is the eighth discipline** (owner: yes). The collection map gains a
+  card; financial intelligence is the field's highest-rated stream (Scher and
+  Thiergart: High, under a year) and was missing from the seven.
+- **IMINT and GEOINT read as one section**: the AI-verification literature
+  says "satellite imagery" and never separates them.
+- **The empirical anchor section is deleted** (owner: the IAEA cases are
+  already covered in earlier modules — precedents.mdx). Baker's finding
+  survives as one paragraph at the head of the module; the case-files drill,
+  the Baker reading card, and the caveats section go.
+- **Intelligence institutions and treaty design is deleted** (owner: "this
+  has no place in 2.3"). Definition 17, the NTM red-line workspace, its
+  exemplar, the sharing/protection/architecture sections, and the
+  clause-anatomy and who-watches benches go with it. Where that material
+  should live, if anywhere, is an open question for the owner.
+- **The Analyst Desk is deleted** (owner: throw it out; the last section is
+  only a summary and the memo). The Cold Open goes with it — it existed only
+  to be unsealed at the desk.
+- **Assessment stays**, checked against modules 0 and 1 for repeats: the
+  1991 Iraq nuclear program is theirs; the 2002–03 Iraq WMD estimate, base
+  rates, Heuer, and the false-alarm arithmetic are not, so nothing was cut.
+  The feasibility-cards fold moved here from the old signatures section.
+- **All of 2.4's material and exercises are preserved** (owner: "I still want
+  to keep our exercises and materials from 2.4"). The four lessons keep their
+  files, slugs, exercises, and unit `2.4` in the join — so learner progress and
+  the skill map's rung tags survive — and renumber to 2.3.7–2.3.10. The old 2.4
+  intro's paragraph and objectives block now open 2.3.7; seam edits only ("In
+  this module" → "In this part of the module"; the objectives scope reads "the
+  human layer"; 2.3.10's "final section of this module" → "final section on
+  the human layer").
+- **No source packet for the memo** (owner: it does not exist; learners use
+  the course or search). The packet list is gone from the written-output
+  section; the brief's red-line sentence is replaced. The GAO report the owner
+  approved (GAO-23-105698, *U.S. May Face Challenges in Verifying Future Treaty
+  Goals*) is a reading card beside the desk, as the genre done for real.
+- **The mastery checkpoint drops the NTM-obligations item** (its material left
+  the module) and is seven items, six the bar; the remaining correctives point
+  at the renumbered sections.
+
+New text is assembled from what the module already carried plus verbatim
+passages from the two committed artifacts: *Six Layers* §4.4's OSINT entry and
+§4.3.1's national-intelligence paragraph, the MIRI draft's transmission-lines
+passage (Appendix D) and its "fund pilot verification efforts using open-source
+intelligence or satellite data" recommendation, and three rows of Scher and
+Thiergart's locating-compute table from the ported data (FININT, underground
+construction, cyber operations and communication surveillance). SIGINT and
+CYBER are reading sections and say so: the AI-verification literature gives
+them a sentence each. A CYBER exercise is still to be discussed with the
+owner. OSINT harvest, for the record: Wasil treats no open-source method
+(customs data is the nearest) and Scher and Thiergart's table has no OSINT
+row; the OSINT section states that rather than papering over it.
+
+Minutes: head 20; OSINT 25; imagery 25; MASINT 40; FININT 20; SIGINT 10;
+CYBER 10; insiders 35; reporting 60; audits 30; institutions 25; assessment
+80; summary and memo 200 — 580 in all. Exercise ids and storage keys of every
+kept widget are unchanged; the five removed widgets are unregistered and their
+files deleted. Citations: the PRC GAIGI entry left with the packet that cited
+it; the GAO entry is new.
+
+## 2026-09-02 — consistency pass: the human layer is addressed as 2.3 everywhere
+
+Course owner, on the merge above: the human layer must be addressed as part
+of 2.3, not as a layer that happens to sit inside it — check consistency. The
+sweep found the footprint of "2.4" well beyond the four lessons:
+
+- **The unit folds too.** The four human lessons now join unit `2.3`
+  (`verificationUnitOfLesson`); unit `2.4` and its meta row are gone, and
+  course.js draws one unit. Cost, stated: a static-site learner who had
+  marked unit 2.4 complete keeps an inert id in their store — app progress
+  is per lesson id, and none of those changed. Skill-map rung tags on `2.4`
+  retag to `2.3` in both `data/skills.js` and its TS mirror (`incentives`,
+  `confverif`, `human`); the compound rung is `2.1–2.3` over three buckets;
+  the map's `rev` and `SKILLS_REV` bump to 3 together, as their comment asks.
+- **A dead link.** 2.0.1 (`mechanism-privacy.mdx`) pointed "Module 2.4" at the
+  retired `human-intro` slug — a 404 since the merge. It now sends readers
+  to 2.3's human-layer sections at `human-insiders`.
+- **Widget chrome and drill copy** carried the old numbers: the eyebrows
+  "· 2.4.1" to "· 2.4.4" in the insiders and reporting widgets and the
+  policy labs; the missing-board and policy-on-paper reveals; the limitations
+  ledger's sibling-owner option "2.4 human layer" (now "the human layer,
+  2.3.7–2.3.10") and a reveal that still scored against the Analyst Desk;
+  the assessment deck's own "2.3.3" intro. All renumbered.
+- **The lessons address themselves by number**: 2.3.7's opener reads "In
+  2.3.7–2.3.10, you will learn…" with the objectives scoped to those
+  sections; 2.3.10 opens "In 2.3.10, the last of the human-layer sections";
+  the head says the human layer is read "here, as 2.3.7–2.3.10".
+- **Module 2 has three buckets now**, and its summary says so. The capstone
+  briefs that named "Verification 2.4 — the human layer" as a prerequisite
+  name "Verification 2.3 — intelligence and the human layer"; the ones that
+  said "the four layers" of Module 2 say "the evidence layers" (label
+  `Verification 2.x — the evidence layers`); the whistleblower brief's
+  "Module 2.4 says…" reads "Module 2.3's human-layer sections say…". The bank
+  is regenerated from the briefs. The context distiller's "2.4.1"/"2.4.4"
+  are sections of the fictional system card it distills, and stay.
+
+## 2026-09-02 — second consistency pass, on the owner's "go through everything again"
+
+A wider sweep than the first: retired slugs and ids (none left), retired
+concepts, every `2.3.N` pointer in every lesson and data file of the course
+(all resolve to the new map; the context distiller's `2.3.4`–`2.3.6` and
+`2.4.x` are sections of the fictional system card it distills and stay),
+layer-count copy in the app pages and static scripts, the guidance files, and
+a full-page render of the head, 2.3.7 and 2.3.12. What it found:
+
+- The skill map's history rung still read "Empirical anchor: what national
+  intelligence found…" — the section is gone, the finding is in the head;
+  the label drops the section name.
+- The ISIS citation's registry blurb called the brief "an underlying
+  document of the module's case files"; it is now the imagery card
+  practiced on a real undeclared site.
+- The About page listed Module 2 "across the hardware, cloud, intelligence
+  and human layers"; it now says the human layer is read inside intelligence.
+- Three static-script comments (platform.js, map.js, notebook.js) still
+  described the compound rung as `2.1–2.4` filling by quarters; the code
+  reads `compoundRung`/`compoundUnits` from skills.js and needed nothing.
+- CLAUDE.md's Title-Case note named "Module 2.4" as the conformed module; it
+  now names the former 2.4 as 2.3.7–2.3.10.
+- The collection map's language-and-records family is five cards since
+  FININT joined; in a four-column grid the fifth sat alone on a second row.
+  The family grids now take five and three columns respectively.
+
+Left alone, on purpose: `data/exercises.js`'s orphaned `ex-evasion` table
+still names "these four layers" — its own four columns (hardware, cloud,
+intelligence, human) feed the capstone red-team table, and collapsing them
+is a content decision for the owner, recorded here rather than made.
+
+## 2026-09-02 — task statements rewritten as tasks, on the owner's instruction
+
+Course owner, on 2.3.10's standard-of-proof exercise ("One allegation. Four
+dockets — the evidence in front of an institution, and the institution
+holding it."): the phrasing is bad, and every task in the module is to be
+formulated the way a task-setting centre would formulate it — what is given,
+what to do, what counts as done — with no fragments for effect, no
+unexplained metaphors, no nonsense terms. The pass covered every exercise
+the merged 2.3 embeds — data files, widget copy, marking key, lesson
+lead-ins, checkpoint correctives, and the memo brief.
+
+What changed, by exercise:
+
+- **Standard of proof**: "docket" (a court-calendar term used to mean a
+  case) is gone from the data, the widget, and the marking key; the intro
+  states the setup plainly (one allegation received four times, each case
+  pairing evidence with the institution that must act on it); the task is
+  "choose the institution's next step, then justify it in three parts"; the
+  reveal states the hidden 2×2 in plain words; case titles read "Converging
+  evidence" and "A single channel". The code identifiers followed
+  (`PROOF_CASES`, `ProofCase`).
+- **Missing board**: "Aim for around a few sentences" became "two to four
+  sentences per station"; the finder and judge prompts say whose part is
+  being cast; the closing prompt and the strain prompt are plain questions.
+- **Construct a case**: the reveal kickers are "Failure point: …"; the
+  heading "Where a report can die" is "Where a report can fail".
+- **Inspection order** (policy labs): the instruction names Project Lattice
+  and says what to decide instead of "set the ceiling imposed by access".
+- **Drill benches**: the Fermi bench drops "Derive, never plug in" and
+  "Derive it; don't receive it" for "work the numbers out yourself;
+  reference values appear only after you commit"; the assessment deck drops
+  "prices the base rate", "places every bound with its sibling owner",
+  "canonical failure case", "the bias menu's words", and "calibrated
+  verdict" for plain statements of the same tasks.
+- **Feasibility cards**: the widget's eyebrow and paragraphs, the lesson
+  fold, and the red-team prompt say what to do in order ("commit a rating
+  and a timeline with a short reason before the field's rating is shown,
+  then compare").
+- **Lead-ins and the memo**: the power-explainer lead-in drops "the decay
+  clock running against the whole signature"; the assessment lead-in drops
+  "a question the module refuses to answer for you"; the written-output
+  lead-in and the memo brief are stated as tasks (the brief also lists human
+  sources among the mechanisms, since the human layer now sits in 2.3); two
+  checkpoint correctives drop "beat" and "carries this exact trade".
+
+Explanatory reveal prose (the missing-board commentary, the drill reveals,
+the power explainer's captions) was left in its register: it explains,
+it does not set a task. The same pass has not been made over modules 0–2.2.
+
+## 2026-09-02 — the red-line packet's sources are gone with it
+
+Owner, reading the 2026-09-01 packet entry above ("Kissinger's World Order is
+cited with page locators…"): if the module does not use Kissinger, it must
+not cite him. Checked against the live content after the deletions: no
+lesson, data file, widget, memo brief, or citations entry in 2.3 names
+Kissinger, *World Order*, NSS 2025, the PRC Global AI Governance Initiative,
+Gottemoeller, or Glaser. They were the source packet of the red-line memo and
+left with the institutions section; the entry above stands as the record of
+what that packet was. The one historical example that remains in the debates
+fold — the Niger forgeries, as the standing warning that shared documents
+might be fake — is Baker's point and is cited to Baker.
+
+## 2026-09-02 — the collection map is labelled the way the references label it
+
+Course owner, on the map's copy ("Eight ways a watcher sees… those that
+collect language and records, and those that collect physics"): this is
+model-speak; look at how such taxonomies are labelled where people wrote the
+text. Checked against three human-written references: the Naval War College
+library guide ("There are five main ways of collecting intelligence that are
+often referred to as 'intelligence collection disciplines' or the 'INTs'"),
+the ODNI definitions of the disciplines, and Clark's *Intelligence
+Collection*, whose Part I is "Literal collection" (OSINT, HUMINT, COMINT,
+cyber) and Part II "Nonliteral collection" (imaging, radar, MASINT) — the
+division the map already used under invented names. The map is now titled
+"Intelligence collection disciplines", its lede states the division in
+Clark's terms and credits him, the family labels are "Literal collection" and
+"Nonliteral collection", the card definitions follow the ODNI/NWC wording
+(SIGINT as COMINT and ELINT; MASINT as technically derived intelligence other
+than imagery and signals; GEOINT as the analysis and visual representation of
+activity on the earth; FININT as intelligence gathered from the analysis of
+monetary transactions), the field labels are "What it collects" and
+"Limitations", and the legend is an instruction. The head lesson's section
+and the closing summary line use the same terms.
+
+Owner, same day, on the relabelled map: do not credit Clark — the
+literal/nonliteral division is standard across textbooks. The attribution is
+removed from the map's lede, the head lesson's section, and the closing
+summary; the division and its labels stay.
+
+## 2026-09-02 — 2.3.4 gets the Basel Institute material
+
+Owner: the Basel Institute on Governance has good material on this; and add
+a section saying that if you want to spend more time on it, the Institute
+runs free interactive online courses, with links. Two optional reading cards
+(*Quick Guide 15: Following the money*, 1,068 words, ~5 min; *Quick Guide 19:
+Offshore structures and beneficial ownership*, 2,191 words, ~10 min — both
+measured from the PDFs) and an "Optional: Going Further" section pointing at
+Basel LEARN's Operational Analysis and Source and Application of Funds
+courses and the platform. Five citations-registry entries. The IMF and
+Egmont FIU overviews proposed earlier are not used.
+
+## 2026-09-02 — three readings from the owner's "find new OSINT articles about AI" ask
+
+Owner, on the general-method readings proposed earlier: no 62-page RAND
+report in OSINT, and the pages should be about OSINT for training runs and
+AI specifically — find new articles by respected people. Searched; the
+owner placed what survived: Epoch AI's *Introducing the Frontier Data Centers
+Hub* (Nov. 2025, ~1,100 words) goes in 2.3.2 as the imagery method written up
+by its practitioners, not in OSINT; the Memphis turbines case (TechCrunch,
+18 June 2025: SELC-commissioned aerial photos, 35 turbines; thermal images a
+month later, at least 33 running; the July permit for 15) goes in 2.3.3 under
+the sentence that already named Memphis; Scher's *Verifying Restrictions on
+Frontier AI Research* (arXiv, June 2026; 28 mechanisms, the "Covert projects"
+subsection) goes in the head's readings as the newest catalogue. All three
+optional, 5 + 5 + 10 minutes. Mercado's 2004 OSINT essay was read and set
+aside: history and institutional argument, not method. Considered and not
+placed: Rahman, *Does Distributed Training Undermine Compute Governance?*
+(May 2026) — awaiting the owner's call after the affiliation check (MIRI
+technical governance team; previously Epoch AI); Rahman and Tajdari's
+zero-overhead telemetry paper (June 2026) belongs to the hardware and cloud
+layers, not here.
+
+## 2026-09-03 — Rahman 2026 placed in 2.3.11, whole
+
+Owner, after a chapter-by-chapter retelling of Rahman, *Does Distributed
+Training Undermine Compute Governance?* (arXiv 2605.29359, 28 May 2026;
+13 pages, six of them body): put it in 2.3, in the most suitable section,
+whole — not the partial assignment (abstract, §1, §4, §5.3, §6, Appendix G)
+proposed the day before. It sits in 2.3.11 directly under the bounds
+paragraph whose last sentence it measures ("distributed development spreads
+compute thinner"): the paper's premise (a frontier datacenter cannot hide
+from the grid or the satellite) supports 2.3.2–2.3.3, its evasion (nodes
+below the monitoring threshold are invisible to thermal and electrical
+means) is the blind spot the memo asks for, and its Appendix G names what
+covers it — whistleblowers, financial and procurement intelligence, chip
+registries with a memory threshold, challenge inspections coordinated across
+the suspected network — while grading bandwidth caps and traffic monitoring
+as not holding. Optional, like every paper card in 2.3 except Wasil; 35
+minutes, measured from the 8,300 words of body and appendices without the
+references. One citations-registry entry. The section's minutes are
+unchanged: optional readings are not counted in them.
+
+Registry hygiene found on the way: the Scher 2026 and Scher–Thiergart URLs
+sat in `pending` as well as `entries` (parked by the bulk collector before
+their entries were written, never removed). The appendix printed them
+regardless — it filters on entries and counts only entry-less pending URLs
+as waiting — so nothing was hidden, but a URL belongs in one list, and the
+two pending lines are gone.
+
+## 2026-09-03 — 2.3.1 gets a fact-checking card and a "Going Further" pointer
+
+Owner: add Research Clinic to OSINT's "if you want to learn more", and an
+optional card to an outside resource, GIJN's fact-checking chapter. Both
+placed at the end of 2.3.1. The card is *Introduction to Investigative
+Journalism: Fact-Checking* (Mariam Elba, Global Investigative Journalism
+Network, 26 Nov. 2024), about 2,000 words, 10 minutes, optional: internal
+pre-publication checking — annotate every statement of fact with its
+source, prefer primary documents, archive links, the fact-checking desk's
+questions. gijn.org blocks the build sandbox (Cloudflare challenge, then
+connection resets, the Wayback copy too); the text was read through a text
+relay and the authorship and date corroborated on Margot Williams's Substack
+repost of the chapter ("with permission from GIJN"). The pointer section is
+"Going Further", the 2.3.4 format: Research Clinic, Paul Myers's link
+library kept since 2003 alongside his training courses, free, a directory
+rather than a course. Two registry entries; the registry's entries are
+back in URL order (the Rahman entry had been inserted after the Scher one).
+
+## 2026-09-03 — SIGINT merged into cyber; 2.3 is eleven sections
+
+Owner ("Да сливаем"), after the inventory showed 2.3.5 Signals intelligence
+as 290 words of prose with nothing to read and nothing to do: the
+literature never separates signals from cyber (one row in Scher and
+Thiergart, one list in *Six Layers*, both words in Definition 17), so the two
+sections are one — "2.3.5 Signals and cyber intelligence", at the cyber
+lesson's id, slug and file, 20 minutes (the two sections' sum, until its
+readings and exercise are chosen). The SIGINT lesson's two usable paragraphs
+moved over: the arms-control NTM precedent (satellites and signals counted
+silos and launchers, noninterference clauses) and the sources-and-methods
+limit (Baker §2.3.3), which the cyber prose had been restating as "everything
+2.3.5 said, with more force". `intelligence-sigint.mdx` and the
+`v-intel-sigint` entry are gone (recoverable at 00df3d2c). The sections after
+it move down one: 2.3.6 Insiders, 2.3.7 Reporting and protection, 2.3.8 Audits
+and inspections, 2.3.9 Institutions, 2.3.10 Assessment, 2.3.11 Summary and
+written output. Every cross-reference by number was swept — head lesson,
+Objectives scope, widget eyebrows, drill copy, the capstone briefs, the module
+1 privacy lesson's link, CLAUDE.md — and course.js and the capstone bank
+regenerated. Unit minutes unchanged at 580. Not renumbered on purpose:
+`context-distiller.ts`'s `sec` fields (system-card section numbers, not
+ours) and the historical outline spec.
+
+Still open for the merged section, per the owner: which reading (Warner's
+"Intelligence in Cyber, and Cyber in Intelligence" proposed as the section's
+reading, ODNI's "Background: The Analytic Process and Cyber Incident
+Attribution" with Annex B as the short second) and which exercise ("Two
+capitals" from the Def 17 paragraph; "Natanz through the inspectors' eyes"
+from ISIS 2010 and Langner; a Q Model ledger from Rid and Buchanan).
+
+## 2026-09-03 — 2.3.5 gets its reading and its exercise
+
+Owner: Warner as the section's reading, "if it is about the capabilities of
+cyber as such — go ahead"; and the exercise is the question itself, "in
+bullet points, sketch how cyber could be used in the context of
+verification". Placed: *Intelligence in Cyber—and Cyber in Intelligence*
+(Michael Warner, ch. 1 of *Understanding Cyber Conflict: Fourteen Analogies*,
+Georgetown UP 2017; the free chapter PDF Carnegie hosts, 14 pages, ~6,900
+words, 30 minutes), required. Honest note on the owner's condition: the
+chapter argues that cyber operations are intelligence in nature and history
+(espionage and counterespionage moved into cyberspace intact; common roots in
+signals intelligence, computer security and electronic warfare; what is new
+is scale and the permanence of data; blown collection ends in a purge, not a
+war; spying and attacking were always blurry), and states capabilities in
+passing rather than as a catalogue. It is the right frame for the section's
+question and not a capabilities text; the card says what to read it for.
+
+The exercise is an `understanding-check` (`v-intel-cyber-uses`, the first in
+the Verification track; the platform's write-then-compare card, not
+persisted): the prompt asks for five to eight bullets, each saying what is
+collected, against whom, and what a finding settles. The sample answer is
+eight bullets assembled from sources the module already carries — Scher and
+Thiergart's row; Scher 2026 §3.1 (known and unknown targets) and §3.4 (weights
+security); Rahman 2026 (the sub-threshold fallback and the very-low rating
+for traffic monitoring); *Six Layers* (supplemental mechanisms paired with
+inspections); Definition 17 and the NTM precedent; Baker §2.3.3; Warner on
+provocation and the spying/attacking line — nothing asserted beyond what
+those say, and one gap stated as a gap (Rahman does not rate collection from
+inside systems). Section minutes 20 → 45 (prose, the reading, the exercise);
+unit 2.3 meta 580 → 605. ODNI's attribution background and Annex B, the
+Kello review of Buchanan, and the Stoll and NOVA cards remain proposed, not
+placed.
+
+## 2026-09-03 — 2.3.5: Lin is the required reading; Warner moves to optional
+
+Owner, after a search for texts about cyber collection's capabilities as
+such: use Lin, make it required, and move the reading about the field's
+motivation to optional. Placed: Herbert S. Lin, *Offensive Cyber Operations
+and the Use of Force*, Journal of National Security Law & Policy 4 (2010),
+the Georgetown PDF; the assignment is Parts I and II, pp. 63–70, 3,443
+words measured from the PDF, 15 minutes, required. It gives what Warner did
+not: vulnerability, access and payload; easy targets on the Internet and
+difficult ones that need close access, with an adversary's important systems
+in the difficult class; exploitation against confidentiality versus attack
+against integrity, authenticity and availability; and the objectives list
+(traffic read for keywords, his examples "nuclear" and "plutonium";
+exfiltration of plans and passwords; network mapping by traffic analysis).
+Warner's chapter stays as the optional second card. The exercise's sample
+answer gains a ninth bullet from Lin, on access being physical and handing
+over to the human layer. Section minutes 45 → 30 (optional reading not
+counted); unit 2.3 meta 605 → 590. One registry entry.
+
+Searched and not placed, for the record: Kaspersky's *Equation Group:
+Questions and Answers* (2015; CNE since 2001, hard-drive firmware
+persistence, the Fanny air-gap worm; pp. 3–22, ~15 min) and the CrySyS
+*sKyWIper* (Flame) report's four-page summary — the "capabilities in the
+wild" pair, offered and awaiting a word; Rovner's intelligence-contest essay;
+Buchanan's *Legend of Sophistication*; Rid 2012's espionage section; the CRS
+cyberspace-operations primer. Unreachable from the sandbox: the NRC 2009
+report itself (Lin's article is its public account), the ISC 2015 report,
+Der Spiegel's TAO article.
+
+## 2026-09-03 — no Kaspersky sources
+
+Owner: "we will not touch Russian Kaspersky." The *Equation Group: Questions
+and Answers* report proposed above is withdrawn and is not to be proposed
+again; the same holds for any other Kaspersky material. The remaining
+"capabilities in the wild" candidates, if one is ever wanted, are the CrySyS
+Lab (Budapest University of Technology) *sKyWIper* summary and Citizen
+Lab's Pegasus reporting.
+
+## 2026-09-03 — the memo's budget is two hours
+
+Owner: cut the memo to 120 minutes. The slot has no time field; the budget
+lives in 2.3.11's Written Output prose ("Budget three hours" → "Budget two
+hours") and in the section's minutes (200 → 140; the memo was 180 of them).
+Unit 2.3 meta 590 → 530. The brief's length (900 words) and its research
+requirement (three public artifacts found by the author) are unchanged
+pending the owner's word: they were set against three hours.
+
+## 2026-09-03 — 2.3.1, 2.3.2, 2.3.4 get required readings and exercises; six repetitions fixed
+
+Owner, on the three sections whose minutes had nothing required behind
+them: make the readings required, or build exercises on them inside those
+minutes. Done both, minutes unchanged (25/25/20). Each card now names the
+assigned part, and each part was measured from the page or PDF:
+
+- 2.3.1: FAS, *Tracking Hyperscale AI Data Center Growth with Satellite
+  Imagery* — Christina Krawec, 12 May 2026 (the card had said "Federation
+  of American Scientists, 2025, 10 min"; the whole piece is ~8,900 words).
+  Assigned: Case Study 2 (Colossus feature identification) and the Key
+  Takeaways, ~2,900 words, 13 min. Exercise `v-intel-osint-fas`: what each
+  of the four sources established (the utility's annotation, the permit, the
+  civil-society flight, the October 2025 image) and what none could. GIJN
+  stays optional, as placed.
+- 2.3.2: Epoch's hub post required (5 min) and now carrying the methodology
+  link; ISIS, *The Al Kibar Reactor* required — assigned the introduction
+  (pp. 1–3) and "Summary and Lessons" (pp. 28–30), ~2,600 words, 12 min (the
+  card had said 15 min for the whole; the whole is ~5,600 words, 24 min).
+  Exercise `v-intel-imagery-al-kibar`: the expected signatures and how each
+  was hidden, what imagery alone established, what settled it (photographs
+  from a friendly service — human intelligence).
+- 2.3.4: Epoch, *Diversion and Resale* — Isabel Juniewicz, 29 Apr. 2026 (the
+  card had said "Epoch AI, 2025, 12 min"; whole ~4,100 words). Assigned Key
+  takeaways through Combined results, ~2,500 words, 11 min. Exercise
+  `v-intel-finint-smuggling`: the two evidence streams, and that none of the
+  section's named streams (customs, licences, financial intelligence) is
+  among them. Basel cards stay optional.
+
+All three exercises are `understanding-check` cards with sample answers
+drawn from the assigned pages only. Registry entries for FAS and Epoch
+smuggling corrected (author, date).
+
+Repetitions, per the owner's "давай починим":
+1. The *Six Layers* national-intelligence paragraph is no longer quoted in
+   the head; a sentence states its placement and points at 2.3.6, which
+   reproduces §4.3 whole. 2.3.5 now refers to "the paragraph 2.3.6
+   reproduces". 2.3.6's intro gains one seam sentence: the third category is
+   the layer 2.3.1–2.3.5 just walked; this section and the next three take
+   the first two.
+2. "Supplemental": the collection map's OSINT card no longer restates the
+   *Six Layers* classification, and 2.3.1's lede refers to the module's
+   opening instead of restating it. It is stated in the head, summed in
+   2.3.10's Bounds, and recapped in Eight Lines.
+3. Epoch's method is stated once, in 2.3.2's hub card (with the methodology
+   link); 2.3.1's prose and its FAS card no longer repeat it.
+4. The ~500-site count is sourced to 2.3.3; 2.3.10's base-rate bullet says
+   so. The bench's own use and the recap stay.
+5. 2.3.5's two sources-and-methods paragraphs are one.
+6. The limitations ledger is named as the memo's middle in draft, in 2.3.10's
+   bench intro and in 2.3.11's Written Output.
+
+## 2026-09-03 — the four write-then-compare checks now persist
+
+Owner, on 2.3.5's exercise being the one piece of writing in the module
+that was not saved: why. Answer: the platform's `understanding-check` card
+was the only ready write-then-compare mechanism and it keeps its text in
+the browser; the persisted `writing-prompt` type had no model answer to
+show. That trade-off was made silently and was the wrong one for a module
+where every other piece of writing is saved. Fixed at the platform level,
+scoped to writing exercises: `WritingExercise` gains an optional
+`sampleAnswer`, rendered once the learner has submitted (commit before the
+answer, the house pattern), in place of the grader card. The four checks
+(`v-intel-cyber-uses`, `v-intel-osint-fas`, `v-intel-imagery-al-kibar`,
+`v-intel-finint-smuggling`) are now `writing-prompt`s with a sample answer:
+drafts autosave, submission is a row, reopen works, signed-out shows the
+usual "sign in to save" card. Their ids stay outside the `v-task-` prefix, so
+the completion page's list of required written work does not grow: they are
+section checks, not the module's written output. The Control track's 33
+understanding checks are untouched.
+
+## 2026-09-03 — copy pass: headings and prose in the register of a policy textbook
+
+Owner: "Check formulations for llmisms and check against how policy
+textbooks and ЦПМ are formulating stuff normally pls. Esp headers im
+crying." Applied to every 2.3 text this session authored: the seven
+intelligence lessons, the two drill decks, the three widgets, the four
+sample answers, the widget registry titles, and the memo slot's criteria.
+The 2.4 author's prose in 2.3.6–2.3.9 is untouched apart from the one seam
+sentence in 2.3.6, now "The third category is the subject of 2.3.1–2.3.5;
+this section and the next three cover the first two." Quotes, links, ids,
+storage keys, reading assignments, and the checks' answers are unchanged.
+
+Headings, before → after:
+
+- 2.3: What Intelligence-Based Mechanisms Are → Definition; What the Traces
+  Are → Signatures.
+- 2.3.1: What the Literature Gives It → In the Literature; The Stream in
+  Practice → In Practice.
+- 2.3.2: What Imagery Settles → Evidential Value.
+- 2.3.3: Thermal → Thermal Signatures; The Power Signature, Live →
+  Interactive: The Power Signature.
+- 2.3.5: What the Literature Says → In the Literature; What the Precedent
+  Carries → Precedent; The Characteristic Limits → Limits.
+- 2.3.10: What Breaks the Chain → Sources of Error; What a Source Is Worth →
+  Evaluating a Source; The Progression → From Anomaly to Suspected
+  Non-Compliance; The Bounds, in Sum → Limits of the Layer.
+- 2.3.11: Comparing Against Declarations → Comparison with Declarations;
+  Escalating → Escalation; Recording What You Did Not Resolve → The Record;
+  The Module in Eight Lines → Summary; Mastery Checkpoint → Review Questions.
+- Drill decks: "Drill Bench: Judgment Under Uncertainty" → "Drill Bench:
+  Assessment" (benches False alarms, Post-mortem, Limitations table; the
+  deck's title in the widget registry changed with it); "Fermi bench" →
+  "Fermi estimate"; "Four Levers, One Each" → "Four Levers".
+
+Prose rules applied, sentence by sentence rather than as a sweep: a
+fragment became a sentence; the "not X but Y" and "that is the point, not
+an apology" constructions went; the module's private metaphors (ladder,
+rung, haystack, autopsy, ledger, decay clock, real-world colour) became
+the plain term (sequence, step, candidate sites, post-mortem, table,
+decay, case); every allusion now carries its referent in the same sentence
+(Curveball, the Niger documents, the aluminum tubes); a review question's
+`why` names the section to revisit by number. The memo brief itself is the
+owner's wording and stands; only its five criteria were reworded. Checked:
+content, MDX and verification suites (480 tests), typecheck, eslint on the
+touched files, memos.js regenerated, and all nine 2.3 pages rendered on a
+dev server with the new headings.
+
+Correction, same day, owner: "Intelligence based очень важные слова" — the
+head's first heading is "Intelligence-Based Mechanisms", not "Definition".
+The list above is otherwise as applied.
+
+## 2026-09-03 — one objectives block for all of 2.3, in the head
+
+Owner: learning objectives for the whole of 2.3, in 2.3 only, and done
+properly. Before drafting, what had been planned was collected: the
+playground's 2.3 design spec ("by the end of the module the learner can"
+paragraph and its five-level outcome map), the owner's goal sentence at the
+end of the outline's 2.3 intro ("say three things about it: what it
+establishes, what else would explain it, and what it justifies doing next"),
+module 2's own block in 2.0 (the costly-vs-cheap-signals bullet), the skill
+map's Intelligence-sources goals, and the owner's four human-layer
+objectives that had opened 2.3.6. No per-section objectives for
+2.3.1–2.3.5, 2.3.10 or 2.3.11 existed anywhere.
+
+The block: `<Objectives scope="this submodule">` in `intelligence-intro.mdx`,
+placed directly after the owner's goal sentence so that sentence introduces
+it. The 2.3.6 block is removed; its four objectives are carried into the
+head verbatim as items 4–7 (moved, not reworded). Nothing else in 2.3 states
+objectives: 2.3.6's "In 2.3.6–2.3.9, you will learn…" is the owner's
+opening prose and stays; the skill map's goals are the map's own surface,
+not lesson objectives, and stay; 2.0's module-level block covers all of
+module 2 and stays.
+
+Method, so the next edit can argue with it rather than re-derive it:
+
+- Verb first, at the level the section actually assesses, then the object,
+  then the condition or standard. No "understand", "know", "be familiar
+  with".
+- Every objective is taught in a named section and assessed by a named
+  instrument in the module. Optional material (Rahman, the feasibility
+  cards, the debates, Basel LEARN, GIJN) generates no objective.
+- Order follows the module, so the list is a map: technical layer (1–3),
+  human layer (4–7), assessment and response (8–9), written output (10).
+  Items 1, 8 and 9 are the owner's three things, itemised: what a signal
+  establishes, what else would explain it, what it justifies doing next.
+- Vocabulary is the lessons' own (signature families, collection
+  disciplines, verification lead, suspected non-compliance, challenge
+  inspection), so each objective can be found in the text.
+- One sentence each, under forty words; the owner's four are as supplied.
+
+Alignment, objective → taught in → assessed by:
+
+| # | Taught in | Assessed by |
+| --- | --- | --- |
+| 1 signatures and disciplines | 2.3 Signatures, collection map; 2.3.1–2.3.5 | collection map; the four write-then-compare exercises (`v-intel-osint-fas`, `v-intel-imagery-al-kibar`, `v-intel-finint-smuggling`, `v-intel-cyber-uses`); review questions 1, 5 |
+| 2 power to compute | 2.3.3 | `drills-intel-signatures` (Fermi estimate: conversion, 130 MW scale-up, three-site triage); the power-signature explainer's decay panel |
+| 3 identifies, does not resolve; limits | 2.3 Intelligence-Based Mechanisms (Baker's tips); 2.3.5 Limits (sources and methods, voluntary sharing); 2.3.10 Limits of the Layer | review questions 2, 7; the cyber exercise's last bullet |
+| 4–7 human layer (owner's) | 2.3.6–2.3.9 | `human-insiders`, `human-reporting-protection`, `whistleblower-levers`, `human-institutions-judgment`, `human-audits-inspections`, `standard-of-proof`, `missing-board` |
+| 8 place a signal with confidence | 2.3.10 Sources of Error, Evaluating a Source, From Anomaly to Suspected Non-Compliance | `drills-intel-assessment` (False alarms, Post-mortem); review questions 3, 4, 6 |
+| 9 proportionate response, the record | 2.3.11 Comparison with Declarations, Escalation, The Record | Post-mortem step 3 (the calibrated verdict with its next steps); review question 4; the memo's bottom line |
+| 10 the overview memo | 2.3.11 Written Output | memo slot `m2-3-intel-overview`, its five criteria |
+
+Flagged, not changed: the owner's goal sentence ends "by the end you should
+be able to" and the component's fixed lead then says "By the end of this
+submodule, you will be able to:"; two "by the end" in a row. Cutting the
+sentence is her call (it was flagged once before, 2026-08-13, and kept).
+Checked: content, MDX and verification suites (480), and both pages
+rendered on a dev server: the block appears once, in the head, and 2.3.6
+opens on the owner's paragraph.

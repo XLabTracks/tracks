@@ -27,17 +27,16 @@ export function DatacenterPower() {
       <div className="border-border bg-card rounded-xl border p-4">
         <p className="eyebrow text-muted-foreground">The energy signature, in numbers</p>
         <p className="mt-1.5 text-sm leading-relaxed">
-          A frontier campus draws like a small country. Drop a real facility
-          into a lineup of national grids: each bar is a country’s average
-          continuous electricity draw, and the marker is the facility you
-          picked. Then look at what a watcher can and cannot read off that
-          draw — the load shape — and how fast the whole signature is
-          shrinking.
+          A frontier campus draws as much power as a small country. Select a
+          facility to place it among national grids: each bar is a country’s
+          average continuous electricity draw, and the marker is the facility
+          selected. Below that: what a watcher can and cannot read from the
+          draw (the load shape), and how fast the signature is shrinking.
         </p>
       </div>
 
       <div className="border-border rounded-xl border p-4">
-        <p className="text-sm font-medium">Pick a facility</p>
+        <p className="text-sm font-medium">Select a facility</p>
         <div className="mt-2 flex flex-wrap gap-1.5">
           {DCP_FACILITIES.map((f) => (
             <button
@@ -121,24 +120,24 @@ export function DatacenterPower() {
           {facility.name}: {facility.mw} MW — {facility.note}.
         </p>
         <p className="text-muted-foreground mt-2 text-xs leading-relaxed">
-          Amber bars are grids the selected facility out-draws. Off this chart:
-          Poland {DCP_BIG_GRIDS[0]!.gw} GW, France {DCP_BIG_GRIDS[1]!.gw} GW,
-          Germany {DCP_BIG_GRIDS[2]!.gw} GW, United States {DCP_BIG_GRIDS[3]!.gw}{" "}
-          GW — where {DCP_META.usMW / 1000 >= 10 ? "~10.1" : ""} GW of tracked AI
-          datacentre draw already sits (90% of the world total). Ireland is the
-          canonical visible-in-the-grid case — datacentres already take ~20% of
+          Amber bars are grids that draw less than the selected facility. Not
+          on this chart: Poland {DCP_BIG_GRIDS[0]!.gw} GW, France{" "}
+          {DCP_BIG_GRIDS[1]!.gw} GW, Germany {DCP_BIG_GRIDS[2]!.gw} GW, and the
+          United States {DCP_BIG_GRIDS[3]!.gw} GW, where about{" "}
+          {(DCP_META.usMW / 1000).toFixed(1)} GW of tracked AI datacenter draw
+          already sits (90% of the world total). Ireland is the standard case of
+          datacenters visible in national grid statistics, at about 20% of
           national electricity; Iceland’s smelter-dominated grid is the
-          comparable-load case MIRI’s Appendix D names.
+          comparable-load case named in MIRI’s Appendix D.
         </p>
       </div>
 
       <div className="border-border rounded-xl border p-4">
         <p className="text-sm font-medium">What the draw looks like over a day</p>
         <p className="text-muted-foreground mt-1 text-xs leading-relaxed">
-          Stylised load shapes, not measured traces — the point is the shape.
-          Training holds a narrow band around the clock; inference follows
-          human demand. A flat line at constant temperature is the thing the
-          thermal card watches for.
+          Stylised load shapes, not measured traces. Training holds a narrow
+          band around the clock; inference follows human demand. A flat load at
+          constant temperature is what thermal imaging looks for.
         </p>
         <div className="mt-3 overflow-x-auto">
           <svg
@@ -184,20 +183,20 @@ export function DatacenterPower() {
                 .join(" ")}
             />
             <text x={46} y={34} className="fill-amber-500" style={{ fontSize: 11, fontWeight: 600 }}>
-              training — flat, around the clock
+              training: flat, around the clock
             </text>
             <text x={46} y={96} className="fill-sky-600" style={{ fontSize: 11, fontWeight: 600 }}>
-              inference — follows human demand
+              inference: follows human demand
             </text>
           </svg>
         </div>
       </div>
 
       <div className="border-border rounded-xl border p-4">
-        <p className="text-sm font-medium">The decay clock</p>
+        <p className="text-sm font-medium">The decay of the signature</p>
         <p className="text-muted-foreground mt-1 text-xs leading-relaxed">
-          Performance-per-watt improves about {DCP_DECAY.ratePerYear}× a year,
-          so the power a fixed training workload needs shrinks annually. The
+          Performance per watt improves about {DCP_DECAY.ratePerYear}× a year,
+          so the power a fixed training workload needs falls each year. The
           same workload that draws {DCP_DECAY.startMW} MW in{" "}
           {DCP_DECAY.startYear}:
         </p>
@@ -247,9 +246,10 @@ export function DatacenterPower() {
           </svg>
         </div>
         <p className="text-muted-foreground mt-2 text-xs leading-relaxed">
-          Six years in, the same run hides under 15 MW — below the ~10 MW
-          haystack floor is within sight. “Below threshold” is a date, not a
-          fact, and the energy signature is the module’s most perishable tool.
+          After six years the same run draws under 15 MW, close to the ~10 MW
+          floor of the candidate-site count. “Below threshold” is a statement
+          about a date, and the energy signature is the module’s most
+          perishable tool.
         </p>
       </div>
 

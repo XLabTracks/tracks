@@ -1,35 +1,38 @@
-The physics a facility cannot help emitting: the heat it dumps and the power it
-draws. This is the module's most quantitative stream and its most perishable.
+Measurement and signature intelligence reads what a facility cannot avoid
+emitting: the heat it dumps and the power it draws. It is the module's most
+quantitative stream and the one that decays fastest.
 
-## Thermal
+## Thermal Signatures
 
-Waste heat, and the narrow temperature band of constant chip operation. Infrared
-imaging, or heat inferred from rooftops where snow never accumulates in winter
-(Baker, footnote 127). Sensing capability is actively improving — HotSat-class
-commercial thermal satellites are the current example, and SatVu has published
-a [thermal image of a live US datacentre](https://www.satellitevu.com/news/satvu-releases-first-of-its-kind-thermal-image-revealing-true-operational-activity-inside-major-u-s-data-centre),
-rooftop cooling, substations, and electrical yards read as active or dormant
-from orbit.
+The signature is waste heat, held in the narrow temperature band of constant
+chip operation. It is read by infrared imaging, or inferred from rooftops where
+snow does not accumulate in winter (Baker, footnote 127). Sensing capability is
+improving: HotSat-class commercial thermal satellites are the current example,
+and SatVu has published a
+[thermal image of a live US datacenter](https://www.satellitevu.com/news/satvu-releases-first-of-its-kind-thermal-image-revealing-true-operational-activity-inside-major-u-s-data-centre)
+in which rooftop cooling, substations, and electrical yards read as active or
+dormant from orbit.
 
 ## Energy and the Power Grid
 
 Measured energy delivery can be converted into an approximate FLOP count,
-which makes large unauthorized runs detectable from power draw — coarse
-violations only (Wasil et al.). The grid connection that draw requires, and
-what it looks like from orbit, is 2.3.2's picture; this section is the number.
+which makes large unauthorized runs detectable from power draw; the method
+catches coarse violations only (Wasil et al.). The grid connection that such a
+draw requires, and what it looks like from orbit, is covered in 2.3.2. This
+section covers the number.
 
-Against that, Scher and Thiergart rate power-grid analysis only **Medium**
-feasibility — their sole non-High intelligence mechanism. Three reasons:
+Scher and Thiergart rate power-grid analysis at **Medium** feasibility, the
+only intelligence mechanism they do not rate High. They give three reasons:
 
 - Covert generation at the roughly 130 MW scale of a 100k-H100 cluster is
   plausible, comparable to military naval reactors.
-- Around 500 datacenters worldwide exceed 10 MW — a large haystack (2024–25
-  figures).
-- Chip performance-per-watt improves about 1.6× a year, steadily shrinking the
-  energy signature of any fixed quantity of compute.
+- Around 500 datacenters worldwide exceed 10 MW (2024–25 figures), so the set
+  of candidate sites is large.
+- Chip performance per watt improves about 1.6× a year, so the energy
+  signature of a fixed quantity of compute shrinks each year.
 
-Real-world colour: the xAI Memphis behind-the-meter gas turbines were surfaced
-by aerial thermal imaging — the signature and the workaround in one case.
+A case: xAI's behind-the-meter gas turbines in Memphis were detected by aerial
+thermal imaging. The case shows the signature and the workaround together.
 
 <ReadingCard
   id="intel-memphis-turbines"
@@ -41,32 +44,32 @@ by aerial thermal imaging — the signature and the workaround in one case.
   optional
 >
 
-The Memphis case as it was established: aerial photographs commissioned by the
+How the Memphis case was established: aerial photographs commissioned by the
 Southern Environmental Law Center in March 2025 showed 35 turbines around the
 Colossus site; thermal images about a month later showed at least 33 of them
-running; a June flight counted 26. The permit that followed
-([July 2025](https://techcrunch.com/2025/07/03/xai-gets-permits-for-15-natural-gas-generators-at-memphis-data-center/))
+running; a June flight counted 26. The permit issued in
+[July 2025](https://techcrunch.com/2025/07/03/xai-gets-permits-for-15-natural-gas-generators-at-memphis-data-center/)
 allows 15 generators, 247 MW.
 
 </ReadingCard>
 
-<Callout variant="note" title="Architecture changes the picture">
+<Callout variant="note" title="Power depends on architecture">
 
-Power consumption is architecture-dependent, so the same facility can change
-signature without changing size. Scaling an existing architecture by adding
-layers and shifting to a new architecture with a different compute profile
+Power consumption depends on architecture, so the same facility can change its
+signature without changing its size. Scaling an existing architecture by adding
+layers and moving to a new architecture with a different compute profile
 produce different curves, and inference and training draw differently again.
 See Scher et al., *An International Agreement to Prevent the Premature Creation
-of Artificial Superintelligence*, Appendix D — and connect it back to the
-development picture from Module 1.
+of Artificial Superintelligence*, Appendix D, and compare with the account of
+development in Module 1.
 
 </Callout>
 
 ## Underground Construction
 
-Scher and Thiergart carry one more measurement row, rated High feasibility
-within a year: geophysical methods already in use to detect underground
-construction, applied to the case of a datacenter built out of sight.
+Scher and Thiergart list one more measurement mechanism, rated High
+feasibility within a year: geophysical methods already in use to detect
+underground construction, applied to a datacenter built underground.
 
 <SourceQuote
   t="Mechanisms to Verify International Agreements About AI Development"
@@ -81,14 +84,14 @@ underground data centers being built secretively.
 
 </SourceQuote>
 
-Their own caveat travels with it: these approaches may not, on their own,
-differentiate a datacenter from any other underground construction.
+Their caveat: these approaches may not, on their own, distinguish a datacenter
+from any other underground construction.
 
-## The Power Signature, Live
+## Interactive: The Power Signature
 
 The explainer below is built from
-[Epoch's data-centre dataset](https://epoch.ai/data/ai-data-centers). It sets a
-real facility beside national grids for scale, shows which features of its
+[Epoch's datacenter dataset](https://epoch.ai/data/ai-data-centers). It places
+a real facility beside national grids for scale, shows which features of its
 load a watcher can and cannot read, and projects how fast the signature
 shrinks as performance per watt improves.
 
@@ -96,7 +99,7 @@ shrinks as performance per watt improves.
 
 ## Drill Bench
 
-The Fermi bench: derive the power-to-compute conversion from two basic
+A Fermi estimate: derive the power-to-compute conversion from two basic
 facts, scale it to a real cluster, then classify three sites from their power
 draw alone. Work the numbers out yourself; reference values appear only after
 you commit.
@@ -114,8 +117,8 @@ you commit.
   mins="4 min"
 >
 
-Appendix D — the data-centre signature: satellite, thermal, and power
-monitoring, and the architecture-dependent power consumption the callout above
-points into.
+Read Appendix D, on the datacenter signature: satellite, thermal, and power
+monitoring, and the architecture-dependent power consumption referred to in
+the callout above.
 
 </ReadingCard>

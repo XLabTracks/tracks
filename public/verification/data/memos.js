@@ -103,11 +103,11 @@ window.VERIFICATION_MEMOS = [
     "audience": "A policymaker trying to understand what we can actually track, and what we cannot.",
     "words": 900,
     "criteria": [
-      "Fidelity to what each mechanism can actually establish",
-      "Currency — cited public artifacts the author found, not recalled",
-      "Bounds carried in the papers’ own modality — reduces, never defeats",
-      "A defended prioritization, not a catalog recital",
-      "Named blind spots, each with the sibling mechanism that covers it"
+      "Accuracy about what each mechanism can establish",
+      "Currency: public artifacts from the last two years, found and cited with links",
+      "Limits stated as the papers state them: the layer reduces cheating and does not defeat it",
+      "A prioritization with reasons, not a list of mechanisms",
+      "Named blind spots, each with the mechanism elsewhere in the course that covers it"
     ]
   },
   {

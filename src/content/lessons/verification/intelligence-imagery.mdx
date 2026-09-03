@@ -1,8 +1,8 @@
-Two disciplines the AI-verification literature never separates: it says
-"satellite imagery" and means both. IMINT is the picture; GEOINT is the
-picture placed — terrain, grid connection, and change over time. The cards keep
-them apart because they fail differently, and this section walks them
-together.
+The AI-verification literature does not separate these two disciplines: it
+says "satellite imagery" and means both. IMINT is the image; GEOINT is the
+image in its geographic and temporal context: terrain, grid connection, change
+over time. The collection map keeps them apart because they fail differently;
+this section covers them together.
 
 ## Overhead Imagery
 
@@ -11,9 +11,9 @@ perimeter. Facilities above roughly 10,000 H100-equivalents typically occupy
 substantial footprints with characteristic features (MIRI, Appendix D.3.5; a
 2025 snapshot).
 
-The historical hook: the IAEA only began using satellite imagery in the 1990s,
-after failures to detect undeclared facilities under declared-facility
-safeguards.
+Historical note: the IAEA began using satellite imagery only in the 1990s,
+after undeclared facilities went undetected under safeguards that covered
+declared facilities.
 
 Caveats: imagery is unlikely to distinguish AI from non-AI datacenters
 (cooling is the key differentiator), it struggles with industrial look-alikes,
@@ -21,7 +21,8 @@ and it can be defeated by underground or camouflaged construction.
 
 ## The Grid Connection
 
-Where imagery becomes geospatial: not the building but what has to run to it.
+Imagery becomes geospatial when the object is not the building but the
+infrastructure that must reach it.
 
 <SourceQuote
   t="An International Agreement to Prevent the Premature Creation of Artificial Superintelligence"
@@ -40,18 +41,16 @@ take a long time and would itself be visible to satellites.
 
 </SourceQuote>
 
-That is the sentence that makes the stream quantitative: city-scale draw needs
-a city-scale connection, and hiding the connection is itself a slow,
-satellite-visible construction project. What the draw means in compute is
-2.3.3's arithmetic.
+A city-scale power draw needs a city-scale connection, and hiding the
+connection is itself a slow construction project visible from orbit.
+Converting the draw into compute is the arithmetic of 2.3.3.
 
-## What Imagery Settles
+## Evidential Value
 
-Cover stories are falsifiable: Iran's denial of activity at a site was
+Imagery can falsify a cover story: Iran's denial of activity at a site was
 contradicted by commercially available satellite imagery. Whether commercial
-transparency is a democratizing boon or a spoofable liability — shutter
-control, hard physical limits, AI-generated imagery — is one of the module's
-open debates, kept for 2.3.11.
+imagery is a net gain for verification or a liability (shutter control,
+physical limits, AI-generated imagery) is one of the debates in 2.3.11.
 
 <ReadingCard
   id="intel-isis-al-kibar"
@@ -63,19 +62,18 @@ open debates, kept for 2.3.11.
 >
 
 Read the introduction (pp. 1–3) and "Summary and Lessons" (pp. 28–30); the
-camouflage sections between them are annotated images, worth a skim. An
-undeclared site as the imagery analysts wrote it up: ISIS located the bombed
-building from commercial imagery in October 2007 and called it a reactor,
-and the IAEA's own imagery experts, reading the same pictures, called that
-unlikely. Every signature the skeptics expected — protection, a tall reactor
-hall, power lines, cooling, a stack, transport, housing — had been hidden:
-a remote canyon, a building partly underground, a false roof turning a
-Yongbyon-shaped structure into a box. What settled it was not imagery.
-The Turquzabad companion is
+sections between them are annotated images and can be skimmed. ISIS located
+the bombed building from commercial imagery in October 2007 and identified it
+as a reactor; the IAEA's imagery experts, reading the same images, judged that
+unlikely. Every signature the skeptics expected (physical protection, a tall
+reactor hall, power lines, cooling, a stack, transport, housing) had been
+concealed: a remote canyon, a building partly underground, a false roof that
+turned a Yongbyon-shaped structure into a box. Imagery did not settle the
+question. A related case is Turquzabad,
 [Revealed: Emptying of the Iranian "Atomic Warehouse" at Turquz Abad](https://isis-online.org/isis-reports/revealed-emptying-of-the-iranian-atomic-warehouse-at-turquz-abad)
 (Albright, Heinonen, Pabian, and Stricker, 2018): a rival's seized archive
-pointed at coordinates, commercial imagery watched the site being emptied, and
-environmental samples did the resolving.
+pointed at coordinates, commercial imagery showed the site being emptied, and
+environmental samples settled it.
 
 </ReadingCard>
 
@@ -88,12 +86,12 @@ environmental samples did the resolving.
   mins="5 min"
 >
 
-The imagery method written up by the people running it: satellite images
-(cooling equipment counted and measured on the roof), building permits, and
-public documents, combined into power, compute, and construction timelines for
-thirteen US datacenters — about 15% of the world's delivered compute as of late
-2025. Read it for the stated uncertainty: the cooling-based estimates can be
-off by a factor of two either way. The method in full is the hub's
+Epoch's description of its own method: satellite images (cooling equipment
+counted and measured on the roof), building permits, and public documents,
+combined into power, compute, and construction timelines for thirteen US
+datacenters, about 15% of the world's delivered compute as of late 2025. Note
+the stated uncertainty: the cooling-based estimates can be off by a factor of
+two in either direction. The full method is on the hub's
 [methodology page](https://epoch.ai/data/data-centers-documentation/methodology).
 
 </ReadingCard>

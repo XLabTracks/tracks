@@ -25,7 +25,7 @@ export const LC_PROMPTS = [
   {
     key: "assumption",
     label: "Assumption",
-    q: "Name the strongest thing that must be TRUE for your rating to hold. One or two sentences.",
+    q: "Name the strongest assumption your rating depends on. One or two sentences.",
   },
   {
     key: "cooperation",

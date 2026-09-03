@@ -2522,3 +2522,50 @@ usual "sign in to save" card. Their ids stay outside the `v-task-` prefix, so
 the completion page's list of required written work does not grow: they are
 section checks, not the module's written output. The Control track's 33
 understanding checks are untouched.
+
+## 2026-09-03 — copy pass: headings and prose in the register of a policy textbook
+
+Owner: "Check formulations for llmisms and check against how policy
+textbooks and ЦПМ are formulating stuff normally pls. Esp headers im
+crying." Applied to every 2.3 text this session authored: the seven
+intelligence lessons, the two drill decks, the three widgets, the four
+sample answers, the widget registry titles, and the memo slot's criteria.
+The 2.4 author's prose in 2.3.6–2.3.9 is untouched apart from the one seam
+sentence in 2.3.6, now "The third category is the subject of 2.3.1–2.3.5;
+this section and the next three cover the first two." Quotes, links, ids,
+storage keys, reading assignments, and the checks' answers are unchanged.
+
+Headings, before → after:
+
+- 2.3: What Intelligence-Based Mechanisms Are → Definition; What the Traces
+  Are → Signatures.
+- 2.3.1: What the Literature Gives It → In the Literature; The Stream in
+  Practice → In Practice.
+- 2.3.2: What Imagery Settles → Evidential Value.
+- 2.3.3: Thermal → Thermal Signatures; The Power Signature, Live →
+  Interactive: The Power Signature.
+- 2.3.5: What the Literature Says → In the Literature; What the Precedent
+  Carries → Precedent; The Characteristic Limits → Limits.
+- 2.3.10: What Breaks the Chain → Sources of Error; What a Source Is Worth →
+  Evaluating a Source; The Progression → From Anomaly to Suspected
+  Non-Compliance; The Bounds, in Sum → Limits of the Layer.
+- 2.3.11: Comparing Against Declarations → Comparison with Declarations;
+  Escalating → Escalation; Recording What You Did Not Resolve → The Record;
+  The Module in Eight Lines → Summary; Mastery Checkpoint → Review Questions.
+- Drill decks: "Drill Bench: Judgment Under Uncertainty" → "Drill Bench:
+  Assessment" (benches False alarms, Post-mortem, Limitations table; the
+  deck's title in the widget registry changed with it); "Fermi bench" →
+  "Fermi estimate"; "Four Levers, One Each" → "Four Levers".
+
+Prose rules applied, sentence by sentence rather than as a sweep: a
+fragment became a sentence; the "not X but Y" and "that is the point, not
+an apology" constructions went; the module's private metaphors (ladder,
+rung, haystack, autopsy, ledger, decay clock, real-world colour) became
+the plain term (sequence, step, candidate sites, post-mortem, table,
+decay, case); every allusion now carries its referent in the same sentence
+(Curveball, the Niger documents, the aluminum tubes); a review question's
+`why` names the section to revisit by number. The memo brief itself is the
+owner's wording and stands; only its five criteria were reworded. Checked:
+content, MDX and verification suites (480 tests), typecheck, eslint on the
+touched files, memos.js regenerated, and all nine 2.3 pages rendered on a
+dev server with the new headings.

@@ -125,17 +125,17 @@ export function LocatingCompute(_: VerificationWidgetProps) {
     return (
       <div className="not-prose my-6 space-y-4">
         <div className="border-border bg-card rounded-xl border p-5">
-          <p className="eyebrow text-muted-foreground">Rate each mechanism before seeing the field&rsquo;s rating</p>
+          <p className="eyebrow text-muted-foreground">Rate each mechanism before the authors&rsquo; rating is shown</p>
           <p className="mt-2 text-sm leading-relaxed">
             Each card is one building block for a single job: locating the
             world&rsquo;s AI compute, which is the first thing any verification
-            regime has to do. For each card, commit a feasibility rating and a
+            regime has to do. For each card, record a feasibility rating and a
             timeline on the report&rsquo;s own scale, answer one short question
-            that makes your reasoning visible, and only then see the
-            field&rsquo;s rating. Where you differ, argue from the evidence.
+            that states your reasoning, and then see the authors&rsquo; rating.
+            Where you differ, argue from the evidence.
           </p>
           <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
-            The ratings you are about to argue with come from{" "}
+            The ratings come from{" "}
             <a
               className="text-brand-ink font-medium underline-offset-4 hover:underline"
               href={LC_SOURCE.url}
@@ -145,15 +145,15 @@ export function LocatingCompute(_: VerificationWidgetProps) {
               {LC_SOURCE.by}
             </a>
             , who call them &ldquo;{LC_SOURCE.caveat}.&rdquo; Matching them is
-            not the goal: a reasoned disagreement scores higher than silent
-            deference.
+            not the aim; a reasoned disagreement is worth more than agreement
+            without reasons.
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             <Button size="sm" onClick={() => setDeck("intel")}>
               Intelligence deck: {DECKS.intel.length} cards, ~15 min
             </Button>
             <Button size="sm" variant="outline" onClick={() => setDeck("full")}>
-              Full table: {DECKS.full.length} cards, the extension run
+              Full table: {DECKS.full.length} cards, optional
             </Button>
             {Object.keys(saved.answers).length > 0 ? (
               <Button size="sm" variant="outline" onClick={() => persist(EMPTY)}>
@@ -165,8 +165,8 @@ export function LocatingCompute(_: VerificationWidgetProps) {
             The intelligence deck covers this module&rsquo;s mechanisms: the
             eight a state can run without the other side&rsquo;s cooperation.
             The full table (hardware, inspections, export controls) is optional
-            further practice, and preparation for 4.1, where you unseal your
-            Module-2 ranking.
+            further practice and preparation for 4.1, where your Module 2
+            ranking is unsealed.
           </p>
         </div>
       </div>
@@ -222,7 +222,7 @@ export function LocatingCompute(_: VerificationWidgetProps) {
       <div className="not-prose my-6 space-y-4">
         <div className="border-border bg-card rounded-xl border p-5">
           <p className="eyebrow text-muted-foreground">
-            Your calibration against the field
+            Your ratings against the report&rsquo;s
           </p>
           <div className="mt-3 grid grid-cols-3 gap-2 text-center">
             {[
@@ -264,8 +264,7 @@ export function LocatingCompute(_: VerificationWidgetProps) {
 
         <div className="border-border bg-card rounded-xl border p-5">
           <p className="text-sm font-medium">
-            Synthesis, and this is the deliverable. An emergency three-month
-            pause starts in six months. Choose two building blocks to fund now
+            Synthesis. An emergency three-month pause starts in six months. Choose two building blocks to fund now
             and defend the choice in about three sentences. If you rated any
             block differently from the report, use at least one of those in
             your answer.
@@ -283,7 +282,7 @@ export function LocatingCompute(_: VerificationWidgetProps) {
             </Button>
             {saved.deck === "intel" ? (
               <Button size="sm" variant="outline" onClick={() => setDeck("full")}>
-                Extension: the full table ({DECKS.full.length})
+                Continue with the full table ({DECKS.full.length})
               </Button>
             ) : null}
             <Button size="sm" variant="outline" onClick={() => setDeck(null)}>
@@ -294,9 +293,9 @@ export function LocatingCompute(_: VerificationWidgetProps) {
             </span>
           </div>
           <p className="text-muted-foreground mt-3 text-xs leading-relaxed">
-            Keep the frame in mind: these ratings are the field&rsquo;s
-            preliminary estimates, and your sealed Module-2 stream ranking is
-            still waiting in 4.1. This exercise is practice for unsealing it.
+            These ratings are the authors&rsquo; preliminary estimates. Your
+            sealed Module 2 ranking is unsealed in 4.1; this exercise is
+            practice for that.
           </p>
         </div>
       </div>
@@ -314,7 +313,7 @@ export function LocatingCompute(_: VerificationWidgetProps) {
     if (!draft.rate) lints.push("rating not set");
     if (!draft.time) lints.push("timeline not set");
     if (draft.open.trim().length < LC_MIN_ANSWER)
-      lints.push(`answer under ${LC_MIN_ANSWER} characters (the rule: reasoning must be visible, not a word)`);
+      lints.push(`answer under ${LC_MIN_ANSWER} characters; state the reasoning, not just a word`);
 
     return (
       <div className="not-prose my-6 space-y-4">
@@ -373,7 +372,7 @@ export function LocatingCompute(_: VerificationWidgetProps) {
             rows={3}
             value={draft.open}
             onChange={(e) => update(gi, { open: e.target.value })}
-            placeholder="Think on the page."
+            placeholder="Your reasoning, in one or two sentences."
             aria-label={prompt.label}
             className="border-border bg-background mt-2 w-full rounded-md border p-3 text-sm"
           />
@@ -394,7 +393,7 @@ export function LocatingCompute(_: VerificationWidgetProps) {
             <p className="text-muted-foreground text-xs" aria-live="polite">
               {lints.length
                 ? lints.join(" · ")
-                : "No take-backs after commit; that is the calibration point."}
+                : "A committed rating cannot be changed."}
             </p>
           </div>
         </div>
@@ -449,8 +448,8 @@ export function LocatingCompute(_: VerificationWidgetProps) {
       <div className="border-border rounded-xl border p-4">
         <p className="text-sm font-medium">
           {match
-            ? "Optional: anything in their note you would still push back on?"
-            : "You disagree, so argue it: what is the weakest evidence in their note, or what are they missing? Their ratings are self-described quick estimates; this is the real exercise."}
+            ? "Optional: is there anything in their note you would still dispute?"
+            : "You disagree, so argue the point: what is the weakest evidence in their note, or what have they missed? Their ratings are, in their own words, quick estimates."}
         </p>
         <textarea
           rows={3}
@@ -470,7 +469,7 @@ export function LocatingCompute(_: VerificationWidgetProps) {
           </Button>
           <p className="text-muted-foreground text-xs" aria-live="polite">
             {pushShort
-              ? `Disagreement needs at least ${LC_MIN_PUSHBACK} characters of argument: differ with reasons, not vibes.`
+              ? `A disagreement needs at least ${LC_MIN_PUSHBACK} characters of argument.`
               : match
                 ? "Optional; Continue when ready."
                 : "Ready."}

@@ -1,10 +1,11 @@
-A signature is not a finding, and a tip is not non-compliance. This section is
-about the step between them: how a watcher turns an anomaly into an assessment
-they can defend, and how much confidence that assessment can carry.
+A signature is not a finding, and a tip is not non-compliance. This section
+covers the step between them: how an analyst turns an anomaly into an
+assessment that can be defended, and how much confidence that assessment can
+carry.
 
 ## Observation, Inference, Judgment
 
-Three things get collapsed in ordinary speech and must be kept apart here.
+Three terms that ordinary speech runs together must be kept apart here.
 
 - An **observation** is what the sensor, the filing, or the source actually
   recorded.
@@ -12,84 +13,85 @@ Three things get collapsed in ordinary speech and must be kept apart here.
 - A **judgment** is what an analyst concludes given the inference, the
   alternatives, and their own confidence.
 
-Most disputes that look like disagreements about evidence are disagreements one
-layer up — about which assumption is doing the work.
+Most disputes that appear to be about evidence are disputes about which
+assumption is being relied on.
 
-## What Breaks the Chain
+## Sources of Error
 
-- **Alternative explanations.** The default question, not the last resort. A
-  power draw has more than one cause.
+- **Alternative explanations.** Asking for them is the default step, not the
+  last resort. A power draw has more than one cause.
 - **Dual-use ambiguity.** The same building, the same chips, and the same
   people serve permitted and prohibited activity. Ambiguity is the normal case,
   not the exception.
 - **Base rates.** How many facilities of this kind exist, and how many are
-  violations? Around 500 datacenters worldwide exceed 10 MW, the count 2.3.3
-  gave. A signature that fires on all of them has told you nothing.
+  violations? Around 500 datacenters worldwide exceed 10 MW (the count given
+  in 2.3.3). A signature that fires on all of them establishes nothing.
 
-## What a Source Is Worth
+## Evaluating a Source
 
-Four questions, applied to every input:
+Four questions apply to every input:
 
-- **Reliability** — has this source been right before, and about this kind of
-  thing?
-- **Timeliness** — is it describing the present, or a facility as it stood two
-  years ago?
-- **Corroboration** — does an independent stream see the same thing? Streams
+- **Reliability.** Has this source been right before, and about this kind of
+  question?
+- **Timeliness.** Does it describe the present, or the facility as it stood
+  two years ago?
+- **Corroboration.** Does an independent stream see the same thing? Streams
   that share an origin are not independent.
-- **Confidence** — what would have to be true for this to be wrong, and how
+- **Confidence.** What would have to be true for this to be wrong, and how
   likely is that?
 
-## The Progression
+## From Anomaly to Suspected Non-Compliance
 
-The chain runs: **anomaly → verification lead → suspected non-compliance.**
-Each arrow is a decision someone has to justify, and each has a different
-evidentiary bar. Escalating too fast burns credibility; escalating too slowly
+The sequence is **anomaly → verification lead → suspected non-compliance.**
+Each step is a decision that someone has to justify, and each has a different
+evidentiary bar. Escalating too fast costs credibility; escalating too slowly
 loses the window in which the activity is observable.
 
-What earns a promotion up the ladder is corroboration across evidence
-**kinds** — physical, procurement, financial, digital, organizational. They
-fail differently, so their agreement means something.
+A step up is justified by corroboration across **kinds** of evidence:
+physical, procurement, financial, digital, organizational. They fail in
+different ways, so their agreement is informative.
 
-Good analysis portrays uncertainty rather than manufacturing certainty. The
-cautionary case is the 2002–03 Iraq WMD estimate —
-["dead wrong,"](https://irp.fas.org/offdocs/wmd_report.pdf) with high
-confidence — which you will take apart in the autopsy below. The phrase is the
+Good analysis states its uncertainty rather than manufacturing certainty. The
+cautionary case is the 2002–03 Iraq WMD estimate,
+["dead wrong"](https://irp.fas.org/offdocs/wmd_report.pdf) and held with high
+confidence, which the post-mortem drill below takes apart. The phrase is the
 Silberman–Robb WMD Commission's own, and its report is the public
 post-mortem.
 
-First, a question to answer for yourself: among roughly 500 candidate sites,
-how often does a detection rule that feels cautious fire on an innocent one?
-Commit a guess in the bench before doing the arithmetic.
+First, a question to answer before the drill: among roughly 500 candidate
+sites, how often does a detection rule that seems cautious fire on an innocent
+one? Commit a guess in the drill before doing the arithmetic.
 
 ## Drill Bench
 
-Three benches. The false-alarm bench turns the base rate into arithmetic;
-the autopsy takes apart an assessment that was confident and wrong; the
-limitations ledger names, for each signature family, its standard failure
-case and the mechanism elsewhere in the course that covers it. The ledger is
-also the memo's middle section in draft: 2.3.11 asks for the same table,
-mechanism by mechanism, with the artifacts you find.
+Three drills. The first turns the base rate into arithmetic; the second is a
+post-mortem of an assessment that was confident and wrong; the third records,
+for each signature family, its standard failure case and the mechanism
+elsewhere in the course that covers it. The third table is a draft of the
+memo's middle section: 2.3.11 asks for the same table, mechanism by mechanism,
+with the artifacts you find.
 
 <VerificationExercise id="drills-intel-assessment" />
 
-## The Bounds, in Sum
+## Limits of the Layer
 
-Four independent papers converge: NTM is "a valuable starting point" but
-limited against disguise, distribution, and software-level violations (Wasil
-et al.); detecting a secret datacenter "is unlikely to be the load-bearing
-part of a verification regime" (Scher and Thiergart); imagery, OSINT, and
-financial audits are "merely supplemental" — though a circumvention attempt
-may itself trip other, more reliable mechanisms (*Six Layers*); and military
+Four papers agree. NTM is "a valuable starting point" but limited against
+disguise, distribution, and software-level violations (Wasil et al.);
+detecting a secret datacenter "is unlikely to be the load-bearing part of a
+verification regime" (Scher and Thiergart); imagery, OSINT, and financial
+audits are "merely supplemental", although an attempt to circumvent them may
+trigger other, more reliable mechanisms (*Six Layers*); and military
 facilities are a named blind spot (MIRI).
 
-Reframe, not deflation. These bounds are why the layer is supplemental, not
-load-bearing — and that is the point, not an apology. Its value is deterrence,
-lead generation, and raising the cost and complexity of cheating: each bound
-is also a cost imposed on the cheater, and each named gap is covered by
-another mechanism of the course, which you have just placed in the ledger. The bounds widen over time — efficiency gains shrink the
-large-facility signature yearly, distributed development spreads compute
-thinner — so the honest modality stays hedged: this layer *reduces* the
-effectiveness of cheating; it does not *defeat* it.
+These limits are why the layer is supplemental rather than load-bearing, and
+they do not make it useless. Its value is deterrence, lead generation, and
+raising the cost and complexity of cheating: each limit is also a cost imposed
+on the cheater, and each named gap is covered by another mechanism of the
+course, as recorded in the third drill. The limits widen over time, because
+efficiency gains shrink the large-facility signature each year and distributed
+development spreads compute across smaller sites. The correct statement of the
+layer's value is therefore that it reduces the effectiveness of cheating; it
+does not defeat it.
 
 <ReadingCard
   id="intel-rahman-distributed-training"
@@ -101,29 +103,29 @@ effectiveness of cheating; it does not *defeat* it.
   optional
 >
 
-The distributed-development bound, measured. A simulator calibrated on
-published low-communication training runs finds that every existing or
-proposed compute threshold can be crossed on nodes below every proposed
-monitoring threshold, over consumer-grade internet. Nodes that size are
-invisible to thermal and electrical means, so enforcement falls to network
-monitoring and in-person observation. Appendix G grades the countermeasures,
-and the ones that hold are this module's: whistleblowers (a distributed
-operation needs a workforce that grows with its node count), financial and
-procurement intelligence, chip registries that count memory as well as
-compute, and challenge inspections coordinated across the whole suspected
-network. Bandwidth caps and traffic monitoring do not hold. Read the whole
-paper, appendices included.
+A quantitative study of the distributed-development limit. A simulator
+calibrated on published low-communication training runs finds that every
+existing or proposed compute threshold can be crossed on nodes below every
+proposed monitoring threshold, over consumer-grade internet. Nodes of that
+size are invisible to thermal and electrical means, so enforcement falls to
+network monitoring and in-person observation. Appendix G grades the
+countermeasures. The ones that hold are this module's: whistleblowers (a
+distributed operation needs a workforce that grows with its node count),
+financial and procurement intelligence, chip registries that count memory as
+well as compute, and challenge inspections coordinated across the whole
+suspected network. Bandwidth caps and traffic monitoring do not hold. Read
+the whole paper, appendices included.
 
 </ReadingCard>
 
 <Fold label="Optional: The Feasibility Cards">
 
 For each card from [Scher and Thiergart's](https://arxiv.org/abs/2506.15867)
-Locating Compute Building Blocks table, commit your own feasibility rating and
-timeline with a short reason before the field's rating is shown, then compare
-and argue any disagreement. The intelligence deck covers this module's
-mechanisms; the full table is optional further practice, and preparation for
-4.1, where you unseal your Module-2 ranking.
+Locating Compute Building Blocks table, record your own feasibility rating
+and timeline with a short reason before the authors' rating is shown, then
+compare and argue any disagreement. The intelligence deck covers this
+module's mechanisms; the full table is optional further practice and
+preparation for 4.1, where your Module 2 ranking is unsealed.
 
 <VerificationExercise id="locating-compute" />
 
@@ -141,9 +143,9 @@ mechanisms; the full table is optional further practice, and preparation for
   optional
 >
 
-The cognition primary behind the autopsy's bias menu, free in full from the
-CIA's own press. Part III is the biases; chapter 8 is analysis of competing
-hypotheses.
+The primary source for the biases named in the post-mortem drill, free in
+full from the CIA's own press. Part III covers the biases; chapter 8 covers
+analysis of competing hypotheses.
 
 </ReadingCard>
 
@@ -157,8 +159,8 @@ hypotheses.
   optional
 >
 
-Methodological material, applied directly to the autopsy: Quality of
-Information Check (pp. 10–11), Indicators or Signposts of Change (pp. 12–13),
-and Analysis of Competing Hypotheses (pp. 14–16).
+Methods applied directly in the post-mortem drill: Quality of Information
+Check (pp. 10–11), Indicators or Signposts of Change (pp. 12–13), and
+Analysis of Competing Hypotheses (pp. 14–16).
 
 </ReadingCard>

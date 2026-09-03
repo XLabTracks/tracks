@@ -5,57 +5,57 @@ const AUTOPSY_DOSSIER =
 
 export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
   id: "drills-intel-assessment",
-  title: "Drill Bench: Judgment Under Uncertainty",
+  title: "Drill Bench: Assessment",
   blurb:
-    "Three benches for 2.3.10. The false-alarm bench turns the base rate into arithmetic; the autopsy takes apart an assessment that was confident and wrong; the limitations ledger names, for each signature family, its standard failure case and the mechanism elsewhere in the course that covers it.",
+    "Three drills for 2.3.10. The first turns the base rate into arithmetic; the second is a post-mortem of an assessment that was confident and wrong; the third records, for each signature family, its standard failure case and the mechanism elsewhere in the course that covers it.",
   benches: [
     {
       id: "false-alarm",
-      label: "False-alarm bench",
-      name: "The false-alarm bench",
+      label: "False alarms",
+      name: "False alarms",
       kicker:
         "Before trusting an alarm, work out how often it fires on innocent sites. Three steps; commit each before the next.",
       time: "~5 min",
       steps: [
         {
           type: "number",
-          q: "The haystack: ~500 datacenters worldwide draw more than 10 MW. Suppose your detection rule is careful — it false-alarms on just 1% of innocent sites per year. How many false alarms is that per year?",
+          q: "About 500 datacenters worldwide draw more than 10 MW. Suppose your detection rule is careful and false-alarms on 1% of innocent sites per year. How many false alarms is that per year?",
           min: 4,
           max: 6,
           reveal:
-            "500 × 1% = ~5 false alarms every year — from a rule that sounds cautious.",
+            "500 × 1% = about 5 false alarms every year, from a rule that sounds cautious.",
         },
         {
           type: "pick",
           q: "And the numerator: in any given year, how many genuine covert frontier-scale programs do you expect to exist in that haystack?",
           opts: ["~0–1", "~10", "~50"],
           right: 0,
-          why: "Approximately zero to one. So the \"cautious\" rule produces ~5 wrong demands for every real one it could ever catch — the alarms are mostly wrong even though the rule is mostly right.",
+          why: "Approximately zero to one. So the cautious rule produces about five false alarms for every real program it could catch: the alarms are mostly wrong even though the rule is mostly right.",
         },
         {
           type: "text",
           q: "Every challenge inspection that finds nothing costs the regime credibility it does not get back, and makes the next alarm easier to dismiss even when it is true. Given about five false alarms for at most one true one, what condition must a signal meet before you recommend an inspection? Answer in two sentences.",
           minLen: 60,
           reveal:
-            "The threshold must clear the base rate, not merely feel careful: a signal justifies escalation only when corroboration across independent evidence kinds makes THIS alarm more likely true than the base rate makes it false. That is what calibration means here: escalation earned by corroboration, not paranoia.",
+            "The threshold must clear the base rate, not merely seem careful: a signal justifies escalation only when corroboration across independent kinds of evidence makes this particular alarm more likely true than the base rate makes it false. That is what calibration means here: escalation justified by corroboration.",
         },
       ],
     },
     {
       id: "autopsy",
-      label: "Intelligence autopsy",
-      name: "The intelligence autopsy",
+      label: "Post-mortem",
+      name: "Post-mortem of an assessment",
       kicker:
-          "A diagnosis drill, kept separate from the question of escalation. Below is an invented assessment, written with high confidence and wrong, built from the failure patterns the Iraq post-mortems documented. Name its failures using the terms in this list: single-source dependence · circular corroboration · dual-use misread · unauthenticated documents · confirming-evidence bias · mirror-imaging · groupthink · base-rate neglect.",
+          "A diagnosis drill, separate from the question of escalation. Below is an invented assessment, written with high confidence and wrong, built from the failure patterns documented in the Iraq post-mortems. Name its failures using the terms in this list: single-source dependence · circular corroboration · dual-use misread · unauthenticated documents · confirming-evidence bias · mirror-imaging · groupthink · base-rate neglect.",
       time: "~15 min",
       steps: [
         {
           type: "text",
           brief: AUTOPSY_DOSSIER,
-          q: "The assessment claims four independent lines. Trace each: how many independent evidence kinds can you actually count, and which claims collapse into each other?",
+          q: "The assessment claims four independent lines. Trace each: how many independent kinds of evidence can you count, and which claims collapse into each other?",
           minLen: 60,
           reveal:
-            "The streams collapse. Line (4) \"independently corroborates\" line (1) — but a partner service repeating the same logistics source is one stream wearing two hats. That is circular corroboration on top of single-source dependence: the Curveball pattern, where one fabricator echoed through liaison channels read as convergence. Line (3) is paper of unverified chain of custody — the Niger-documents lesson: procurement paper is evidence only after authentication. Four claimed lines are really two: one human source (amplified), one customs record.",
+            "The streams collapse. Line (4) \"independently corroborates\" line (1), but a partner service repeating the same logistics source is one stream counted twice. That is circular corroboration on top of single-source dependence: the Curveball pattern, named for the Iraqi defector whose single fabricated account, repeated through liaison channels, was read as convergence. Line (3) is paper with an unverified chain of custody: the lesson of the Niger documents, forged papers on a uranium purchase that were cited before they were authenticated. Procurement paper is evidence only after authentication. Four claimed lines are really two: one human source, amplified, and one customs record.",
         },
         {
           type: "text",
@@ -63,7 +63,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
           q: "What does \"high confidence\" rest on here? Name the strongest link and the weakest link in the chain.",
           minLen: 60,
           reveal:
-            "The customs record is real — and dual-use. High-bandwidth interconnect serves national research networks and telecom backbones as readily as training clusters: the aluminum-tubes pattern, a genuine observable read through the conclusion it was expected to support (confirming-evidence bias). And \"cannot account for the observed scale\" assumes the analyst's model of what a cloud hub looks like — mirror-imaging — while a declared cloud hub is, precisely, a dense compute hall with immersion cooling. The confidence language is unearned: \"high confidence\" resting on one human source plus one dual-use record, with alternatives \"considered and dismissed\" in a single sentence, is certainty manufactured, not portrayed. In a ~500-site haystack the base rate alone forbids it (base-rate neglect).",
+            "The customs record is real, and dual-use. High-bandwidth interconnect serves national research networks and telecom backbones as readily as training clusters: the aluminum-tubes pattern, named for the tubes Iraq imported, a genuine observable read through the conclusion it was expected to support, which is confirming-evidence bias. \"Cannot account for the observed scale\" assumes the analyst's own model of what a cloud hub looks like, which is mirror-imaging, while a declared cloud hub is exactly a dense compute hall with immersion cooling. The confidence language is unjustified: \"high confidence\" resting on one human source plus one dual-use record, with alternatives \"considered and dismissed\" in a single sentence, is certainty manufactured rather than stated. Among about 500 candidate sites the base rate alone forbids it (base-rate neglect).",
         },
         {
           type: "text",
@@ -71,14 +71,14 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
           q: "Name the failure mode or modes, using the terms from the list, and write the one-line verdict this evidence actually supports, with its confidence level.",
           minLen: 60,
           reveal:
-            "A calibrated verdict: \"Anomaly, promotable to verification lead. Task imagery and grid data on Karsu Ridge; request clarification against the declared cloud-hub filing; seek an evidence kind that does not pass through the logistics source. Confidence: low-to-moderate. Dissent: partner corroboration is not independent. Blind spot: if the hub declaration is genuine, everything observed is innocent.\" The tip may still be right — that is what the ladder is for. The failure mode is not using leads; it is dressing a lead as a verdict.",
+            "A calibrated verdict: \"Anomaly, promotable to verification lead. Task imagery and grid data on Karsu Ridge; request clarification against the declared cloud-hub filing; seek a kind of evidence that does not pass through the logistics source. Confidence: low to moderate. Dissent: partner corroboration is not independent. Blind spot: if the hub declaration is genuine, everything observed is innocent.\" The tip may still be right; that is what the escalation sequence is for. The failure is not the use of leads but the presentation of a lead as a verdict.",
         },
       ],
     },
     {
       id: "limitations-ledger",
-      label: "Limitations ledger",
-      name: "The limitations ledger",
+      label: "Limitations table",
+      name: "Limitations by signature",
       kicker:
         "One row per signature family. For each family, choose its standard failure case, then choose the mechanism elsewhere in the course that covers what this signature misses.",
       time: "~10 min",
@@ -89,16 +89,16 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
           q: "Which is this signature’s standard failure case?",
           opts: [
             "Cloud cover makes optical collection impossible most of the year",
-            "Underground or disguised builds — and above ground, AI vs ordinary datacenter is ambiguous (cooling is the only differentiator)",
+            "Underground or disguised builds; above ground, an AI datacenter and an ordinary one are ambiguous (cooling is the only differentiator)",
             "Commercial resolution is too coarse to see buildings at all",
             "Imagery cannot be shown to allies without burning sources",
           ],
           right: 1,
-          why: "Committed. Now the second half of the row: name the sibling mechanism that covers the gap.",
+          why: "Recorded. Now the second half of the row: the mechanism that covers the gap.",
         },
         {
           type: "pick",
-          statement: "Overhead imagery — the gap's owner",
+          statement: "Overhead imagery: the covering mechanism",
           q: "Which mechanism elsewhere in the course covers what this signature cannot see?",
           opts: [
             "2.2 cloud / provider reporting",
@@ -108,7 +108,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
             "3.2 combining evidence",
           ],
           right: 1,
-          why: "MIRI's draft names military and hardened facilities the blind spot; what the roof hides, people inside can reveal — whistleblowers and inspectors are the human layer, 2.3.6–2.3.9.",
+          why: "MIRI's draft names military and hardened facilities as the blind spot. What the roof hides, people inside can reveal: whistleblowers and inspectors are the human layer, 2.3.6–2.3.9.",
         },
         {
           type: "pick",
@@ -117,15 +117,15 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
           opts: [
             "Power draw cannot be measured from outside a facility",
             "Heat signatures are only visible in winter",
-            "The signature decays: ~1.6×/yr efficiency gains shrink it annually, and behind-the-meter generation hides the draw entirely",
+            "The signature decays: efficiency gains of about 1.6× a year shrink it, and behind-the-meter generation hides the draw entirely",
             "Grid operators refuse to share load data",
           ],
           right: 2,
-          why: "Committed. Now the second half of the row: name the sibling mechanism that covers the gap.",
+          why: "Recorded. Now the second half of the row: the mechanism that covers the gap.",
         },
         {
           type: "pick",
-          statement: "Energy and thermal — the gap's owner",
+          statement: "Energy and thermal: the covering mechanism",
           q: "Which mechanism elsewhere in the course covers what this signature cannot see?",
           opts: [
             "2.2 cloud / provider reporting",
@@ -135,7 +135,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
             "3.2 combining evidence",
           ],
           right: 2,
-          why: "When the megawatts stop marking the compute, follow the chips instead — chip-level tracking (the hardware layer) does not care how the site is powered.",
+          why: "When power no longer marks the compute, follow the chips: chip-level tracking (the hardware layer) is indifferent to how the site is powered.",
         },
         {
           type: "pick",
@@ -148,11 +148,11 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
             "Chip shipments are too small to appear in customs data",
           ],
           right: 1,
-          why: "Committed. Now the second half of the row: name the sibling mechanism that covers the gap.",
+          why: "Recorded. Now the second half of the row: the mechanism that covers the gap.",
         },
         {
           type: "pick",
-          statement: "Procurement, customs, financial — the gap's owner",
+          statement: "Procurement, customs, financial: the covering mechanism",
           q: "Which mechanism elsewhere in the course covers what this signature cannot see?",
           opts: [
             "2.2 cloud / provider reporting",
@@ -162,7 +162,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
             "3.2 combining evidence",
           ],
           right: 2,
-          why: "Scher and Thiergart's point: the gap is better closed by chip-level tracking — registries follow the accelerators that customs no longer sees cross a border.",
+          why: "Scher and Thiergart's point: the gap is better closed by chip-level tracking, since registries follow accelerators that customs no longer sees crossing a border.",
         },
         {
           type: "pick",
@@ -170,16 +170,16 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
           q: "Which is this signature’s standard failure case?",
           opts: [
             "OSINT is illegal to collect under most treaties",
-            "Filings and permits are cheapest to collect — and easiest to sanitize",
+            "Filings and permits are the cheapest to collect and the easiest to sanitize",
             "Hiring pages are never informative about compute",
             "Publication patterns change too slowly to matter",
           ],
           right: 1,
-          why: "Committed. Now the second half of the row: name the sibling mechanism that covers the gap.",
+          why: "Recorded. Now the second half of the row: the mechanism that covers the gap.",
         },
         {
           type: "pick",
-          statement: "Open sources — the gap's owner",
+          statement: "Open sources: the covering mechanism",
           q: "Which mechanism elsewhere in the course covers what this signature cannot see?",
           opts: [
             "2.2 cloud / provider reporting",
@@ -189,7 +189,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
             "3.2 combining evidence",
           ],
           right: 1,
-          why: "A sanitized paper trail still passes through people. What the filings hide — what the company believed, what leadership was warned about — is exactly what the human layer, 2.3.6–2.3.9, reveals.",
+          why: "A sanitized paper trail still passes through people. What the filings hide (what the company believed, what its leadership was warned about) is what the human layer, 2.3.6–2.3.9, reveals.",
         },
         {
           type: "pick",
@@ -202,11 +202,11 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
             "Signals intelligence is banned by the noninterference norm",
           ],
           right: 0,
-          why: "Committed. Now the second half of the row: name the sibling mechanism that covers the gap.",
+          why: "Recorded. Now the second half of the row: the mechanism that covers the gap.",
         },
         {
           type: "pick",
-          statement: "The layer as a whole — the gap's owner",
+          statement: "The layer as a whole: the covering mechanism",
           q: "Which mechanism elsewhere in the course covers what this signature cannot see?",
           opts: [
             "2.2 cloud / provider reporting",
@@ -216,7 +216,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
             "3.2 combining evidence",
           ],
           right: 0,
-          why: "Wasil's honest-bounds sentence: limited against software-level violations. Inside a declared facility the sibling is 2.2 — provider reporting and workload telemetry are the layer that can see a training job.",
+          why: "Wasil's sentence on the layer's limits: limited against software-level violations. Inside a declared facility the covering mechanism is 2.2: provider reporting and workload telemetry are the layer that can see a training job.",
         },
       ],
     },

@@ -11,21 +11,20 @@ The real problem here is ambiguity. A hundred-megawatt building full of accelera
 
 The goal is that by the end you should be able to take signals, whether they’re thermal plumes, an import spike, a suspicious hiring wave, and say three things about it: what it establishes, what else would explain it, and what it justifies doing next.
 
-## What Intelligence-Based Mechanisms Are
+## Definition
 
-Every mechanism so far has needed the monitored side to play along. Hardware
-roots of trust (2.1) and provider reporting (2.2) share one failure mode: they
-assume cooperation. This layer is the one evidence stream that works uninvited
-— what undeclared frontier-AI development shows to a rival who is simply
-watching, and what a watcher can honestly conclude from it. The guiding
-question: **how can states identify possible undeclared frontier-AI
-development without the monitored actor's cooperation?**
+The mechanisms in 2.1 and 2.2 assume cooperation: hardware roots of trust
+need chips built or retrofitted for the purpose, and provider reporting covers
+only what passes through a covered provider. Intelligence-based mechanisms do
+not. The question for this module is how states can identify possible
+undeclared frontier-AI development without the monitored actor's cooperation,
+and what a watcher can conclude from what it sees.
 
-Two properties frame the layer. It works without permission, and it works
-today — no new hardware, no new treaty machinery. Three literatures name the
-same thing differently: Wasil et al. call it the national technical means (NTM)
-category, *Six Layers* calls it Layer 6, and Scher and Thiergart call it the
-national-intelligence building blocks.
+The layer has two properties: it works without the monitored actor's
+permission, and it needs no new hardware or treaty machinery. The three papers
+this module draws on name it differently. Wasil et al. call it the national
+technical means (NTM) category, *Six Layers* calls it Layer 6, and Scher and
+Thiergart call it the national-intelligence building blocks.
 
 <SourceQuote
   t="Verification methods for international AI agreements"
@@ -43,66 +42,63 @@ hardware).
 
 </SourceQuote>
 
-The taxonomy the whole module hangs on: NTM is defined by what it does *not*
-need — access — which is exactly why it is the fallback when a suspected state
-refuses cooperation. Wasil's NTM list is remote sensing, whistleblowers, energy
-monitoring, customs-data analysis, and financial intelligence: the human source
-sits inside the category from the start, which is why the human layer is read
-here, as 2.3.6–2.3.9, and not as a module of its own.
+NTM is defined by what it does not need: access. That is why it is the
+fallback when a suspected state refuses to cooperate. Wasil's NTM list is
+remote sensing, whistleblowers, energy monitoring, customs-data analysis, and
+financial intelligence. Human sources are part of the category from the start,
+which is why the human layer is covered in this module, as 2.3.6–2.3.9, rather
+than as a module of its own.
 
-*Six Layers* files national intelligence activities — human, signals, and
-cyber intelligence — among its personnel-based layers, as the one set of
-mechanisms that may be effective without the Prover's cooperation, and adds
-that states with weak intelligence capabilities could rely on stronger
-states'. The passage is reproduced whole in 2.3.6, with the rest of §4.3.
+*Six Layers* places national intelligence activities (human, signals, and
+cyber intelligence) among its personnel-based layers, as mechanisms that may
+be effective without the Prover's cooperation, and notes that states with weak
+intelligence capabilities could rely on stronger states'. The passage is
+reproduced in full in 2.3.6, with the rest of §4.3.
 
-Where *Six Layers* files everything technical in this module is worth knowing
-before you read it: satellite imagery, open sources, and financial audits are
-"merely supplemental" in its scheme — limited in scope or circumventable on
-their own — but it adds that an attempt to circumvent them tends to trip the
-other layers. Its own example: hiding a datacenter underwater means contracting
-one of the few firms that can build one, and exposing the program to those
-firms' whistleblowers and to intelligence.
+*Six Layers* classes the technical streams of this module (satellite imagery,
+open sources, and financial audits) as "merely supplemental": limited in scope
+or circumventable on their own. It adds that an attempt to circumvent them
+tends to trigger the other layers. Its example: hiding a datacenter underwater
+means contracting one of the few firms that can build one, which exposes the
+program to those firms' whistleblowers and to intelligence.
 
-Has this kind of watching ever caught a covert program? Yes, with fine print.
-Baker's record of the four states the IAEA investigated for undeclared
-facilities — the cases the track's nuclear-precedents section covers — is that
-three investigations began mainly or entirely with national-intelligence tips
-and none through the agency's own safeguards, and that the tips "appear to be
-irreplaceable" ([Baker, pp. 14–15](https://doi.org/10.48550/arXiv.2304.04123)).
-The fine print: intelligence evidence is characteristically suggestive, not
-decisive or internationally credible — satellite images are ambiguous, shared
-documents might be fake — which is why regimes pair a tip with escalation
-rather than treating it as a verdict.
+The precedent: of the four states the IAEA investigated for undeclared
+facilities (the cases in the track's nuclear-precedents section), three
+investigations began mainly or entirely with national-intelligence tips and
+none through the agency's own safeguards; Baker concludes that the tips
+"appear to be irreplaceable"
+([Baker, pp. 14–15](https://doi.org/10.48550/arXiv.2304.04123)). Baker also
+records the limit: intelligence evidence is characteristically suggestive
+rather than decisive or internationally credible, because satellite images
+are ambiguous and shared documents may be forged. A regime therefore treats a
+tip as the start of a process, not as a verdict.
 
-Hold on to one distinction for the rest of the module. Intelligence
-**identifies**; the regime **resolves**. A tip is not a finding.
+The distinction that runs through the module: intelligence identifies, the
+regime resolves. A tip is not a finding.
 
-## What the Traces Are
+## Signatures
 
-Each signature this module walks carries the same three-part anatomy: what it
-tells a verifier, what access it requires, and its main caveat. A standing
-red-team question applies to every one — **would this signature survive an
-adversary who knows it is being watched?**
+Each signature in this module is described in the same three parts: what it
+tells a verifier, what access it requires, and its main caveat. One question
+applies to every signature: would it survive an adversary who knows it is
+being watched?
 
-The signatures sort into four families, and it is worth being able to name
-which one a given observation belongs to:
+Signatures fall into four families:
 
 - **Facility signatures** — what the building is and looks like.
 - **Resource-flow signatures** — power, water, chips, money moving in.
 - **Organizational signatures** — who is hired, who contracts with whom.
 - **Operational signatures** — what the site does, and when.
 
-Boundary: provider-reported utilization is 2.2’s declared world. This layer
-sees what never enters a report.
+Provider-reported utilization belongs to 2.2, the declared side. This layer
+covers what never enters a report.
 
 ## The Collection Disciplines
 
-Those are the signatures. Intelligence is collected in a small number of
-ways, usually called the collection disciplines or the INTs, each named for
-its source; the map below lists the eight this module uses, divided into
-literal and nonliteral collection. Open each card; the sections that follow
-take the disciplines one at a time.
+Intelligence is collected in a small number of ways, usually called the
+collection disciplines or the INTs, each named for its source. The map lists
+the eight this module uses, divided into literal and nonliteral collection.
+Open each card; sections 2.3.1–2.3.5 cover the disciplines one at a time.
 
 <VerificationExercise id="collection-map" />
 
@@ -117,11 +113,11 @@ take the disciplines one at a time.
   mins="7 min"
 >
 
-Read pp. 5–7 — the national technical means category, method by method. Two
-questions to carry through it:
+Read pp. 5–7, the national technical means category, method by method. Two
+questions to answer while reading:
 
-- Why is “unilaterally” the load-bearing word in the NTM category?
-- Which listed method surprises you, and why?
+- Why does the word “unilaterally” matter in the definition of NTM?
+- Which listed method did you not expect, and why?
 
 </ReadingCard>
 
@@ -135,11 +131,10 @@ questions to carry through it:
   optional
 >
 
-Read every intelligence-based section: §4.3, the personnel-based layers
-(whistleblowers, interviews, and national intelligence — HUMINT, SIGINT,
-cyber), and §4.4, the supplemental mechanisms that class imagery, open sources,
-and financial audits. This is the paper the module quotes for where each
-stream sits.
+Read §4.3, the personnel-based layers (whistleblowers, interviews, and
+national intelligence: HUMINT, SIGINT, cyber), and §4.4, the supplemental
+mechanisms (imagery, open sources, financial audits). The module cites this
+paper for the classification of each stream.
 
 </ReadingCard>
 
@@ -153,10 +148,9 @@ stream sits.
   optional
 >
 
-Read every intelligence-based section: the national-intelligence building
-blocks, and the locating-compute appendix (pp. 67 to 80) the feasibility
-cards in 2.3.10 are built from. This is the source of every feasibility rating
-the module quotes.
+Read the national-intelligence building blocks and the locating-compute
+appendix (pp. 67–80), the source of the feasibility ratings quoted in the
+module and of the feasibility cards in 2.3.10.
 
 </ReadingCard>
 
@@ -170,10 +164,10 @@ the module quotes.
   optional
 >
 
-The newest catalogue: 28 mechanisms for verifying a halt on AI research rather
-than on compute. Read the "Covert projects" subsection, which puts open
-sources, signals and communications intelligence, and human sources side by
-side as the methods that found covert WMD programs, and says which
-rule-breakers each can catch.
+A catalogue of 28 mechanisms for verifying restrictions on AI research rather
+than on compute. Read the "Covert projects" subsection: it lists open sources,
+signals and communications intelligence, and human sources as the methods
+that detected covert WMD programs, and says which kind of violator each can
+catch.
 
 </ReadingCard>

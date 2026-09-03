@@ -2258,3 +2258,8 @@ activity on the earth; FININT as intelligence gathered from the analysis of
 monetary transactions), the field labels are "What it collects" and
 "Limitations", and the legend is an instruction. The head lesson's section
 and the closing summary line use the same terms.
+
+Owner, same day, on the relabelled map: do not credit Clark — the
+literal/nonliteral division is standard across textbooks. The attribution is
+removed from the map's lede, the head lesson's section, and the closing
+summary; the division and its labels stay.

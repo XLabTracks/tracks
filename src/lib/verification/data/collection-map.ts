@@ -13,8 +13,8 @@ export const COLLECTION_COPY = {
   title: "Intelligence collection disciplines",
   lede:
     "Intelligence is collected in a small number of ways, usually called the " +
-    "collection disciplines or the INTs, each named for its source. Clark's " +
-    "textbook divides them into literal collection, whose sources yield " +
+    "collection disciplines or the INTs, each named for its source. They " +
+    "divide into literal collection, whose sources yield " +
     "information in a form people use to communicate, and nonliteral " +
     "collection, whose sources yield images and measurements that need " +
     "technical processing before an analyst can read them. The eight " +

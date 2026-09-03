@@ -2503,3 +2503,22 @@ Repetitions, per the owner's "давай починим":
 5. 2.3.5's two sources-and-methods paragraphs are one.
 6. The limitations ledger is named as the memo's middle in draft, in 2.3.10's
    bench intro and in 2.3.11's Written Output.
+
+## 2026-09-03 — the four write-then-compare checks now persist
+
+Owner, on 2.3.5's exercise being the one piece of writing in the module
+that was not saved: why. Answer: the platform's `understanding-check` card
+was the only ready write-then-compare mechanism and it keeps its text in
+the browser; the persisted `writing-prompt` type had no model answer to
+show. That trade-off was made silently and was the wrong one for a module
+where every other piece of writing is saved. Fixed at the platform level,
+scoped to writing exercises: `WritingExercise` gains an optional
+`sampleAnswer`, rendered once the learner has submitted (commit before the
+answer, the house pattern), in place of the grader card. The four checks
+(`v-intel-cyber-uses`, `v-intel-osint-fas`, `v-intel-imagery-al-kibar`,
+`v-intel-finint-smuggling`) are now `writing-prompt`s with a sample answer:
+drafts autosave, submission is a row, reopen works, signed-out shows the
+usual "sign in to save" card. Their ids stay outside the `v-task-` prefix, so
+the completion page's list of required written work does not grow: they are
+section checks, not the module's written output. The Control track's 33
+understanding checks are untouched.

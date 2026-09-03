@@ -108,7 +108,12 @@ export function CollectionMap(_: VerificationWidgetProps) {
       <p className="text-muted-foreground text-3xs tracking-wide uppercase">
         {label}
       </p>
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+      <div
+        className={cn(
+          "grid grid-cols-2 gap-2",
+          kind === "literal" ? "sm:grid-cols-5" : "sm:grid-cols-3",
+        )}
+      >
         {DISCIPLINES.filter((d) => d.kind === kind).map((d) => (
           <Tile
             key={d.id}

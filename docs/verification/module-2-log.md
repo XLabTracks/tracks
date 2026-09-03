@@ -2143,3 +2143,34 @@ sweep found the footprint of "2.4" well beyond the four lessons:
   "Module 2.4 says…" reads "Module 2.3's human-layer sections say…". The bank
   is regenerated from the briefs. The context distiller's "2.4.1"/"2.4.4"
   are sections of the fictional system card it distills, and stay.
+
+## 2026-09-02 — second consistency pass, on the owner's "go through everything again"
+
+A wider sweep than the first: retired slugs and ids (none left), retired
+concepts, every `2.3.N` pointer in every lesson and data file of the course
+(all resolve to the new map; the context distiller's `2.3.4`–`2.3.6` and
+`2.4.x` are sections of the fictional system card it distills and stay),
+layer-count copy in the app pages and static scripts, the guidance files, and
+a full-page render of the head, 2.3.7 and 2.3.12. What it found:
+
+- The skill map's history rung still read "Empirical anchor: what national
+  intelligence found…" — the section is gone, the finding is in the head;
+  the label drops the section name.
+- The ISIS citation's registry blurb called the brief "an underlying
+  document of the module's case files"; it is now the imagery card
+  practiced on a real undeclared site.
+- The About page listed Module 2 "across the hardware, cloud, intelligence
+  and human layers"; it now says the human layer is read inside intelligence.
+- Three static-script comments (platform.js, map.js, notebook.js) still
+  described the compound rung as `2.1–2.4` filling by quarters; the code
+  reads `compoundRung`/`compoundUnits` from skills.js and needed nothing.
+- CLAUDE.md's Title-Case note named "Module 2.4" as the conformed module; it
+  now names the former 2.4 as 2.3.7–2.3.10.
+- The collection map's language-and-records family is five cards since
+  FININT joined; in a four-column grid the fifth sat alone on a second row.
+  The family grids now take five and three columns respectively.
+
+Left alone, on purpose: `data/exercises.js`'s orphaned `ex-evasion` table
+still names "these four layers" — its own four columns (hardware, cloud,
+intelligence, human) feed the capstone red-team table, and collapsing them
+is a content decision for the owner, recorded here rather than made.

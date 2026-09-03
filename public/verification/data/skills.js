@@ -81,7 +81,7 @@ window.SKILLS = {
         ["0.1", "Nuclear: averted nuclear war, and the decades it took to build the verification apparatus."],
         ["0.3", "IAEA safeguards; what it takes to catch a Chinchilla; Iraq and undeclared infrastructure."],
         ["1.2", "The empty institutional shelf: is there a WHO for AI, an IAEA? — what the nuclear institutions hold that AI's don't."],
-        ["2.3", "Empirical anchor: what national intelligence found that routine safeguards missed."]
+        ["2.3", "What national intelligence found that routine safeguards missed."]
       ] },
     { id: "failure", label: "Identifying failure modes", mod: 0, unit: "0.2", r: 1, lo: [3, 5], bloom: [2, 5],
       goals: [

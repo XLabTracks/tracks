@@ -2275,3 +2275,24 @@ measured from the PDFs) and an "Optional: Going Further" section pointing at
 Basel LEARN's Operational Analysis and Source and Application of Funds
 courses and the platform. Five citations-registry entries. The IMF and
 Egmont FIU overviews proposed earlier are not used.
+
+## 2026-09-02 — three readings from the owner's "find new OSINT articles about AI" ask
+
+Owner, on the general-method readings proposed earlier: no 62-page RAND
+report in OSINT, and the pages should be about OSINT for training runs and
+AI specifically — find new articles by respected people. Searched; the
+owner placed what survived: Epoch AI's *Introducing the Frontier Data Centers
+Hub* (Nov. 2025, ~1,100 words) goes in 2.3.2 as the imagery method written up
+by its practitioners, not in OSINT; the Memphis turbines case (TechCrunch,
+18 June 2025: SELC-commissioned aerial photos, 35 turbines; thermal images a
+month later, at least 33 running; the July permit for 15) goes in 2.3.3 under
+the sentence that already named Memphis; Scher's *Verifying Restrictions on
+Frontier AI Research* (arXiv, June 2026; 28 mechanisms, the "Covert projects"
+subsection) goes in the head's readings as the newest catalogue. All three
+optional, 5 + 5 + 10 minutes. Mercado's 2004 OSINT essay was read and set
+aside: history and institutional argument, not method. Considered and not
+placed: Rahman, *Does Distributed Training Undermine Compute Governance?*
+(May 2026) — awaiting the owner's call after the affiliation check (MIRI
+technical governance team; previously Epoch AI); Rahman and Tajdari's
+zero-overhead telemetry paper (June 2026) belongs to the hardware and cloud
+layers, not here.

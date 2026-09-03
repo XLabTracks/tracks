@@ -150,6 +150,13 @@
       "container": "arXiv",
       "date": "June 2026"
     },
+    "https://arxiv.org/abs/2606.28694": {
+      "title": "Verifying Restrictions on Frontier AI Research",
+      "about": "A catalogue of 28 mechanisms for verifying restrictions on AI research under a halt, including open-source, signals, and human intelligence against covert projects.",
+      "authors": "Scher, Aaron",
+      "publisher": "arXiv",
+      "date": "27 June 2026"
+    },
     "https://arxiv.org/html/2407.05694v1": {
       "title": "On the Limitations of Compute Thresholds as a Governance Strategy",
       "about": "The counterargument on thresholds: why compute cutoffs are a shaky governance proxy, since the compute-risk relationship is uncertain and moving.",
@@ -281,6 +288,13 @@
       "about": "How the hub's numbers are made: commercial imagery and permitting documents, cooling equipment read off the roof, then modelled power, compute, and cost.",
       "org": "Epoch AI",
       "date": "2025"
+    },
+    "https://epoch.ai/latest/introducing-the-frontier-data-centers-hub": {
+      "title": "Introducing the Frontier Data Centers Hub",
+      "about": "Epoch AI's write-up of its open-source method for tracking large AI datacenters — satellite imagery, permits, and public documents combined into power, compute, and construction timelines.",
+      "authors": "Epoch AI",
+      "publisher": "Epoch AI",
+      "date": "4 Nov. 2025"
     },
     "https://epoch.ai/publications/chip-smuggling": {
       "title": "Diversion and Resale: Estimating Compute Smuggling to China",
@@ -418,6 +432,22 @@
       "title": "Our Theory of Change",
       "about": "The source page of the one-page infographic 0.1.2 reproduces — an organization's whole theory of change made legible on a single sheet.",
       "org": "Slow Food USA"
+    },
+    "https://techcrunch.com/2025/06/18/xai-is-facing-a-lawsuit-for-operating-over-400-mw-of-gas-turbines-without-permits/": {
+      "title": "xAI Is Facing a Lawsuit for Operating over 400 MW of Gas Turbines without Permits",
+      "about": "How aerial and thermal photography commissioned by the Southern Environmental Law Center established the number of gas turbines running at xAI's Memphis site.",
+      "authors": "De Chant, Tim",
+      "container": "TechCrunch",
+      "publisher": "TechCrunch",
+      "date": "18 June 2025"
+    },
+    "https://techcrunch.com/2025/07/03/xai-gets-permits-for-15-natural-gas-generators-at-memphis-data-center/": {
+      "title": "xAI Gets Permits for 15 Natural Gas Generators at Memphis Data Center",
+      "about": "The Shelby County air permit that followed the Memphis turbine dispute: 15 generators, up to 247 MW.",
+      "authors": "De Chant, Tim",
+      "container": "TechCrunch",
+      "publisher": "TechCrunch",
+      "date": "3 July 2025"
     },
     "https://techgov.intelligence.org/blog/catch-up-algorithmic-progress-might-actually-be-60x-per-year": {
       "title": "Catch-Up Algorithmic Progress Might Actually Be 60x per Year",

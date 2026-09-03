@@ -2433,3 +2433,12 @@ Buchanan's *Legend of Sophistication*; Rid 2012's espionage section; the CRS
 cyberspace-operations primer. Unreachable from the sandbox: the NRC 2009
 report itself (Lin's article is its public account), the ISC 2015 report,
 Der Spiegel's TAO article.
+
+## 2026-09-03 — no Kaspersky sources
+
+Owner: "we will not touch Russian Kaspersky." The *Equation Group: Questions
+and Answers* report proposed above is withdrawn and is not to be proposed
+again; the same holds for any other Kaspersky material. The remaining
+"capabilities in the wild" candidates, if one is ever wanted, are the CrySyS
+Lab (Budapest University of Technology) *sKyWIper* summary and Citizen
+Lab's Pegasus reporting.

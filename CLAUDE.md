@@ -516,6 +516,9 @@ add must reduce the duplication, never widen it.
   sources regressed on every new batch. A surviving `h1` renders as `h2` —
   the page owns the document's only h1. The breadcrumb stops at the module
   for the same reason.
+- **No Kaspersky sources in the Verification course** (course owner,
+  2026-09-03: "we will not touch Russian Kaspersky"). Do not cite, link, or
+  propose Kaspersky reports or blog posts, whatever the topic.
 - **Never invent curriculum.** Modules 0-2's prose is transcribed from the
   author's WIP outline, verbatim. Modules 3-4 are declared with real titles
   and no items until their prose is drafted — an empty module counts as

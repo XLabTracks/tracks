@@ -2679,3 +2679,29 @@ Same day, owner: Scher and Thiergart leaves the head too, to 2.3.3 as an
 optional reading after the MIRI Appendix D card (the section quotes its
 underground-construction row and its Medium rating for power-grid analysis;
 id kept). The head's reading section is now Wasil alone, headed "Reading".
+
+## 2026-09-03 — 2.3.1 opens in the owner's words
+
+Owner's spec for the start of 2.3.1, applied verbatim: a two-sentence
+contrast (every other method assumes some access; open sources do not); the
+definition of open-source intelligence as the intelligence process applied
+to legally and publicly available information, with the data / information
+/ intelligence distinction (a permit, a news article about the permit, an
+answer with a stated confidence); the MIRI "what can we do today"
+recommendation with its quote, moved up from In the Literature; the line
+"But what does it mean?"; and an optional task, `v-intel-osint-guess`
+("Optional: Can you guess what signs we can catch with open-source data, and
+how?"), a saved free-form prompt outside the `v-task-` prefix. Deleted on
+her instruction: the old lede, the paragraph reading the Six Layers entry
+("The entry names two uses…"), and the paragraph on the other two core
+papers having no OSINT entry. In the Literature now holds the Six Layers
+quote and the §4.4 card only.
+
+One correction inside the kept paragraph: it said the MIRI draft "lists
+open-source intelligence among the methods for locating chips (Appendix
+D)". Appendix D does not mention open sources; the paper's only mention is
+the "what can we do today" recommendation quoted beneath. The sentence now
+claims only that. Review question 1's hint, which pointed at the deleted
+lede, now points at the collection map's OSINT card and 2.3.10's
+limitations table, the two places that still state cheapest-to-collect,
+easiest-to-sanitize.

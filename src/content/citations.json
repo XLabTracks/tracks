@@ -261,13 +261,6 @@
       "container": "NVIDIA Attestation Tools documentation",
       "publisher": "NVIDIA"
     },
-    "https://doi.org/10.48550/arXiv.2304.04123": {
-      "title": "Nuclear Arms Control Verification and Lessons for AI Treaties",
-      "about": "A case study mining nuclear arms-control verification for lessons about what makes AI treaty verification hard and how to make it easier.",
-      "authors": "Baker, Mauricio",
-      "container": "arXiv",
-      "date": "Apr. 2023"
-    },
     "https://en.wikipedia.org/wiki/Executive_Order_14110": {
       "title": "Executive Order 14110",
       "about": "The encyclopedia article on EO 14110's history, contents, and 2025 rescission.",

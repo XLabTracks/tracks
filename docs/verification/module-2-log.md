@@ -2632,3 +2632,31 @@ sentence is her call (it was flagged once before, 2026-08-13, and kept).
 Checked: content, MDX and verification suites (480), and both pages
 rendered on a dev server: the block appears once, in the head, and 2.3.6
 opens on the owner's paragraph.
+
+## 2026-09-03 — the head's objectives come first; five paragraphs cut
+
+Owner, on the head page: the objectives block is the first thing on the
+page and the rest follows; and the five paragraphs after the Wasil quote
+in Intelligence-Based Mechanisms ("NTM is defined by what it does not
+need…" through "A tip is not a finding.") are deleted. Both done. The
+block now opens `intelligence-intro.mdx`, ahead of the owner's transcribed
+intro, the pattern `introduction.mdx` already uses; the "two by the end in
+a row" flag closes with it. The section keeps its first two paragraphs
+and the Wasil three-category quote.
+
+Retargeted, because they pointed at the deleted text: 2.3.1's lede
+("the classification in the module's opening" → *Six Layers* §4.4);
+2.3.5's close ("from the module's opening" → "the module's"); review
+question 2's hint, now "See the Six Layers passage reproduced in 2.3.6:
+the IAEA has often learned of violations from national agencies, not from
+its own safeguards" (that footnote cites Baker 2023); the cyber sample
+answer's "this module's opening calls the split identify and resolve". The
+Baker doi entry left the citations registry as an orphan (citations.test)
+and was removed; the arXiv link in 2.3.11's debates stays.
+
+Two consequences for the owner to rule on: review question 2 still asks
+about "Baker's record of the four states", a framing the module no longer
+states anywhere (2.3.6's reproduced footnote carries the general finding
+only); and objective 3's "what national intelligence found that safeguards
+missed" is now taught by that footnote and the optional debates rather than
+by the head.

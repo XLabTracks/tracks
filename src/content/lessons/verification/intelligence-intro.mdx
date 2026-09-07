@@ -1,16 +1,3 @@
-
-Let’s talk about what a frontier training run physically is, because the physics is what makes this whole layer possible.
-
-Somewhere there is a building. Inside it are tens of thousands of accelerator chips, and every one of them came from somewhere: fabricated at one of the handful of leading-edge fabs you mapped in Module 1, shipped across borders, bought with purchase orders, installed by contractors. The building draws something on the order of a hundred megawatts, the consumption of a small city, continuously, for months. Every watt of that electricity ends up as heat, because that is what computation does to energy, so the facility has to dump city-scale heat into the air or a river, day and night, all winter. The money involved runs to billions once you count the chips, the construction, and the power contracts, and money moves through banks and contracts that leave records. And several hundred engineers had to be hired, which means job postings, moved equity, and LinkedIn.
-
-A state can lie in its declarations. It cannot opt out of thermodynamics, customs, payroll, or the electrical grid. Each of those is a place where a secret program touches the world other people can see, and some of the touches are visible from orbit. Intelligence, as this course uses the word, means collecting and reading those traces without the cooperation of the actor being watched.
-
-That independence is what earns this layer its place next to hardware as one of the two the track weights most. The mechanisms in 2.1 mostly need chips designed or retrofitted for the job, and the ones in 2.2 see whatever passes through a covered provider. Intelligence is how you watch the actor who signed nothing, declared nothing, or is lying, and it requires no buildout: the satellites are already flying, the customs data already accumulates, the analysts are already at their desks. If an emergency pause started tomorrow, this layer would be the one working by evening.
-
-The real problem here is ambiguity. A hundred-megawatt building full of accelerators might be a covert training site, or it might be a video-streaming company’s new region, and from the outside they can look identical. Several hundred data centers in the world are large enough to be candidates. So the questions that organize this section are the ones a working analyst faces in order: which traces are worth watching, and what does each one actually establish, taken one collection discipline at a time (2.3.1–2.3.5)? Who can see a program from inside it, and what makes them talk (2.3.6–2.3.7)? What does granted access add that watching cannot (2.3.8–2.3.9)? How do you read ambiguous traces without fooling yourself, which turns out to be the hardest part of the job (2.3.10)? And when you have the picture, what do you tell the person who has to act on it (2.3.11)?
-
-The goal is that by the end you should be able to take signals, whether they’re thermal plumes, an import spike, a suspicious hiring wave, and say three things about it: what it establishes, what else would explain it, and what it justifies doing next.
-
 <Objectives scope="this submodule">
 1. For a frontier training run, name the signatures it leaves and the collection discipline that reads each, and state for any one of them what it establishes, what access it requires, and its main caveat.
 2. Convert a facility's power draw into an order-of-magnitude bound on its compute, classify a site from its draw alone, and state how fast that signature decays as performance per watt improves.
@@ -23,6 +10,18 @@ The goal is that by the end you should be able to take signals, whether they’r
 9. Choose the proportionate regime response to a lead, from clarification to challenge inspection, weighing the cost of a false alarm against the cost of a miss, and record the confidence, dissent, and blind spots the decision rests on.
 10. Write, for a decision-maker who has not taken the module, an overview of what intelligence-based mechanisms can see this year: current public artifacts, limits stated as the papers state them, and each blind spot with the mechanism that covers it.
 </Objectives>
+
+Let’s talk about what a frontier training run physically is, because the physics is what makes this whole layer possible.
+
+Somewhere there is a building. Inside it are tens of thousands of accelerator chips, and every one of them came from somewhere: fabricated at one of the handful of leading-edge fabs you mapped in Module 1, shipped across borders, bought with purchase orders, installed by contractors. The building draws something on the order of a hundred megawatts, the consumption of a small city, continuously, for months. Every watt of that electricity ends up as heat, because that is what computation does to energy, so the facility has to dump city-scale heat into the air or a river, day and night, all winter. The money involved runs to billions once you count the chips, the construction, and the power contracts, and money moves through banks and contracts that leave records. And several hundred engineers had to be hired, which means job postings, moved equity, and LinkedIn.
+
+A state can lie in its declarations. It cannot opt out of thermodynamics, customs, payroll, or the electrical grid. Each of those is a place where a secret program touches the world other people can see, and some of the touches are visible from orbit. Intelligence, as this course uses the word, means collecting and reading those traces without the cooperation of the actor being watched.
+
+That independence is what earns this layer its place next to hardware as one of the two the track weights most. The mechanisms in 2.1 mostly need chips designed or retrofitted for the job, and the ones in 2.2 see whatever passes through a covered provider. Intelligence is how you watch the actor who signed nothing, declared nothing, or is lying, and it requires no buildout: the satellites are already flying, the customs data already accumulates, the analysts are already at their desks. If an emergency pause started tomorrow, this layer would be the one working by evening.
+
+The real problem here is ambiguity. A hundred-megawatt building full of accelerators might be a covert training site, or it might be a video-streaming company’s new region, and from the outside they can look identical. Several hundred data centers in the world are large enough to be candidates. So the questions that organize this section are the ones a working analyst faces in order: which traces are worth watching, and what does each one actually establish, taken one collection discipline at a time (2.3.1–2.3.5)? Who can see a program from inside it, and what makes them talk (2.3.6–2.3.7)? What does granted access add that watching cannot (2.3.8–2.3.9)? How do you read ambiguous traces without fooling yourself, which turns out to be the hardest part of the job (2.3.10)? And when you have the picture, what do you tell the person who has to act on it (2.3.11)?
+
+The goal is that by the end you should be able to take signals, whether they’re thermal plumes, an import spike, a suspicious hiring wave, and say three things about it: what it establishes, what else would explain it, and what it justifies doing next.
 
 ## Intelligence-Based Mechanisms
 
@@ -54,40 +53,6 @@ hardware-dependent methods (methods that require rules around advanced
 hardware).
 
 </SourceQuote>
-
-NTM is defined by what it does not need: access. That is why it is the
-fallback when a suspected state refuses to cooperate. Wasil's NTM list is
-remote sensing, whistleblowers, energy monitoring, customs-data analysis, and
-financial intelligence. Human sources are part of the category from the start,
-which is why the human layer is covered in this module, as 2.3.6–2.3.9, rather
-than as a module of its own.
-
-*Six Layers* places national intelligence activities (human, signals, and
-cyber intelligence) among its personnel-based layers, as mechanisms that may
-be effective without the Prover's cooperation, and notes that states with weak
-intelligence capabilities could rely on stronger states'. The passage is
-reproduced in full in 2.3.6, with the rest of §4.3.
-
-*Six Layers* classes the technical streams of this module (satellite imagery,
-open sources, and financial audits) as "merely supplemental": limited in scope
-or circumventable on their own. It adds that an attempt to circumvent them
-tends to trigger the other layers. Its example: hiding a datacenter underwater
-means contracting one of the few firms that can build one, which exposes the
-program to those firms' whistleblowers and to intelligence.
-
-The precedent: of the four states the IAEA investigated for undeclared
-facilities (the cases in the track's nuclear-precedents section), three
-investigations began mainly or entirely with national-intelligence tips and
-none through the agency's own safeguards; Baker concludes that the tips
-"appear to be irreplaceable"
-([Baker, pp. 14–15](https://doi.org/10.48550/arXiv.2304.04123)). Baker also
-records the limit: intelligence evidence is characteristically suggestive
-rather than decisive or internationally credible, because satellite images
-are ambiguous and shared documents may be forged. A regime therefore treats a
-tip as the start of a process, not as a verdict.
-
-The distinction that runs through the module: intelligence identifies, the
-regime resolves. A tip is not a finding.
 
 ## Signatures
 

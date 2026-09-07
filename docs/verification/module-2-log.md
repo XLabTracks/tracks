@@ -2749,3 +2749,44 @@ Network infrastructure to 2.3.5 and Technical traces to 2.3.1, and neither
 section currently teaches those methods. The Working Rules say "2.3.10
 covers the scales" for confidence levels; 2.3.10 asks for a stated
 confidence but does not yet present a shared scale.
+
+## 2026-09-03 — 2.3.2 rebuilt to the owner's spec
+
+Owner's text, applied as written: the opening (imagery needs no equipment
+on the ground; "satellite imagery" in the literature means IMINT plus
+GEOINT); the GeoGuessr aside (Bellingcat's and the FBI's method; PIGEON,
+2023; Bellingcat's 500-trial tests of language models, June and August
+2025; the two 2025 benchmarks), set as a note callout titled "GeoGuessr"
+with each work linked; "What the Analyst Looks For"; "The Grid Connection"
+with the MIRI quote kept and her closing argument for GEOINT over IMINT;
+"What Imagery Can and Cannot Settle" with the Al Kibar and Turquzabad
+cases and the pattern paragraph; the Al Kibar card cut to its reading
+instructions (her "reading instructions as currently on the page"), the
+Turquzabad link moved from that card into the case's lead; the Epoch card
+unchanged; the exercise prompt replaced by hers. Deleted with the old text:
+the Overhead Imagery checklist, the note that the IAEA took up satellite
+imagery in the 1990s, and Evidential Value.
+
+Corrections of two slips, both typographic: "оборудование" → "equipment",
+and the stray quotation mark around satellite imagery. One reference
+changed for accuracy: the exercise's "the table above" is the table in
+2.3.1, and now says so. Sample answer extended by me for the added line
+(the row: energy and grid, and the river water that stood in for it; the
+report says those systems were disguised, not omitted).
+
+Four works registered for the appendix, facts checked against the sources:
+PIGEON (Haas, Skreta, Alberti, Finn; arXiv 2307.05845, 11 July 2023; the
+abstract carries the 40%-within-25-km figure), Bellingcat 14 August 2025
+(the page confirms the June round of 500 trials against Google Lens and the
+hallucination finding), "Where on Earth?" (Qian et al., arXiv 2510.10880,
+13 October 2025) and "From Pixels to Places" (Li et al., arXiv 2508.01608,
+3 August 2025). The appendix now lists the owner's Works cited plus the
+Turquzabad report. Minutes: 2.3.2 25 → 30 (prose ~600 words, the two
+readings 17 min, the exercise); unit meta 535 → 540; course.js regenerated.
+
+Flag, unchanged: the Al Kibar paragraph says environmental samples and a
+defector's material settled the building's identity. The assigned report
+says photographs of the inside and outside, obtained by US intelligence
+and reportedly from Israel, settled it in spring 2007, and the exercise's
+sample answer says the same; the IAEA's samples came a year later. The
+page now says two different things about the same question.

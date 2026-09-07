@@ -1,28 +1,43 @@
-The AI-verification literature does not separate these two disciplines: it
-says "satellite imagery" and means both. IMINT is the image; GEOINT is the
-image in its geographic and temporal context: terrain, grid connection, change
-over time. The collection map keeps them apart because they fail differently;
-this section covers them together.
+Imagery works on any place on Earth, we don't need any additional equipment
+to make more probes. You can see in some articles the words "satellite
+imagery" and it means combination of IMINT (what is in the frame) and GEOINT
+(where the image is placed in space and time).
 
-## Overhead Imagery
+<Callout variant="note" title="GeoGuessr">
 
-Building footprint, electrical substations, cooling equipment, security
-perimeter. Facilities above roughly 10,000 H100-equivalents typically occupy
-substantial footprints with characteristic features (MIRI, Appendix D.3.5; a
-2025 snapshot).
+You might have heard of GeoGuessr. Players use the same methodology as
+Bellingcat when they are trying to locate a place of a warcrime or FBI when
+they are trying to figure where the hostage is being held.
 
-Historical note: the IAEA began using satellite imagery only in the 1990s,
-after undeclared facilities went undetected under safeguards that covered
-declared facilities.
+It is also being automated. In 2023 a Stanford team trained
+[PIGEON](https://arxiv.org/abs/2307.05845) on Street View panoramas; it put
+40% of guesses within 25 km globally, ranked in the top 0.01% of GeoGuessr
+players, and beat one of the game's best professionals six games out of six.
 
-Caveats: imagery is unlikely to distinguish AI from non-AI datacenters
-(cooling is the key differentiator), it struggles with industrial look-alikes,
-and it can be defeated by underground or camouflaged construction.
+General-purpose vision-language models are now tested on the same task:
+[Bellingcat ran 500 trials](https://www.bellingcat.com/resources/2025/08/14/llms-vs-geolocation-gpt-5-performs-worse-than-other-ai-models/)
+in June 2025 and again in August, and found the leading models competitive
+with Google Lens on holiday photos with signs and architecture, weaker on
+remote landscapes, and prone to confident wrong answers. Academic benchmarks
+now exist for the task at country, city and street scale (GeoBench-style
+suites; ["Where on Earth?"](https://arxiv.org/abs/2510.10880), 2025;
+["From Pixels to Places"](https://arxiv.org/abs/2508.01608), 2025).
+
+</Callout>
+
+## What the Analyst Looks For
+
+A frontier cluster is a large industrial building with an unusual ratio of
+power and cooling to floor area. However this method does not distinguish an
+AI datacenter from a cloud or enterprise one, except through cooling density
+and power, and those overlap. And it says nothing about what runs inside a
+finished building. You will learn about converting a power estimate into a
+compute estimate in 2.3.3.
 
 ## The Grid Connection
 
-Imagery becomes geospatial when the object is not the building but the
-infrastructure that must reach it.
+Imagery becomes geospatial when the object is not the building but what must
+reach it.
 
 <SourceQuote
   t="An International Agreement to Prevent the Premature Creation of Artificial Superintelligence"
@@ -41,16 +56,38 @@ take a long time and would itself be visible to satellites.
 
 </SourceQuote>
 
-A city-scale power draw needs a city-scale connection, and hiding the
-connection is itself a slow construction project visible from orbit.
-Converting the draw into compute is the arithmetic of 2.3.3.
+A city-scale draw needs a city-scale connection, and hiding the connection is
+itself a slow construction project visible from orbit. This is the argument
+for GEOINT over IMINT in one sentence: you can disguise a box, but you cannot
+disguise the fact that a gigawatt arrived somewhere.
 
-## Evidential Value
+## What Imagery Can and Cannot Settle
 
-Imagery can falsify a cover story: Iran's denial of activity at a site was
-contradicted by commercially available satellite imagery. Whether commercial
-imagery is a net gain for verification or a liability (shutter control,
-physical limits, AI-generated imagery) is one of the debates in 2.3.11.
+Two cases from nuclear verification mark the limits.
+
+**Al Kibar, Syria, 2007.** After the building was bombed, ISIS located it in
+commercial imagery and identified it as a reactor. The IAEA's own imagery
+experts, reading the same images, judged that unlikely. Every signature on
+the checklist above had been concealed: a remote canyon, a building partly
+underground, a false roof and walls that turned a Yongbyon-shaped structure
+into a plain box, no visible cooling, no visible power lines, no housing.
+Imagery did not settle the question. Environmental samples and a defector's
+material did. The lesson is not that imagery failed. It is that a Prover who
+knows the checklist can build against it, and that two competent analysts can
+read the same frame in opposite ways.
+
+**[Turquzabad, Iran, 2018.](https://isis-online.org/isis-reports/revealed-emptying-of-the-iranian-atomic-warehouse-at-turquz-abad)**
+A rival state's seized archive supplied coordinates. Commercial imagery then
+showed the site being emptied, container by container, over months.
+Environmental samples settled what had been there. Imagery did not find the
+site and did not identify the material; it established the timeline of the
+cover-up once someone else had said where to look.
+
+The pattern in both: imagery is decisive about sequence and location, weak
+about identity, and it works best when another layer has provided the target.
+Read 2.3.1's four roles again with that in mind. Whether commercial imagery
+is a net gain for verification or a liability (shutter control, physical
+limits, AI-generated imagery) is one of the debates in 2.3.11.
 
 <ReadingCard
   id="intel-isis-al-kibar"
@@ -62,18 +99,7 @@ physical limits, AI-generated imagery) is one of the debates in 2.3.11.
 >
 
 Read the introduction (pp. 1–3) and "Summary and Lessons" (pp. 28–30); the
-sections between them are annotated images and can be skimmed. ISIS located
-the bombed building from commercial imagery in October 2007 and identified it
-as a reactor; the IAEA's imagery experts, reading the same images, judged that
-unlikely. Every signature the skeptics expected (physical protection, a tall
-reactor hall, power lines, cooling, a stack, transport, housing) had been
-concealed: a remote canyon, a building partly underground, a false roof that
-turned a Yongbyon-shaped structure into a box. Imagery did not settle the
-question. A related case is Turquzabad,
-[Revealed: Emptying of the Iranian "Atomic Warehouse" at Turquz Abad](https://isis-online.org/isis-reports/revealed-emptying-of-the-iranian-atomic-warehouse-at-turquz-abad)
-(Albright, Heinonen, Pabian, and Stricker, 2018): a rival's seized archive
-pointed at coordinates, commercial imagery showed the site being emptied, and
-environmental samples settled it.
+sections between them are annotated images and can be skimmed.
 
 </ReadingCard>
 

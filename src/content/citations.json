@@ -59,6 +59,13 @@
       "container": "EU Artificial Intelligence Act",
       "publisher": "artificialintelligenceact.eu"
     },
+    "https://arxiv.org/abs/2307.05845": {
+      "title": "PIGEON: Predicting Image Geolocations",
+      "about": "A Stanford geolocation model trained on Street View panoramas from GeoGuessr: over 40% of guesses within 25 km worldwide, the top 0.01% of the game's players, and a six-game win over one of its best professionals; the section's example of automated geolocation.",
+      "authors": "Haas, Lukas, Michal Skreta, Silas Alberti, and Chelsea Finn",
+      "publisher": "arXiv",
+      "date": "11 July 2023"
+    },
     "https://arxiv.org/abs/2402.02675": {
       "title": "Verifiable evaluations of machine learning models using zkSNARKs",
       "about": "Shows a model's claimed evaluation results can be proved with zkSNARKs without revealing the weights behind them.",
@@ -114,6 +121,20 @@
       "authors": "Baker, Mauricio, Gabriel Kulp, Oliver Marks, et al.",
       "container": "arXiv",
       "date": "July 2025"
+    },
+    "https://arxiv.org/abs/2508.01608": {
+      "title": "From Pixels to Places: A Systematic Benchmark for Evaluating Image Geolocalization Ability in Large Language Models",
+      "about": "IMAGEO-Bench: accuracy, distance error, geospatial bias, and reasoning of ten language models on global street scenes, US points of interest, and a private set of unseen images.",
+      "authors": "Li, Lingyao, Runlong Yu, Qikai Hu, et al.",
+      "publisher": "arXiv",
+      "date": "3 August 2025"
+    },
+    "https://arxiv.org/abs/2510.10880": {
+      "title": "Where on Earth? A Vision-Language Benchmark for Probing Model Geolocation Skills Across Scales",
+      "about": "EarthWhere: 810 images at two scales, country-level multiple choice and street-level identification with optional web search, for scoring vision-language models on geolocation.",
+      "authors": "Qian, Zhaofang, Hardy Chen, Zeyu Wang, et al.",
+      "publisher": "arXiv",
+      "date": "13 October 2025"
     },
     "https://arxiv.org/abs/2510.21203": {
       "title": "The Nuclear Analogy in AI Governance Research",
@@ -549,6 +570,13 @@
       "about": "The Additional Protocol assures the absence of undeclared nuclear material and activities: the response to the declared-versus-undeclared gap exposed by Iraq and North Korea. Primary text: IAEA INFCIRC/540.",
       "org": "Arms Control Association",
       "date": "2024"
+    },
+    "https://www.bellingcat.com/resources/2025/08/14/llms-vs-geolocation-gpt-5-performs-worse-than-other-ai-models/": {
+      "title": "LLMs vs. Geolocation: GPT-5 Performs Worse Than Other AI Models",
+      "about": "Bellingcat's second round of 500 geolocation trials, language models against Google Lens on the team's own holiday photos: strongest on scenes with signs and architecture, weakest on remote landscapes, and every model hallucinating at some point.",
+      "authors": "Bellingcat",
+      "publisher": "Bellingcat",
+      "date": "14 August 2025"
     },
     "https://www.cia.gov/resources/csi/books-monographs/psychology-of-intelligence-analysis-2": {
       "title": "Psychology of Intelligence Analysis",

@@ -28,6 +28,21 @@ But what does it mean?
 
 <Exercise id="v-intel-osint-guess" />
 
+| Category | What to look at | What it establishes | Where it is taught |
+| --- | --- | --- | --- |
+| Energy and grid | Interconnection requests (ERCOT, PJM, FERC, state PUCs), power purchase agreements, grid-operator load data, new substations and transformers, on-site generation permits | Upper bound on cluster power; commissioning timeline | 2.3.3 |
+| Imagery | Optical (Planet, Maxar), thermal (SatVu), construction progress, cooling equipment, substations, parking lots, night lights | Physical existence and scale of a facility | 2.3.2 |
+| Chip supply chain | Customs records (HS codes, Panjiva, ImportGenius), TSMC, Nvidia, SK Hynix disclosures, export licences, intermediaries | Where accelerators went and in what quantity | 2.3.4 |
+| Financial disclosures | 10-K and 10-Q, capex on earnings calls, project finance and bond issues for data centres, cloud contracts and backlog, state tax incentives | Whether stated scale matches money spent | 2.3.4 |
+| Permits and local records | Building, environmental, water and zoning permits, council hearings, local news, lawsuits, lobbying filings | Early signal of intent; often earlier and more precise than press releases | 2.3.1, 2.3.2 |
+| Agreements | Cloud deals (Microsoft and OpenAI, Oracle and OpenAI, CoreWeave), government contracts, voluntary commitments, industry-body membership | Who is using whose compute; what was promised | 2.3.1, 2.3.9 |
+| Technical traces | Model cards, papers, benchmarks, compute estimates (Epoch AI), API behaviour, public repositories | Back-calculated FLOP for models already trained | 2.3.1 |
+| Network infrastructure | BGP and ASN announcements, IP ranges, dark-fibre leases, cable capacity, inter-site latency | Whether clusters are linked across sites | 2.3.5 |
+| People | Hiring, job postings, career moves, conference talks, leaks, litigation between firms | Indirect signals; the verifier's route to interviewees | 2.3.6 |
+
+Most rows are disciplines in their own right, and the sections named in the
+last column teach their methods.
+
 ## In the Literature
 
 The fullest treatment of open sources in the core literature is one entry
@@ -68,11 +83,91 @@ well) and why an attempt to circumvent them tends to trigger the other layers.
 
 </ReadingCard>
 
-## In Practice
+## Four Things Open Sources Do for a Verifier
 
-Several public trackers now do what the papers describe. The FAS report below
-is one; the power explainer in 2.3.3 runs on Epoch's datacentre dataset, which
-is built the same way (2.3.2 describes the method).
+The NATO handbook on open sources, written for coalition staffs without their
+own classified collection, names four contributions open sources make to the
+rest of the intelligence effort. All four transfer to verification, and
+together they say more precisely what "supplementary" means.
+
+1. **Tip-off.** Open data is usually first to show an anomaly: a grid filing
+   before a press release, a permit before a building.
+2. **Targeting.** Open data tells the verifier where to spend the expensive
+   instruments: which site to inspect, which cluster to attest, which cloud
+   records to request.
+3. **Context and validation.** Open data lets the verifier read the result of
+   the expensive instrument. Imagery shows a building; the permit says what it
+   was built for and when.
+4. **Plausible cover.** If the verifier learned something through a closed
+   channel, an open source that shows the same thing lets the finding be put
+   to the Prover without revealing the method. The AI verification literature
+   does not discuss this role, and for a US-China agreement it matters: how do
+   you allege a violation without disclosing how you know.
+
+<ReadingCard
+  id="intel-nato-osint-handbook"
+  href="https://archive.org/details/NATOOSINTHandbookV1.2"
+  title="NATO Open Source Intelligence Handbook"
+  author="NATO | Supreme Allied Commander Atlantic"
+  year="2001"
+  mins="85 min"
+  optional
+>
+
+If you are interested you can find the handbook
+[here](https://archive.org/details/NATOOSINTHandbookV1.2) but it was written
+for staffs who use open sources so as not to burden a national intelligence
+service. A verifier is in the opposite position: the closed sources may not
+exist, or may belong to the other side. The four roles still hold, but the
+reason to invest in open sources is not economy. It is that for much of the
+problem, open sources are all there is.
+
+</ReadingCard>
+
+## What Open Sources Cannot Reach
+
+Three limits recur in every source above and in the FAS case below.
+
+1. Open sources estimate capacity, not activity. Nothing visible from outside
+   distinguishes training from inference from idle.
+2. All of it is evadable by a Prover who is trying: distributed training
+   across sub-threshold sites, rented compute in a third country, hardware
+   bought through intermediaries.
+3. Open sources therefore mostly produce discrepancy that justifies the more
+   intrusive layers.
+
+## Working Rules
+
+Four rules from the intelligence and investigative-journalism literature that
+apply unchanged to a verification file.
+
+- **Collect sources, not information.** Keep an evaluated register of sources
+  (what it is, who runs it, how reliable it has proved, how often it updates),
+  not an archive of facts. The register is what lets the next analyst start
+  in an hour rather than a week.
+- **Provenance is half the product.** Every claim carries where it came from,
+  when it was published, and when it was collected. An undated or unsourced
+  item is treated as suspect. Archive every page, because pages change.
+- **Separate information from fact.** The reader must be able to see, line by
+  line, what is known, what is inferred, and what is guessed. State a
+  confidence level using a shared scale (2.3.10 covers the scales).
+- **Corroborate across independent sources.** Two sources that copy from the
+  same press release are one source. Independence means a different collector
+  with a different reason to be right.
+
+There are public trackers that cover information relevant for training run.
+For example the power explainer in 2.3.3 runs on Epoch's data-centre dataset.
+It becomes easier and easier to create automated trackers purely on open
+source information since many things are uploaded to internet, or, at least
+traces of activities. You might be familiar with the Pentagon Pizza Index. The
+observation dates to the Cold War: on the nights before major US military
+operations, pizza deliveries to the Pentagon and the CIA spiked, because staff
+were working late. Journalists noticed it before the 1989 Panama invasion and
+the 1991 Gulf War. Now Google Maps publishes live "popular times" for every
+pizzeria including those near the Pentagon; an account called Pentagon Pizza
+Report on x.com posts screenshots when several of them run unusually busy late
+at night, and it flagged activity hours before the June 2025 US strikes on
+Iran. It is one of the most classic OSINT examples.
 
 <ReadingCard
   id="intel-fas-hyperscale"
@@ -130,3 +225,9 @@ social-media research, people and company finders, domain and IP lookups,
 government and charity registers, geolocation and mapping, verification tools.
 The site is free. It is a directory, not a course: go to the category your
 question belongs to.
+
+The [Berkeley Protocol](https://www.ohchr.org/sites/default/files/2024-01/OHCHR_BerkeleyProtocol.pdf)
+is the current standard for open-source investigation: collection,
+preservation, verification and chain of custody, written for investigators
+who will have to defend their findings to a hostile reader. It is long; the
+chapters on verification and documentation are the ones that transfer.

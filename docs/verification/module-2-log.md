@@ -2705,3 +2705,47 @@ claims only that. Review question 1's hint, which pointed at the deleted
 lede, now points at the collection map's OSINT card and 2.3.10's
 limitations table, the two places that still state cheapest-to-collect,
 easiest-to-sanitize.
+
+## 2026-09-03 — 2.3.1 rebuilt to the owner's spec, second half
+
+Owner's text, applied as written: the nine-row table of open-source
+categories (what to look at, what it establishes, where in 2.3 it is
+taught) with its closing sentence; "Four Things Open Sources Do for a
+Verifier" (tip-off, targeting, context and validation, plausible cover,
+after the NATO handbook) with the handbook as an optional card whose blurb
+is hers (57 pages, ~19,000 words, 85 min); "What Open Sources Cannot Reach"
+(capacity not activity; evadable; produces discrepancy); "Working Rules"
+(four rules); the trackers paragraph with her Pentagon Pizza Index text
+verbatim; the FAS card and the GIJN card as they were; the exercise prompt
+replaced by hers (one word of confidence per source, and which layer of 2.3
+to invoke next); the Berkeley Protocol paragraph in Going Further, linked
+to the OHCHR PDF. Formatting decisions mine: Title Case headings, bold
+lead-ins on the four roles and the four rules, "here" in the NATO blurb
+linked to the same URL as the card.
+
+Placement decision: In the Literature (the Six Layers quote and the §4.4
+card) sits between the table and Four Things, because Four Things says
+what "supplementary" means and the term is Six Layers'. In Practice as a
+heading is gone; her trackers paragraph takes its place.
+
+Not added: a hand-written Works Cited. The lesson page already assembles a
+Works cited appendix from every link in the body (rehype-lesson-citations
+plus citations.json), so the two new works were registered instead (NATO
+handbook, Berkeley Protocol) and the appendix now lists Baker et al., Elba,
+Krawec, Myers, NATO, OHCHR/Berkeley, and Scher et al.: her list plus the two
+works the page links that she did not name.
+
+Sample answer for the FAS exercise extended by me to cover the two new asks:
+a confidence word per source and a next layer (2.3.3 thermal or grid data to
+see whether the turbines run; 2.3.8 if the draw contradicts the declaration).
+Minutes: 2.3.1 25 → 30 (prose now ~1,170 words, 5 min, plus the FAS
+reading, the exercise and the optional guess); unit meta 530 → 535;
+course.js regenerated.
+
+Flags for the owner, none changed: the handbook's own preface lists
+"tip-offs, context, validation and cover for information sanitation";
+"targeting" is the section's addition. The table's last column sends
+Network infrastructure to 2.3.5 and Technical traces to 2.3.1, and neither
+section currently teaches those methods. The Working Rules say "2.3.10
+covers the scales" for confidence levels; 2.3.10 asks for a stated
+confidence but does not yet present a shared scale.

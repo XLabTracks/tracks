@@ -46,6 +46,13 @@
       "publisher": "AI Whistleblower Initiative",
       "date": "2026"
     },
+    "https://archive.org/details/NATOOSINTHandbookV1.2": {
+      "title": "NATO Open Source Intelligence Handbook",
+      "about": "The coalition staff handbook on open sources, version 1.2 on the Internet Archive: what open sources contribute to an all-source effort (tip-offs, context, validation, and cover for information sanitation), how to collect and evaluate them, and how to organise an OSINT capability without tasking a national service.",
+      "authors": "NATO",
+      "publisher": "Supreme Allied Commander Atlantic",
+      "date": "November 2001"
+    },
     "https://artificialintelligenceact.eu/article/51/": {
       "title": "Article 51: Classification of General-Purpose AI Models as General-Purpose AI Models with Systemic Risk",
       "about": "The consolidated text of the AI Act article that presumes systemic risk above 10^25 training FLOP.",
@@ -636,6 +643,13 @@
       "title": "Superconducting Super Collider: Cancellation",
       "about": "A reference page on the SSC's 1993 cancellation, mirroring the Wikipedia article's Cancellation section under Creative Commons.",
       "org": "LiquiSearch"
+    },
+    "https://www.ohchr.org/sites/default/files/2024-01/OHCHR_BerkeleyProtocol.pdf": {
+      "title": "Berkeley Protocol on Digital Open Source Investigations",
+      "about": "The standard for open-source investigations whose findings must survive a hostile reader: principles, legal framework, security and preparation, then the investigation cycle (online inquiries, collection, preservation, verification, analysis) and reporting; the 2022 printing of the 2020 protocol.",
+      "authors": "Office of the United Nations High Commissioner for Human Rights, and Human Rights Center, UC Berkeley School of Law",
+      "publisher": "United Nations",
+      "date": "2020"
     },
     "https://www.opcw.org/chemical-weapons-convention/annexes/verification-annex/part-x-challenge-inspections-pursuant": {
       "title": "Verification Annex, Part X: Challenge Inspections Pursuant to Article IX",

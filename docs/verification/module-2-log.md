@@ -2660,3 +2660,17 @@ states anywhere (2.3.6's reproduced footnote carries the general finding
 only); and objective 3's "what national intelligence found that safeguards
 missed" is now taught by that footnote and the optional debates rather than
 by the head.
+
+## 2026-09-03 — the head's optional cards redistributed
+
+Owner: the head's optional readings duplicate what the later sections
+cover. Six Layers §4.3 stays where it is reproduced (2.3.6); §4.4 whole
+becomes an optional card in 2.3.1, placed in In the Literature directly
+after the paragraph that reads its OSINT entry (5 min, ~1,050 words). Scher
+2026 goes later as optional: to 2.3.5, after Warner and before the
+exercise, because the exercise's sample answer draws three of its seven
+points from the paper's Covert projects subsection and the learner should
+be able to read the source before comparing; the card keeps its id, so a
+reader's mark on it survives the move. The head now carries Wasil
+(required) and Scher and Thiergart (optional); the latter awaits the
+owner's word. No registry change: both URLs remain cited.

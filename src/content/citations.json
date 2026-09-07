@@ -59,6 +59,20 @@
       "container": "EU Artificial Intelligence Act",
       "publisher": "artificialintelligenceact.eu"
     },
+    "https://arxiv.org/abs/2001.08361": {
+      "title": "Scaling Laws for Neural Language Models",
+      "about": "The scaling-laws paper: language-model loss as a power law in parameters, data, and compute, and the source of the rule of thumb that training costs about six FLOP per parameter per token.",
+      "authors": "Kaplan, Jared, Sam McCandlish, Tom Henighan, et al.",
+      "container": "arXiv",
+      "date": "Jan. 2020"
+    },
+    "https://arxiv.org/abs/2203.15556": {
+      "title": "Training Compute-Optimal Large Language Models",
+      "about": "The Chinchilla paper: for a fixed training budget, model size and training tokens should be scaled in roughly equal proportion, so ten times the compute buys about 3.2 times the parameters and 3.2 times the tokens.",
+      "authors": "Hoffmann, Jordan, Sebastian Borgeaud, Arthur Mensch, et al.",
+      "container": "arXiv",
+      "date": "Mar. 2022"
+    },
     "https://arxiv.org/abs/2307.05845": {
       "title": "PIGEON: Predicting Image Geolocations",
       "about": "A Stanford geolocation model trained on Street View panoramas from GeoGuessr: over 40% of guesses within 25 km worldwide, the top 0.01% of the game's players, and a six-game win over one of its best professionals; the section's example of automated geolocation.",
@@ -339,6 +353,13 @@
       "publisher": "Epoch AI",
       "date": "29 Apr. 2026"
     },
+    "https://epoch.ai/publications/power-demands-of-frontier-ai-training": {
+      "title": "How Much Power Will Frontier AI Training Demand in 2030?",
+      "about": "Epoch's projection of the power a frontier training run draws: 2.2× a year historically, from 4–5× a year compute growth net of hardware efficiency and longer runs, reaching multiple gigawatts by 2030.",
+      "authors": "You, Josh, and David Owen",
+      "container": "Epoch AI",
+      "date": "11 Aug. 2025"
+    },
     "https://fas.org/publication/tracking-hyperscale/": {
       "title": "Tracking Hyperscale AI Data Center Growth with Satellite Imagery",
       "about": "A trained imagery analyst's method for reading AI datacentre construction from commercial satellite imagery, with two case studies (Ajman, Colossus) and the open sources — utility annotations, permits, a civil-society flight — read beside the images.",
@@ -487,6 +508,13 @@
       "authors": "Myers, Paul",
       "publisher": "Research Clinic",
       "date": "n.d.",
+      "standalone": true
+    },
+    "https://resources.nvidia.com/en-us-hopper-architecture/nvidia-tensor-core-gpu-datasheet": {
+      "title": "NVIDIA H100 Tensor Core GPU Datasheet",
+      "about": "NVIDIA's specification sheet for the H100: the 700 W thermal design power of the SXM part and its 16-bit tensor throughput, the two numbers behind the lesson's joules-per-FLOP estimate.",
+      "org": "NVIDIA",
+      "date": "2022",
       "standalone": true
     },
     "https://slowfoodusa.org/theory-of-change/": {
@@ -710,7 +738,7 @@
       "title": "SatVu Releases First-of-its-Kind Thermal Image Revealing True Operational Activity Inside Major U.S. Data Centre",
       "about": "The thermal signature as a shipping product: heat across rooftop cooling, substations, and electrical yards showing which parts of a datacentre are active.",
       "org": "SatVu",
-      "date": "2026"
+      "date": "16 Dec. 2025"
     },
     "https://www.sipri.org/sites/default/files/files/books/SIPRI85Krass/SIPRI85Krass03.pdf": {
       "title": "Verification: How Much Is Enough?",

@@ -1,38 +1,152 @@
-Measurement and signature intelligence reads what a facility cannot avoid
-emitting: the heat it dumps and the power it draws. It is the module's most
-quantitative stream and the one that decays fastest.
+A cluster turns electricity into heat at close to 100% efficiency, and both
+ends of that conversion are measurable from outside: the power has to come
+from somewhere, and the heat has to go somewhere. Measurement and signature
+intelligence reads those two quantities and estimates how much compute is
+running here.
 
-## Thermal Signatures
+<Fold label="Optional: Power, From Watts to FLOP">
 
-The signature is waste heat, held in the narrow temperature band of constant
-chip operation. It is read by infrared imaging, or inferred from rooftops where
-snow does not accumulate in winter (Baker, footnote 127). Sensing capability is
-improving: HotSat-class commercial thermal satellites are the current example,
-and SatVu has published a
-[thermal image of a live US datacenter](https://www.satellitevu.com/news/satvu-releases-first-of-its-kind-thermal-image-revealing-true-operational-activity-inside-major-u-s-data-centre)
-in which rooftop cooling, substations, and electrical yards read as active or
-dormant from orbit.
+A watt measures how quickly energy is used: one joule per second. A 2 kW
+kettle converts 2,000 joules of electrical energy into heat every second. A
+computing cluster drawing 130 MW consumes 130 million joules per second.
+Watts describe a rate, not a total amount of energy.
 
-## Energy and the Power Grid
+A FLOP is one arithmetic operation, such as an addition or multiplication, on
+floating-point numbers—the computer’s way of representing values such as 0.25
+or −3.7 across a wide range of magnitudes. FLOP count the arithmetic
+performed; FLOP per second measure how fast it happens.
 
-Measured energy delivery can be converted into an approximate FLOP count,
-which makes large unauthorized runs detectable from power draw; the method
-catches coarse violations only (Wasil et al.). The grid connection that such a
-draw requires, and what it looks like from orbit, is covered in 2.3.2. This
-section covers the number.
+Think of a language model as an enormous collection of adjustable numbers,
+called parameters. During pretraining, it processes text divided into
+tokens—words or pieces of words—and predicts what comes next. Its prediction
+errors guide small adjustments to the parameters. This process repeats across
+the training data, teaching the model patterns that help it make better
+predictions.
 
-Scher and Thiergart rate power-grid analysis at **Medium** feasibility, the
-only intelligence mechanism they do not rate High. They give three reasons:
+Most of the arithmetic involved is matrix multiplication. For a conventional
+dense transformer, the training cost can be approximated as:
 
-- Covert generation at the roughly 130 MW scale of a 100k-H100 cluster is
-  plausible, comparable to military naval reactors.
-- Around 500 datacenters worldwide exceed 10 MW (2024–25 figures), so the set
-  of candidate sites is large.
-- Chip performance per watt improves about 1.6× a year, so the energy
-  signature of a fixed quantity of compute shrinks each year.
+$$
+\text{Training FLOP} \approx 6 \times \text{number of parameters} \times \text{number of tokens processed}.
+$$
 
-A case: xAI's behind-the-meter gas turbines in Memphis were detected by aerial
-thermal imaging. The case shows the signature and the workaround together.
+The factor of six accounts for both making predictions and calculating how
+the parameters should change. It is an approximation, not an exact count for
+every model architecture
+([Kaplan et al., 2020](https://arxiv.org/abs/2001.08361)).
+
+This gives two main ways to spend more compute: train a larger model, or
+train it on more text. More parameters make processing each token more
+expensive; more tokens mean more processing overall. The 2022 Chinchilla
+study found that, to get the best performance from a fixed training budget
+under its experimental conditions, model size and training data should grow
+in roughly equal proportions. Following that rule, ten times more compute
+would mean about 3.2 times as many parameters and 3.2 times as many tokens
+([Hoffmann et al., 2022](https://arxiv.org/abs/2203.15556)).
+
+The connection to electricity is physical. Arithmetic in a chip requires
+switching transistors, which charges and discharges tiny electrical
+capacitances and dissipates energy as heat.
+
+For a rough hardware benchmark, an NVIDIA H100 SXM has a power rating of up
+to 700 W and a peak throughput of approximately $10^{15}$ dense, 16-bit
+floating-point operations per second. Dividing power by throughput gives an
+energy cost on the order of $10^{-12}$ joules per FLOP. This is a peak-based
+GPU estimate, not a measurement of an entire training facility
+([NVIDIA H100 datasheet](https://resources.nvidia.com/en-us-hopper-architecture/nvidia-tensor-core-gpu-datasheet)).
+
+Using that illustrative efficiency, a training run requiring $10^{25}$ FLOP
+would consume:
+
+$$
+10^{25}\ \text{FLOP}\times10^{-12}\ \text{joules/FLOP} =10^{13}\ \text{joules} \approx2.8\ \text{GWh}.
+$$
+
+Spread over three months, that corresponds to roughly 1.3 MW of average power
+under those assumptions. A facility actually drawing 130 MW for three months
+would instead consume about 280 GWh—a hundred times as much energy.
+
+The hundredfold gap between the two examples is the difference between a 2023
+frontier run and a 2025–26 one. Frontier training compute has grown 4 to 5
+times a year, and after efficiency gains and longer runs are netted out, the
+power a frontier run draws has still grown 2.2 times a year
+([You and Owen, 2025](https://epoch.ai/publications/power-demands-of-frontier-ai-training)).
+The signature scales with the run, and the run has been getting bigger faster
+than the chips have been getting cheaper to feed.
+
+</Fold>
+
+## Heat
+
+<ReadingCard
+  id="intel-satvu-thermal"
+  href="https://www.satellitevu.com/news/satvu-releases-first-of-its-kind-thermal-image-revealing-true-operational-activity-inside-major-u-s-data-centre"
+  title="SatVu releases first-of-its-kind thermal image revealing true operational activity inside major U.S. data centre"
+  author="SatVu"
+  year="2025"
+  mins="3 min"
+>
+
+Read the release.
+
+</ReadingCard>
+
+Almost all the electricity a data centre consumes ends up as heat. A large
+training run can keep chips under a fairly constant load for weeks, so the
+cooling system has to remove roughly the same amount of heat, day and night.
+Inference often varies with user demand. A sustained thermal signature can
+therefore be evidence of continuous, intensive use—not just that a site has
+the capacity for it. However it is important to note that energy consumption
+may be disguised as other high-energy activities and obtaining detailed
+energy consumption data can be hard.
+
+Commercial thermal satellites such as HotSat can resolve individual
+buildings. SatVu has published thermal imagery of an operating US data centre
+showing which cooling equipment, substations and electrical yards appear
+active. There are simpler indicators too:
+[Baker et al.](https://arxiv.org/abs/2507.15916) note that roofs where snow
+does not settle in winter can reveal waste heat (footnote 127). That may be
+visible in ordinary optical satellite imagery, without a thermal sensor.
+
+But heat does not tell us what the chips are doing. It provides evidence of
+activity and a rough indication of its scale, not a reliable distinction
+between training and inference. A Prover could run inference between
+training runs to keep power consumption—and heat output—roughly constant.
+The workload would change; the thermal signature would not necessarily show
+it.
+
+<ReadingCard
+  id="intel-wasil-energy-monitoring"
+  href="https://arxiv.org/abs/2408.16074"
+  title="Verification Methods for International AI Agreements"
+  author="Wasil, Reed, Miller, and Barnett | arXiv"
+  year="2024"
+  mins="5 min"
+>
+
+Read the "Energy monitoring" entry under national technical means: the
+description, the historical precedents, and the evasion techniques. Note what
+they mean by "coarse": the method can catch a facility drawing far more than
+it declares, and cannot catch a run that fits inside an authorised facility's
+normal draw. The evasion list is the one to keep.
+
+</ReadingCard>
+
+<ReadingCard
+  id="intel-scher-thiergart"
+  href="https://arxiv.org/abs/2506.15867"
+  title="Mechanisms to Verify International Agreements About AI Development"
+  author="Scher and Thiergart | MIRI"
+  year="2024"
+  mins="30 min"
+  optional
+>
+
+Read the national-intelligence building blocks and the locating-compute
+appendix (pp. 67–80), the source of the feasibility ratings quoted in the
+module and of the feasibility cards in 2.3.10.
+
+</ReadingCard>
 
 <ReadingCard
   id="intel-memphis-turbines"
@@ -53,40 +167,6 @@ allows 15 generators, 247 MW.
 
 </ReadingCard>
 
-<Callout variant="note" title="Power depends on architecture">
-
-Power consumption depends on architecture, so the same facility can change its
-signature without changing its size. Scaling an existing architecture by adding
-layers and moving to a new architecture with a different compute profile
-produce different curves, and inference and training draw differently again.
-See Scher et al., *An International Agreement to Prevent the Premature Creation
-of Artificial Superintelligence*, Appendix D, and compare with the account of
-development in Module 1.
-
-</Callout>
-
-## Underground Construction
-
-Scher and Thiergart list one more measurement mechanism, rated High
-feasibility within a year: geophysical methods already in use to detect
-underground construction, applied to a datacenter built underground.
-
-<SourceQuote
-  t="Mechanisms to Verify International Agreements About AI Development"
-  url="https://arxiv.org/abs/2506.15867"
-  what="the locating-compute appendix (pp. 67–80) — the underground-construction row"
-  by="Scher and Thiergart | MIRI (2024)"
->
-
-Various approaches are already in use to detect underground construction
-(National MASINT Office, 2022). Applying them could reduce the likelihood of
-underground data centers being built secretively.
-
-</SourceQuote>
-
-Their caveat: these approaches may not, on their own, distinguish a datacenter
-from any other underground construction.
-
 ## Interactive: The Power Signature
 
 The explainer below is built from
@@ -96,45 +176,3 @@ load a watcher can and cannot read, and projects how fast the signature
 shrinks as performance per watt improves.
 
 <VerificationExercise id="datacenter-power" />
-
-## Drill Bench
-
-A Fermi estimate: derive the power-to-compute conversion from two basic
-facts, scale it to a real cluster, then classify three sites from their power
-draw alone. Work the numbers out yourself; reference values appear only after
-you commit.
-
-<VerificationExercise id="drills-intel-signatures" />
-
-## Reading
-
-<ReadingCard
-  id="intel-miri-appendix-d"
-  href="https://arxiv.org/abs/2511.10783"
-  title="An International Agreement to Prevent the Premature Creation of Artificial Superintelligence"
-  author="Scher, Abecassis, Barnett, and Abeyta | MIRI"
-  year="2025"
-  mins="4 min"
->
-
-Read Appendix D, on the datacenter signature: satellite, thermal, and power
-monitoring, and the architecture-dependent power consumption referred to in
-the callout above.
-
-</ReadingCard>
-
-<ReadingCard
-  id="intel-scher-thiergart"
-  href="https://arxiv.org/abs/2506.15867"
-  title="Mechanisms to Verify International Agreements About AI Development"
-  author="Scher and Thiergart | MIRI"
-  year="2024"
-  mins="30 min"
-  optional
->
-
-Read the national-intelligence building blocks and the locating-compute
-appendix (pp. 67–80), the source of the feasibility ratings quoted in the
-module and of the feasibility cards in 2.3.10.
-
-</ReadingCard>

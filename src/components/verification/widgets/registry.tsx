@@ -138,13 +138,6 @@ const MissingBoard = dynamic<VerificationWidgetProps>(
   () => import("./missing-board").then((module) => module.MissingBoard),
   { loading: WidgetLoading },
 );
-const DrillsIntelSignatures = dynamic<VerificationWidgetProps>(
-  () =>
-    import("./drills-intel-signatures").then(
-      (module) => module.DrillsIntelSignatures,
-    ),
-  { loading: WidgetLoading },
-);
 const DrillsIntelAssessment = dynamic<VerificationWidgetProps>(
   () =>
     import("./drills-intel-assessment").then(
@@ -174,7 +167,6 @@ export const verificationWidgets: Record<
   "context-distiller": ContextDistiller,
   "drills-primers": DrillsPrimers,
   "drills-games": DrillsGames,
-  "drills-intel-signatures": DrillsIntelSignatures,
   "drills-intel-assessment": DrillsIntelAssessment,
   "datacenter-power": DatacenterPower,
   "locating-compute": LocatingCompute,

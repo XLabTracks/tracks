@@ -2790,3 +2790,69 @@ says photographs of the inside and outside, obtained by US intelligence
 and reportedly from Israel, settled it in spring 2007, and the exercise's
 sample answer says the same; the IAEA's samples came a year later. The
 page now says two different things about the same question.
+
+## 2026-09-07 — 2.3.3 rebuilt to the owner's spec; the Al Kibar sentence in 2.3.2
+
+Owner's text, applied as written: the two-sentence opening (electricity to
+heat at close to 100% efficiency; both ends measurable from outside); the
+optional "Power: from watts to FLOP" block, set as a Fold labelled "Optional:
+Power, From Watts to FLOP" with its two equations as display math and the
+three exponents inline; "Heat", with the SatVu release card first (required,
+3 min, "Read the release.") and her three paragraphs after it; the Wasil card
+on the energy-monitoring entry (5 min, new id intel-wasil-energy-monitoring;
+the head's intel-wasil-ntm card is a different reading); the Scher and
+Thiergart card and the Memphis card unchanged; the power-signature explainer
+unchanged. Gone with the old text, because the spec has no place for them:
+the Thermal Signatures and Energy and the Power Grid prose (the Scher and
+Thiergart Medium rating and its three reasons, the Memphis sentence), the
+"Power depends on architecture" callout with its wrong Appendix D citation,
+Underground Construction with its Scher and Thiergart quote, the MIRI
+Appendix D reading card, and the Drill Bench.
+
+The Fermi drill bench (drills-intel-signatures: the conversion, the 130 MW
+scale-up, three sites from their draw alone) is retired, not moved: the
+suite requires every registered deck to be embedded by a lesson, and
+placing it in another section would be a content decision. Its component,
+data file, registry entries and test import are deleted; the progress key
+v-drills:drills-intel-signatures is orphaned. The explainer's reference
+facility note said "the module's Fermi-estimate unit"; it now credits the
+figure to Scher and Thiergart (100,000 H100s at ~130 MW, their p. 3004 line).
+Objective 2 in the head's block still promises "classify a site from its
+draw alone", and no exercise on the page does that now.
+
+The spec's inline source markers were the drafting tool's, not citations:
+the three whose works appear in the owner's Works cited became linked
+parenthetical citations in her own style ("(Kaplan et al., 2020)",
+"(Hoffmann et al., 2022)", "(NVIDIA H100 datasheet)"), and the four whose
+works do not (NIST, NVIDIA Docs, Google for Developers, MIT OpenCourseWare)
+were dropped. The hundredfold-gap paragraph sits inside the Fold: its first
+words are "the two examples", which only the Fold's reader has met. The
+Wasil card's last clause, "every item on it reappears in the 'How a Prover
+beats the signature' block of this section", named a block that exists
+nowhere on the page or in the explainer, so the sentence stops at "The
+evasion list is the one to keep." Typographic: "2025-26" → "2025–26", a
+period after "dissipates energy as heat", and the garbled fragment "A
+facility drawing 130 MW for three months consumes 280 GWh. At th" dropped.
+
+Facts checked against the sources: You and Owen (Epoch AI, 11 Aug. 2025,
+the page carries 2.2×/year power and 4–5×/year compute); Kaplan et al.
+(arXiv 2001.08361, 23 Jan. 2020) for the factor of six; Hoffmann et al.
+(arXiv 2203.15556, 29 Mar. 2022) for equal-proportion scaling; NVIDIA's H100
+page and datasheet for 700 W and 989 dense FP16 teraFLOPS; the arithmetic
+(10^13 J = 2.78 GWh; over 2,160 h, 1.29 MW; 130 MW × 2,160 h = 281 GWh);
+Wasil's energy-monitoring entry for "coarse-grained"; Baker et al. footnote
+127 for snow on roofs; the SatVu release for chillers, transformers and
+electrical yards. Four works registered; the SatVu registry entry's date
+corrected from "2026" to the release's own 16 Dec. 2025. The datasheet at
+NVIDIA's link is © 2022, so the registry says 2022 where the owner's list
+said 2023. Minutes unchanged at 40 (969 words, of which 514 optional;
+required readings 8 min; the explainer).
+
+2.3.2: the Al Kibar sentence now says what the assigned report says —
+photographs of the inside and outside of the building, obtained by US
+intelligence and reportedly from Israel, settled it (ISIS p. 29), and the
+IAEA concluded in 2011, years after the strike, that the building had very
+likely been a reactor (Baker 2023, §4.1). The proposed phrasing "the IAEA's
+environmental samples confirmed it a year later" was not used: the samples
+were taken in 2008 and the finding came in 2011, and neither assigned source
+describes the samples.

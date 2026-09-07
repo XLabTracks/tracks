@@ -43,7 +43,7 @@ export const DCP_FACILITIES: DcpFacility[] = [
     id: "h100k",
     name: "Reference: 100k-H100 cluster",
     mw: 130,
-    note: "the module's Fermi-estimate unit: 100,000 × ~1.3 kW",
+    note: "Scher and Thiergart's figure for 100,000 H100s",
   },
 ];
 

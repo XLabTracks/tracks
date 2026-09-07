@@ -33,7 +33,6 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "standard-of-proof", title: "The Standard of Proof", bridged: false },
   { id: "missing-board", title: "The Missing Board", bridged: false },
   { id: "cloud-evidence-drill", title: "Cloud Evidence Drill", bridged: true },
-  { id: "drills-intel-signatures", title: "Drill Bench: Power to Compute", bridged: true },
   {
     id: "drills-intel-assessment",
     title: "Drill Bench: Assessment",

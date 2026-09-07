@@ -8,7 +8,6 @@ import { shuffleAnswerOptions } from "@/lib/shuffle";
 import { DRILLS_FOUNDATIONS } from "./data/drills-foundations";
 import { DRILLS_GAMES } from "./data/drills-games";
 import { DRILLS_INTEL_ASSESSMENT } from "./data/drills-intel-assessment";
-import { DRILLS_INTEL_SIGNATURES } from "./data/drills-intel-signatures";
 import { DRILLS_PRIMERS } from "./data/drills-primers";
 import { QUICK_QUESTIONS } from "./data/policy-quick-check";
 import { QUIZ } from "./data/protocol-actors";
@@ -18,7 +17,6 @@ const DECKS: DrillDeck[] = [
   DRILLS_PRIMERS,
   DRILLS_FOUNDATIONS,
   DRILLS_GAMES,
-  DRILLS_INTEL_SIGNATURES,
   DRILLS_INTEL_ASSESSMENT,
 ];
 

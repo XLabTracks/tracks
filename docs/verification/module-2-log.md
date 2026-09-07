@@ -2674,3 +2674,8 @@ be able to read the source before comparing; the card keeps its id, so a
 reader's mark on it survives the move. The head now carries Wasil
 (required) and Scher and Thiergart (optional); the latter awaits the
 owner's word. No registry change: both URLs remain cited.
+
+Same day, owner: Scher and Thiergart leaves the head too, to 2.3.3 as an
+optional reading after the MIRI Appendix D card (the section quotes its
+underground-construction row and its Medium rating for power-grid analysis;
+id kept). The head's reading section is now Wasil alone, headed "Reading".

@@ -2856,3 +2856,38 @@ likely been a reactor (Baker 2023, §4.1). The proposed phrasing "the IAEA's
 environmental samples confirmed it a year later" was not used: the samples
 were taken in 2008 and the finding came in 2011, and neither assigned source
 describes the samples.
+
+## 2026-09-07 — 2.3.2 after the owner's review: the list, the note, GeoGuessr
+
+Six points from the owner on the rebuilt page. "What the Analyst Looks For"
+has its positive half back: the signatures list that stood on the page
+before the rebuild (building footprint, electrical substations, cooling
+equipment, security perimeter; the >10,000 H100-equivalent footprint, MIRI
+Appendix D.3.5, "Satellite and Aerial Surveillance"), restored verbatim
+between her two sentences and now linked to the treaty. The fuller version
+she describes, with generators and what each feature establishes, is not in
+this session's transcript, in the repository's history or its other
+branches, in the WIP outline on Drive, or in Notion, and the playground
+repository cannot be attached from this session; when she pastes it, it
+replaces the restored list. The GeoGuessr callout moved after that section,
+before The Grid Connection, with a lead sentence carrying her framing (a
+second entrance to the section: not a satellite, but a photograph an
+employee took) in my translation.
+
+The historical note stands ahead of the two cases, on her skeleton (Iraq
+1991, the Additional Protocol of 1997, the Satellite Imagery Analysis Unit
+of 2001) in my wording: the old page's note, the Arms Control Association
+factsheet (Model Additional Protocol adopted 15 May 1997; Iraq exploited
+safeguards confined to declared facilities) and the IAEA Bulletin 57-2
+article (the unit, 2001), both already in the registry, with her closing
+sentence verbatim: "Al Kibar is what happened when a builder had read that
+lesson." The appendix grows to 11.
+
+The two references: "Every signature on the checklist above" has its
+checklist again; the exercise's "which row of the table in 2.3.1" is now
+"which signature on the list in this section", and the sample answer's last
+bullet names the substations and the cooling equipment on that list. "A
+defector's material" was already replaced in eade67cd; the owner was reading
+an earlier deploy. The archive-and-retrospective paragraph (IAEA Bulletin,
+USGS, ISIS on Tuwaitha) is not taken, per her "ok if not": the opening keeps
+"any place on Earth" only.

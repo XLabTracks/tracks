@@ -3153,3 +3153,36 @@ Ids, slugs and the unit id 2.4 untouched: they are URLs and progress keys.
 "The human layer" as a phrase in prose (the about page, the capstone
 briefs, the supply-chain drills) stays; it is the literature's word for the
 thing, not the unit's name.
+
+## 2026-09-08 — 2.1 head: the field's own case for compute, and the chip primer
+
+Owner's spec for the section's opening. Under "Before You Begin", after the
+time lines, a block "Why Compute, in the Words of the Field": one bridge
+line of mine, saying "as of early 2024" as she asked (the text predates the
+H20, distributed training and the Chip Security Act), then §3.B of Sastry,
+Heim et al., "Computing Power and the Governance of Artificial
+Intelligence" (arXiv 2402.08797, CC BY 4.0), reproduced in full as a
+SourceQuote: 1,186 words, the four subsections as bold lead-ins, the seven
+figures and twenty footnotes omitted and the header saying so; three LaTeX
+artefacts repaired (triple hyphens to em dashes, "≤\leq" to "≤"). Under it
+her attribution line with the licence and the arXiv link; then her note
+card ("detectability and supply chain are mostly covered in different
+modules"); then the Grunewald card with her blurb and her meta line
+(Explainer: How AI Chips Are Made, The Power Law, 5 September 2025, a
+guest post adapted from an IAPS report; 15 min, required), and Appendix A,
+"The Compute-Uranium Analogy", as an optional card beside it (888 words,
+4 min; blurb mine from the appendix's own text). The opening puzzle now sits
+under its own heading, "Test Your Judgement", and closes on her line, "Keep
+your answers; 2.1.8 returns to them" (2.1.8 does return to the ledger). Her
+spec placed the block "after Why this section exists"; the page has no such
+block, so it stands where one would.
+
+Grunewald's figures checked against the post: an 80 to 95 percent share,
+1.5 to 2 million H100s in 2024, performance doubling every 28 months, EDA
+and the fab's process design kit, photomasks and 300 mm wafers, TSVs, CoWoS
+and high-bandwidth memory. Grunewald registered; Sastry was. The page's
+headings brought to Title Case per the standing rule (Before You Begin, The
+Central Question, What You Will Be Able to Do, A Map of the Section, Core
+Source Packet and its PageBreak). Minutes for the head 5 → 25; the page's
+"Core time: 165–180 minutes" line and the unit meta are untouched, though
+a required 15-minute reading now sits inside them.

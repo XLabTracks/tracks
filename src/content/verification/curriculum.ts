@@ -248,7 +248,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-infrastructure",
     title: "2.1 Hardware",
     contentRef: "verification/hardware-attestation",
-    estimatedMinutes: 5,
+    estimatedMinutes: 25,
   },
   {
     id: "v-hw-claim",

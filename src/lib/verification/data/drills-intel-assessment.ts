@@ -7,7 +7,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
   id: "drills-intel-assessment",
   title: "Drill Bench: Assessment",
   blurb:
-    "Three drills for 2.3.10. The first turns the base rate into arithmetic; the second is a post-mortem of an assessment that was confident and wrong; the third records, for each signature family, its standard failure case and the mechanism elsewhere in the course that covers it.",
+    "Three drills for 2.3.6. The first turns the base rate into arithmetic; the second is a post-mortem of an assessment that was confident and wrong; the third records, for each signature family, its standard failure case and the mechanism elsewhere in the course that covers it.",
   benches: [
     {
       id: "false-alarm",
@@ -102,13 +102,13 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
           q: "Which mechanism elsewhere in the course covers what this signature cannot see?",
           opts: [
             "2.2 cloud / provider reporting",
-            "the human layer, 2.3.6–2.3.9",
+            "2.4 human layer",
             "Hardware layer (chip-level tracking)",
             "3.1 evasion scenarios",
             "3.2 combining evidence",
           ],
           right: 1,
-          why: "MIRI's draft names military and hardened facilities as the blind spot. What the roof hides, people inside can reveal: whistleblowers and inspectors are the human layer, 2.3.6–2.3.9.",
+          why: "MIRI's draft names military and hardened facilities as the blind spot. What the roof hides, people inside can reveal: whistleblowers and inspectors are the 2.4 human layer.",
         },
         {
           type: "pick",
@@ -129,7 +129,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
           q: "Which mechanism elsewhere in the course covers what this signature cannot see?",
           opts: [
             "2.2 cloud / provider reporting",
-            "the human layer, 2.3.6–2.3.9",
+            "2.4 human layer",
             "Hardware layer (chip-level tracking)",
             "3.1 evasion scenarios",
             "3.2 combining evidence",
@@ -156,7 +156,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
           q: "Which mechanism elsewhere in the course covers what this signature cannot see?",
           opts: [
             "2.2 cloud / provider reporting",
-            "the human layer, 2.3.6–2.3.9",
+            "2.4 human layer",
             "Hardware layer (chip-level tracking)",
             "3.1 evasion scenarios",
             "3.2 combining evidence",
@@ -183,13 +183,13 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
           q: "Which mechanism elsewhere in the course covers what this signature cannot see?",
           opts: [
             "2.2 cloud / provider reporting",
-            "the human layer, 2.3.6–2.3.9",
+            "2.4 human layer",
             "Hardware layer (chip-level tracking)",
             "3.1 evasion scenarios",
             "3.2 combining evidence",
           ],
           right: 1,
-          why: "A sanitized paper trail still passes through people. What the filings hide (what the company believed, what its leadership was warned about) is what the human layer, 2.3.6–2.3.9, reveals.",
+          why: "A sanitized paper trail still passes through people. What the filings hide (what the company believed, what its leadership was warned about) is what the 2.4 human layer reveals.",
         },
         {
           type: "pick",
@@ -210,7 +210,7 @@ export const DRILLS_INTEL_ASSESSMENT: DrillDeck = {
           q: "Which mechanism elsewhere in the course covers what this signature cannot see?",
           opts: [
             "2.2 cloud / provider reporting",
-            "the human layer, 2.3.6–2.3.9",
+            "2.4 human layer",
             "Hardware layer (chip-level tracking)",
             "3.1 evasion scenarios",
             "3.2 combining evidence",

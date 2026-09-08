@@ -3062,3 +3062,61 @@ procurement intelligence (FININT)"; 2.3.5 "Signals intelligence (SIGINT)"
 and "cyber intelligence (CYBER)" — CYBER as the map's own card label, not
 CYBINT. 2.3.2 already introduces IMINT and GEOINT in its opening paragraph
 (the owner's own wording) and is untouched.
+
+## 2.4 Human restored as its own submodule (2026-09-08)
+
+Course owner: 2.4 comes back. The four human-layer lessons had been folded
+into 2.3 as 2.3.6–2.3.9 (the 2026-09-02 merge and its consistency pass,
+above), and the owner's reasons for reversing it are recorded here so the
+next session does not re-derive them from the diff: 2.4 carries
+proportionally too much material for one section of 2.3; every other 2.3
+section covers one row of the collection map, and the human material would
+be the one section covering four things; and audits and inspections are not
+intelligence at all (granted access, not watching from outside). The overlap
+is explained to learners in a sentence rather than the material shoehorned
+into 2.3.
+
+What moved:
+
+- **The graph.** `v-human-intro` (`human-intro.mdx`, slug `human-intro`) is
+  back as the head "2.4 Human", with the four lessons nested under it as
+  2.4.1–2.4.4 in their original order and at their original ids, slugs and
+  files. 2.3 is now head + 2.3.1–2.3.5 (the disciplines) + 2.3.6 assessment
+  + 2.3.7 summary and memo; the human lessons sit after 2.3.7 in the module's
+  item order. Unit `2.4` is back in the join and the unit meta (150 min, the
+  four lessons' own minutes); 2.3's meta drops to 400. course.js regenerated.
+- **The head's prose.** `human-intro.mdx` is the pre-merge file (its opening
+  paragraph and four objectives, which had been carried by 2.3.6's opener and
+  by 2.3's objectives block) plus one new paragraph saying why the human
+  layer is read here: HUMINT is on 2.3's map and the literature files it under
+  intelligence, but there is too much of it for one section, and audits and
+  inspections are granted access rather than intelligence. 2.3's head loses
+  the four human objectives (its list is six items again), its discernment
+  paragraph runs 2.3.1–2.3.5 / 2.3.6 / 2.3.7 and gains a paragraph pointing
+  at 2.4 for the same reasons, and the collection-map lead-in says HUMINT is
+  read in 2.4. 2.4.1's duplicate opener is gone and its "third category"
+  sentence points at 2.3; 2.4.4 opens "In 2.4.4, the last section of this
+  submodule".
+- **Every cross-reference by number.** 2.3.10 → 2.3.6 and 2.3.11 → 2.3.7 in
+  2.3.1, 2.3.2, 2.3.3, 2.3.5, 2.3.6, 2.3.7 and the assessment deck's copy;
+  2.3.5's §4.3 pointer and 2.3.7's "reproduced in" reveal → 2.4.1; 2.3.7's
+  escalation ladder → 2.4.3; the limitations ledger's sibling-owner option is
+  "2.4 human layer" again; widget eyebrows 2.4.1–2.4.4 (insiders, reporting,
+  the two policy labs); the missing-board prompt → 2.4.4; policy-on-paper's
+  note → 2.4.2. 2.0.1's managed-access card links "Module 2.4" at
+  `human-intro` again (the link that 404'd during the merge is live because
+  the slug is back).
+- **The skill map.** Rung tags return to `2.4` (`incentives`, `confverif`,
+  `human`) in `data/skills.js` and its TS mirror; the compound rung is
+  `2.1–2.4` over four buckets; `rev` and `SKILLS_REV` bump to 4 together and
+  the completion-stats test is back to quarters.
+- **Around the module.** The module summary says four buckets again; the
+  about page reads "hardware, cloud, intelligence and human layers"; the
+  whistleblower and weight-security briefs name "Verification 2.4 — the human
+  layer" as their prerequisite and "Module 2.4" in their text, and the bank is
+  regenerated. The "Verification 2.x — the evidence layers" label on the
+  other briefs is kept: it is correct at four. CLAUDE.md's Title Case note
+  names 2.4. The static glossary's `unit: '2.4'` entries never changed.
+
+Typecheck clean, lint 0 errors, 1228 tests green, all three generators'
+`--check` clean.

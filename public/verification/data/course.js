@@ -139,7 +139,7 @@ window.COURSE = {
       "week": "weeks 4–8",
       "status": "notes complete",
       "goal": "Verification infrastructure and evidence streams",
-      "summary": "The three buckets of mechanism — hardware, cloud, and intelligence, which carries the human layer — each judged by the claims it can test, the evidence it produces, what it costs to implement, and how it fails.",
+      "summary": "The four buckets of mechanism — hardware, cloud, intelligence, and the human layer — each judged by the claims it can test, the evidence it produces, what it costs to implement, and how it fails.",
       "units": [
         {
           "id": "2.0",
@@ -187,7 +187,7 @@ window.COURSE = {
           "id": "2.3",
           "title": "Intelligence",
           "kind": "explainer",
-          "mins": "550 min",
+          "mins": "400 min",
           "href": "/tracks/verification/verification-infrastructure/intelligence-intro",
           "lessons": [
             "intelligence-intro",
@@ -196,12 +196,22 @@ window.COURSE = {
             "intelligence-masint",
             "intelligence-finint",
             "intelligence-cyber",
+            "intelligence-assessment",
+            "intelligence-action"
+          ]
+        },
+        {
+          "id": "2.4",
+          "title": "Human",
+          "kind": "explainer",
+          "mins": "150 min",
+          "href": "/tracks/verification/verification-infrastructure/human-intro",
+          "lessons": [
+            "human-intro",
             "human-insiders",
             "human-reporting-protection",
             "human-audits-inspections",
-            "human-institutions",
-            "intelligence-assessment",
-            "intelligence-action"
+            "human-institutions"
           ]
         }
       ]

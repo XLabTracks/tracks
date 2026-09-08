@@ -8,13 +8,9 @@ While a state can lie in its declarations, it cannot hide such evidence in therm
 1. For a frontier training run, name the signatures it leaves and the collection discipline that reads each, and state for any one of them what it establishes, what access it requires, and its main caveat.
 2. Convert a facility's power draw into an order-of-magnitude bound on its compute, classify a site from its draw alone, and state how fast that signature decays as performance per watt improves.
 3. Explain why intelligence identifies violations but does not resolve them: what national intelligence found that safeguards missed, why sharing with a verifier stays voluntary, and the limits the literature agrees on.
-4. Identify who in the AI supply chain could observe which activities, and why and how they could be incentivized to reveal, hide, or obfuscate that information.
-5. Trace the path information takes from reporter to verifier, and judge whether a proposed reporting channel would probabilistically motivate an insider to use it.
-6. Compare and contrast audits and inspections, including analyzing the knowledge boundaries of an audit or inspection regime.
-7. Assess the levels of independence and reliability of a verifying institution.
-8. Place an ambiguous signal on the sequence from anomaly to verification lead to suspected non-compliance, with a stated confidence, after evaluating its sources, weighing the base rate, and ruling out the analytic failures that make a confident assessment wrong.
-9. Choose the proportionate regime response to a lead, from clarification to challenge inspection, weighing the cost of a false alarm against the cost of a miss, and record the confidence, dissent, and blind spots the decision rests on.
-10. Write, for a decision-maker who has not taken the module, an overview of what intelligence-based mechanisms can see this year: current public artifacts, limits stated as the papers state them, and each blind spot with the mechanism that covers it.
+4. Place an ambiguous signal on the sequence from anomaly to verification lead to suspected non-compliance, with a stated confidence, after evaluating its sources, weighing the base rate, and ruling out the analytic failures that make a confident assessment wrong.
+5. Choose the proportionate regime response to a lead, from clarification to challenge inspection, weighing the cost of a false alarm against the cost of a miss, and record the confidence, dissent, and blind spots the decision rests on.
+6. Write, for a decision-maker who has not taken the module, an overview of what intelligence-based mechanisms can see this year: current public artifacts, limits stated as the papers state them, and each blind spot with the mechanism that covers it.
 </Objectives>
 
 ## Why Intelligence?
@@ -46,7 +42,9 @@ hardware).
 
 A key problem with intelligence mechanisms, however, is ambiguity. A hundred-megawatt building full of accelerators might be a covert training site, or it might be a video-streaming company’s new region, and from the outside they can look identical. Several hundred data centers in the world are large enough to be candidates.
 
-So, the questions that organize this section target this central issue of discernment: which traces are worth watching, and what does each one actually establish (2.3.1–2.3.5)? Who can see a program from inside it, and what makes them talk (2.3.6–2.3.7)? What does granted access add that watching cannot (2.3.8–2.3.9)? How do you read ambiguous traces without fooling yourself, which turns out to be the hardest part of the job (2.3.10)? And when you have the full picture, what do you tell the person who has to act on it (2.3.11)?
+So, the questions that organize this section target this central issue of discernment: which traces are worth watching, and what does each one actually establish (2.3.1–2.3.5)? How do you read ambiguous traces without fooling yourself, which turns out to be the hardest part of the job (2.3.6)? And when you have the full picture, what do you tell the person who has to act on it (2.3.7)?
+
+One collection discipline is missing from that list. Human sources (HUMINT) are counted as intelligence by every paper this module draws on, but the people inside a program, the channels that let them report, and the audits and inspections that grant a verifier access are too much for one section, and granted access is not intelligence in the sense above. They have a submodule of their own, 2.4.
 
 By the end of this module, you should be able to take signals, whether they’re thermal plumes, an import spike, or a suspicious hiring wave, and identify what it establishes, what else would explain it, and what it justifies doing next.
 
@@ -72,7 +70,8 @@ covers what never enters a report.
 Intelligence is collected in a small number of ways, usually called the
 collection disciplines or the INTs, each named for its source. The map lists
 the eight this module uses, divided into literal and nonliteral collection.
-Open each card; sections 2.3.1–2.3.5 cover the disciplines one at a time.
+Open each card; sections 2.3.1–2.3.5 cover the disciplines one at a time,
+and HUMINT is read in 2.4.
 
 <VerificationExercise id="collection-map" />
 

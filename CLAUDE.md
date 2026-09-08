@@ -676,8 +676,8 @@ rose`, or Okabe–Ito). Those read as stock AI slop against the maroon, which is
   scale their level owns, with no per-lesson font overrides that make one
   lesson's subtitles a different size from its neighbours'. When touching a
   lesson, bring its headings and its PageBreak titles (the part-strip labels)
-  up to this rather than matching whatever mixed case sits nearby. The former 2.4
-  (now 2.3.6–2.3.9) is conformed; sweep others as they are edited.
+  up to this rather than matching whatever mixed case sits nearby. Module 2.4
+  is conformed; sweep others as they are edited.
 - **Never frame a section by its item count.** Course owner (2026-09-08, the
   2.3.1 edit document): headings and lead-ins like "Four Things Open Sources
   Do", "Three limits recur", "Four rules from the literature" are forbidden —

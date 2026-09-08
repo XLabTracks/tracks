@@ -1,3 +1,9 @@
+Let’s talk about what a frontier training run physically is.
+
+Somewhere, there is a building containing tens of thousands of accelerator chips. Each was fabricated at one of the handful of leading manufacturers you mapped in Module 1, shipped across borders, bought with purchase orders, and installed by contractors. The building continuously draws power equivalent to the consumption of a small city for months. Every watt ends up as heat, so the facility is always dumping city-scale heat into the air or a river. The billions of dollars involved moves through banks and contracts, leaving records. Several hundred engineers have to be hired, which means job postings, moved equity, and LinkedIn.
+
+While a state can lie in its declarations, it cannot hide such evidence in thermodynamics, customs, payrolls, or the electrical grid. Intelligence, as this course uses the word, means collecting and reading those traces without the cooperation of the actor being watched.
+
 <Objectives scope="this submodule">
 1. For a frontier training run, name the signatures it leaves and the collection discipline that reads each, and state for any one of them what it establishes, what access it requires, and its main caveat.
 2. Convert a facility's power draw into an order-of-magnitude bound on its compute, classify a site from its draw alone, and state how fast that signature decays as performance per watt improves.
@@ -11,32 +17,16 @@
 10. Write, for a decision-maker who has not taken the module, an overview of what intelligence-based mechanisms can see this year: current public artifacts, limits stated as the papers state them, and each blind spot with the mechanism that covers it.
 </Objectives>
 
-Let’s talk about what a frontier training run physically is, because the physics is what makes this whole layer possible.
+## Why Intelligence?
 
-Somewhere there is a building. Inside it are tens of thousands of accelerator chips, and every one of them came from somewhere: fabricated at one of the handful of leading-edge fabs you mapped in Module 1, shipped across borders, bought with purchase orders, installed by contractors. The building draws something on the order of a hundred megawatts, the consumption of a small city, continuously, for months. Every watt of that electricity ends up as heat, because that is what computation does to energy, so the facility has to dump city-scale heat into the air or a river, day and night, all winter. The money involved runs to billions once you count the chips, the construction, and the power contracts, and money moves through banks and contracts that leave records. And several hundred engineers had to be hired, which means job postings, moved equity, and LinkedIn.
+The two most unique and important properties of intelligence mechanisms:
 
-A state can lie in its declarations. It cannot opt out of thermodynamics, customs, payroll, or the electrical grid. Each of those is a place where a secret program touches the world other people can see, and some of the touches are visible from orbit. Intelligence, as this course uses the word, means collecting and reading those traces without the cooperation of the actor being watched.
+1. It works without the monitored actor’s permission.
+2. It doesn’t require additional infrastructure, technological or political.
 
-That independence is what earns this layer its place next to hardware as one of the two the track weights most. The mechanisms in 2.1 mostly need chips designed or retrofitted for the job, and the ones in 2.2 see whatever passes through a covered provider. Intelligence is how you watch the actor who signed nothing, declared nothing, or is lying, and it requires no buildout: the satellites are already flying, the customs data already accumulates, the analysts are already at their desks. If an emergency pause started tomorrow, this layer would be the one working by evening.
+The mechanisms in 2.1 and 2.2 assume cooperation: hardware roots of trust need chips built or retrofitted for the purpose, and provider reporting covers only what passes through a covered provider. Intelligence-based mechanisms do not. As intelligence mechanisms bypass the hurdle of political cooperation, we teach them as one of the most important mechanism categories. If an emergency pause started tomorrow, this layer would likely be the most feasible to start working by evening.
 
-The real problem here is ambiguity. A hundred-megawatt building full of accelerators might be a covert training site, or it might be a video-streaming company’s new region, and from the outside they can look identical. Several hundred data centers in the world are large enough to be candidates. So the questions that organize this section are the ones a working analyst faces in order: which traces are worth watching, and what does each one actually establish, taken one collection discipline at a time (2.3.1–2.3.5)? Who can see a program from inside it, and what makes them talk (2.3.6–2.3.7)? What does granted access add that watching cannot (2.3.8–2.3.9)? How do you read ambiguous traces without fooling yourself, which turns out to be the hardest part of the job (2.3.10)? And when you have the picture, what do you tell the person who has to act on it (2.3.11)?
-
-The goal is that by the end you should be able to take signals, whether they’re thermal plumes, an import spike, a suspicious hiring wave, and say three things about it: what it establishes, what else would explain it, and what it justifies doing next.
-
-## Intelligence-Based Mechanisms
-
-The mechanisms in 2.1 and 2.2 assume cooperation: hardware roots of trust
-need chips built or retrofitted for the purpose, and provider reporting covers
-only what passes through a covered provider. Intelligence-based mechanisms do
-not. The question for this module is how states can identify possible
-undeclared frontier-AI development without the monitored actor's cooperation,
-and what a watcher can conclude from what it sees.
-
-The layer has two properties: it works without the monitored actor's
-permission, and it needs no new hardware or treaty machinery. The three papers
-this module draws on name it differently. Wasil et al. call it the national
-technical means (NTM) category, *Six Layers* calls it Layer 6, and Scher and
-Thiergart call it the national-intelligence building blocks.
+The three papers this module draws on name it differently. Wasil et al. call it the national technical means (NTM) category, *Six Layers* calls it Layer 6, and Scher and Thiergart call it the national-intelligence building blocks.
 
 <SourceQuote
   t="Verification methods for international AI agreements"
@@ -53,6 +43,12 @@ hardware-dependent methods (methods that require rules around advanced
 hardware).
 
 </SourceQuote>
+
+A key problem with intelligence mechanisms, however, is ambiguity. A hundred-megawatt building full of accelerators might be a covert training site, or it might be a video-streaming company’s new region, and from the outside they can look identical. Several hundred data centers in the world are large enough to be candidates.
+
+So, the questions that organize this section target this central issue of discernment: which traces are worth watching, and what does each one actually establish (2.3.1–2.3.5)? Who can see a program from inside it, and what makes them talk (2.3.6–2.3.7)? What does granted access add that watching cannot (2.3.8–2.3.9)? How do you read ambiguous traces without fooling yourself, which turns out to be the hardest part of the job (2.3.10)? And when you have the full picture, what do you tell the person who has to act on it (2.3.11)?
+
+By the end of this module, you should be able to take signals, whether they’re thermal plumes, an import spike, or a suspicious hiring wave, and identify what it establishes, what else would explain it, and what it justifies doing next.
 
 ## Signatures
 

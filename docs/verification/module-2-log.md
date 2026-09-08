@@ -2994,3 +2994,20 @@ three other lessons, whose appendices now print it instead of counting it
 pending. The appendix lists 13 works. Minutes 20 → 30 (1,357 words ≈ 6 min,
 Wasil 3, Epoch 11, the exercise); unit meta 540 → 550; course.js
 regenerated.
+
+## 2.3 Intelligence — intro rebuilt to the owner's edit document (2026-09-08)
+
+The 2.3 intro (intelligence-intro) now carries the prose of the owner's
+"2.3 edits" document verbatim. The page opens with three short paragraphs
+(what a training run physically is; the building, power, heat, money and
+hiring; declarations lie but thermodynamics, customs, payrolls and the grid
+do not), and the Objectives block moves below them instead of opening the
+page, per the document's placement mark. A new "Why Intelligence?" heading
+(Title Case per the standing rule) opens on the two properties as a numbered
+list, then the cooperation paragraph, which keeps its first two sentences
+and now closes on bypassing political cooperation and the pause-by-evening
+line. The three-paper naming sentence and the Wasil SourceQuote stay where
+the document marks the refs; the ambiguity, discernment-questions and
+by-the-end paragraphs follow as the document words them. Signatures, The
+Collection Disciplines and Reading are unchanged, per the document's closing
+instruction.

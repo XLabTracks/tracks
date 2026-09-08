@@ -3139,3 +3139,17 @@ Robb–Silberman PDF at irp.fas.org), none dead. Unchanged and still owed to
 the owner: 2.3.1's "2.3.6 covers the scales", which 2.3.6 does not, and the
 table's Network infrastructure and Technical traces rows pointing at
 sections that do not teach them.
+
+## 2026-09-08 — 2.4 is "Human Evidence"
+
+Course owner's choice among the outline's two names: "Human Evidence" (the
+outline's body heading) over "Human Layer" (its section heading), a fourth
+evidence stream named like Hardware, Cloud and Intelligence. Renamed where
+the unit is named: the section head's title and the unit meta in
+curriculum.ts (course.js regenerated), the module summary's list of four,
+the mechanism-sort bucket, the five drill options "2.4 human layer" and
+their two reveals, and the two capstones' prerequisites (bank regenerated).
+Ids, slugs and the unit id 2.4 untouched: they are URLs and progress keys.
+"The human layer" as a phrase in prose (the about page, the capstone
+briefs, the supply-chain drills) stays; it is the literature's word for the
+thing, not the unit's name.

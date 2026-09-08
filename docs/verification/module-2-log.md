@@ -3033,3 +3033,19 @@ Callout (the course's red box), text as the document words it. The owner's
 no-numeric-framing rule is added to CLAUDE.md's verification style rules.
 The guess exercise, FAS/GIJN/NATO cards, the FAS exercise and Going Further
 are unchanged, per the document.
+
+## 2.3.2 Imagery — the owner's edit document (2026-09-08)
+
+The opening paragraph carries the document's wording (no equipment, no
+permission; "satellite imagery" as IMINT plus GEOINT). The Grid Connection
+section moves to right after it, ahead of "What the Analyst Looks For", its
+heading deleted and replaced by the document's evidence-versus-building
+paragraph — the document invites datacenter-specific examples in place of
+its scaffolding-and-trucks placeholders, so the examples are the lesson's
+own signatures: the transformer yard, transmission lines toward the site,
+cooling equipment staged for installation. The moved block (the geospatial
+sentence, the MIRI transmission-lines quote, the city-scale-draw paragraph)
+is otherwise unchanged. Bellingcat gets its introduction — "the open-source
+investigative collective" — at its first mention in the GeoGuessr box, per
+the document's note that it was referenced cold. IAEA history, the two
+cases, the reading cards and the exercise are untouched.

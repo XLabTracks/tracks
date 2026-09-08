@@ -1004,3 +1004,19 @@ no-checks note names the slot's criteria; the About page no longer says
 outputs are put through peer review; the module 3 gap text and the 4.1
 criteria line lose the phrase. Criteria stay: they are what the writer
 judges their own draft on.
+
+## 0.1 — the verification-problem widget cut to the owner's four answers (2026-09-08)
+
+The owner's instruction: a simple open-each interactive carrying nothing
+beyond her own text. The widget is now four disclosures on the platform's
+Accordion, each headed by her question (Trust? / Punish violations? /
+Mutual transparency? / Neutral, privacy-preserving verification
+mechanisms?) and opening to her paragraph verbatim. Gone: the eyebrow,
+title, lede and prompt card, the "Option 01" labels and one-line summaries,
+the "It collapses"-style outcomes with their Failure mode / The answer
+that holds framing, the Inspected marks, and the "Test this answer" links.
+The data file keeps only id, question and detail.
+Then, on the owner's next instruction, the verdict marks return without
+words: once a row has been opened, 1–3 carry a red X and their question is
+struck through, and 4 carries a green checked box; the marks persist after
+the row is closed. `holds` is back in the data for that one distinction.

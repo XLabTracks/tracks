@@ -3120,3 +3120,22 @@ What moved:
 
 Typecheck clean, lint 0 errors, 1228 tests green, all three generators'
 `--check` clean.
+
+## 2026-09-08 — cross-reference sweep after 2.4 came back
+
+Every section number in the module's lessons, exercises, widget data,
+capstones and unit tags checked against the new numbering (2.3.6
+assessment, 2.3.7 summary; 2.4.1–2.4.4 the human lessons). The restoration
+had carried most of them; four were still on the old numbers and are fixed:
+2.3.1's table sent Agreements to 2.3.9 and People to 2.3.6 (now 2.4.4 and
+2.4.1); the cyber sample answer's "the human layer (2.3.6)" (now 2.4.1) and
+the OSINT sample answer's "2.3.8: an inspection" (now 2.4.3). The section
+numbers inside the context distiller's items are the distilled document's
+own, not the course's, and stay. Internal course links (33) all resolve to
+a lesson, paper or unit. The 75 external links in 2.3 and 2.4 all answer;
+five sit behind bot checks for a datacenter client (GIJN, which the relay
+reads; the Times of Israel; GAO's PDF; the IAEA Bulletin page; the
+Robb–Silberman PDF at irp.fas.org), none dead. Unchanged and still owed to
+the owner: 2.3.1's "2.3.6 covers the scales", which 2.3.6 does not, and the
+table's Network infrastructure and Technical traces rows pointing at
+sections that do not teach them.

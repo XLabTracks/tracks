@@ -3049,3 +3049,16 @@ is otherwise unchanged. Bellingcat gets its introduction — "the open-source
 investigative collective" — at its first mention in the GeoGuessr box, per
 the document's note that it was referenced cold. IAEA history, the two
 cases, the reading cards and the exercise are untouched.
+
+## 2.3.1–2.3.5 — abbreviations introduced in each first paragraph (2026-09-08)
+
+Owner's instruction: each discipline section introduces its abbreviation(s)
+in the first paragraph so learners can link them to the collection map's
+cards. The style is one parenthetical at the first full-name mention:
+2.3.1 "Open-source intelligence (OSINT)" — moved up from the definition
+paragraph, whose "commonly abbreviated as OSINT" clause is retired; 2.3.3
+"Measurement and signature intelligence (MASINT)"; 2.3.4 "Financial and
+procurement intelligence (FININT)"; 2.3.5 "Signals intelligence (SIGINT)"
+and "cyber intelligence (CYBER)" — CYBER as the map's own card label, not
+CYBINT. 2.3.2 already introduces IMINT and GEOINT in its opening paragraph
+(the owner's own wording) and is untouched.

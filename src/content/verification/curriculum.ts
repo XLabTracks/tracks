@@ -479,7 +479,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-intel-intro",
     title: "2.3.4 Financial and procurement intelligence",
     contentRef: "verification/intelligence-finint",
-    estimatedMinutes: 20,
+    estimatedMinutes: 30,
   },
   {
     id: "v-intel-cyber",
@@ -629,7 +629,7 @@ export const verificationUnitMeta: Record<
   "2.0": { title: "Confidentiality vs. verifiability", kind: "explainer", mins: "15–20 min" },
   "2.1": { title: "Hardware", kind: "explainer", mins: "165–180 min" },
   "2.2": { title: "Cloud", kind: "reading + exercise", mins: "120 min" },
-  "2.3": { title: "Intelligence", kind: "explainer", mins: "540 min" },
+  "2.3": { title: "Intelligence", kind: "explainer", mins: "550 min" },
   "3.0": { title: "What is covert development?", kind: "explainer", mins: "10–15 min" },
   "3.1": { title: "How could a determined actor cheat?", kind: "interactive", mins: "30–40 min" },
   "3.2": { title: "Red team / blue team", kind: "exercise", mins: "45–60 min" },

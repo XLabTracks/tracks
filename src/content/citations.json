@@ -73,6 +73,13 @@
       "container": "arXiv",
       "date": "Mar. 2022"
     },
+    "https://arxiv.org/abs/2303.11341": {
+      "title": "What Does It Take to Catch a Chinchilla? Verifying Rules on Large-Scale Neural Network Training via Compute Monitoring",
+      "about": "Shavit's compute-monitoring proposal: interventions on the chip, at the datacenter and at the supply chain, where fewer than two dozen fabs worldwide can make leading-edge chips and the lithography-equipment supply chain is the channel a monitor watches.",
+      "authors": "Shavit, Yonadav",
+      "container": "arXiv",
+      "date": "Mar. 2023"
+    },
     "https://arxiv.org/abs/2307.05845": {
       "title": "PIGEON: Predicting Image Geolocations",
       "about": "A Stanford geolocation model trained on Street View panoramas from GeoGuessr: over 40% of guesses within 25 km worldwide, the top 0.01% of the game's players, and a six-game win over one of its best professionals; the section's example of automated geolocation.",
@@ -525,6 +532,13 @@
       "date": "2022",
       "standalone": true
     },
+    "https://semianalysis.com/2025/09/08/huawei-ascend-production-ramp/": {
+      "title": "Huawei Ascend Production Ramp: Die Banks, TSMC Continued Production, HBM Is the Bottleneck",
+      "about": "SemiAnalysis on Huawei's accelerator supply: the bank of more than 2.9 million Ascend dies obtained from TSMC in breach of export controls, SMIC's 7 nm-class ramp and its poor yields, and high-bandwidth memory as the binding constraint.",
+      "authors": "Patel, Dylan, AJ, and Myron Xie",
+      "container": "SemiAnalysis",
+      "date": "8 Sept. 2025"
+    },
     "https://slowfoodusa.org/theory-of-change/": {
       "title": "Our Theory of Change",
       "about": "The source page of the one-page infographic 0.1.2 reproduces — an organization's whole theory of change made legible on a single sheet.",
@@ -716,6 +730,13 @@
       "about": "A reference page on the SSC's 1993 cancellation, mirroring the Wikipedia article's Cancellation section under Creative Commons.",
       "org": "LiquiSearch"
     },
+    "https://www.nist.gov/chips/tsmc-arizona-phoenix": {
+      "title": "TSMC Arizona",
+      "about": "The CHIPS Program Office's award page: up to $6.6 billion in direct funding for three Phoenix fabs, 4 nm and 5 nm in the first, 3 nm in the second, 2 nm and A16 in the third, with the production timeline.",
+      "org": "National Institute of Standards and Technology",
+      "container": "CHIPS for America",
+      "date": "2024"
+    },
     "https://www.ohchr.org/sites/default/files/2024-01/OHCHR_BerkeleyProtocol.pdf": {
       "title": "Berkeley Protocol on Digital Open Source Investigations",
       "about": "The standard for open-source investigations whose findings must survive a hostile reader: principles, legal framework, security and preparation, then the investigation cycle (online inquiries, collection, preservation, verification, analysis) and reporting; the 2022 printing of the 2020 protocol.",
@@ -802,7 +823,6 @@
     "https://www.felonybench.com/",
     "https://ai-2040.com/supplements/faq",
     "https://www.iaea.org/sites/default/files/18/09/sg-serving-nuclear-non-proliferation.pdf",
-    "https://arxiv.org/abs/2303.11341",
     "https://www.dfat.gov.au/about-us/publications/Pages/background-papers-on-nuclear-verification-issues",
     "https://arxiv.org/abs/2403.08501",
     "https://arxiv.org/abs/2310.13625",

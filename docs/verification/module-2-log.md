@@ -2936,3 +2936,61 @@ Minutes stay 30 (1,200 words ≈ 5 min, readings 17 min, the exercise).
 
 Flag: the section immediately above Al Kibar is now the IAEA one; the
 signatures "from the section above" are two sections up.
+
+## 2026-09-08 — 2.3.4 rebuilt to the owner's spec, with Wasil's table and figures
+
+Owner's text, applied as written: the opening; "Three Streams" with her
+five-column table; the closed-versus-open paragraph under her heading "What
+Is Public" (her paste had the heading after that paragraph and in front of
+the evasion block, where it fits nothing; flagged); "How a Prover Beats the
+Trail", the block's name from her note, with her items as bold-lead
+paragraphs rather than bullets because the first item carries her four
+paragraphs on domestic manufacture (the TSMC dependence, the US route, the
+China route, the 2030 question); "We have manufacture at home." read as that
+item's lead and flagged. Her three Wasil points woven in: Table 1's
+complements after the manufacture-at-home, dual-use and intermediaries items
+(fab inspections; customs data as physical corroboration; whistleblowers for
+complex structures), a fifth item "Older chips" in my wording from Figure 2
+(the use of older chips beside local manufacture), and the Figure 5
+paragraph before the Scher and Thiergart quote (both methods green: existing
+US monitoring of semiconductor exports; has been used in the past; "the
+method is mature; the access is not"). The Wasil card carries her blurb
+(3 min). "Scher and Thiergart's version is broader…" leads the quote. The
+Epoch card is kept though absent from her list, because her exercise is
+built on it; flagged. Her exercise prompt with its third question; the
+sample answer extended from Epoch's table (the Supermicro indictment, about
+80,000 chips and 141,000 H100-equivalents, close to half of the ~300,000
+alleged; Megaspeed next at about 111,000). Basel cards and Going Further
+unchanged.
+
+Sources. Shavit §6 linked and promoted from pending to a registry entry
+(Yonadav Shavit, arXiv 2303.11341, Mar. 2023; §6 "At the supply chain":
+fewer than two dozen fabs at 14 nm or below, the lithography-equipment
+supply chain as the channel a monitor watches; the paper predates and does
+not mention the Huawei shadow-fab exposure of August 2023, so that clause
+has no source of its own). SemiAnalysis found at
+semianalysis.com/2025/09/08/huawei-ascend-production-ramp/, dated
+8 September 2025 where her list says February 2026; its free portion
+confirms more than 2.9 million Ascend dies from TSMC, the die bank carrying
+2024–25, poor SMIC 7 nm-class yields and HBM as the bottleneck; the wafer
+figures, the 600,000 dies, the 40% yield and the $500 million sit behind the
+paywall, unverified; the inline year corrected to 2025. NIST's TSMC Arizona
+award page found and registered (up to $6.6 billion; fab 1 at 4 and 5 nm
+from the first half of 2025, fab 2 at 3 nm from the second half of 2027,
+fab 3 at 2 nm and A16 by the end of the decade), which confirms the node
+sequence and the 2027 date; the 24,000 wafers a month and the tool-install
+timing are SupplyICs', whose site sits behind a bot check and could not be
+read, so it is not registered. "The Substrate" could not be found (the
+Substack of that name is an unrelated newsletter); the parenthetical stays
+as text. AEI's 2026 model, Goldman Sachs' yields and Morgan Stanley's 86% are
+not in her Works cited and could not be checked (AEI's site is bot-checked);
+they stand as her text, unlinked. Wasil's Figures 2 and 5 were read from the
+arXiv HTML images and match her descriptions; Table 1's rows from the text.
+Precision: Shavit says fewer than two dozen fabs; the page says "the few
+dozen lithography-capable facilities".
+
+Registry: Shavit, SemiAnalysis and NIST added; Shavit's URL is linked from
+three other lessons, whose appendices now print it instead of counting it
+pending. The appendix lists 13 works. Minutes 20 → 30 (1,357 words ≈ 6 min,
+Wasil 3, Epoch 11, the exercise); unit meta 540 → 550; course.js
+regenerated.

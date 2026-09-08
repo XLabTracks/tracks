@@ -678,6 +678,14 @@ rose`, or Okabe–Ito). Those read as stock AI slop against the maroon, which is
   lesson, bring its headings and its PageBreak titles (the part-strip labels)
   up to this rather than matching whatever mixed case sits nearby. The former 2.4
   (now 2.3.6–2.3.9) is conformed; sweep others as they are edited.
+- **Never frame a section by its item count.** Course owner (2026-09-08, the
+  2.3.1 edit document): headings and lead-ins like "Four Things Open Sources
+  Do", "Three limits recur", "Four rules from the literature" are forbidden —
+  how many items an arbitrary categorization yields carries no information,
+  and the count goes stale the moment the list is edited. Name the thing
+  itself ("Open Source Contributions to Verifiability") and let the list be
+  as long as it is. Ordered-list markers are fine; prose or headings that
+  announce the number are not. Sweep these out of a lesson as it is edited.
 
 Traps that cost time already, so they are written down:
 

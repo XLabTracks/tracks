@@ -3011,3 +3011,25 @@ the document marks the refs; the ambiguity, discernment-questions and
 by-the-end paragraphs follow as the document words them. Signatures, The
 Collection Disciplines and Reading are unchanged, per the document's closing
 instruction.
+
+## 2.3.1 Open-source intelligence — the owner's edit document (2026-09-08)
+
+OSINT named as the common abbreviation in the definition paragraph. The
+categories table now has a name — it opens a "What Open Sources Reveal"
+section — and moved into a `quad-table` wrapper (globals.css, the
+pair/trio/rubric family): fixed layout with widths proportioned to each
+column's content, because the shared last-child rule handed all the slack to
+the section-pointer column and squeezed the two that carry words. The
+"In the Literature" heading is deleted; its quote and reading card flow
+under the table's section. "Four Things Open Sources Do for a Verifier" is
+renamed "Open Source Contributions to Verifiability" and the count language
+is gone there and in the NATO card; "Three limits recur in every source
+above and in the FAS case below." reads "Open sources have a few key
+limitations, notably:" per the document; "Working Rules" is renamed "Rules
+for Handling Open-Source Evidence" and its lead-in de-numbered. The
+trackers paragraph carries the document's wording verbatim, and the
+Pentagon Pizza Index moves out of running prose into a titled highlight
+Callout (the course's red box), text as the document words it. The owner's
+no-numeric-framing rule is added to CLAUDE.md's verification style rules.
+The guess exercise, FAS/GIJN/NATO cards, the FAS exercise and Going Further
+are unchanged, per the document.

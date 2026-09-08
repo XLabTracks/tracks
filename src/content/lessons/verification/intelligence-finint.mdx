@@ -1,0 +1,211 @@
+Training AI is expensive. You pay people, you pay rent, you pay for
+electricity (we already counted how much a cluster eats in 2.3.3), and before
+any of that you pay for the chips, which have to be made somewhere and shipped
+from there. Each of these payments leaves a record with someone other than
+the Prover: a customs service, a licensing office, a bank, a securities
+regulator. Financial and procurement intelligence (FININT) is reading those
+records.
+
+## Three Streams
+
+When we say "financial intelligence" we usually mean three different things:
+
+| Stream | What is recorded | Who holds it | What it establishes | Public? |
+| --- | --- | --- | --- | --- |
+| Trade and customs | Import and export declarations by HS code, shipper, consignee, quantity, value | National customs services; aggregators (Panjiva, ImportGenius) resell partial mirrors | Where hardware went, in what quantity, from whom | Partly: aggregators cover some countries and lag; official records are not open |
+| Export licensing and end-use | Licence applications, end-user statements, post-shipment checks | Licensing authorities (BIS in the US); the State Department's Blue Lantern programme verifies end use of licensed defence exports | That a named buyer was authorised, and whether the goods are where they were declared to be | No, except enforcement actions and indictments |
+| Financial | Transactions, wires, suspicious-activity reports, beneficial ownership, project finance, corporate disclosures | Banks and financial intelligence units (FinCEN in the US) for transactions; securities regulators and the companies themselves for disclosures | Who paid, through what structure; whether declared scale matches money spent | Transactions no; corporate disclosures yes |
+
+## What Is Public
+
+Transaction data is closed, and reaches a verifier only through an agreement
+or a state's own financial intelligence unit. Corporate disclosure is open:
+10-K and 10-Q filings, capital expenditure on earnings calls, bond issues and
+project finance for datacentres, cloud contracts and backlog, state tax
+incentives.
+
+## How a Prover Beats the Trail
+
+**Manufacture at home.** Customs tracking only sees what crosses a border.
+Domestic chip production removes the numerator. (Detecting a covert fab is a
+different problem: the few dozen lithography-capable facilities worldwide and
+their equipment suppliers, through which the Huawei shadow-fab network was
+exposed in 2023
+([Shavit §6](https://arxiv.org/abs/2303.11341)).) Wasil et al. answer this
+one with fab inspections: on-site inspection of semiconductor plants, to
+check whether domestic production capacity matches what was declared
+([Table 1](https://arxiv.org/abs/2408.16074)).
+
+Almost all frontier accelerators are fabricated by one company, TSMC, in
+Taiwan, and packaged with high-bandwidth memory from two Korean suppliers and
+one American. Both the US and China want out of that dependence.
+
+**The US route.** The CHIPS Act (2022) put $39 billion into manufacturing
+incentives, most of it to pull TSMC, Intel and Samsung onto US soil. By
+mid-2026 the first
+[TSMC Arizona](https://www.nist.gov/chips/tsmc-arizona-phoenix) fab is in
+volume production at 4 nm, about 24,000 wafers a month; the second fab's
+equipment goes in during 2026 for 3 nm production in 2027; the third targets
+2 nm by the end of the decade. Every one of these fabs came with a public
+award, a tool-order backlog at ASML, and a construction timeline that imagery
+confirmed. Onshoring makes American production more transparent.
+
+**The China route.** China's route is the one Shavit's argument was written
+about. Huawei was cut off from TSMC in 2020 and worked around it for four
+years: through shell companies it accumulated an estimated 2.9 million
+advanced TSMC dies, worth about $500 million, before the channel was closed
+in October 2024, and that stockpile powered most Ascend 910C shipments
+through 2025 (The Substrate, 2026). The shadow-fab network exposed in 2023
+was the manufacturing half of the same strategy. Since then production has
+shifted to SMIC's 7 nm-class process: advanced-node capacity of roughly
+45,000 wafers a month at the end of 2025, planned to reach 60,000 in 2026 and
+80,000 in 2027
+([SemiAnalysis, 2025](https://semianalysis.com/2025/09/08/huawei-ascend-production-ramp/)),
+with Huawei targeting about 600,000 Ascend 910C dies in 2026. The binding
+constraints are yield, reported around 40% against TSMC's 90%-plus, and
+high-bandwidth memory and packaging, where CXMT and the Chinese OSATs are
+years behind.
+
+**The 2030 question.** How fast the gap closes is contested, and the range
+matters for any agreement with a horizon past 2028. AEI's 2026 model has
+Huawei meeting half of China's domestic compute demand by 2028 and
+self-sufficiency "thinkable" by 2030, with SMIC's allocation of leading-edge
+capacity to Ascend as the single largest variable. Goldman Sachs' model is
+slower: SMIC yields rising from 23% in 2026 to 50% in 2030 and 75% in 2035,
+with the supply gap narrowing sharply only by 2035. Morgan Stanley projects
+domestic suppliers taking 86% of China's AI chip market by 2030, which is a
+market-share claim, not a frontier-capability one. What none of the models
+dispute is that the Chinese route is being built through the same chokepoints
+procurement intelligence watches: lithography tools, HBM, packaging. A
+verifier who can see those three flows can see the trajectory; one who cannot
+is guessing between AEI and Goldman.
+
+**Older chips.** Export controls draw their line at a performance threshold,
+so a Prover can buy below it and make up the difference in volume. Wasil et
+al. list the use of older chips beside local manufacture as the two evasions
+of customs analysis (Figure 2).
+
+**Dual-use.** Servers, transformers, chillers and fibre have civilian buyers.
+A purchase that would be a signal for a nuclear programme is noise for a
+datacentre. Wasil et al.'s complement is customs data: physical evidence of
+hardware purchases and movements to set against a suspicious transaction
+(Table 1).
+
+**Intermediaries.** Shell companies, proxies and offshore structures separate
+the buyer of record from the user. This is the oldest problem in financial
+investigation, and the Basel guides below are the standard introduction to
+unwinding it. Wasil et al.'s complement is whistleblowers: an insider who can
+read a complex transaction or name the structure behind it (Table 1).
+
+**No-audit budget.** A state programme funded off the books shows no capex,
+no bond, no disclosure. The trail then exists only in transaction data, which
+requires access.
+
+<ReadingCard
+  id="intel-wasil-customs-finint"
+  href="https://arxiv.org/abs/2408.16074"
+  title="Verification Methods for International AI Agreements"
+  author="Wasil, Reed, Miller, and Barnett | arXiv"
+  year="2024"
+  mins="3 min"
+>
+
+National technical means — "Customs data analysis" and "Financial
+intelligence"; then Table 1, the customs and financial rows.
+
+</ReadingCard>
+
+Wasil et al. put both methods in the group that needs little additional
+research: customs data because of existing US monitoring of semiconductor
+exports, financial intelligence because it has been used in the past
+(Figure 5). That is what the High rating below rests on. The method is
+mature; the access is not.
+
+Scher and Thiergart's version is broader and rated High feasibility within a
+year:
+
+<SourceQuote
+  t="Mechanisms to Verify International Agreements About AI Development"
+  url="https://arxiv.org/abs/2506.15867"
+  what="the locating-compute appendix (pp. 67–80) — the FININT row"
+  by="Scher and Thiergart | MIRI (2024)"
+>
+
+AI development projects are very expensive, and covert AI projects might leave
+a substantial money trail. Financial intelligence gathering might focus on
+purchases of AI-relevant raw materials, chips, and other data center
+components.
+
+</SourceQuote>
+
+<ReadingCard
+  id="intel-epoch-smuggling"
+  href="https://epoch.ai/publications/chip-smuggling"
+  title="Diversion and Resale: Estimating Compute Smuggling to China"
+  author="Isabel Juniewicz | Epoch AI"
+  year="2026"
+  mins="11 min"
+>
+
+Read Key takeaways, Overview, Evidence on smuggled chips, and Estimation
+methodology through Combined results. The paper is a public estimate of
+smuggled compute: a median of about 660,000 H100-equivalents through the end
+of 2025, with a 90% interval from 290,000 to 1.6 million. Read it for what the
+number rests on. There are two evidence streams: diversion (indictments and
+investigative reporting on chips leaving legitimate supply chains, the
+Supermicro and Megaspeed cases) and resale (reporting on the grey market
+inside China: vendor counts, order sizes, photographed chips). Neither is
+customs data, export-licence data, or financial intelligence, and the model's
+largest assumption is the share of smuggling that nobody detected. For the
+institutional side, see CNAS on
+[countering chip smuggling](https://www.cnas.org/publications/reports/countering-ai-chip-smuggling-has-become-a-national-security-priority)
+and on
+[putting intelligence behind export-control enforcement](https://www.cnas.org/publications/commentary/to-win-the-ai-race-bolster-export-control-enforcement-with-intelligence).
+
+</ReadingCard>
+
+## Exercise
+
+<Exercise id="v-intel-finint-smuggling" />
+
+<ReadingCard
+  id="intel-basel-following-the-money"
+  href="https://learn.baselgovernance.org/course/view.php?id=36"
+  title="Quick Guide 15: Following the money"
+  author="Stephen Ratcliffe | Basel Institute on Governance"
+  year="2020"
+  mins="5 min"
+  optional
+>
+
+The method in four pages: how financial transactions are used to extract
+information and evidence about a crime, a suspect, and a network.
+
+</ReadingCard>
+
+<ReadingCard
+  id="intel-basel-offshore-structures"
+  href="https://baselgovernance.org/resources/publications/quick-guide-19-offshore-structures-and-beneficial-ownership/"
+  title="Quick Guide 19: Offshore structures and beneficial ownership"
+  author="Phyllis Atkinson | Basel Institute on Governance"
+  year="2020"
+  mins="10 min"
+  optional
+>
+
+How corporate vehicles and offshore structures are used to disguise
+ownership: the shell-company and proxy case from the list of places where
+undeclared activity can sit.
+
+</ReadingCard>
+
+## Going Further
+
+The Basel Institute on Governance runs free, self-paced online courses on
+these methods:
+[Operational Analysis](https://learn.baselgovernance.org/course/view.php?id=3)
+(working suspicious-transaction reports),
+[Source and Application of Funds](https://learn.baselgovernance.org/enrol/index.php?id=17)
+(tracing a money trail), and the rest of
+[Basel LEARN](https://learn.baselgovernance.org/). Each takes several hours
+and ends in a certificate of completion.

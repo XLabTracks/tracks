@@ -81,7 +81,7 @@ export function ConstructCase({
 
           <section className="panel">
             <h4 className="text-muted-foreground eyebrow">
-              Where a report can die
+              Where a report can fail
             </h4>
             <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
               All of it held back until now, and deliberately: naming where a

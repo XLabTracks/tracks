@@ -23,6 +23,7 @@ import { COMPANIES_AB_KEY } from "@/lib/verification/data/marking-keys";
 import { MarkingKeyPanel } from "../kit/marking-key";
 import type { VerificationWidgetProps } from "../kit/types";
 import { writingArea, writingCardFocus } from "../kit/writing-surface";
+import { readStored, writeStored } from "@/components/verification/kit/stored";
 
 interface Saved {
   differences: Record<string, string>;
@@ -72,7 +73,7 @@ export function CompaniesAB({
   useEffect(() => {
     let restored = EMPTY;
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = readStored(STORAGE_KEY);
       if (raw) restored = prune(JSON.parse(raw));
     } catch {
     }
@@ -85,7 +86,7 @@ export function CompaniesAB({
   const persist = useCallback((next: Saved) => {
     setSaved(next);
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      writeStored(STORAGE_KEY, JSON.stringify(next));
     } catch {
     }
   }, []);

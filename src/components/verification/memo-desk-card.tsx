@@ -1,4 +1,4 @@
-import { ArrowUpRight, PenLine, Users } from "lucide-react";
+import { ArrowUpRight, PenLine } from "lucide-react";
 import { OptionalPrefix } from "@/components/content/optional-tag";
 import {
   memoGenreLabels,
@@ -64,18 +64,12 @@ function Slot({ slot }: { slot: MemoSlot }) {
             <dd className="text-foreground">{slot.audience}</dd>
           </div>
         ) : null}
-        {slot.peerReviewed ? (
-          <div className="flex items-center gap-1.5">
-            <Users className="size-3.5" aria-hidden />
-            <dd className="text-foreground">Goes through peer review</dd>
-          </div>
-        ) : null}
       </dl>
 
       {slot.criteria?.length ? (
         <>
           <p className="text-muted-foreground mt-3 eyebrow">
-            Reviewed on
+            Judged on
           </p>
           <ul className="mt-1 list-disc space-y-0.5 pl-5 text-sm leading-relaxed">
             {slot.criteria.map((criterion) => (

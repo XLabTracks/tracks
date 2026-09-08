@@ -67,7 +67,7 @@ export interface WorkedCase {
 export const WORKED_CASES: WorkedCase[] = [
   {
     id: "corroboration",
-    kicker: "The failure is corroboration.",
+    kicker: "Failure point: corroboration.",
     insider:
       "A scheduling engineer at a cloud provider, working on the team that allocates accelerator capacity to enterprise customers.",
     information:
@@ -79,7 +79,7 @@ export const WORKED_CASES: WorkedCase[] = [
   },
   {
     id: "sharing-barrier",
-    kicker: "The failure is who may be told.",
+    kicker: "Failure point: who is allowed to be told.",
     insider:
       "A compliance officer at a chip vendor, responsible for export-control screening.",
     information:

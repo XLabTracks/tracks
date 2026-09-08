@@ -12,7 +12,7 @@ deliverable_type: spec
 mentor: recommended
 audience: The task force told to stand up verification this year, not next.
 skills: [regime design, feasibility triage, gap analysis]
-prerequisites: [Verification 2.x — the four layers, Verification 4.1 — feasibility and layering]
+prerequisites: [Verification 2.x — the evidence layers, Verification 4.1 — feasibility and layering]
 updated: 2026-08-06
 ---
 
@@ -43,7 +43,7 @@ collection — and be exact about what it cannot see.
 
 Module 4.1 asks the sequencing question directly: what works for an MVP
 emergency pause versus what needs years of institution-building. This brief
-is that question taken literally, with the four layers of Module 2 as the
+is that question taken literally, with the evidence layers of Module 2 as the
 parts bin. The discipline it trains — feasibility triage under a deadline,
 with gaps stated rather than papered over — is the difference between a
 regime design and a regime sketch.

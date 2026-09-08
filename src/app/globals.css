@@ -899,6 +899,44 @@
   width: 58%;
 }
 
+/* 2.3.1's open-source categories table (`<div className="quad-table">`): a
+   short category label, a long what-to-look-at list, a medium finding, and a
+   section pointer holding little more than "2.3.3". Same fixed-layout remedy
+   as .pair-table/.trio-table — under the shared block-scroll treatment the
+   generic last-child width:100% handed all the slack to the pointer column
+   and squeezed the two that carry words. Widths are proportioned to what
+   each column holds, stated on all four headers so the last-child rule
+   cannot reach one. */
+.lesson-body .quad-table {
+  margin-block: 28px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+.lesson-body .quad-table table {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background-image: none;
+}
+.lesson-body .quad-table table th:first-child {
+  width: 16%;
+}
+.lesson-body .quad-table table th:nth-child(2) {
+  width: 38%;
+}
+.lesson-body .quad-table table th:nth-child(3) {
+  width: 31%;
+}
+.lesson-body .quad-table table th:last-child {
+  width: 15%;
+}
+
 /* 0.1.2's theory-of-change elements table (`<div className="elements-grid">`
    around a literal grid table). It wore its own dress once — theme-inverted
    band headers, square corners, per-cell collapsed borders — and the course

@@ -187,14 +187,16 @@ window.COURSE = {
           "id": "2.3",
           "title": "Intelligence",
           "kind": "explainer",
-          "mins": "35–45 min",
+          "mins": "400 min",
           "href": "/tracks/verification/verification-infrastructure/intelligence-intro",
           "lessons": [
             "intelligence-intro",
-            "intelligence-signatures",
-            "intelligence-anchor",
+            "intelligence-osint",
+            "intelligence-imagery",
+            "intelligence-masint",
+            "intelligence-finint",
+            "intelligence-cyber",
             "intelligence-assessment",
-            "intelligence-institutions",
             "intelligence-action"
           ]
         },
@@ -202,7 +204,7 @@ window.COURSE = {
           "id": "2.4",
           "title": "Human",
           "kind": "explainer",
-          "mins": "120 min",
+          "mins": "150 min",
           "href": "/tracks/verification/verification-infrastructure/human-intro",
           "lessons": [
             "human-intro",

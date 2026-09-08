@@ -51,7 +51,7 @@ Design one channel, properly.
 
 ## Why it exists
 
-The human layer is where the track's realism lives. The other three layers can
+The human layer is where the track's realism lives. The other evidence streams can
 be improved with engineering; this one runs on whether a specific person, with
 a mortgage and a non-disparagement clause, decides to speak. Designing for that
 is a different discipline from designing a telemetry rule, and learners who can

@@ -12,7 +12,7 @@ deliverable_type: spec
 mentor: recommended
 audience: The regulator who has to accept or reject a self-reported eval result.
 skills: [evidence standards, attestation design, adversarial reasoning, cost-of-compliance analysis]
-prerequisites: [Verification 2.x — the four layers, Verification 4.1 — feasibility and layering, TG week 3 — running evals]
+prerequisites: [Verification 2.x — the evidence layers, Verification 4.1 — feasibility and layering, TG week 3 — running evals]
 sources:
   - "[Request for Proposals: Improving Capability Evaluations — Coefficient Giving, formerly Open Philanthropy (2025, closed)](https://coefficientgiving.org/funds/navigating-transformative-ai/request-for-proposals-improving-capability-evaluations/)"
 updated: 2026-08-04

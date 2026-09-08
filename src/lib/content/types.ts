@@ -863,6 +863,13 @@ export interface WritingExercise extends ExerciseBase {
    * making an optional essay compulsory.
    */
   optional?: true;
+  /**
+   * A model answer revealed once the learner has submitted — the
+   * write-then-compare shape of an understanding check, but persisted like
+   * every other piece of writing. When present, the exercise is a check
+   * against this answer, so the grader card is not offered for it.
+   */
+  sampleAnswer?: string;
 }
 
 export type Exercise =

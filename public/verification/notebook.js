@@ -453,7 +453,7 @@ window.VTNotebook = (function () {
 
   /* Derived at paint time from window.SKILLS and vt-progress — nothing here
      is ever written back. The arithmetic mirrors VT.rungFill/skillProgress in
-     platform.js (including the compound 2.1–2.4 rung); keep the two in step. */
+     platform.js (including the compound 2.1–2.3 rung); keep the two in step. */
 
   let skillsLoad = null; // null | 'loading' | 'failed'
 

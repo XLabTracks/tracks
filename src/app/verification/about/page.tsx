@@ -75,9 +75,9 @@ export default function Page() {
             </p>
             <p>
               Most modules end in one short written output — a memo, brief, critique
-              or design note — applied to a concrete verification problem and put
-              through peer review. The <a href="/verification/memo-desk">memo desk</a> is
-              where you draft them, brief beside the page.
+              or design note — applied to a concrete verification problem. The
+              <a href="/verification/memo-desk">memo desk</a> is where you draft them,
+              brief beside the page.
             </p>
 
             <h2>Taking it</h2>

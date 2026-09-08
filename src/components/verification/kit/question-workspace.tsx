@@ -12,6 +12,7 @@ import {
 } from "@/lib/verification/question-workspace";
 import { writingArea, writingCardFocus } from "./writing-surface";
 import { cn } from "@/lib/utils";
+import { readStored, writeStored } from "@/components/verification/kit/stored";
 
 export function QuestionWorkspace({
   storageKey,
@@ -39,7 +40,7 @@ export function QuestionWorkspace({
     (next: Saved) => {
       setState(next);
       try {
-        localStorage.setItem(storageKey, JSON.stringify(next));
+        writeStored(storageKey, JSON.stringify(next));
       } catch {
       }
     },
@@ -184,7 +185,7 @@ const EMPTY: Saved = { answers: {}, done: {} };
 
 function read(key: string): Saved {
   try {
-    const raw = localStorage.getItem(key);
+    const raw = readStored(key);
     return raw ? { ...EMPTY, ...JSON.parse(raw) } : EMPTY;
   } catch {
     return EMPTY;

@@ -12,7 +12,7 @@ deliverable_type: spec
 mentor: recommended
 audience: The parties to an agreement whose central mechanism has just been routed around.
 skills: [regime design, ecosystem monitoring, threat modelling, evidence standards]
-prerequisites: [Verification 2.x — the four layers, Verification 3 — covert development, Verification 4.1 — feasibility and layering]
+prerequisites: [Verification 2.x — the evidence layers, Verification 3 — covert development, Verification 4.1 — feasibility and layering]
 sources:
   - "[Open Technical Problems in Open-Weight AI Model Risk Management (2025)](https://openreview.net/forum?id=8QyGLnFkzc)"
 updated: 2026-08-04
@@ -30,7 +30,7 @@ Write the annex a verification regime needs for the day after.
 - **The trigger.** What observation tells the parties this has happened at
   all — and how long that takes. Be honest: this is often the weakest link in
   the whole annex, and naming the detection lag is half the deliverable.
-- **What survives.** Which of the four layers still tells you anything once
+- **What survives.** Which of Module 2's layers still tells you anything once
   the weights are loose. Hardware and cloud were watching *training*. Say
   plainly what each layer can and cannot see about a model that is now being
   run by someone who never signed anything.
@@ -64,7 +64,7 @@ honest holes rather than a fix.
 ## Scope
 
 **In scope:** one agreement (reuse the one from your Module 4 capstone if you
-did it), one exfiltration scenario, the four layers, and public literature on
+did it), one exfiltration scenario, Module 2's layers, and public literature on
 open-weight and post-release monitoring.
 
 **Out of scope:** the security engineering of preventing exfiltration. That

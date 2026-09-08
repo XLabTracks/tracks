@@ -1,12 +1,14 @@
 "use client";
 
 import { useCallback, useSyncExternalStore } from "react";
+import { readStored, writeStored } from "@/components/verification/kit/stored";
 
 /* Where an inline check's pick and a gap-fill's placements are kept.
  *
  * This is learner work, not progress: it feeds no meter, unlocks nothing and
- * completes no unit, which is why it stays in the browser instead of going to
- * the account the way `LessonProgress` does.
+ * completes no unit. It is written through kit/stored.ts, so it rides to the
+ * account in the widgets store of the Verification state document and is
+ * purged from the device on sign-out, like every other piece of learner work.
  *
  * Read through useSyncExternalStore rather than an effect, because the value
  * only exists on the client: the server snapshot is the fallback, so the first
@@ -30,7 +32,7 @@ function all(): Record<string, unknown> {
   if (cache) return cache;
   if (typeof window === "undefined") return (cache = {});
   try {
-    const raw = JSON.parse(window.localStorage.getItem(KEY) || "null");
+    const raw = JSON.parse(readStored(KEY) || "null");
     cache = raw && typeof raw === "object" ? (raw as Record<string, unknown>) : {};
   } catch {
     cache = {};
@@ -49,7 +51,7 @@ export function writeMark(id: string, value: unknown): void {
   else next[id] = value;
   cache = next;
   try {
-    window.localStorage.setItem(KEY, JSON.stringify(next));
+    writeStored(KEY, JSON.stringify(next));
   } catch {
     /* private mode: the mark is lost on reload, and nothing depends on it */
   }

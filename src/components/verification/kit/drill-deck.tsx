@@ -41,6 +41,7 @@ import {
 } from "@/lib/verification/engines/drills";
 import type { VerificationWidgetProps } from "./types";
 import { SegMeter } from "./seg-meter";
+import { readStored, writeStored } from "@/components/verification/kit/stored";
 
 export function DrillDeckView({
   deck,
@@ -58,7 +59,7 @@ export function DrillDeckView({
   useEffect(() => {
     let restored: DrillProgress = {};
     try {
-      const raw = localStorage.getItem(storageKey);
+      const raw = readStored(storageKey);
       if (raw) restored = pruneProgress(JSON.parse(raw) as DrillProgress, deck);
     } catch {
     }
@@ -72,7 +73,7 @@ export function DrillDeckView({
     (next: DrillProgress) => {
       setProgress(next);
       try {
-        localStorage.setItem(storageKey, JSON.stringify(next));
+        writeStored(storageKey, JSON.stringify(next));
       } catch {
       }
     },

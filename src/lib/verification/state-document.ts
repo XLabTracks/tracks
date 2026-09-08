@@ -4,6 +4,7 @@ export const VERIFICATION_STORE_NAMES = [
   "highlights",
   "memos",
   "fieldMap",
+  "widgets",
 ] as const;
 
 export type VerificationStoreName = (typeof VERIFICATION_STORE_NAMES)[number];
@@ -15,9 +16,13 @@ export type VerificationStateDocument = {
   highlights: unknown;
   memos: unknown;
   fieldMap: unknown;
+  widgets: WidgetStore | null;
   stamps: Record<VerificationStoreName, number>;
   updatedAt: number;
 };
+
+export type WidgetEntry = { value: unknown; updatedAt: number };
+export type WidgetStore = Record<string, WidgetEntry>;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -28,7 +33,43 @@ function timestamp(value: unknown): number {
   return Number.isFinite(number) && number > 0 ? number : 0;
 }
 
+function normalizeWidgets(value: unknown): WidgetStore | null {
+  if (!isRecord(value)) return null;
+  const store: WidgetStore = {};
+  for (const [key, entry] of Object.entries(value)) {
+    if (!isRecord(entry)) continue;
+    const updatedAt = timestamp(entry.updatedAt);
+    if (!updatedAt) continue;
+    store[key] = { value: entry.value === undefined ? null : entry.value, updatedAt };
+  }
+  return store;
+}
+
+function widgetsStamp(store: WidgetStore | null): number {
+  if (!store) return 0;
+  let newest = 0;
+  for (const entry of Object.values(store)) newest = Math.max(newest, entry.updatedAt);
+  return newest;
+}
+
+function mergeWidgets(
+  current: WidgetStore | null,
+  incoming: WidgetStore | null,
+): { store: WidgetStore | null; changed: boolean } {
+  if (!incoming) return { store: current, changed: false };
+  const store: WidgetStore = { ...(current ?? {}) };
+  let changed = false;
+  for (const [key, entry] of Object.entries(incoming)) {
+    const mine = store[key];
+    if (mine && mine.updatedAt >= entry.updatedAt) continue;
+    store[key] = entry;
+    changed = true;
+  }
+  return { store: changed ? store : current, changed };
+}
+
 function nestedStamp(name: VerificationStoreName, value: unknown): number {
+  if (name === "widgets") return widgetsStamp(normalizeWidgets(value));
   if (!isRecord(value)) return 0;
 
   if (name === "memos") return timestamp(value._updatedAt);
@@ -72,6 +113,7 @@ export function normalizeVerificationStateDocument(
     highlights: source.highlights ?? null,
     memos: source.memos ?? null,
     fieldMap: source.fieldMap ?? null,
+    widgets: normalizeWidgets(source.widgets),
     stamps,
     updatedAt: Math.max(...Object.values(stamps), 0),
   };
@@ -96,6 +138,15 @@ export function mergeVerificationStateDocuments(
   };
 
   for (const name of VERIFICATION_STORE_NAMES) {
+    if (name === "widgets") {
+      const merged = mergeWidgets(current.widgets, incoming.widgets);
+      if (merged.changed) {
+        document.widgets = merged.store;
+        document.stamps.widgets = widgetsStamp(merged.store);
+        acceptedStores.push(name);
+      }
+      continue;
+    }
     const currentStamp = current.stamps[name];
     const incomingStamp = incoming.stamps[name];
     const acceptsEqualStampedRetry = incomingStamp > 0 && incomingStamp === currentStamp;

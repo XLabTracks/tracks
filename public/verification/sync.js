@@ -35,13 +35,15 @@
   const HIGHLIGHTS_KEY = 'vt-highlights.v1';
   const MEMO_KEY = 'xlab-verification-memo-desk.v1';
   const FIELD_MAP_KEY = 'vt-field-map:v1';
+  const WIDGET_STAMPS_KEY = 'vt-widget-stamps.v1';
   const PUSH_MS = 1200;
   const STORES = [
     { name: 'progress', key: PROGRESS_KEY },
     { name: 'notebook', key: NOTEBOOK_KEY },
     { name: 'highlights', key: HIGHLIGHTS_KEY },
     { name: 'memos', key: MEMO_KEY },
-    { name: 'fieldMap', key: FIELD_MAP_KEY }
+    { name: 'fieldMap', key: FIELD_MAP_KEY },
+    { name: 'widgets', key: WIDGET_STAMPS_KEY }
   ];
 
   let signedIn = false;
@@ -57,7 +59,62 @@
     return Number.isFinite(number) && number > 0 ? number : 0;
   }
 
+  /* The widgets store is a map of storage key -> { value, updatedAt }: every
+     app widget that writes through kit/stored.ts stamps its key, and the
+     map is composed from those stamps on read. Merged per key on both ends,
+     so two widgets edited on two devices both survive. */
+  function widgetsStamp(value) {
+    if (!value || typeof value !== 'object') return 0;
+    let newest = 0;
+    Object.keys(value).forEach(function (key) {
+      const entry = value[key];
+      if (entry && typeof entry === 'object') newest = Math.max(newest, positiveStamp(entry.updatedAt));
+    });
+    return newest;
+  }
+
+  function readWidgets() {
+    const stamps = getLocal(WIDGET_STAMPS_KEY);
+    const out = {};
+    if (!stamps || typeof stamps !== 'object') return out;
+    Object.keys(stamps).forEach(function (key) {
+      const stamp = positiveStamp(stamps[key]);
+      if (!stamp) return;
+      let value = null;
+      try {
+        const raw = localStorage.getItem(key);
+        if (raw !== null) value = JSON.parse(raw);
+      } catch (e) { return; }
+      out[key] = { value: value, updatedAt: stamp };
+    });
+    return out;
+  }
+
+  function adoptNewerWidgets(server, local) {
+    if (!server || typeof server !== 'object') return false;
+    const stamps = getLocal(WIDGET_STAMPS_KEY) || {};
+    let adopted = false;
+    Object.keys(server).forEach(function (key) {
+      const entry = server[key];
+      const stamp = entry && typeof entry === 'object' ? positiveStamp(entry.updatedAt) : 0;
+      if (!stamp) return;
+      const mine = local && local[key] ? positiveStamp(local[key].updatedAt) : 0;
+      if (stamp <= mine) return;
+      try {
+        if (entry.value === null || entry.value === undefined) localStorage.removeItem(key);
+        else localStorage.setItem(key, JSON.stringify(entry.value));
+        stamps[key] = stamp;
+        adopted = true;
+      } catch (e) { /* quota or private mode — the account copy stays authoritative */ }
+    });
+    if (adopted) {
+      try { localStorage.setItem(WIDGET_STAMPS_KEY, JSON.stringify(stamps)); } catch (e) { /* as above */ }
+    }
+    return adopted;
+  }
+
   function storeStamp(name, value) {
+    if (name === 'widgets') return widgetsStamp(value);
     if (!value || typeof value !== 'object' || Array.isArray(value)) return 0;
     if (name === 'memos') return positiveStamp(value._updatedAt);
     if (name !== 'progress') return positiveStamp(value.updatedAt);
@@ -78,7 +135,7 @@
   function readLocal() {
     const document = { version: 2, stamps: {}, updatedAt: 0 };
     STORES.forEach(function (store) {
-      const value = getLocal(store.key);
+      const value = store.name === 'widgets' ? readWidgets() : getLocal(store.key);
       const stamp = storeStamp(store.name, value);
       document[store.name] = value;
       document.stamps[store.name] = stamp;
@@ -119,6 +176,10 @@
   function adoptNewerStores(server, local) {
     let adopted = false;
     STORES.forEach(function (store) {
+      if (store.name === 'widgets') {
+        adopted = adoptNewerWidgets(server.widgets, local.widgets) || adopted;
+        return;
+      }
       if (server.stamps[store.name] > local.stamps[store.name]) {
         adopted = writeStore(store, server[store.name]) || adopted;
       }
@@ -188,8 +249,12 @@
     window.addEventListener('storage', function (e) {
       if (e.key === PROGRESS_KEY || e.key === NOTEBOOK_KEY ||
           e.key === HIGHLIGHTS_KEY || e.key === MEMO_KEY ||
-          e.key === FIELD_MAP_KEY) push();
+          e.key === FIELD_MAP_KEY || e.key === WIDGET_STAMPS_KEY) push();
     });
+    // App widgets write in this tab through kit/stored.ts, which announces
+    // every committed write; the stamps map is what the storage event sees
+    // from other tabs.
+    window.addEventListener('vt-widget-change', push);
     // Same-tab highlight writes fire no storage event; highlight.js
     // announces them so a mark reaches the account when it is made.
     window.addEventListener('vt-highlights-change', push);
@@ -234,7 +299,25 @@
     });
   }
 
-  ready = fetch(URL_STATE, { headers: { Accept: 'application/json' } })
+  /* The account guard (src/lib/verification/device-storage.ts) runs first on
+     every page: it purges another account's — or a signed-out session's —
+     learner work from this device before anything here could adopt it or
+     push it into the wrong account. Wait for it; a page without the guard
+     times out into the old behaviour rather than never syncing. */
+  function whenAccountSettled() {
+    if (window.__tracksAccountSettled) return Promise.resolve();
+    return new Promise(function (resolve) {
+      let done = false;
+      function finish() { if (done) return; done = true; resolve(); }
+      window.addEventListener('tracks-account-settled', finish, { once: true });
+      setTimeout(finish, 4000);
+    });
+  }
+
+  ready = whenAccountSettled()
+    .then(function () {
+      return fetch(URL_STATE, { headers: { Accept: 'application/json' } });
+    })
     .then(function (r) {
       if (r.status === 401) return null;   // signed out: the local copy is it
       // 503 is the route saying its table has not been migrated yet. Same

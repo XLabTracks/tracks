@@ -16,6 +16,7 @@ import {
   BOARD_TASK_LEAD,
 } from "@/lib/verification/data/missing-board";
 import type { VerificationWidgetProps } from "../kit/types";
+import { readStored, writeStored } from "@/components/verification/kit/stored";
 
 interface Saved {
   answers: Record<string, string>;
@@ -55,7 +56,7 @@ export function MissingBoard({
   useEffect(() => {
     let restored = EMPTY;
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = readStored(STORAGE_KEY);
       if (raw) restored = prune(JSON.parse(raw));
     } catch {
     }
@@ -68,7 +69,7 @@ export function MissingBoard({
   const persist = useCallback((next: Saved) => {
     setSaved(next);
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      writeStored(STORAGE_KEY, JSON.stringify(next));
     } catch {
     }
   }, []);

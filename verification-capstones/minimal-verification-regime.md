@@ -12,7 +12,7 @@ deliverable_type: spec
 mentor: recommended
 audience: The negotiating team that would have to sign it, and the technical staff who would have to run it.
 skills: [regime design, threat modelling, evidence standards, institutional analysis]
-prerequisites: [Verification 2.x — the four layers, Verification 3 — covert development, Verification 4.1 — feasibility and layering]
+prerequisites: [Verification 2.x — the evidence layers, Verification 3 — covert development, Verification 4.1 — feasibility and layering]
 updated: 2026-08-04
 ---
 
@@ -60,7 +60,7 @@ modes named by the author rather than the reviewer.
 
 ## Scope
 
-**In scope:** one agreement, one adversary model, the four layers you
+**In scope:** one agreement, one adversary model, the evidence layers you
 already studied, and mechanisms that exist or are plausibly buildable in
 the agreement's window.
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { readStored, writeStored } from "@/components/verification/kit/stored";
 
 export function useStoredState<T>(
   storageKey: string,
@@ -17,7 +18,7 @@ export function useStoredState<T>(
     const { prune: parse, onRestore: seed, empty: blank } = atMount.current;
     let restored = blank;
     try {
-      const raw = localStorage.getItem(storageKey);
+      const raw = readStored(storageKey);
       if (raw) restored = parse(JSON.parse(raw));
     } catch {
     }
@@ -34,7 +35,7 @@ export function useStoredState<T>(
         const resolved =
           typeof next === "function" ? (next as (p: T) => T)(prev) : next;
         try {
-          localStorage.setItem(storageKey, JSON.stringify(resolved));
+          writeStored(storageKey, JSON.stringify(resolved));
         } catch {
         }
         return resolved;

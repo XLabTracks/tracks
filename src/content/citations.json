@@ -502,6 +502,14 @@
       "about": "An explainer of the importance-tractability-neglectedness framework for prioritizing problems.",
       "org": "Probably Good"
     },
+    "https://publications.jrc.ec.europa.eu/repository/handle/JRC97258": {
+      "title": "Commercial Satellite Imagery as an Evolving Open-Source Verification Technology: Emerging Trends and Their Impact for Nuclear Nonproliferation Analysis",
+      "about": "A Joint Research Centre technical report on commercial imagery as a verification tool: it records that the IAEA set up its Satellite Imagery Analysis Unit in 2001, and surveys resolution trends and the open-source analysts working beside the agencies.",
+      "authors": "Pabian, Frank",
+      "publisher": "Publications Office of the European Union",
+      "date": "2015",
+      "standalone": true
+    },
     "https://researchclinic.net/": {
       "title": "Research Clinic",
       "about": "Paul Myers's link library for internet research, kept since 2003 alongside his training courses: search engines, social-media research, people and company finders, domain and IP lookups, government and charity registers, geolocation, and verification tools.",
@@ -656,9 +664,17 @@
     },
     "https://www.iaea.org/publications/magazines/bulletin/57-2/completing-the-picture-using-satellite-imagery-to-enhance-iaea-safeguards-capabilities": {
       "title": "Completing the Picture: Using Satellite Imagery to Enhance IAEA Safeguards Capabilities",
-      "about": "Imagery as complement, not determinant, across safeguards activities; the Satellite Imagery Analysis Unit, established 2001, and denied-access monitoring.",
-      "container": "IAEA Bulletin 57-2",
-      "date": "2016"
+      "about": "Imagery as a complement to what states declare: verifying declarations, planning inspections, following change at known sites, and looking for undeclared activity where inspectors have no access.",
+      "authors": "Quevenco, Rodolfo",
+      "container": "IAEA Bulletin, vol. 57, no. 2",
+      "date": "June 2016"
+    },
+    "https://www.iaea.org/sites/default/files/infcirc540.pdf": {
+      "title": "Model Protocol Additional to the Agreement(s) between State(s) and the International Atomic Energy Agency for the Application of Safeguards (INFCIRC/540)",
+      "about": "The 1997 Model Additional Protocol: the expanded declarations and complementary access that let the IAEA look for undeclared material and activities, the reform that followed Iraq.",
+      "org": "International Atomic Energy Agency",
+      "date": "1997",
+      "standalone": true
     },
     "https://www.leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?article=&chapter=5.1.&division=2.&lawCode=LAB&part=3.&title=": {
       "title": "Whistleblower Protections: Catastrophic Risks in AI Foundation Models, Labor Code §§ 1107–1107.2",

@@ -1,19 +1,40 @@
-Imagery works on any place on Earth, we don't need any additional equipment
-to make more probes. You can see in some articles the words "satellite
-imagery" and it means combination of IMINT (what is in the frame) and GEOINT
-(where the image is placed in space and time).
+Imagery works on any place on Earth. It needs no equipment on the ground and
+no permission from the Prover. You can see in some articles the words
+"satellite imagery" and it means combination of IMINT (what is in the frame)
+and GEOINT (where the image is placed in space and time).
 
 ## What the Analyst Looks For
 
-A frontier cluster is a large industrial building with an unusual ratio of
-power and cooling to floor area. Building footprint, electrical substations,
-cooling equipment, security perimeter. Facilities above roughly 10,000
-H100-equivalents typically occupy substantial footprints with characteristic
-features ([MIRI, Appendix D.3.5](https://arxiv.org/abs/2511.10783); a 2025
-snapshot). However this method does not distinguish an AI datacenter from a
-cloud or enterprise one, except through cooling density and power, and those
-overlap. And it says nothing about what runs inside a finished building. You
-will learn about converting a power estimate into a compute estimate in 2.3.3.
+A large datacenter can look much like a warehouse: a long, windowless
+building with loading docks. Analysts therefore pay close attention to the
+equipment around it. A transformer yard indicates a substantial power
+connection, while rows of generators and fuel tanks suggest provision for
+backup power. Fences, checkpoints and a wide setback provide further clues,
+though other industrial sites have these features too
+([Krawec, 2026](https://fas.org/publication/tracking-hyperscale/)).
+
+Cooling equipment is particularly useful for estimating capacity. By
+identifying and counting chillers, dry coolers or cooling towers, an analyst
+can estimate how much heat the facility is equipped to remove.
+[Epoch AI](https://epoch.ai/data/data-centers-documentation/methodology) uses this approach to estimate IT power capacity, then
+combines it with information or assumptions about the chips to estimate
+compute. The result is an estimate of capacity, not a measurement of how much
+power the site is actually using.
+
+A Prover could make these features harder to interpret by reusing an existing
+industrial power connection, sharing backup infrastructure, or enclosing
+parts of the cooling system. Some cooling designs already leave little
+equipment visible outside. Enclosing the machinery does not eliminate the
+need to reject heat, but it can make the cooling arrangement harder to
+identify ([Epoch AI, 2025](https://epoch.ai/data/data-centers-documentation/methodology)).
+
+Images taken over time can show when construction began, when cooling
+equipment appeared and when buildings were added. They can also support a
+rough estimate of the facility’s capacity. Identifying its use is harder: an
+AI training cluster may look much like a conventional cloud datacenter, and
+imagery cannot reveal the workload running inside ([Krawec, 2026](https://fas.org/publication/tracking-hyperscale/)).
+Section 2.3.3 explains how power estimates can be converted into compute
+estimates.
 
 <Callout variant="note" title="GeoGuessr">
 
@@ -65,23 +86,40 @@ itself a slow construction project visible from orbit. This is the argument
 for GEOINT over IMINT in one sentence: you can disguise a box, but you cannot
 disguise the fact that a gigawatt arrived somewhere.
 
-## What Imagery Can and Cannot Settle
+## How the IAEA Came to Use Satellite Imagery
 
-Historical note: the IAEA began using satellite imagery only in the 1990s,
-after Iraq's undeclared programme, uncovered in 1991, showed that safeguards
-confined to declared facilities could miss what was never declared. The
-[Additional Protocol of 1997](https://www.armscontrol.org/factsheets/iaea-safeguards-agreements-glance)
-gave the Agency the mandate to assure the absence of undeclared activity, and
-in 2001 it set up its own
-[Satellite Imagery Analysis Unit](https://www.iaea.org/publications/magazines/bulletin/57-2/completing-the-picture-using-satellite-imagery-to-enhance-iaea-safeguards-capabilities).
-Al Kibar is what happened when a builder had read that lesson.
+Before 1991, IAEA safeguards focused heavily on declared nuclear material and
+facilities. The Agency had special-inspection authority, but its routine
+verification work relied largely on states’ declarations. After the Gulf War,
+inspections under UN Security Council Resolution 687 uncovered Iraq’s
+undeclared programme, including electromagnetic enrichment sites at Tarmiya
+and Ash Sharqat and weapons work at Al Atheer. These activities had gone
+undetected while declared facilities at Tuwaitha remained under safeguards.
+
+The discovery prompted reforms intended to improve the detection of
+undeclared activities. These included the
+[Model Additional Protocol](https://www.iaea.org/sites/default/files/infcirc540.pdf), approved in 1997, which provided for
+broader reporting requirements and inspection access in states that accepted
+it. Satellite imagery became part of the wider effort to strengthen
+safeguards, although the Agency did not need an Additional Protocol to use
+it.
+
+In 2001, the IAEA established its Satellite Imagery Analysis Unit
+([Pabian, 2015](https://publications.jrc.ec.europa.eu/repository/handle/JRC97258)). Imagery helped analysts check declarations, follow
+changes at known facilities and identify possible undeclared activities,
+including at sites inspectors could not visit. It supplied evidence to guide
+further investigation rather than settling a site’s purpose on its own
+([Quevenco, 2016](https://www.iaea.org/publications/magazines/bulletin/57-2/completing-the-picture-using-satellite-imagery-to-enhance-iaea-safeguards-capabilities)). The Al Kibar case below examines the limits of
+this approach.
+
+## What Imagery Can and Cannot Settle
 
 Two cases from nuclear verification mark the limits.
 
 **Al Kibar, Syria, 2007.** After the building was bombed, ISIS located it in
 commercial imagery and identified it as a reactor. The IAEA's own imagery
-experts, reading the same images, judged that unlikely. Every signature on
-the checklist above had been concealed: a remote canyon, a building partly
+experts, reading the same images, judged that unlikely. Every signature from
+the section above had been concealed: a remote canyon, a building partly
 underground, a false roof and walls that turned a Yongbyon-shaped structure
 into a plain box, no visible cooling, no visible power lines, no housing.
 Imagery did not settle the question. Photographs of the inside and outside

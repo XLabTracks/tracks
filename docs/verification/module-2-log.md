@@ -2891,3 +2891,48 @@ defector's material" was already replaced in eade67cd; the owner was reading
 an earlier deploy. The archive-and-retrospective paragraph (IAEA Bulletin,
 USGS, ISIS on Tuwaitha) is not taken, per her "ok if not": the opening keeps
 "any place on Earth" only.
+
+## 2026-09-08 — 2.3.2: the owner's paragraphs land
+
+Owner's text, applied as written. The opening's draft clause ("we don't need
+any additional equipment to make more probes") gives way to her sentence,
+"Imagery needs no equipment on the ground and no permission from the
+Prover", with "Imagery" → "It" against the repetition. "What the Analyst
+Looks For" is her four paragraphs (the warehouse look-alike; transformer
+yard, generators and fuel tanks, fences; cooling equipment counted for
+capacity, Epoch's method, capacity not consumption; the Prover's three
+options; imagery over time and the workload it cannot see), replacing the
+restored list and her earlier three sentences. "How the IAEA Came to Use
+Satellite Imagery" is a new section before the two cases (Iraq under UNSCR
+687: Tarmiya, Ash Sharqat, Al Atheer, Tuwaitha; the Model Additional Protocol
+of 1997; the Satellite Imagery Analysis Unit of 2001; imagery as evidence to
+guide investigation), replacing the note of 2f6751ae. Cross-references per
+her edits: "Every signature from the section above"; the exercise's "which
+signature from this section"; the sample answer's last bullet names the
+transformer yard and the cooling equipment.
+
+Source markers, as in 2.3.3: FAS ×2 → "(Krawec, 2026)" linked; Epoch AI ×2
+→ the methodology page, once on her phrase "Epoch AI" and once in
+parentheses; the two IAEA markers in the Iraq paragraph dropped (no work in
+her Works cited additions); IAEA after the Additional Protocol → the
+INFCIRC/540 PDF; JRC → Pabian; IAEA at the end → Quevenco.
+
+Facts checked: the FAS report (a large footprint with only loading areas is
+likely a warehouse; substations by their transformers; backup generators in
+rows) — fences, checkpoints and a setback are not in its text; Epoch's
+methodology (chillers and cooling towers counted, fans regressed to cooling
+capacity, IT power from it, chip types assumed; "some cooling methods do not
+have a clear footprint outside"); Quevenco (author, June 2016, pp. 24–25;
+verifying declarations, monitoring change, undeclared activity, sites
+without access — the article does not mention 2001); Pabian (JRC97258, EUR
+27687, dated 2015 by the repository and the report's own cover, where her
+list said 2016: "In 2001, the IAEA established an in-house Satellite Imagery
+Analysis Unit"); INFCIRC/540 (printed September 1997); Iraq's EMIS plants at
+Tarmiya and Ash Sharqat, weaponization at Al Atheer, Tuwaitha under
+safeguards (FAS's Iraq programme page). The Quevenco registry entry had
+credited the article with the 2001 fact, which is Pabian's; corrected, with
+author and issue added. Three works registered; the appendix 11 → 13.
+Minutes stay 30 (1,200 words ≈ 5 min, readings 17 min, the exercise).
+
+Flag: the section immediately above Al Kibar is now the IAEA one; the
+signatures "from the section above" are two sections up.

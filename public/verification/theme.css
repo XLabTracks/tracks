@@ -1,18 +1,12 @@
 /* XLab Verification — the palette and chrome the standalone verification
-   subdomain pages run on. Three themes over one set of variable names, so a
-   rule that reads --primary or --border follows the switch without being
-   touched. Day and night carry XLab's maroon; high contrast drops the brand
-   for black, white and one signal yellow.
+   subdomain pages run on. Two themes, day and night, over one set of variable
+   names, so a rule that reads --primary or --border follows the switch
+   without being touched. Both carry XLab's maroon.
 
    Trap: maroon at #800000 is a fine SURFACE on dark (white on it reads at
    12:1) but not fine as TEXT on dark (2.3:1). That is why --brand-ink exists
    separately from --primary: filled things use --primary, written things use
    --brand-ink, and the two differ per theme.
-
-   Trap: high contrast is picked, never inferred. It is a legibility setting,
-   and a learner who needs it should not have it depend on an OS toggle they
-   set for a different reason — so prefers-color-scheme only ever chooses
-   between day and night.
 
    Module hues run Chinese Red - Satsuma - Lunar Yellow - Khaki - Cobalt: one
    family with the brand in it rather than a general-purpose data palette
@@ -22,7 +16,7 @@
    Each theme keeps the hue and solves lightness for its own ground, so the
    day values are the same five colours darkened to carry as text on paper,
    not different colours. Every one clears 4.5:1 where it is set (day 4.6-8.5,
-   night 5.2-6.9, high contrast 7.7-13.1); the old day palette cleared it on
+   night 5.2-6.9); the old day palette cleared it on
    one of five.
    They stay decorative: warm neighbours converge for a protanope, so
    everywhere a module colour appears the module number appears as text beside
@@ -209,129 +203,8 @@
   --shadow-soft-lg: 0 12px 40px rgba(0, 0, 0, 0.5);
 }
 
-/* High contrast is a low-vision mode, not a dark theme, and it is built to
-   WCAG's own numbers rather than to taste.
-
-   IT ENLARGES THE TYPE BY DEFAULT, AND THAT IS THE POINT OF IT. The Aa menu
-   now lets a reader override that default: contrast and magnification are
-   separate preferences, but somebody who needs both should still reach both
-   with one switch. With no explicit Aa choice, high contrast therefore opens
-   at 200%; once a reader chooses a size, that choice wins. Browser zoom is not
-   the answer either, for the reason spelled out under 1.4.10 below.
-
-   The numbers:
-
-     1.4.6 Contrast (Enhanced, AAA) — 7:1 for body type. Here every pair is
-       black against white at 21:1, because the mode exists for people for whom
-       7:1 is the floor and not the target.
-     1.4.4 Resize text (AA) — 200%, applied by re-solving the --fs- scale.
-       Every rule on these pages picks a step from it, so the scale is the
-       whole mechanism; a root font-size would do nothing, because these
-       stylesheets size in px and px does not follow the root font.
-     1.4.10 Reflow (AA) — no sideways scrolling at 320 CSS px. This is why
-       the type scale and not `zoom` carries the 200%: zoom shrinks the layout
-       viewport and leaves the media queries behind, so the page lays out in
-       half the room while every width rule still believes in the whole of it.
-     2.5.5 Target Size (Enhanced, AAA) — 44x44 CSS px for anything pressable.
-
-   Hue carries nothing at all in this mode. The five module colours collapse to
-   the foreground and the module number does the work it was always doing
-   beside them, so a learner who cannot separate the hues loses nothing —
-   there is nothing left to separate.
-
-   Trap: it is picked, never inferred. prefers-color-scheme only ever chooses
-   between day and night; a legibility setting must not ride on an OS toggle
-   someone set for a different reason. */
-:root[data-theme="contrast"] {
-  --background: #000000;
-  --foreground: #ffffff;
-  --card: #000000;
-  --primary: #ffe600;
-  --primary-foreground: #000000;
-  --brand-ink: #ffe600;
-  --muted: #000000;
-  --muted-foreground: #ffffff;
-  --accent: #1a1a1a;
-  --border: #ffffff;
-  --ring: #ffe600;
-  /* The marker is the mode's own yellow with its own ink — the selected-state
-     pair, so a highlight reads like everything else pressed in this mode. */
-  --hl: var(--primary);
-  --hl-ink: var(--primary-foreground);
-
-  /* No hue at all: every module reads as foreground, and the number beside it
-     is the whole encoding. */
-  --mod-0: #ffffff;
-  --mod-1: #ffffff;
-  --mod-2: #ffffff;
-  --mod-3: #ffffff;
-  --mod-4: #ffffff;
-  --mod-0-ink: #000000;
-  --mod-1-ink: #000000;
-  --mod-2-ink: #000000;
-  --mod-3-ink: #000000;
-  --mod-4-ink: #000000;
-  --mod-0-text: #ffffff;
-  --mod-1-text: #ffffff;
-  --mod-2-text: #ffffff;
-  --mod-3-text: #ffffff;
-  --mod-4-text: #ffffff;
-
-  /* Correct and wrong keep a colour because they are the one place a glance
-     has to be instant — and both still carry their word and glyph. */
-  --ok: #6bffcb;
-  --no: #ffab70;
-  --destructive: #ffab70;
-
-  /* On black the set's own values already clear 4.5:1, except blue, which
-     takes its sky-blue counterpart. */
-  /* Hue carries nothing here either; the widget's own label is the encoding. */
-  --comply: #ffffff;
-  --defect: #ffffff;
-  --hide: #ffffff;
-  --exaggerate: #ffffff;
-  --free-ride: #ffffff;
-
-  --radius: 8px;
-  --radius-sm: 6px;
-  --radius-xs: 4px;
-  --hairline: 3px;
-  --shadow-soft: none;
-  --shadow-soft-lg: none;
-
-  /* 1.4.4: type at 200%, and the type scale is the only thing doubled.
-     Every rule on these pages picks a --fs- step, so re-solving the scale
-     moves all of them and nothing else.
-
-     In rem, not px, and for the reason the day scale is: a learner who has
-     already raised their browser's text size must not have this mode take
-     it back off them. 2x on top of whatever they set, not 2x instead of it.
-
-     It is emphatically NOT `zoom: 2` on the root. Zoom scales the box tree,
-     which sounds like the same thing and is not: it halves the layout
-     viewport while leaving the media queries where they were, so a 320px
-     phone lays out in 160px of room and every width rule still believes it
-     has 320. That is a 1.4.10 Reflow failure by construction — content that
-     has to be scrolled sideways to read a line, which is the exact thing
-     this mode exists to spare somebody. Reflow only works if the layout sees
-     the real viewport, so the layout is left alone and the letters grow. */
-  --text-scale: 2;
-  --fs-2xs: 1.5rem;
-  --fs-xs: 1.625rem;
-  --fs-sm: 1.75rem;
-  --fs-md: 2rem;
-  --fs-lg: 2.25rem;
-  --fs-xl: 2.5rem;
-  --fs-2xl: 3rem;
-  --fs-3xl: 3.75rem;
-  --fs-4xl: 4.75rem;
-  --fs-title: clamp(2.75rem, 6.8vw, 4.5rem);
-  --fs-hero: clamp(3rem, 8.8vw, 6.5rem);
-}
-
-/* Aa is the explicit reader preference. It comes after the palette so it wins
-   even when high contrast supplied the 200% low-vision default. The endpoint
-   is not the default: WCAG's 200% is the size the page must survive, while the
+/* Aa is the explicit reader preference. It comes after the palette. The
+   endpoint is not the default: WCAG's 200% is the size the page must survive, while the
    learner chooses the size that is comfortable to read. */
 :root[data-text-scale="100"] [data-reading-surface] {
   --text-scale: 1;
@@ -406,7 +279,7 @@
 
 /* A long word at 72px is wider than a 320px screen, and a heading that cannot
    break is a horizontal scrollbar. Breaking is the lesser harm. */
-:root:is([data-theme="contrast"], .reader-large) {
+:root.reader-large {
   overflow-wrap: break-word;
 }
 
@@ -425,7 +298,7 @@
    and both are a sideways scrollbar at twice it, so this mode releases them.
    A data table is the one thing left scrolling in its own box, which the
    criterion allows and the house rules already require. */
-:root:is([data-theme="contrast"], .reader-large)
+:root.reader-large
   :is(
     .brand,
     .nav a,
@@ -442,7 +315,7 @@
   white-space: normal;
 }
 
-:root:is([data-theme="contrast"], .reader-large)
+:root.reader-large
   :is(
     .brand,
     .header-right,
@@ -468,7 +341,7 @@
    of wrapping — and the bank's grid is what then pushed the page sideways.
    Only the low-vision mode needs this: at the ordinary type size no card's
    min-content reaches a 320px column. */
-:root:is([data-theme="contrast"], .reader-large) .bank-grid > * {
+:root.reader-large .bank-grid > * {
   min-width: 0;
 }
 
@@ -480,11 +353,11 @@
    floor they need, and it has to reach the wrapper as well as the control:
    a label holding a select is the item that will not give, and `max-width:
    100%` on the select then resolves against the label's own overflow. */
-:root:is([data-theme="contrast"], .reader-large) :is(input, select, textarea) {
+:root.reader-large :is(input, select, textarea) {
   min-width: 0;
   max-width: 100%;
 }
-:root:is([data-theme="contrast"], .reader-large)
+:root.reader-large
   :is(.control-row, .rt-row, .guide-tools, .sort)
   > * {
   min-width: 0;
@@ -496,7 +369,7 @@
 /* Label above value rather than beside it: an 88px label column beside a
    value is a two-column table, and at this size the value column has nothing
    left to hold a word. */
-:root:is([data-theme="contrast"], .reader-large) .brief dl > div {
+:root.reader-large .brief dl > div {
   grid-template-columns: minmax(0, 1fr);
   gap: 2px;
 }
@@ -504,20 +377,20 @@
 /* 2.5.5: 44x44 CSS px minimum for a pointer target. A minimum must not replace
    a component's layout model: forcing every button to inline-flex collapsed
    complex card-buttons into one horizontal line at enlarged text sizes. */
-:root:is([data-theme="contrast"], .reader-large) button,
-:root:is([data-theme="contrast"], .reader-large) [role="button"],
-:root:is([data-theme="contrast"], .reader-large) .btn,
-:root:is([data-theme="contrast"], .reader-large) .chip,
-:root:is([data-theme="contrast"], .reader-large) .nav a,
-:root:is([data-theme="contrast"], .reader-large) .site-footer a,
-:root:is([data-theme="contrast"], .reader-large) .part-jump {
+:root.reader-large button,
+:root.reader-large [role="button"],
+:root.reader-large .btn,
+:root.reader-large .chip,
+:root.reader-large .nav a,
+:root.reader-large .site-footer a,
+:root.reader-large .part-jump {
   min-height: 44px;
   min-width: 44px;
 }
 
 /* Memo-desk rows keep their authored grid explicitly; the generic target rule
    above now changes size only, never display. */
-:root:is([data-theme="contrast"], .reader-large) .slot-btn {
+:root.reader-large .slot-btn {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-items: start;
@@ -533,7 +406,7 @@
    turns the rule off rather than breaking anything visible. It had already
    happened once: the rule named `.sky-wrap`, which no longer exists, so the
    scatter was rendering here with 16px-tall targets. */
-:root:is([data-theme="contrast"], .reader-large) .constellation {
+:root.reader-large .constellation {
   display: none;
 }
 
@@ -543,16 +416,16 @@
    their own. They stay because at 200% type a three-column grid holds a
    handful of words per line, and tracking from the end of one short line to
    the start of the next is the reading problem this mode exists to remove. */
-:root:is([data-theme="contrast"], .reader-large) .objectives,
-:root:is([data-theme="contrast"], .reader-large) .modules,
-:root:is([data-theme="contrast"], .reader-large) .roster,
-:root:is([data-theme="contrast"], .reader-large) .lh-row,
-:root:is([data-theme="contrast"], .reader-large) .facts,
-:root:is([data-theme="contrast"], .reader-large) .map-body,
-:root:is([data-theme="contrast"], .reader-large) .desk,
-:root:is([data-theme="contrast"], .reader-large) .cap-grid,
-:root:is([data-theme="contrast"], .reader-large) .stat-row,
-:root:is([data-theme="contrast"], .reader-large) .player .shell {
+:root.reader-large .objectives,
+:root.reader-large .modules,
+:root.reader-large .roster,
+:root.reader-large .lh-row,
+:root.reader-large .facts,
+:root.reader-large .map-body,
+:root.reader-large .desk,
+:root.reader-large .cap-grid,
+:root.reader-large .stat-row,
+:root.reader-large .player .shell {
   grid-template-columns: minmax(0, 1fr) !important;
   /* One column only holds if the flow fills by row. A grid that fills by
      column (.objectives does, so its numbers read down the left) answers a
@@ -563,7 +436,7 @@
 
 /* The header is a fixed-height single row by default; at this size its own
    contents no longer fit across, so it wraps like it does on a phone. */
-:root:is([data-theme="contrast"], .reader-large) .site-header .bar {
+:root.reader-large .site-header .bar {
   display: flex;
   height: auto;
   align-items: stretch;
@@ -577,28 +450,28 @@
    shrink and wrap at 200% produced six labels painted on top of one another.
    They keep their line and travel in one explicitly scrollable rail; the page
    itself never scrolls sideways. */
-:root:is([data-theme="contrast"], .reader-large) .site-header .nav {
+:root.reader-large .site-header .nav {
   width: 100%;
   flex: none;
   flex-wrap: nowrap;
   overflow-x: auto;
 }
-:root:is([data-theme="contrast"], .reader-large) .site-header .nav a {
+:root.reader-large .site-header .nav a {
   flex: none;
   white-space: nowrap;
 }
 
-:root:is([data-theme="contrast"], .reader-large) .site-header .brand {
+:root.reader-large .site-header .brand {
   flex-wrap: nowrap;
   gap: 6px;
   font-size: var(--fs-md);
   white-space: nowrap;
 }
-:root:is([data-theme="contrast"], .reader-large) .site-header .brand-mark {
+:root.reader-large .site-header .brand-mark {
   height: 20px;
 }
 
-:root:is([data-theme="contrast"], .reader-large) .site-header .header-right {
+:root.reader-large .site-header .header-right {
   width: 100%;
 }
 /* A sticky side column has to stop being one when the column is gone. The rule
@@ -609,22 +482,15 @@
    `.slot-rail`/`.check-rail` are named here because this rule said `.rail` and
    matched neither: the same silent miss the .constellation note above records,
    so both desk rails are spelled out rather than assumed. */
-:root:is([data-theme="contrast"], .reader-large) .rail,
-:root:is([data-theme="contrast"], .reader-large) .slot-rail,
-:root:is([data-theme="contrast"], .reader-large) .check-rail {
+:root.reader-large .rail,
+:root.reader-large .slot-rail,
+:root.reader-large .check-rail {
   position: static;
   width: auto;
   max-width: none;
   height: auto;
   max-height: none;
   overflow: visible;
-}
-
-/* Focus has to be findable, not merely present. */
-:root[data-theme="contrast"]
-  :where(button, a, input, select, textarea, summary, [tabindex]):focus-visible {
-  outline: 4px solid var(--ring);
-  outline-offset: 3px;
 }
 
 h1,
@@ -765,11 +631,7 @@ button,
    Two files, not one filtered file. The day artwork is maroon-and-black and
    disappears on the night ground; the white artwork keeps the maroon cross
    and turns the letters white. Both ship, and CSS shows one — a filter that
-   re-lit the day file pushed the cross off-brand towards pink.
-
-   High contrast is the exception: it drops brand colour by design, and a
-   maroon cross on black reads at about 2:1, so there the white file is
-   flattened the rest of the way. */
+   re-lit the day file pushed the cross off-brand towards pink. */
 .brand-mark {
   height: 24px;
   width: auto;
@@ -781,12 +643,10 @@ button,
 .mark-night {
   display: none;
 }
-:root[data-theme="dark"] .mark-day,
-:root[data-theme="contrast"] .mark-day {
+:root[data-theme="dark"] .mark-day {
   display: none;
 }
-:root[data-theme="dark"] .mark-night,
-:root[data-theme="contrast"] .mark-night {
+:root[data-theme="dark"] .mark-night {
   display: block;
 }
 
@@ -878,8 +738,8 @@ button,
    The width is set by the longer of the two labels the button can carry —
    "Account" once a session is detected, not "Sign in" — because a width fitted
    to the shorter one clips the other the moment sync.js swaps it. The height
-   is a variable because the contrast theme lifts every tap target to 44px; if
-   only the button read that rule the pair would come apart in that theme
+   is a variable because the large text size lifts every tap target to 44px;
+   if only the button read that rule the pair would come apart at that size
    alone. */
 .header-right {
   --hdr-action-w: 100px;
@@ -888,10 +748,10 @@ button,
   align-items: center;
   gap: 10px;
 }
-/* At 200% type the label and the three 44px segments both outgrow the default
+/* At 200% type the label and the two 44px segments both outgrow the default
    size, so the pair is given a bigger one rather than a fixed one it would
    spill out of. */
-:root:is([data-theme="contrast"], .reader-large) .header-right {
+:root.reader-large .header-right {
   --hdr-action-w: 168px;
   --hdr-action-h: 54px;
 }
@@ -906,14 +766,13 @@ button,
   min-height: var(--hdr-action-h);
 }
 
-/* Three-way theme switch, drawn as radios rather than a cycling button: a
-   cycling control gives no way to see which of the three is active, and none
-   of them is an obvious "next". */
+/* Two-way theme switch, drawn as radios rather than a cycling button: a
+   cycling control gives no way to see which is active. */
 .theme-switch {
   display: inline-flex;
   align-items: center;
-  /* The switch shares the account button's width floor, and in high contrast
-     the floor (sized for that button's grown label) exceeds the three
+  /* The switch shares the account button's width floor, and at the large
+     text size the floor (sized for that button's grown label) exceeds the two
      segments' content. Space-between feeds the slack into the two
      inter-segment gaps so the end segments stay against the padding on both
      sides — flex-start pools all of it after the selected segment, a stretch
@@ -934,11 +793,10 @@ button,
    content, so a percentage height resolves against nothing and the button
    collapses onto its icon — 30 x 13.5, which the corner radius then rounds
    into a squat pill. The side is stated instead, off the same token that
-   sets the header's action height, so the three segments stay square when
-   high contrast makes everything bigger — and minus the padding and the two
+   sets the header's action height, so the two segments stay square when the
+   large text size makes everything bigger — and minus the padding and the two
    hairlines, so the control still stands exactly as tall as the button beside
-   it. High contrast draws a 3px hairline, which is why that is a variable
-   here and not a 2. */
+   it. */
 .theme-switch button {
   --seg: calc(var(--hdr-action-h, 44px) - 4px - 2 * var(--hairline));
   display: inline-flex;
@@ -1021,28 +879,13 @@ button,
   stroke-linejoin: round;
 }
 /* Equal boxes draw unequal icons: the sun's rays reach 20 of the 24 viewBox
-   units where the moon and the contrast disc reach 18. Sizing the sun down
+   units where the moon reaches 18. Sizing the sun down
    matches the ink the eye compares, not the box the CSS sets — and the sun is
    the one that has to survive the filled ground of the selected state. */
 .theme-switch button[data-theme="light"] svg {
   width: 13.5px;
   height: 13.5px;
 }
-/* High contrast re-solves the segments to 44px squares, and a 15px icon with
-   a sub-pixel stroke floats in one as a grey speck — thin white lines
-   anti-alias below the mode's own bar. The ink scales with the box: larger
-   icons, a stroke thick enough to rasterise white, and the sun keeps its
-   optical discount. */
-:root[data-theme="contrast"] .theme-switch svg {
-  width: 22px;
-  height: 22px;
-  stroke-width: 2.4;
-}
-:root[data-theme="contrast"] .theme-switch button[data-theme="light"] svg {
-  width: 20px;
-  height: 20px;
-}
-
 /* ---------- buttons ---------- */
 
 .btn {
@@ -1199,8 +1042,9 @@ button,
   }
   .header-right {
     /* The 44px tap floor, not above it: 50px here made the phone header the
-       largest rendition of the chrome anywhere ("sizes", translated). Contrast keeps
-       its own 54px — that floor is the type size's, not the viewport's. */
+       largest rendition of the chrome anywhere ("sizes", translated). The large
+       text size keeps its own 54px — that floor is the type size's, not the
+       viewport's. */
     --hdr-action-h: 44px;
     gap: 8px;
     order: 2;

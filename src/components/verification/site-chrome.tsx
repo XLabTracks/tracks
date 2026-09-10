@@ -71,10 +71,10 @@ export function VerificationHeader() {
       root.removeAttribute("data-text-scale");
       root.classList.remove("reader-enlarged");
       root.classList.remove("reader-large");
-      let theme: "light" | "dark" | "contrast" | null = null;
+      let theme: "light" | "dark" | null = null;
       try {
         const stored = localStorage.getItem("tracks-theme");
-        if (stored === "light" || stored === "dark" || stored === "contrast") {
+        if (stored === "light" || stored === "dark") {
           theme = stored;
         }
       } catch {
@@ -83,7 +83,6 @@ export function VerificationHeader() {
         ? "dark"
         : "light";
       root.classList.toggle("dark", theme !== "light");
-      root.classList.toggle("contrast", theme === "contrast");
       const w = window as unknown as { VTNotebook?: { close: () => void } };
       w.VTNotebook?.close();
       links().forEach((l) => {

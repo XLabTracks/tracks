@@ -178,18 +178,6 @@ section.band .intro {
   opacity: 0.38;
 }
 
-/* High contrast is a legibility mode: the rings and the star field carry no
-   information, and at --border white on black they out-shout the labels they
-   run under. Drop them, and dim the out-of-focus branches far less. */
-:root[data-theme="contrast"] .sky .ring,
-:root[data-theme="contrast"] .sky .star {
-  display: none;
-}
-:root[data-theme="contrast"] .sky.focusing .node:not(.hot),
-:root[data-theme="contrast"] .sky.focusing .arc-label:not(.hot) {
-  opacity: 0.6;
-}
-
 /* The web's connective tissue, quietest first.
 
    Strands — the arc of ring carrying one module's stars, a wash of the hue.
@@ -734,8 +722,7 @@ section.band .intro {
    footer.
 
    Painted on all four sides, not a tinted edge, and the red is --primary
-   rather than a literal, so each theme re-solves it — high contrast turns the
-   band yellow-on-black rather than shipping a red nobody chose.
+   rather than a literal, so each theme re-solves it.
 
    No status pill and no call-to-action button. Both were added here and both
    were wrong: the pill is stock component-library furniture that says in a

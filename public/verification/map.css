@@ -95,7 +95,7 @@
   display: flex;
   flex-direction: column;
   /* The corridor is text units, not px: the button inherits the body size,
-     so at day type these are the old 160/150/210 — and when high contrast
+     so at day type these are the old 160/150/210 — and when the reader
      doubles the type the frame doubles with it instead of letting
      "decisionmakers" paint through its own border. */
   flex: 1 1 10em;
@@ -244,11 +244,3 @@
   color: var(--brand-ink);
 }
 
-/* In high contrast the map centres node labels as a deliberate map treatment,
-   and drops the meter: its track paints in --muted, which this mode resolves
-   to the ground, so only the fraction was ever visible — and the fraction is
-   the encoding this mode runs on anyway. */
-:root[data-theme='contrast'] .node { align-items: center; }
-:root[data-theme='contrast'] .node .n-label { text-align: center; }
-:root[data-theme='contrast'] .node .n-fill { display: none; }
-:root[data-theme='contrast'] .node .n-meta { justify-content: center; }

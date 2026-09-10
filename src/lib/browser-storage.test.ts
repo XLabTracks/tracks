@@ -27,7 +27,11 @@ function filesUnder(root: string): string[] {
 }
 
 function unguardedIn(file: string): string[] {
-  const tree = parse(readFileSync(file, "utf8"), {
+  const source = readFileSync(file, "utf8");
+  // Parsing every file under src takes seconds; only the handful that name a
+  // storage API can offend, and a name is cheap to look for.
+  if (!/localStorage|sessionStorage|indexedDB/.test(source)) return [];
+  const tree = parse(source, {
     jsx: file.endsWith(".tsx"),
     loc: true,
   });

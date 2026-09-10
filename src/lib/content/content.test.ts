@@ -1453,6 +1453,34 @@ describe("completion page integrity", () => {
   });
 });
 
+describe("inline reader blocks stay inline", () => {
+  /* <Src> renders a <p>. MDX turns the children of a JSX block written across
+     several lines into a paragraph of their own, so a citation broken over
+     lines compiles to <p><p>…</p></p> — invalid nesting, which fails
+     hydration and re-renders the whole tree on the client. Eleven of the
+     twelve citations were already written on one line; the twelfth was the
+     one that broke. */
+  it("a <Src> citation opens and closes on the same line", () => {
+    const walk = (at: string): string[] =>
+      readdirSync(at, { withFileTypes: true }).flatMap((entry) => {
+        const file = join(at, entry.name);
+        if (entry.isDirectory()) return walk(file);
+        return file.endsWith(".mdx") ? [file] : [];
+      });
+    const offenders = walk(join(process.cwd(), "src/content/lessons")).flatMap(
+      (file) =>
+        readFileSync(file, "utf8")
+          .split("\n")
+          .flatMap((line, index) =>
+            line.includes("<Src>") && !line.includes("</Src>")
+              ? [`${file}:${index + 1}`]
+              : []
+          )
+    );
+    expect(offenders).toEqual([]);
+  });
+});
+
 describe("required written work", () => {
   /* The closing page congratulates on submitted writing, so the set it counts
      has to be real: ids that resolve, tasks that are writing, and optional

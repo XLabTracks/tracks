@@ -3186,3 +3186,11 @@ Central Question, What You Will Be Able to Do, A Map of the Section, Core
 Source Packet and its PageBreak). Minutes for the head 5 → 25; the page's
 "Core time: 165–180 minutes" line and the unit meta are untouched, though
 a required 15-minute reading now sits inside them.
+
+## 2026-09-10 — 2.1 head: "Before You Begin" and the time lines deleted
+
+Owner's instruction ("DELETE"): the heading "Before You Begin" and the two
+lines under it (core time 165–180 minutes in two sessions; the optional
+technical extension at 35–45 minutes) are gone. The page now opens on "Why
+Compute, in the Words of the Field". The unit meta's "165–180 min" in
+curriculum.ts is untouched: it is the sidebar's figure, not the page's.

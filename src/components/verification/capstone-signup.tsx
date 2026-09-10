@@ -1,13 +1,13 @@
 import bank from "@/content/verification/capstone-bank.json";
 import { Button } from "@/components/ui/button";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUserOrSignedOut } from "@/lib/auth";
 import { isMissingTableError } from "@/lib/db-missing-table";
 import { getDb } from "@/lib/db";
 
 import { SignupForm } from "./capstone-signup-form";
 
 export async function CapstoneSignup() {
-  const user = await getCurrentUser();
+  const user = await getCurrentUserOrSignedOut();
 
   let row: { briefSlug: string | null; proposal: string | null; status: string } | null = null;
   let tableMissing = false;

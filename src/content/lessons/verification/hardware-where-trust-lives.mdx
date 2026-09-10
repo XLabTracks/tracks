@@ -7,7 +7,7 @@ Use one verification target for the comparison:
 
 <Prompt label="Verification target">Determine whether all covered compute in a declared data center is accounted for by permitted workloads.</Prompt>
 
-#### Architecture A: on-chip monitoring
+#### Architecture A: On-Chip Monitoring
 
 Possible components include device identity, secure or measured boot, signed counters, protected telemetry, workload certificates, trusted execution environments, and hardware-backed authorization.
 
@@ -33,9 +33,9 @@ Current confidential-computing support on accelerators is a deployed security pr
 
 <Src>NVIDIA, [*NVIDIA H100 Tensor Core GPU Security*](https://images.nvidia.com/aem-dam/en-zz/Solutions/data-center/h100/PB-11133-001_v01.pdf) — the confidential-computing whitepaper and current product documentation.</Src>
 
-<PageBreak title="Off-chip digital monitoring" />
+<PageBreak title="Off-Chip Digital Monitoring" />
 
-#### Architecture B: off-chip digital monitoring
+#### Architecture B: Off-Chip Digital Monitoring
 
 Possible components include network taps, server or rack gateways, input/output loggers, tamper-evident enclosures, and separate secured verification computers.
 
@@ -55,11 +55,15 @@ Possible components include network taps, server or rack gateways, input/output 
 - Installation, calibration, chain of custody, and maintenance;
 - Risk that verifier-supplied hardware enables espionage or sabotage.
 
-Recent work has proposed fingerprinting or committing cluster input and output through external taps and secure gateways. These designs are research proposals. Their value is to make the trust-placement problem concrete, not to show that the engineering and political problems are solved.
+The worked example of this architecture is the cluster input-output
+fingerprinting design read in full in Module 3.0. Take from it here only what
+the comparison needs: it is a research proposal, and its interest is that it
+tries to make the verifier's evidence independent of any processor both
+parties have to trust.
 
-<Src>A. Cankaya et al., *Fingerprinting All AI Cluster I/O Without Mutually Trusted Processors* — [arXiv:2606.10724](https://arxiv.org/abs/2606.10724), June 2026. Treat the architecture and implementation schedule as a research proposal.</Src>
+<Src>A. Cankaya et al., *Fingerprinting All AI Cluster I/O Without Mutually Trusted Processors* — [arXiv:2606.10724](https://arxiv.org/abs/2606.10724), June 2026. Taught in 3.0; not summarised here.</Src>
 
-#### Architecture C: off-chip analog monitoring
+#### Architecture C: Off-Chip Analog Monitoring
 
 Possible components include independently installed power meters, thermal sensors, electromagnetic measurements, independent clocks, tamper-evident packaging, and physical inspection of the sensor boundary.
 
@@ -81,7 +85,7 @@ Possible components include independently installed power meters, thermal sensor
 
 A rack meter installed under treaty access belongs in this hardware section. A foreign intelligence service estimating the same site’s power use from outside the facility belongs in the intelligence section. The physical phenomenon may be similar, but the access, chain of custody, confidence, and institutional role differ.
 
-#### Architecture D: hybrid assurance
+#### Architecture D: Hybrid Assurance
 
 A hybrid system might combine:
 
@@ -95,7 +99,7 @@ A hybrid system might combine:
 
 Count independent failure modes, not mechanism names. A signed meter, a signed classifier, and a licensing system that all depend on one vendor key provide less redundancy than their number suggests.
 
-#### The confidentiality trade
+#### The Confidentiality Trade
 
 Hardware evidence can reduce disclosure by returning a bounded claim rather than raw code, data, weights, or traces. It can also concentrate power in manufacturers, key authorities, and verifiers. A proposal should specify:
 
@@ -107,17 +111,109 @@ Hardware evidence can reduce disclosure by returning a bounded claim rather than
 - How abuse is audited;
 - What happens when parties disagree about the verifier or reference values.
 
-#### Activity: bilateral pilot review
+<ReadingCard
+  id="hw-six-layers-hardware"
+  href="https://arxiv.org/abs/2507.15916"
+  title="Verifying International Agreements on AI: Six Layers of Verification"
+  author="Baker, Kulp, Marks, Brundage, and Heim | arXiv"
+  year="2025"
+  mins="15 min"
+>
 
-Compare an on-chip design with an off-chip design for the working pause rule. For each, record:
+Read the hardware-enabled-mechanisms layer and the chip-tracking layer. Other
+sections of this paper are assigned elsewhere in the course; these two are
+this page's. The argument to test as you read: the paper holds that
+verification must not rest on chips alone. Which of the architectures above is
+that argument, and does the paper's own layering match it?
 
-- What a U.S. delegation would distrust;
-- What a Chinese delegation would distrust;
-- What the operator would regard as commercially sensitive;
-- Whose cooperation is indispensable;
-- The strongest technical assumption;
-- The strongest institutional assumption;
-- The main abuse risk;
-- The smallest pilot that would produce decision-relevant evidence.
+</ReadingCard>
 
-Choose an architecture for a **pilot**, not immediate universal deployment. State the evidence the pilot must produce before the mechanism deserves a larger role.
+<PageBreak title="The Pilot on the Table" />
+
+#### The Pilot on the Table
+
+Two delegations have agreed, in principle, to test one hardware mechanism
+before writing any of it into a treaty. The proposal in front of them is
+deliberately small.
+
+**Scope.** One site on each side, each holding roughly 4,000 accelerators of a
+single generation, running ordinary commercial workloads. Twelve months. No
+pause rule is in force during the pilot; nothing the mechanism reports has any
+legal consequence. The purpose is to learn whether the evidence is worth
+anything, not to catch anyone.
+
+**The mechanism.** Rack-level power measurement, installed by the host and
+jointly inspected. Each meter is supplied by the visiting party from a jointly
+agreed design, sealed in a tamper-evident enclosure, and installed in the host
+site's electrical room in the presence of both parties' engineers. Readings
+are aggregated into a fifteen-minute average per rack. The raw series never
+leaves the site: what leaves is a signed hourly total, and a flag when a rack
+exceeds an agreed band.
+
+**What each side gives up.** The host accepts foreign-supplied hardware inside
+its electrical room and a stream of data about its facility's operation. The
+visiting party accepts that it never sees a workload, a customer, a model, or
+a device identity, and that the host may pause a meter with notice and a
+written reason.
+
+**What the pilot is trying to find out.** Whether a rack-level total, over a
+year, can distinguish a training run from a mixed inference load well enough
+to be worth arguing about; how often meters fail, drift, or are paused; how
+long an installation takes; what a false alarm costs politically when nothing
+is at stake; and whether either side's engineers can produce a plausible way
+to defeat the meter with the enclosure intact.
+
+**What it is not.** It is not a test of attestation, licensing, or workload
+classification, none of which are installed. It produces no evidence about
+undeclared sites, because both sites are declared by construction. It cannot
+speak to a state-backed owner with years of preparation, because a twelve-month
+pilot at a commercial site is not that threat model.
+
+Now review it.
+
+<Check
+  id="hw-pilot-independence"
+  q="The host proposes a change: rather than foreign-supplied meters, each side installs meters of its own manufacture and shares the signed totals. What does the pilot lose?"
+  options={[
+    "The one element that did not share a root of trust with the party being measured",
+    "Nothing of substance: the readings and the aggregation rule are unchanged",
+    "Its tamper-evident enclosures, which only work on foreign hardware",
+    "The ability to detect training, which depends on the meter's manufacturer",
+  ]}
+  answer={0}
+  why="The design's whole claim on a verifier's attention is that the instrument does not answer to the operator. A host-supplied meter reporting on the host is the same trust relationship as an on-chip counter, moved outside the box and given a different name."
+/>
+
+#### Count the Failure Modes
+
+<Check
+  id="hw-failure-modes"
+  q="A design pairs on-chip identity, an on-chip signed meter, and vendor-distributed licensing, all rooted in one manufacturer's key hierarchy, and adds an independently supplied rack meter. How many independent failure modes does it have?"
+  options={[
+    "Two",
+    "Four, one per mechanism",
+    "One, since every mechanism can be attacked",
+    "Three, since licensing is distributed separately",
+  ]}
+  answer={0}
+  why="Three of the four share a root: compromise it and identity, metering and licensing fall together, however different their names are. The rack meter is the second, because it was supplied and installed by somebody else. Counting mechanisms rather than roots is the most common way a layered design turns out to be one layer."
+/>
+
+#### Key Custody, Red Team
+
+<Exercise id="v-hw-key-custody" />
+
+#### Dossier Row: Trust Placement
+
+<Exercise id="v-hw-dossier-trust" />
+
+<PageBreak title="Return to the Opening Puzzle" />
+
+#### Return to the Opening Puzzle
+
+The last row of the opening puzzle is the one this page settles: whether the
+treaty authority can suspend the devices. Nothing measured on this page
+touches it. Suspension is an authority a document grants and a key enforces,
+and where that key lives is the argument you have just had.
+
+<ClaimLedger id="hw-opening-puzzle" set="hardware-opening" recall />

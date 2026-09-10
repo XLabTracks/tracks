@@ -1,6 +1,40 @@
 {
   "_comment": "Hand-authored citation registry for the Works cited appendix. entries: MLA fields plus a hand-written 'about' line per work; the appendix assembles itself from each lesson's links (rehype-lesson-citations) and looks them up here. pending: cited URLs whose bibliographic facts are still being verified -- they render nothing until moved into entries; never promote one unchecked. The collector was widened to read every href/url attribute, not just markdown links, literal anchors and SourceQuote, so works a lesson reaches through a ReadingCard or any other component are cited now too -- 24 of them arrived at once and are parked in pending, each awaiting a person to write its fields. excluded: links that are not works (course tools, shared working documents). citations.test.ts holds all three sets honest.",
   "entries": {
+    "https://aigi.ox.ac.uk/publications/verification-for-international-ai-governance/": {
+      "title": "Verification for International AI Governance",
+      "about": "The report 2.1.1 reads for the limits section: why leading-node chips cannot currently be verified non-destructively, and why off-chip measurement is treated as the near-term path.",
+      "authors": "Harack, Ben, Robert F. Trager, Anka Reuel, et al.",
+      "publisher": "Oxford Martin AI Governance Initiative",
+      "date": "2025"
+    },
+    "https://batteringram.eu/": {
+      "title": "Battering RAM: Low-Cost Interposer Attacks on Confidential Computing via Dynamic Memory Aliasing",
+      "about": "The sub-$50 DDR4 interposer that passes every boot-time trust check and then redirects protected memory, breaking Intel SGX and defeating AMD SEV-SNP attestation on patched systems with brief physical access.",
+      "authors": "De Meulemeester, Jesse, David Oswald, Ingrid Verbauwhede, and Jo Van Bulck",
+      "container": "47th IEEE Symposium on Security and Privacy",
+      "date": "2026"
+    },
+    "https://tinfoil.sh/blog/2026-02-03-proving-model-identity": {
+      "title": "How Tinfoil Proves Exactly What Model Is Running",
+      "about": "The deployed proof-of-model-identity story, and the source of the section's organizing limit: attestation measures launch state, not runtime state.",
+      "authors": "Tinfoil",
+      "date": "2026"
+    },
+    "https://www.cnas.org/publications/reports/secure-governable-chips": {
+      "title": "Secure, Governable Chips",
+      "about": "The on-chip governance primer behind 2.1.2's vocabulary: chip identity, hardware roots of trust, and secure boot as policy instruments.",
+      "authors": "Aarne, Onni, Tim Fist, and Caleb Withers",
+      "publisher": "Center for a New American Security",
+      "date": "2024"
+    },
+    "https://cacm.acm.org/practice/creating-the-first-confidential-gpus/": {
+      "title": "Creating the First Confidential GPUs",
+      "about": "The engineers' own account of the only attestation chain in production on AI accelerators, and the source for the threat model it was built to answer: the customer is the party protected, the machine's owner the party protected against.",
+      "authors": "Dhanuskodi, Gobikrishna, Sudeshna Guha, Vidhya Krishnan, Aruna Manjunatha, Rob Nertney, Michael O'Connor, and Phil Rogers",
+      "container": "Communications of the ACM",
+      "date": "2024"
+    },
     "https://ai-2040.com/supplements/verification-plan": {
       "title": "Verification Plan",
       "about": "The AI 2040 scenario's supplement laying out a three-phase technical plan for verifying a US-China slowdown agreement without trust.",

@@ -248,7 +248,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-infrastructure",
     title: "2.1 Hardware",
     contentRef: "verification/hardware-attestation",
-    estimatedMinutes: 25,
+    estimatedMinutes: 30,
   },
   {
     id: "v-hw-claim",
@@ -257,7 +257,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-hw-attestation",
     title: "2.1.1 Start with the claim, not the mechanism",
     contentRef: "verification/hardware-claim",
-    estimatedMinutes: 5,
+    estimatedMinutes: 25,
   },
   {
     id: "v-hw-trusted-statement",
@@ -266,7 +266,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-hw-attestation",
     title: "2.1.2 From a chip to a trusted statement",
     contentRef: "verification/hardware-trusted-statement",
-    estimatedMinutes: 5,
+    estimatedMinutes: 70,
   },
   {
     id: "v-hw-accounting",
@@ -275,7 +275,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-hw-attestation",
     title: "2.1.3 Accounting for hardware: identity, location, topology, and completeness",
     contentRef: "verification/hardware-accounting",
-    estimatedMinutes: 5,
+    estimatedMinutes: 63,
   },
   {
     id: "v-hw-measuring-use",
@@ -284,7 +284,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-hw-attestation",
     title: "2.1.4 Measuring and classifying use",
     contentRef: "verification/hardware-measuring-use",
-    estimatedMinutes: 10,
+    estimatedMinutes: 105,
   },
   {
     id: "v-hw-authorization",
@@ -293,7 +293,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-hw-attestation",
     title: "2.1.5 Authorization, licensing, and control",
     contentRef: "verification/hardware-authorization",
-    estimatedMinutes: 5,
+    estimatedMinutes: 70,
   },
   {
     id: "v-hw-where-trust-lives",
@@ -302,7 +302,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-hw-attestation",
     title: "2.1.6 Where should trust live?",
     contentRef: "verification/hardware-where-trust-lives",
-    estimatedMinutes: 5,
+    estimatedMinutes: 70,
   },
   {
     id: "v-hw-reconstructing-run",
@@ -312,7 +312,7 @@ export const verificationLessons: Lesson[] = [
     optional: true,
     title: "2.1.7 Reconstructing a declared training run",
     contentRef: "verification/hardware-reconstructing-run",
-    estimatedMinutes: 5,
+    estimatedMinutes: 45,
   },
   {
     id: "v-hw-policy-studio",
@@ -321,7 +321,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-hw-attestation",
     title: "2.1.8 Policy judgment: what role should hardware play?",
     contentRef: "verification/hardware-policy-studio",
-    estimatedMinutes: 130,
+    estimatedMinutes: 120,
   },
   {
     id: "v-welcome",
@@ -636,7 +636,7 @@ export const verificationUnitMeta: Record<
   "1.2": { title: "Actors", kind: "interactive", mins: "25–30 min" },
   "1.3": { title: "Upstream and downstream", kind: "explainer", mins: "10–15 min" },
   "2.0": { title: "Confidentiality vs. verifiability", kind: "explainer", mins: "15–20 min" },
-  "2.1": { title: "Hardware", kind: "explainer", mins: "165–180 min" },
+  "2.1": { title: "Hardware", kind: "explainer", mins: "9 h core, 45 min optional" },
   "2.2": { title: "Cloud", kind: "reading + exercise", mins: "120 min" },
   "2.3": { title: "Intelligence", kind: "explainer", mins: "400 min" },
   "2.4": { title: "Human Evidence", kind: "explainer", mins: "150 min" },

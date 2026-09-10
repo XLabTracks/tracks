@@ -40,6 +40,8 @@ export const verificationExercises: VerificationExerciseDef[] = [
   },
   { id: "datacenter-power", title: "The Power Signature", bridged: false },
   { id: "locating-compute", title: "The Feasibility Cards", bridged: false },
+  { id: "monitor-evader", title: "Monitor Against Evader", bridged: true },
+  { id: "chain-builder", title: "Build the Authorization Chain", bridged: true },
 ];
 export function getVerificationExercise(id: string): VerificationExerciseDef | undefined {
   return verificationExercises.find((e) => e.id === id);

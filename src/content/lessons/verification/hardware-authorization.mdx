@@ -3,13 +3,21 @@
 
 A monitor produces evidence. A control mechanism changes what the machine can do. A complete policy still needs an authority that decides when control is justified.
 
+This page is about control at the device: what a chip will and will not execute.
+Cutting off an account, a customer or a reseller is a different instrument with
+a different owner, and it belongs to 2.2. The two are often spoken of as one
+"off switch" and they fail in opposite ways: an account suspension reaches
+every machine the provider runs and none that the customer owns, while a
+device control reaches the silicon and stops at the edge of whatever the
+regime managed to enrol.
+
 One proposed family of controls is offline licensing. The device performs only a bounded quantity or type of operation when it holds a valid authorization token. The token may encode a compute allowance, time window, location, workload condition, or other policy. A protected meter reduces the allowance as work occurs. A throttling or disabling mechanism responds when the allowance expires.
 
 A complete authorization chain is:
 
 > legal rule → license criteria → issuer → authenticated device and state → permitted operation → meter or expiration → suspension or revocation → appeal or override → renewal or termination
 
-#### Questions a policy designer must answer
+#### Questions a Policy Designer Must Answer
 
 - Who issues the authorization: one government, both parties, a multiparty authority, or another institution?
 - Which key or combination of keys is sufficient?
@@ -26,9 +34,74 @@ A complete authorization chain is:
 
 James Petrie’s 2024 firmware-based offline-licensing design is a useful proposal to analyze. It argues that some existing accelerators might support a minimal design through a firmware update if they already contain relevant security features. The proposed timeline is an author estimate, not deployment evidence. The paper also states that physical attacks remain a concern without additional hardware changes. No publicly documented, treaty-grade offline-licensing regime for frontier AI compute is operating as of August 2026.
 
-<Src>J. Petrie, *Near-Term Enforcement of AI Chip Export Controls Using a Firmware-Based Design for Offline Licensing* — [arXiv:2404.18308](https://arxiv.org/abs/2404.18308), 2024.</Src>
+<ReadingCard
+  id="hw-petrie-offline-licensing"
+  href="https://arxiv.org/abs/2404.18308"
+  title="Near-Term Enforcement of AI Chip Export Controls Using a Firmware-Based Design for Offline Licensing"
+  author="James Petrie | arXiv"
+  year="2024"
+  mins="20 min"
+>
 
-#### Control authority is part of the mechanism
+Deep-skim the design and the security discussion. The hardware features it
+depends on are the ones this section has already met: firmware verification,
+rollback protection, and secure non-volatile memory, all of which the author
+argues an H100 already has. Two questions to carry: what happens at expiry if
+the issuer cannot be reached, and what the paper says physical attacks still
+do to a firmware-only design.
+
+</ReadingCard>
+
+<ReadingCard
+  id="hw-sastry-enforcement-risks"
+  href="https://arxiv.org/abs/2402.08797"
+  title="Computing Power and the Governance of AI: enforcement mechanisms, and the risks"
+  author="Sastry, Heim, Belfield, et al. | arXiv"
+  year="2024"
+  mins="10 min"
+>
+
+Module 1 used this paper for why compute is governable. Re-read two parts of
+it here: the enforcement-mechanism subsection, and the section on the risks of
+compute governance, which names privacy and the concentration of power. The
+question for this page and the next: which of those risks does an
+offline-licensing regime create that a monitoring regime does not?
+
+</ReadingCard>
+
+<Callout variant="note" title="Off-Chip Compute Verification (course references)">
+Baker, Friedman, Reuter and Harack's working draft is the system view behind
+this page: what a declaration certifies, split three ways, and which parts of
+the system a verifier has to trust to believe it. It is an in-progress sketch
+rather than a published paper, and it should be read as one. The question to
+take to it: of the three things it says a declaration can certify, which does
+a license token address?
+</Callout>
+
+<PageBreak title="The License Token" />
+
+#### The Artifact: A License Token
+
+The fields below are what an offline-licensing token has to carry, drawn from
+the firmware-based design and from Annex C's clock-cycle scheme. The values
+are constructed for this exercise.
+
+| Field | Value | What it binds |
+| --- | --- | --- |
+| Issuer | The Agency's signing key, single signer | Who may authorise, and who alone may withhold |
+| Device | The accelerator's unique identifier | One token, one chip: it does not travel |
+| Allowance | 8.6 × 10^17 clock cycles | The quantity the chip draws down as it works |
+| Valid from, valid until | Day 1 to day 90 of the pause | The window, enforced by the device's own clock |
+| Workload condition | Inference and approved evaluations | A condition the chip cannot itself verify, and which therefore rides on something else |
+| Revocation reference | The list the device checks when it can reach one | What happens when it cannot is the design's hardest question |
+| Signature | Over all of the above | That the issuer, and only the issuer, produced this token |
+
+Read the workload-condition row against 2.1.4. The token can express a
+restriction the chip has no way to test, and a regime that writes that
+condition into its licenses is relying on the classifier, the counter, or an
+inspection to make the condition mean anything.
+
+#### Control Authority Is Part of the Mechanism
 
 A technically sound off-switch can be politically unacceptable when its control structure is vague. An international agreement might require:
 
@@ -42,8 +115,56 @@ A technically sound off-switch can be politically unacceptable when its control 
 
 The choice is not simply “control or no control.” It is a distribution of authority, risk, and failure.
 
-#### Activity: build the authorization chain
+#### Build the Authorization Chain
 
-Assemble an end-to-end system for the working rule from the following components: device identity, attested firmware, protected counter, training classifier, signed record, cross-device aggregation, license token, revocation list, regulator, international notification, inspection trigger, and independent power measurement.
+Assemble the chain end to end for the working rule, then break it. The
+questions underneath are the ones a delegation will ask: which link measures
+the prohibited activity, which only authenticates another link, who decides
+the rule was broken, which link actually stops the machine, what detects an
+accelerator nobody enrolled, and which controls fail together when one key
+does.
 
-Then answer: Which component measures the prohibited activity? Which only authenticates another component? Who decides the threshold was crossed? Which component can stop the activity? What detects an unregistered cluster? Which controls fail together if the manufacturer’s root key is compromised?
+<VerificationExercise id="chain-builder" />
+
+#### Metering Metric, Red and Blue
+
+<Check
+  id="hw-metering-metric"
+  q="Blue must pick the quantity the chip meters. Red will make the chip under-report it. Which choice is hardest for red to attack from inside the machine?"
+  options={[
+    "Clock cycles, counted by the device against its own clock",
+    "Energy, reported by the on-die power telemetry",
+    "Multiply-accumulate operations, counted in the arithmetic units",
+    "Wall-clock time under load, taken from the driver",
+  ]}
+  answer={0}
+  why="Each is attackable, and the question is what the attack costs. A cycle count is the quantity the device's own operation is defined against, and the licensing designs use it for that reason. Energy and operation counts are readings taken by parts of the same stack the operator controls, and 2.1.4's conversion is exactly where an energy meter can be argued with. Time under load is the weakest: it says nothing about what the machine did during it."
+/>
+
+Red's answer to a cycle count is not to argue with the counter but to reach
+around it: run the work on hardware that never enrolled. That closes the loop
+back to 2.1.3, and it is why a licensing regime's coverage question is worth
+more than its metering question.
+
+#### Fail Open or Fail Closed
+
+<Check
+  id="hw-fail-open-closed"
+  q="A submarine cable cut leaves a compliant laboratory unable to reach the issuer for six days. Its licenses expire on day two. What should the design do?"
+  options={[
+    "There is no safe default, which is why the answer belongs in the treaty text and not in the firmware",
+    "Fail open: compliant work must not be stopped by an outage",
+    "Fail closed: an unauthorised chip must not compute, whatever the reason",
+    "Fail open for inference, fail closed for training",
+  ]}
+  answer={0}
+  why="Fail open turns every outage into a licence to run, and an adversary can cause outages. Fail closed hands anyone who can cut a cable the power to stop a rival's lawful work, which is the same instrument the treaty was trying to place under an authority. Both are live proposals, the choice is political rather than technical, and a design that does not say which it chose has not answered the question."
+/>
+
+Smuggling a chip out of the regime, restructuring a run across providers, or
+routing work through a jurisdiction that never signed are evasion scenarios
+rather than properties of this mechanism. Module 3.1 plays them.
+
+#### Dossier Row: Authorization
+
+<Exercise id="v-hw-dossier-authorization" />

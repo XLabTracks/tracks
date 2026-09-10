@@ -269,6 +269,13 @@
       "publisher": "Basel Institute on Governance",
       "date": "12 Nov. 2020"
     },
+    "https://blog.peterwildeford.com/p/explainer-how-ai-chips-are-made": {
+      "title": "Explainer: How AI Chips Are Made",
+      "about": "Grunewald's primer on the three steps, design, fabrication and packaging, and the handful of firms each step passes through, with the 2024 shipment and market-share figures; adapted from an IAPS report.",
+      "authors": "Grunewald, Erich",
+      "container": "The Power Law",
+      "date": "5 Sept. 2025"
+    },
     "https://brilliant.org/wiki/fermi-estimate/": {
       "title": "Fermi Estimate",
       "about": "A wiki explainer of Fermi estimation — rough order-of-magnitude reasoning with worked examples.",

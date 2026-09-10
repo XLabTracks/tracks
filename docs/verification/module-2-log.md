@@ -3120,3 +3120,69 @@ What moved:
 
 Typecheck clean, lint 0 errors, 1228 tests green, all three generators'
 `--check` clean.
+
+## 2026-09-08 — cross-reference sweep after 2.4 came back
+
+Every section number in the module's lessons, exercises, widget data,
+capstones and unit tags checked against the new numbering (2.3.6
+assessment, 2.3.7 summary; 2.4.1–2.4.4 the human lessons). The restoration
+had carried most of them; four were still on the old numbers and are fixed:
+2.3.1's table sent Agreements to 2.3.9 and People to 2.3.6 (now 2.4.4 and
+2.4.1); the cyber sample answer's "the human layer (2.3.6)" (now 2.4.1) and
+the OSINT sample answer's "2.3.8: an inspection" (now 2.4.3). The section
+numbers inside the context distiller's items are the distilled document's
+own, not the course's, and stay. Internal course links (33) all resolve to
+a lesson, paper or unit. The 75 external links in 2.3 and 2.4 all answer;
+five sit behind bot checks for a datacenter client (GIJN, which the relay
+reads; the Times of Israel; GAO's PDF; the IAEA Bulletin page; the
+Robb–Silberman PDF at irp.fas.org), none dead. Unchanged and still owed to
+the owner: 2.3.1's "2.3.6 covers the scales", which 2.3.6 does not, and the
+table's Network infrastructure and Technical traces rows pointing at
+sections that do not teach them.
+
+## 2026-09-08 — 2.4 is "Human Evidence"
+
+Course owner's choice among the outline's two names: "Human Evidence" (the
+outline's body heading) over "Human Layer" (its section heading), a fourth
+evidence stream named like Hardware, Cloud and Intelligence. Renamed where
+the unit is named: the section head's title and the unit meta in
+curriculum.ts (course.js regenerated), the module summary's list of four,
+the mechanism-sort bucket, the five drill options "2.4 human layer" and
+their two reveals, and the two capstones' prerequisites (bank regenerated).
+Ids, slugs and the unit id 2.4 untouched: they are URLs and progress keys.
+"The human layer" as a phrase in prose (the about page, the capstone
+briefs, the supply-chain drills) stays; it is the literature's word for the
+thing, not the unit's name.
+
+## 2026-09-08 — 2.1 head: the field's own case for compute, and the chip primer
+
+Owner's spec for the section's opening. Under "Before You Begin", after the
+time lines, a block "Why Compute, in the Words of the Field": one bridge
+line of mine, saying "as of early 2024" as she asked (the text predates the
+H20, distributed training and the Chip Security Act), then §3.B of Sastry,
+Heim et al., "Computing Power and the Governance of Artificial
+Intelligence" (arXiv 2402.08797, CC BY 4.0), reproduced in full as a
+SourceQuote: 1,186 words, the four subsections as bold lead-ins, the seven
+figures and twenty footnotes omitted and the header saying so; three LaTeX
+artefacts repaired (triple hyphens to em dashes, "≤\leq" to "≤"). Under it
+her attribution line with the licence and the arXiv link; then her note
+card ("detectability and supply chain are mostly covered in different
+modules"); then the Grunewald card with her blurb and her meta line
+(Explainer: How AI Chips Are Made, The Power Law, 5 September 2025, a
+guest post adapted from an IAPS report; 15 min, required), and Appendix A,
+"The Compute-Uranium Analogy", as an optional card beside it (888 words,
+4 min; blurb mine from the appendix's own text). The opening puzzle now sits
+under its own heading, "Test Your Judgement", and closes on her line, "Keep
+your answers; 2.1.8 returns to them" (2.1.8 does return to the ledger). Her
+spec placed the block "after Why this section exists"; the page has no such
+block, so it stands where one would.
+
+Grunewald's figures checked against the post: an 80 to 95 percent share,
+1.5 to 2 million H100s in 2024, performance doubling every 28 months, EDA
+and the fab's process design kit, photomasks and 300 mm wafers, TSVs, CoWoS
+and high-bandwidth memory. Grunewald registered; Sastry was. The page's
+headings brought to Title Case per the standing rule (Before You Begin, The
+Central Question, What You Will Be Able to Do, A Map of the Section, Core
+Source Packet and its PageBreak). Minutes for the head 5 → 25; the page's
+"Core time: 165–180 minutes" line and the unit meta are untouched, though
+a required 15-minute reading now sits inside them.

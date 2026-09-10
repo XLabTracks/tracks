@@ -3769,7 +3769,7 @@ window.CAPSTONE_BANK = {
         "cost-of-compliance analysis"
       ],
       "prerequisites": [
-        "Verification 2.4 — the human layer",
+        "Verification 2.4 — human evidence",
         "Verification 3 — covert development",
         "Verification 4.1 — feasibility and layering"
       ],
@@ -3879,7 +3879,7 @@ window.CAPSTONE_BANK = {
       ],
       "prerequisites": [
         "Verification 1 — actors",
-        "Verification 2.4 — the human layer"
+        "Verification 2.4 — human evidence"
       ],
       "sources": [
         {

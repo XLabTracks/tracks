@@ -139,7 +139,7 @@ window.COURSE = {
       "week": "weeks 4–8",
       "status": "notes complete",
       "goal": "Verification infrastructure and evidence streams",
-      "summary": "The four buckets of mechanism — hardware, cloud, intelligence, and the human layer — each judged by the claims it can test, the evidence it produces, what it costs to implement, and how it fails.",
+      "summary": "The four buckets of mechanism — hardware, cloud, intelligence, and human evidence — each judged by the claims it can test, the evidence it produces, what it costs to implement, and how it fails.",
       "units": [
         {
           "id": "2.0",
@@ -202,7 +202,7 @@ window.COURSE = {
         },
         {
           "id": "2.4",
-          "title": "Human",
+          "title": "Human Evidence",
           "kind": "explainer",
           "mins": "150 min",
           "href": "/tracks/verification/verification-infrastructure/human-intro",

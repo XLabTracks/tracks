@@ -61,7 +61,7 @@ export const verificationModules: Module[] = [
     trackId: "verification",
     title: "Verification infrastructure and evidence streams",
     summary:
-      "The four buckets of mechanism — hardware, cloud, intelligence, and the human layer — each judged by the claims it can test, the evidence it produces, what it costs to implement, and how it fails.",
+      "The four buckets of mechanism — hardware, cloud, intelligence, and human evidence — each judged by the claims it can test, the evidence it produces, what it costs to implement, and how it fails.",
     order: 2,
     prerequisiteModuleIds: ["v-why", "v-scoping"],
     itemIds: [
@@ -248,7 +248,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-infrastructure",
     title: "2.1 Hardware",
     contentRef: "verification/hardware-attestation",
-    estimatedMinutes: 5,
+    estimatedMinutes: 25,
   },
   {
     id: "v-hw-claim",
@@ -513,7 +513,7 @@ export const verificationLessons: Lesson[] = [
     id: "v-human-intro",
     slug: "human-intro",
     moduleId: "v-infrastructure",
-    title: "2.4 Human",
+    title: "2.4 Human Evidence",
     contentRef: "verification/human-intro",
   },
   {
@@ -639,7 +639,7 @@ export const verificationUnitMeta: Record<
   "2.1": { title: "Hardware", kind: "explainer", mins: "165–180 min" },
   "2.2": { title: "Cloud", kind: "reading + exercise", mins: "120 min" },
   "2.3": { title: "Intelligence", kind: "explainer", mins: "400 min" },
-  "2.4": { title: "Human", kind: "explainer", mins: "150 min" },
+  "2.4": { title: "Human Evidence", kind: "explainer", mins: "150 min" },
   "3.0": { title: "What is covert development?", kind: "explainer", mins: "10–15 min" },
   "3.1": { title: "How could a determined actor cheat?", kind: "interactive", mins: "30–40 min" },
   "3.2": { title: "Red team / blue team", kind: "exercise", mins: "45–60 min" },

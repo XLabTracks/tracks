@@ -11,7 +11,7 @@ export const LAYERS: Layer[] = [
   { key: "hardware", name: "Hardware" },
   { key: "cloud", name: "Cloud" },
   { key: "intelligence", name: "Intelligence" },
-  { key: "human", name: "Human layer" },
+  { key: "human", name: "Human evidence" },
   { key: "crypto", name: "Cryptographic" },
 ];
 

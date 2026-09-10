@@ -3194,3 +3194,15 @@ lines under it (core time 165–180 minutes in two sessions; the optional
 technical extension at 35–45 minutes) are gone. The page now opens on "Why
 Compute, in the Words of the Field". The unit meta's "165–180 min" in
 curriculum.ts is untouched: it is the sidebar's figure, not the page's.
+
+## 2026-09-10 — 2.1 head: objectives first, the map and the source packet deleted
+
+Owner's instructions. The objectives block (five items, "By the end of the
+core section…") now opens the page, and its heading "What You Will Be Able
+to Do" is gone, as on 2.3's head. "A Map of the Section" is deleted whole:
+the functions table and the repeated-method line with it. "Core Source
+Packet" is deleted whole: its page break, the author-note callout, the five
+listed sources and the Src citation block ("this is not supposed to be
+there"). The five sources stay in the registry because 2.1's later sections
+link them. The page is now: objectives, Why Compute, in the Words of the
+Field, the two cards, Test Your Judgement, The Central Question.

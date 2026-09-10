@@ -3206,3 +3206,88 @@ listed sources and the Src citation block ("this is not supposed to be
 there"). The five sources stay in the registry because 2.1's later sections
 link them. The page is now: objectives, Why Compute, in the Words of the
 Field, the two cards, Test Your Judgement, The Central Question.
+
+## 2026-09-10 — 2.1 rebuilt against the owner's v2 redesign spec
+
+The spec's rule held: the existing 2.1 prose is the lecture layer and nothing
+was deleted from it except where the spec said so. What was added is
+artifacts, drills, readings, two interactives and the wiring between them.
+Claims and their status are in `module-2-1-verification-log.md`; that log is a
+precondition of this content, not a footnote to it.
+
+Landing. Reordered to objectives, physical opening, puzzle, The Central
+Question, section map, reading, per the spec's list. "Inside the Chip" is new
+prose (~210 words): where the key lives, who provisioned it, and that it
+answers to the manufacturer. Sastry §3.B is no longer reproduced here: one
+sentence in The Central Question names what Module 1 established and links the
+paper. Grunewald moved to 2.1.3 as an optional reading attached to the
+completeness drill. The section map returns as a table of functions against
+the page that teaches each, which is the shape the spec asked for rather than
+the one deleted on 2026-09-10. Puzzle heading now "Test Your Judgment".
+O'Gara's HEMs survey is the landing's one reading. Minutes 25 to 30.
+
+The Tinfoil cold open drafted for the landing moved to 2.1.2 with the spec's
+revision, and the draw-the-trigger card was dropped: the puzzle already
+commits the learner, and the trigger beat survives as the FLI against MIRI
+commit in 2.1.8.
+
+2.1.1. Identify, measure, restrict named as a triad. Harack's limits section
+as a reading. The authenticity/correctness/completeness prose gained the table
+it implies, whose completeness column is empty on every on-chip row, plus a
+check on that. The notebook's three sentences became dossier row 1 with a
+model answer, as the disposition table asked.
+
+2.1.2. Opens on the Tinfoil figure and its three lines of evidence, with the
+commit before any explanation. CACM supplies the deployed primitive and the
+threat model it answers, which is the inversion the whole section runs on.
+Battering RAM is the $50 case, cited to the authors' own site; the September
+2025 disclosure date is not in copy because it did not verify. A1 is the NVIDIA
+attestation result, field names from the documentation example. The trust-chain
+autopsy kept its content, gained the artifact it always lacked, and is now
+dossier row 2. The key-custody margin note is a callout pointing at 2.1.6. The
+composite-attestation drill was dropped on the spec's own trim list.
+
+2.1.3. The 2.2 handoff is narrowed as the owner's dedup pass instructed: this
+page owns declared against registered, and undeclared facilities are 2.3's,
+said in both directions. Scher and Thiergart's chip rows only. Wasil's
+hardware-dependent methods as the pinned excerpt. A2 is the registry extract,
+constructed and labelled, with the count-the-gap and registry-versus-
+declaration checks over it. The locating-compute feasibility sort was removed
+before it was built: 2.3.10's cards come from the same appendix.
+
+2.1.4. The monitor-evader interactive is the round-by-round argument in the
+telemetry paper, with the paper's own numbers at every step and the four
+bounded-claim fields as its closing screen, which is where the master doc's
+"from result to policy claim" went. Watts to FLOP moved here from 2.3.3
+verbatim and became core: 2.3.3 now carries one pointer paragraph, keeps the
+scale comparison and the decay figures, and the 2.3 intro's objective 2 lost
+its first clause. A3 is the utilization series. Shavit is the deep read.
+
+2.1.5. Opens on the device-level against account-level boundary. Petrie's
+paper is correctly attributed: the spec's works-cited list has it as Kulp et
+al., which is a different work. A4 is the license token, and its
+workload-condition row is the page's own argument. The twelve-component
+activity became the chain-builder interactive; its six questions are the
+reveals, and the vendor-key break is a marking task over the same chain.
+
+2.1.6. Cankaya reduced to a pointer at 3.0. Six Layers' two hardware layers as
+the reading. The bilateral pilot review gained the fixed proposal it needed
+(~550 words, new) and is cut to what a reviewer can hold. Key custody is
+technical custody only; institutional independence stays 2.3.9's.
+
+2.1.7. The budget drill is the page's main exercise and the forge-a-PoL drill
+was not built. The ZK figure is Kaizen's own, checked; the TEE cost multiples
+from the module notes are not in copy because they are not in the paper's
+abstract and the full text was not read.
+
+2.1.8. The brief is now case-specific, per the owner's dedup pass: a decision
+on the laboratory's bundle, accept, request more, or reject, with the
+assessment table demoted to reference material because 2.3.11 owns the
+landscape genre. Two-axis placement, the maturity-inflation check, and the FLI
+against MIRI commit are new; the rubric is untouched.
+
+Owed, and not done here: the dossier rows do not prefill 2.1.8 from the six
+earlier pages, so the page tells the learner to carry them across by hand; the
+2.2 side of the 2.1.3 pointer is not written; the claim sorter is one check
+rather than twelve statements, because the opening puzzle already sorts seven.
+

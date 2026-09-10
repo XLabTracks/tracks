@@ -7,9 +7,27 @@ The working rule prohibits **unlicensed training above threshold T** while permi
 2. What kind of workload was it?
 3. Was that workload authorized?
 
-A system may answer one and fail the others.
+A system may answer one and fail the others. A counter answers the first. A
+classifier proposes an answer to the second. Neither touches the third.
 
-#### Compute accounting
+<ReadingCard
+  id="hw-shavit-chinchilla"
+  href="https://arxiv.org/abs/2303.11341"
+  title="What Does It Take to Catch a Chinchilla?"
+  author="Yonadav Shavit | arXiv"
+  year="2023"
+  mins="40 min"
+>
+
+The one mechanism this section reads in depth. Read the compute-accounting
+scheme and the proof-of-training-transcript scheme; skip the appendices. Two
+questions to answer as you go: which part of the scheme is the counter, and
+which part is the transcript. They fail differently, and 2.1.7 returns to the
+second one.
+
+</ReadingCard>
+
+#### Compute Accounting
 
 Training thresholds are usually expressed in total operations, commonly total training FLOP. Throughput, such as FLOP per second, is a different quantity.
 
@@ -31,9 +49,124 @@ Even perfect accounting verifies the threshold, not the policy goal. Algorithmic
 
 <Prompt label="Question to keep visible">What quantity did the meter record, and how closely does that quantity match the legal rule?</Prompt>
 
-<PageBreak title="Workload classification" />
+#### Power, From Watts to FLOP
 
-#### Workload classification
+The conversion below is the compute-accounting primitive for the whole course.
+The arithmetic is the same whether the watts are read by a meter on the chip,
+a power monitor on the rack, or a thermal satellite over the roof; only the
+access and the error bars change. 2.3.3 uses it from outside the fence.
+
+A watt measures how quickly energy is used: one joule per second. A 2 kW
+kettle converts 2,000 joules of electrical energy into heat every second. A
+computing cluster drawing 130 MW consumes 130 million joules per second.
+Watts describe a rate, not a total amount of energy.
+
+A FLOP is one arithmetic operation, such as an addition or multiplication, on
+floating-point numbers—the computer’s way of representing values such as 0.25
+or −3.7 across a wide range of magnitudes. FLOP count the arithmetic
+performed; FLOP per second measure how fast it happens.
+
+Think of a language model as an enormous collection of adjustable numbers,
+called parameters. During pretraining, it processes text divided into
+tokens—words or pieces of words—and predicts what comes next. Its prediction
+errors guide small adjustments to the parameters. This process repeats across
+the training data, teaching the model patterns that help it make better
+predictions.
+
+Most of the arithmetic involved is matrix multiplication. For a conventional
+dense transformer, the training cost can be approximated as:
+
+$$
+\text{Training FLOP} \approx 6 \times \text{number of parameters} \times \text{number of tokens processed}.
+$$
+
+The factor of six accounts for both making predictions and calculating how
+the parameters should change. It is an approximation, not an exact count for
+every model architecture
+([Kaplan et al., 2020](https://arxiv.org/abs/2001.08361)).
+
+This gives two main ways to spend more compute: train a larger model, or
+train it on more text. More parameters make processing each token more
+expensive; more tokens mean more processing overall. The 2022 Chinchilla
+study found that, to get the best performance from a fixed training budget
+under its experimental conditions, model size and training data should grow
+in roughly equal proportions. Following that rule, ten times more compute
+would mean about 3.2 times as many parameters and 3.2 times as many tokens
+([Hoffmann et al., 2022](https://arxiv.org/abs/2203.15556)).
+
+The connection to electricity is physical. Arithmetic in a chip requires
+switching transistors, which charges and discharges tiny electrical
+capacitances and dissipates energy as heat.
+
+For a rough hardware benchmark, an NVIDIA H100 SXM has a power rating of up
+to 700 W and a peak throughput of approximately $10^{15}$ dense, 16-bit
+floating-point operations per second. Dividing power by throughput gives an
+energy cost on the order of $10^{-12}$ joules per FLOP. This is a peak-based
+GPU estimate, not a measurement of an entire training facility
+([NVIDIA H100 datasheet](https://resources.nvidia.com/en-us-hopper-architecture/nvidia-tensor-core-gpu-datasheet)).
+
+Using that illustrative efficiency, a training run requiring $10^{25}$ FLOP
+would consume:
+
+$$
+10^{25}\ \text{FLOP}\times10^{-12}\ \text{joules/FLOP} =10^{13}\ \text{joules} \approx2.8\ \text{GWh}.
+$$
+
+Spread over three months, that corresponds to roughly 1.3 MW of average power
+under those assumptions. A facility actually drawing 130 MW for three months
+would instead consume about 280 GWh—a hundred times as much energy.
+
+The hundredfold gap between the two examples is the difference between a 2023
+frontier run and a 2025–26 one. Frontier training compute has grown 4 to 5
+times a year, and after efficiency gains and longer runs are netted out, the
+power a frontier run draws has still grown 2.2 times a year
+([You and Owen, 2025](https://epoch.ai/publications/power-demands-of-frontier-ai-training)).
+The signature scales with the run, and the run has been getting bigger faster
+than the chips have been getting cheaper to feed.
+
+<Check
+  id="hw-watts-to-flop"
+  q="The laboratory's site draws 130 MW, sustained for the 90 days of the pause, on H100-class hardware. To an order of magnitude, what is the upper bound on the operations it could have performed?"
+  options={[
+    "About 10^27",
+    "About 10^25",
+    "About 10^29",
+    "About 10^23",
+  ]}
+  answer={0}
+  why="130 MW for 90 days is about 10^15 joules; at roughly 10^-12 joules per FLOP that is about 10^27 operations. Treat it as a ceiling and not an estimate: real utilization is well below peak, which pushes the true figure down by a factor of a few, and lower-precision arithmetic buys more operations per joule, which pushes it up. Each of those is worth about 3x, in opposite directions."
+/>
+
+#### The Artifact: A Utilization Series
+
+The laboratory submits the record from its protected counters and telemetry
+for the 90-day window. The extract is constructed for this exercise; each
+feature in it is one the literature reports.
+
+| Feature of the record | What the record shows |
+| --- | --- |
+| Counted operations, as reported | 4.2 × 10^26 |
+| Counter continuity | The record begins on day 31. Days 1 to 30 are absent following a counter reset the operator attributes to a firmware update |
+| Memory | A high allocation plateau held for the full 90 days, including the days with no counted operations |
+| Utilization shape | Days 44 to 58 hold a load whose shape matches signal-processing work rather than the surrounding pattern |
+| Facility power | 130 MW, sustained, for all 90 days |
+
+<Check
+  id="hw-threshold-arithmetic"
+  q="Threshold T is 10^27 counted operations. What can the verifier conclude from that record?"
+  options={[
+    "Nothing yet about T: the counter's record starts after a reset, and the energy over the full window is consistent with roughly 10^27 operations",
+    "The site stayed under T, because the counter is the instrument the rule names and it reports 4.2 × 10^26",
+    "The site crossed T, because the power record bounds the window at about 10^27",
+    "The site stayed under T, because 4.2 × 10^26 is well under half of T",
+  ]}
+  answer={0}
+  why="Two records disagree about the same window and one of them has a hole in it exactly where the memory plateau says work continued. The energy bound is a ceiling rather than a measurement, so it cannot convict either, and the counter cannot acquit while thirty days are missing from it. What the verifier has is a question for the operator and a reason to ask for the firmware-update record."
+/>
+
+<PageBreak title="Workload Classification" />
+
+#### Workload Classification
 
 A compute counter cannot determine whether the operations were training, inference, evaluation, fine-tuning, or another permitted activity. Workload classification uses additional signals, such as temporal GPU telemetry, memory behavior, communication patterns, or authenticated code and configuration.
 
@@ -53,7 +186,17 @@ The limitations are equally important:
 
 This is an **empirical component demonstration**, not an end-to-end verification regime.
 
-#### Separate attacks by what they target
+#### Monitor Against Evader
+
+The study is not one number. It is five rounds of an argument between a
+monitor and an evader, each round adding a strategy on one side and a
+countermeasure on the other, with the detection rate reported at every step.
+Take the monitor's chair. Commit to a countermeasure before each round's
+numbers appear, and read where the sequence ends.
+
+<VerificationExercise id="monitor-evader" />
+
+#### Separate Attacks by What They Target
 
 A verifier should not treat every weakness as a classifier problem.
 
@@ -66,13 +209,33 @@ A verifier should not treat every weakness as a classifier problem.
 | Shift to uninstrumented hardware | Coverage and completeness |
 | Stay under the compute line through algorithmic improvement | The policy proxy itself |
 
-#### Activity: from result to policy claim
+<Check
+  id="hw-maturity-telemetry"
+  q="Where does the telemetry result sit on the maturity ladder 2.1.8 uses?"
+  options={[
+    "An empirical component demonstration: one component, tested under stated conditions",
+    "A deployed primitive: a real security feature shipping in a product",
+    "A relevant-scale pilot: tested at the scale and threat model that matter for policy",
+    "An end-to-end prototype: the components operating together as a system",
+  ]}
+  answer={0}
+  why="It is a classifier evaluated on a corpus, on single-node hardware, with the tamper-resistance of its own input assumed rather than built. Nothing about it operates alongside a meter, a channel, or an institution, and the study says so itself."
+/>
 
-For the telemetry study, write four statements.
+#### Dossier Row: Measurement
 
-- **Observation:** What did the experiment measure?
-- **Supported inference:** What conclusion is justified within that setting?
-- **Unsupported policy leap:** What stronger claim would exceed the evidence?
-- **Deployment dependencies:** What additional technical and institutional components would be required?
+<Exercise id="v-hw-dossier-measuring" />
 
-A well-bounded answer will not claim that the study proves treaty-grade detection across frontier clusters or against a state controlling the measurement path.
+<PageBreak title="Return to the Opening Puzzle" />
+
+#### Return to the Opening Puzzle
+
+Two more rows of the opening puzzle are settled. Whether the devices performed
+inference rather than prohibited training, and whether their cumulative
+compute stayed under the threshold, are both **possibly supported if the
+system was designed to measure it**, and the design that would be required is
+now specific: a protected counter with no gaps in its record, telemetry the
+operator cannot forge, an authenticated channel, and aggregation rules across
+devices and time. The laboratory's bundle has none of those.
+
+<ClaimLedger id="hw-opening-puzzle" set="hardware-opening" recall />

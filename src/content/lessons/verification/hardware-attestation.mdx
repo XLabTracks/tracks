@@ -9,81 +9,83 @@
 5. **Recommend a bounded role.** State what hardware should carry in a layered regime, what it should not carry, which independent evidence must corroborate it, and what new evidence would change your recommendation.
 </Objectives>
 
-#### Why Compute, in the Words of the Field
+#### Inside the Chip
 
-Why compute is the input a regime can see, in the field's own words, as of
-early 2024:
+Somewhere on the die of a modern AI accelerator, a small block of logic does
+something the rest of the chip cannot: it holds a secret. The secret is a
+private key, either burned into one-time-programmable fuses on the production
+line or derived from physical variation in the silicon itself, and the
+circuitry around it is built so the key can be used and not read out.
+Everything this section calls attestation stands on that arrangement. A signed
+report is a statement the chip makes with a key nobody else is supposed to
+have.
 
-<SourceQuote
-  t="Computing Power and the Governance of Artificial Intelligence"
-  url="https://arxiv.org/abs/2402.08797"
-  what="§3.B, The Feasibility of Compute Governance, in full; figures and footnotes omitted"
-  by="Sastry, Heim, Belfield, et al. | arXiv (2024)"
->
+Two facts about that key decide most of what follows. It was provisioned in a
+factory, by the manufacturer, before anyone knew which laboratory or which
+country the chip would work in. And the reference values a verifier compares
+the chip's report against are published by that same manufacturer. The chip
+can testify. It testifies in a language the vendor defined, with a key the
+vendor gave it, about the facts the vendor decided were worth measuring.
 
-**3.B The Feasibility of Compute Governance**
+Against most adversaries that is a strong arrangement. For a treaty it is a
+strange one, because the party holding the chip is the party under suspicion,
+and the key in the chip does not answer to the verifier.
 
-Several properties of AI compute suggest it can serve as an effective governance instrument. We focus on four: detectability, excludability, quantifiability, and supply chain concentration.
+#### Test Your Judgment
 
-**3.B.1 Detectability**
+During a three-month AI pause, a laboratory sends the verification authority a valid cryptographic statement from each of the 20,000 accelerators in its declared cluster. The laboratory says the tokens prove that the cluster complied.
 
-The physicality and resource intensity of AI supercomputers makes them highly detectable and thereby governable. AI supercomputers consist of tens of thousands of AI chips connected with high-bandwidth networking equipment and consume up to dozens of megawatts of power—equivalent to tens of thousands of U.S. households. They are hosted in large data centers—industrial facilities spanning the equivalent of up to several football fields—that require large-scale cooling and power infrastructure (Figure 9) (Pilz & Heim, 2023). The construction of such a facility costs up to several billion dollars and involves a complex permitting and power allocation process. The visibility of supercomputer use has also been used to quantify the climate impact of modern AI systems (OECD, 2022; Patterson et al., 2022; Patterson et al., 2021; Henderson et al., 2020).
+Before reading further, classify each conclusion as **supported**, **possibly supported if the system was designed to measure it**, or **unsupported by attestation alone**.
 
-However, there are also challenges to detecting AI training runs by tracking data centers. While most data centers are likely easy to identify on geospatial imagery, some may be concealed underground or hidden within other industrial facilities. Furthermore, even successfully detecting AI data centers is not sufficient for identifying AI models hosted on those data centers. This would require the data center owners to monitor and report information about how their computers are used—which would raise privacy concerns—and to distinguish AI workloads from the non-AI workloads also hosted by the majority of data centers.
+<ClaimLedger id="hw-opening-puzzle" set="hardware-opening" />
 
-**3.B.2 Excludability**
+Keep your answers; 2.1.8 returns to them.
 
-Compute has a high degree of excludability and rivalry, key attributes of a private good (as distinct from a public good (Samuelson, 1954)). Unauthorized users can be easily excluded from accessing AI chips. Someone wishing to use AI chips—i.e., run desired computations on them—must either possess the chips themselves, or (more commonly) rent the right to use the chips from a cloud compute provider that is in possession of the chips themselves (Pilz & Heim, 2023). In both scenarios, the entity in possession of a chip generally maintains the ability to prevent others from using it. While hackers can theoretically gain access to and exploit an actor’s compute, they can easily be expelled once their intrusion is detected. Therefore, compute can be allocated or withheld from actors or particular use cases.
+#### The Central Question
 
-The excludability and rivalry of compute can perhaps best be understood in contrast to the two other elements of the AI triad: data and algorithms (Buchanan, 2020). Both are intangible. Data and algorithms can be kept private prior to publication, but once published it is difficult to control their use (Arrow, 1996), and they become “digital public goods” with low excludability and rivalry (Gruen, 2017). This has been referred to as the “copy problem” (Trask et al., 2020). Once a paper has been downloaded from the website hosting it, it can be copied and reshared virtually costlessly, even if we remove the original copy from the original host website. By contrast, computing hardware has a finite throughput: if one actor is using some computing power, another actor cannot use that same computing power at the same time.
+A signed statement can be authentic and still be too narrow, stale, incomplete, or based on a compromised measurement. Hardware becomes useful for verification only when the whole chain is specified: the rule, the measurement, the evidence, the trust assumptions, the decision authority, and the response.
 
-To prevent the unsanctioned copying of data or ideas, society primarily relies on institutional tools (e.g., intellectual property rights, contracts, criminal law). However, these policies are far from perfectly effective, especially across jurisdictional borders. The ability to reliably exclude people from accessing these informational goods is much weaker than for physical goods, as evidenced by, for example, the history of nuclear technology, discussed further in Appendix A. The U.S. government’s unsuccessful attempts in the 1970s to restrict access to the RSA encryption algorithm serve as an apt example of the challenges inherent in governing algorithms. The risk of cybertheft of organizational internal assets increases the difficulty of regulating algorithms. Thus, the control and tracking of AI capabilities by monitoring where certain AI algorithms are used or whether some actor is using a particular algorithm becomes a complex task.
+Module 1 established why compute is the input a regime can see at all:
+detectable, excludable, quantifiable, and made in a concentrated supply chain
+([Sastry, Heim, Belfield, et al., 2024](https://arxiv.org/abs/2402.08797)).
+This section asks a different question. Not whether compute is governable in
+principle, but what a particular chip can testify to, to whom, and with what
+left over.
 
-**3.B.3 Quantifiability**
+#### What This Section Teaches, and Where
 
-The computing power attainable from hardware is also easily quantified. It is generally easier to regulate behavior when it is quantifiable—when we can more precisely measure some activity, it is easier to identify it and promote, limit, or deter it.
+Hardware proposals serve several different functions. They are not a ladder
+from weak to strong: a mechanism can do one of these well and contribute
+nothing to another.
 
-Computational resources can be quantified by the quantity and quality of their chips. Most prosaically, chips can be counted. Chips also possess measurable specifications—such as computational performance (in operations/s), chip-to-chip communication bandwidth, memory capacity, and memory bandwidth—that indicate quality. Further, training and deploying advanced AI models typically involves tens of thousands of advanced AI chips, requiring significant amounts of ancillary infrastructure—such as high-speed networking and cooling and energy infrastructure—housed in large-scale data centers. This infrastructure can be used to estimate actors’ computational resources, as well as to verify and set clear thresholds on access.
+| Function | The verifier's question | Taught in |
+| --- | --- | --- |
+| Identify | Which device is this, and is it covered? | 2.1.2, 2.1.3 |
+| Attest | What hardware, firmware and security state is present now? | 2.1.2 |
+| Locate | Where is the device, and how is it connected? | 2.1.3 |
+| Measure | How much counted compute occurred? | 2.1.4 |
+| Classify | Was the workload training, inference, or something else? | 2.1.4 |
+| Restrict | Was the activity permitted, and who can stop it? | 2.1.5 |
+| Reconstruct | Did the declared process produce the submitted model? | Optional: 2.1.7 |
 
-The quantifiability of compute contrasts strongly with another input to AI progress: human capital or “talent.” Individuals are not as transparent as compute or data (Belfield & Hua, 2022). The governance of talent is rightly limited by civil liberties like privacy, and freedom of association and thought (outside of specific and sometimes contentious cases, such as subsidizing research and education and granting or denying student and work visas). Quantifying and comparing talent directly is difficult, making it a less useful indicator of AI capabilities. For example, while some metrics can be predictive of the high productivity of some scientists over others (e.g., h-index, or citation counts), such measures have significant limitations (e.g., they are field dependent or favor older researchers).
-
-**3.B.4 Supply Chain Concentration**
-
-A key factor enhancing the detectability, excludability, and quantifiability of compute is the concentration of the global supply chain for high-end (≤ 7 nm) chips. The large majority of the world’s most advanced AI chips are manufactured by a single company (TSMC), which is critically reliant on extreme ultraviolet (EUV) lithography machines, also only manufactured by a single company (ASML) (Patel, 2023; Tarasov, 2022). Several other links in the supply chain are also dominated by a few providers, including data center GPU design (where NVIDIA has a market share of over 90% (UK CMA, 2021; Nellis et al., 2023)), and cloud compute services (dominated by a few large providers (OFCOM, 2023)). The supply chain is also inelastic, as the entry barriers are high and supply is difficult to increase quickly (OFCOM, 2023). This is especially evident for EUV lithography machines, which took multiple decades and billions of dollars in investments to develop (Miller, 2022). These empirical factors regarding the supply chain could change over time, potentially affecting governability, but examples like the U.S. export controls on semiconductor manufacturing equipment (discussed below) illustrate the existing potential for governance today. Figure 11 illustrates the compute supply chain, whereas Figure 12 focuses on its concentration.
-
-It is not feasible to regulate every instance of AI model deployment, nor is it desirable (as discussed in section 5.A). Today, however, a significant fraction of frontier AI model-related development and deployment compute could be regulated and governed because it is hosted in a relatively small number of data centers housing large numbers of AI chips (Pilz & Heim, 2023).
-
-</SourceQuote>
-
-Reproduced under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
-from Sastry, Girish, Lennart Heim, et al. "Computing Power and the Governance
-of Artificial Intelligence." [arXiv, 2402.08797](https://arxiv.org/abs/2402.08797),
-2024, §3.B.
-
-<Callout variant="note">
-Note that detectability and supply chain are mostly covered in different
-modules in this course.
-</Callout>
+Where the trust for all of this should sit is 2.1.6, and what role hardware
+should be given in a layered regime is 2.1.8.
 
 <ReadingCard
-  id="hw-grunewald-how-chips-are-made"
-  href="https://blog.peterwildeford.com/p/explainer-how-ai-chips-are-made"
-  title="Explainer: How AI Chips Are Made"
-  author="Erich Grunewald | The Power Law (Peter Wildeford's blog), adapted from an IAPS report"
+  id="hw-ogara-hems"
+  href="https://arxiv.org/abs/2505.03742"
+  title="Hardware-Enabled Mechanisms for Verifying Responsible AI Development"
+  author="O’Gara, Kulp, Hodgkins, Petrie, et al. | arXiv"
   year="2025"
-  mins="15 min"
+  mins="20 min"
 >
 
-Read it once through before 2.1.2; it is the only reading in this section
-that is not about verification. Three steps, design, fabrication, packaging,
-and the payoff for us is where each step touches a small number of firms: EDA
-software and the fab's process design kit at design; photomasks, lithography
-tools and 300 mm wafers at fabrication; TSV, CoWoS and high-bandwidth memory
-at packaging. Every one of those is a place where a device identity can be
-provisioned, a production count can be recorded, or a shipment can be
-reconciled. Keep the numbers: 1.5 to 2 million H100s shipped in 2024, NVIDIA
-at 80 to 95% of the market, chip performance doubling every 28 months. When
-2.1.3 asks how a registry could be complete, the answer starts in this post.
+Skim the mechanism map and the open questions. This is the section's own map:
+verifiable reporting of compute quantity, of cluster configuration and
+location, and policy enforcement, with the paper stating plainly that these
+are approaches under investigation rather than fielded capability. Carry one
+question out of it: which of these families does the laboratory's evidence
+bundle actually rely on?
 
 </ReadingCard>
 
@@ -103,17 +105,3 @@ monitoring; where it holds, and where it breaks (compute is not radioactive,
 and model weights have no nuclear counterpart).
 
 </ReadingCard>
-
-#### Test Your Judgement
-
-During a three-month AI pause, a laboratory sends the verification authority a valid cryptographic statement from each of the 20,000 accelerators in its declared cluster. The laboratory says the tokens prove that the cluster complied.
-
-Before reading further, classify each conclusion as **supported**, **possibly supported if the system was designed to measure it**, or **unsupported by attestation alone**.
-
-<ClaimLedger id="hw-opening-puzzle" set="hardware-opening" />
-
-Keep your answers; 2.1.8 returns to them.
-
-#### The Central Question
-
-A signed statement can be authentic and still be too narrow, stale, incomplete, or based on a compromised measurement. Hardware becomes useful for verification only when the whole chain is specified: the rule, the measurement, the evidence, the trust assumptions, the decision authority, and the response.

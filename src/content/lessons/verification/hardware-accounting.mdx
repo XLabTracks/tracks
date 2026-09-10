@@ -5,6 +5,29 @@ A registry of covered accelerators can support several verification tasks. It ca
 
 A registry is not a sensor. It is an institutional record whose value depends on how entries are created and reconciled.
 
+That distinction fixes what this page owns. 2.2 routes one question here and it
+is a narrow one: the discrepancy between what an operator **declared** and what
+the regime has **registered**, which is a reconciliation between records and
+device evidence. Finding a facility nobody declared is a different problem with
+different instruments, and it belongs to 2.3.
+
+<ReadingCard
+  id="hw-scher-thiergart-chip-rows"
+  href="https://arxiv.org/abs/2506.15867"
+  title="Mechanisms to Verify International Agreements About AI Development"
+  author="Scher and Thiergart | MIRI"
+  year="2025"
+  mins="20 min"
+>
+
+Read the chip and hardware mechanism rows, then the Hypothetical Futures
+appendix. The satellite, power-grid and national-intelligence rows are 2.3's;
+skip them here. Carry one question through: which row's feasibility rating
+would change if the registry extract below were the normal quality of
+evidence?
+
+</ReadingCard>
+
 #### Identity
 
 A device credential can help a verifier distinguish a genuine covered device from an unauthenticated substitute. The verifier still needs to know:
@@ -24,9 +47,16 @@ Location-verification proposals often use network timing or challenge-response m
 
 <Src>O’Gara et al., *Hardware-Enabled Mechanisms for Verifying Responsible AI Development* — [arXiv:2505.03742](https://arxiv.org/abs/2505.03742), 2025.</Src>
 
+The delay-based version of this is the baseline proposal in the literature
+(Brass and Aarne, IAPS, 2024): a verifier with landmark servers at known
+positions measures round-trip times to a chip and checks them against the
+speed of light. It bounds a region rather than fixing a point, and it inherits
+every assumption underneath it, including that the thing answering the
+challenge is the chip rather than something answering on its behalf.
+
 A location claim should therefore state its resolution and error model. “Inside Country A,” “inside this data center,” and “inside this rack” are different claims.
 
-#### Cluster topology
+#### Cluster Topology
 
 A collection of individually authenticated devices is not automatically a cluster. A verifier may need to establish:
 
@@ -54,8 +84,94 @@ Attestation covers devices that participate. A registry covers devices that ente
 
 Hardware is therefore strongest for known, instrumented compute. The intelligence and human sections will address what remains when the operator never registers the device, never installs the monitor, or never submits evidence.
 
-#### Try it
+<ReadingCard
+  id="hw-wasil-hardware-methods"
+  href="https://arxiv.org/abs/2408.16074"
+  title="Verification Methods for International AI Agreements"
+  author="Wasil, Reed, Miller, and Barnett | arXiv"
+  year="2024"
+  mins="8 min"
+>
 
-The treaty body wants to support the claim: “All covered accelerators at Site X are registered and accounted for.” Choose three evidence streams that do not share the same source. For each, name the actor that produces it and one way it could fail.
+Module 1 read this paper as a taxonomy. Here, read only the hardware-dependent
+methods: chip location tracking and chip-based reporting, each with its
+description, its precedent, and its evasion list. The evasion list is the part
+to keep, and the question to hold against the extract below is which item on
+it a registry would never show.
 
-A strong answer does not treat the site operator’s inventory, the site operator’s logs, and the site operator’s declaration as three independent streams.
+</ReadingCard>
+
+<ReadingCard
+  id="hw-grunewald-how-chips-are-made"
+  href="https://blog.peterwildeford.com/p/explainer-how-ai-chips-are-made"
+  title="Explainer: How AI Chips Are Made"
+  author="Erich Grunewald | The Power Law, adapted from an IAPS report"
+  year="2025"
+  mins="15 min"
+  optional
+>
+
+Read it before the completeness drill if the provisioning points are
+unfamiliar. The supply-chain map in 1.2.1 showed where the chokepoints are;
+this post shows what is recorded at each one, which is where a registry's
+entries could come from: a device identity at design and test, a production
+count at the fab and at packaging, a shipment record on the way out.
+
+</ReadingCard>
+
+<PageBreak title="The Registry Extract" />
+
+#### The Artifact: A Registry Extract
+
+The laboratory's declaration says 20,000 covered accelerators. The regime's
+registry, reconciled against site evidence for the reporting window, holds
+this. The extract is constructed for this exercise; the shape is what such a
+reconciliation produces.
+
+| Entry | Devices | Device evidence in the window | Location anchor |
+| --- | --- | --- | --- |
+| Site A | 11,400 | Attestation from every device | Timing measurements consistent with the declared region |
+| Site B | 6,900 | Attestation from every device | Timing measurements consistent with the declared region |
+| Site C | 1,460 | Attestation from every device | None: the site has no timing anchor installed |
+| In transit | 240 | None | None |
+| Declared total | 20,000 | | |
+
+<Check
+  id="hw-count-the-gap"
+  q="The claim to support is: every covered accelerator was accounted for, at a known location, during the window. How many devices does this extract leave outside that claim?"
+  options={[
+    "1,700",
+    "240",
+    "1,460",
+    "None: every device is declared, so the count reconciles",
+  ]}
+  answer={0}
+  why="The devices in transit produced no evidence at all, and Site C's produced device evidence with nothing tying it to a place. Both fall outside a claim that joins identity to location, and the count that reconciles is the declaration against itself, which is the operator's arithmetic rather than the regime's."
+/>
+
+What closes a gap like that comes from outside the chip: customs and shipping
+records, foundry and packaging output, provider inventories, a physical count
+at the site. Those are streams this section cannot produce, and the way to
+read the extract is as a list of questions to hand to other layers, not as a
+finding.
+
+<Check
+  id="hw-registry-mismatch"
+  q="The laboratory's declaration lists 20,000 devices at three sites. The registry holds 20,000 entries, but 240 of them are marked in transit with no site. What kind of failure is that, on its own?"
+  options={[
+    "Neither yet: it is a reconciliation difference, and the next step is asking which record moved",
+    "A declaration failure: the laboratory misreported its holdings",
+    "A registry failure: the regime lost track of 240 devices",
+    "A violation: 240 devices are unaccounted for during a pause",
+  ]}
+  answer={0}
+  why="A difference between two records is a question, not a finding. Shipping records, the receiving site's own evidence, or a customs entry decides which of the two moved, and escalating before asking is how a regime spends its credibility on paperwork."
+/>
+
+This page owns that reconciliation. A facility the laboratory never declared
+at all leaves no trace in either record, and finding it is 2.3's work with
+2.3's instruments.
+
+#### Dossier Row: Accounting
+
+<Exercise id="v-hw-dossier-accounting" />

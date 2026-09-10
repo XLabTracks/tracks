@@ -1,13 +1,84 @@
 
 ### 2.1.2 From a chip to a trusted statement
 
-Remote attestation is often described as a chip proving its state. That description hides several actors and several separate judgments.
+A machine can already prove which model it is running. That proof is the place
+to start, because it is real, it is deployed, and it is narrower than it
+sounds.
+
+Tinfoil serves open-weight models inside a hardware trusted execution
+environment and publishes a verification path for the claim "this endpoint is
+serving exactly these weights." Its verify output puts three things in front
+of a reader, and they are not equally strong.
+
+| What the reader is shown | Who stands behind it |
+| --- | --- |
+| A root hash of the model weights, committed as a Merkle tree, named inside a signed attestation report | The hardware manufacturer's signing key, over the code that was loaded at launch |
+| The same hash in the service's own configuration for the model it says it is serving | The operator, asserting it |
+| The public release those weights were built from, which a reader can download and hash independently | Nobody. It is a fact about a public repository: checkable by anyone, attested by no one |
+
+<Check
+  id="hw-cold-open-proved"
+  q="Which of those three did the machine itself prove?"
+  options={[
+    "That a signed report named the code loaded at launch and the weight commitment it launched with",
+    "That the weights being served match the public release they were built from",
+    "That no other model was loaded after the report was produced",
+    "That the operator's configuration is honest",
+  ]}
+  answer={0}
+  why="The signature covers what was loaded when the machine started. Whether that matches a public release is something a reader checks for themselves, and what happened after launch is the limit Tinfoil names in its own post."
+/>
+
+Tinfoil states that limit in one sentence: attestation measures launch state,
+not runtime state. It does not cover the memory bus, the location of the
+machine, or any total of the work it has done. Every hardware claim in this
+section has the same three parts as the table above: something the hardware
+signed, something the operator asserted, and something a third party could
+check without the operator's help. Most of the work of verification is telling
+them apart.
+
+<ReadingCard
+  id="hw-tinfoil-model-identity"
+  href="https://tinfoil.sh/blog/2026-02-03-proving-model-identity"
+  title="How Tinfoil Proves Exactly What Model Is Running"
+  author="Tinfoil"
+  year="2026"
+  mins="10 min"
+>
+
+A vendor engineering post about its own product, and the one deployed story of
+this kind. Two questions to carry: find the sentence where they state their
+own limit, and then this one. Their fix binds attestation to data loaded later
+by attesting a hash together with the code that re-checks that hash on every
+read. The rule this section verifies restricts training, which writes weights
+rather than reading them. Which link in that chain would have to change for
+attestation to say anything about training, and does that link exist? 2.1.4
+answers it.
+
+</ReadingCard>
+
+<ReadingCard
+  id="hw-cnas-secure-governable-chips"
+  href="https://www.cnas.org/publications/reports/secure-governable-chips"
+  title="Secure, Governable Chips"
+  author="Aarne, Fist, and Withers | Center for a New American Security"
+  year="2024"
+  mins="10 min"
+>
+
+Skim for the on-chip governance vocabulary this page then uses precisely: chip
+identity, hardware roots of trust, secure boot, and what the report claims
+each could support if it were built.
+
+</ReadingCard>
+
+Remote attestation is often described as a chip proving its state. That description hides several actors, several separate judgments, and one assumption about who the enemy is.
 
 The IETF’s Remote ATtestation procedureS architecture distinguishes three roles: an **Attester** produces evidence, a **Verifier** appraises that evidence against reference values and policy, and a **Relying Party** decides what to do with the result. This separation matters. The component that checks a signature need not be the institution that decides compliance, and neither automatically has authority to impose a consequence.
 
 <Src>H. Birkholz et al., [“Remote ATtestation procedureS (RATS) Architecture”](https://www.rfc-editor.org/rfc/rfc9334.html) — IETF RFC 9334, January 2023.</Src>
 
-#### The minimum vocabulary
+#### The Minimum Vocabulary
 
 **Hardware-rooted identity.** A device uses a cryptographic key and certificate, or another hardware-bound credential, to authenticate evidence. Some designs derive secrets from physical properties such as a physically unclonable function. Others provision or generate keys during manufacturing. “Hardware-rooted” does not mean literally unforgeable. It means that impersonation should require defeating a defined hardware and key-management boundary.
 
@@ -25,9 +96,45 @@ The IETF’s Remote ATtestation procedureS architecture distinguishes three role
 
 **Appraisal policy.** The rule that turns measured facts into a result such as “acceptable for this workload.” This is a policy judgment, not a property of the signature itself.
 
-<PageBreak title="A deployed primitive" />
+<PageBreak title="The Deployed Primitive" />
 
-#### A deployed primitive: current NVIDIA GPU attestation
+#### The Deployed Primitive, and Who It Was Built For
+
+The only attestation chain in production on AI accelerators is NVIDIA's, and
+the engineers who built it described it in *Communications of the ACM* in
+January 2024. The account is worth reading for what it says about intent. The
+H100's trusted execution environment is anchored in an on-die hardware root of
+trust; booting in confidential-computing mode turns on hardware protections
+for the confidentiality and integrity of code and data.
+
+Note the threat the design answers. The party being protected is the customer
+renting the machine. The party being protected against is whoever holds the
+machine: a compromised host, the cloud provider, an employee with physical
+access. That is a sound and useful threat model, and it is the reverse of a
+treaty's. Confidential computing exists so a tenant can trust a machine it
+does not own. A verification regime needs a rival to trust a machine the
+Prover does own. Same primitive, same signatures, opposite direction. Every
+deployed guarantee in this section was built for the first case, and the
+question on every page of it is what survives when the owner becomes the
+adversary.
+
+<ReadingCard
+  id="hw-cacm-confidential-gpus"
+  href="https://cacm.acm.org/practice/creating-the-first-confidential-gpus/"
+  title="Creating the First Confidential GPUs"
+  author="Dhanuskodi, Guha, Krishnan, Manjunatha, Nertney, O’Connor, and Rogers | Communications of the ACM"
+  year="2024"
+  mins="15 min"
+>
+
+Read the H100 sections and the chain-of-trust description: an on-die root of
+trust, secure and measured boot, a session to a driver running inside a CPU
+enclave, and a signed report of firmware measurements, with only
+manufacturer-signed firmware permitted in confidential-computing mode. Read it
+for the threat model rather than the mechanism, and write down which actor it
+protects and which actor it protects against.
+
+</ReadingCard>
 
 Current NVIDIA documentation describes an operational attestation chain for supported GPUs. Evidence is collected from the GPU, checked against signed Reference Integrity Measurements, evaluated locally or by NVIDIA’s Remote Attestation Service, and checked against certificate-revocation information. This is a useful deployed primitive because it makes the trust chain concrete.
 
@@ -47,7 +154,7 @@ For each link, ask:
 - What independent evidence checks the link?
 - What happens when the link fails?
 
-#### What a signature does and does not do
+#### What a Signature Does and Does Not Do
 
 A valid signature supports a statement such as “the holder of this trusted key signed these claims.” It does not by itself establish that:
 
@@ -60,9 +167,49 @@ A valid signature supports a statement such as “the holder of this trusted key
 - No other device or workload existed;
 - An institution may lawfully act on the result.
 
-Cryptography can faithfully transmit a false or insufficient measurement. The value of attestation therefore depends on the measurement boundary and the governance of keys, reference values, updates, revocation, and decisions.
+Cryptography can faithfully transmit a false or insufficient measurement. The value of attestation therefore depends on the measurement boundary and the governance of keys, reference values, updates, revocation, and decisions. Tinfoil's engineers put the general version in the sentence this page opened with: attestation measures launch state, not runtime state.
 
-#### The adversary changes the assurance
+<PageBreak title="When the Owner Is the Adversary" />
+
+#### When the Owner Is the Adversary: A $50 Case
+
+Researchers at KU Leuven and the University of Birmingham built Battering RAM:
+an active DDR4 interposer, a custom board costing under $50, that sits between
+the processor and its memory. At boot it is transparent and passes every trust
+check. Switched on afterwards, it silently redirects protected addresses to
+attacker-controlled locations. It breaks Intel's scalable SGX and defeats AMD
+SEV-SNP attestation on fully patched systems. The schematics are open source.
+The one requirement is brief physical access to the machine.
+
+Read that requirement against the confidential-computing threat model above.
+For a cloud customer, physical access is precisely what the adversary does not
+have, so a memory interposer sits outside the threat model and the guarantee
+holds. For a treaty verifier, physical access is precisely what the Prover
+does have. The same device is irrelevant in the first case and decisive in the
+second, and it costs less than dinner.
+
+This is not an argument that attestation is useless for verification. It is an
+argument about what has to be added around it: tamper-evident enclosures that
+destroy keys on intrusion, physical inspection to confirm the enclosure is
+intact, and evidence from outside the box that does not depend on the box's
+key at all. 2.1.6 compares architectures on exactly that question.
+
+<Src>J. De Meulemeester, D. Oswald, I. Verbauwhede, and J. Van Bulck, “Battering RAM: Low-Cost Interposer Attacks on Confidential Computing via Dynamic Memory Aliasing,” [batteringram.eu](https://batteringram.eu/), to appear at the 47th IEEE Symposium on Security and Privacy, May 2026.</Src>
+
+<Check
+  id="hw-interposer-verifier-move"
+  q="Your attestation report is valid and the rack holds an interposer. What does the verifier require next?"
+  options={[
+    "Evidence that does not depend on that machine's key: an intact tamper-evident enclosure, confirmed by inspection, plus a measurement taken outside the box",
+    "A second attestation report from the same device, with a fresh nonce",
+    "A longer key and a newer firmware version",
+    "The operator's written assurance that no interposer is installed",
+  ]}
+  answer={0}
+  why="A replayed or re-signed report inherits the same compromised measurement, and key length is not the failing part. The only moves that help come from outside the device's own root of trust."
+/>
+
+#### The Adversary Changes the Assurance
 
 <div className="trio-table">
 
@@ -76,16 +223,51 @@ Cryptography can faithfully transmit a false or insufficient measurement. The va
 
 The same product can be strong against a remote tenant and weak against an owner with physical access. “Secure” is not a mechanism property without an adversary.
 
-#### Activity: trust-chain autopsy
+#### The Artifact: One Attestation Result
 
-Take an attestation token or architecture diagram supplied with this section. Record:
+Here is the shape of the evidence, taken from NVIDIA's own single-GPU
+attestation example. The service returns a signed token whose claims include:
 
-1. The exact claim;
-2. The root or roots of trust;
-3. The measurement component;
-4. The key and reference-value authorities;
-5. Update and revocation authority;
-6. The verifier and relying party;
-7. The strongest relevant adversary;
-8. One common-mode failure;
-9. One independent corroborating source.
+| Claim | What it carries | What it is evidence of |
+| --- | --- | --- |
+| `ueid` | A unique identifier for this GPU | Which device is speaking, inside the vendor's identity scheme |
+| `hwmodel` | The hardware model, for example `GH100 A01 GSP BROM` | The part, not the part's history |
+| `eat_nonce` | The nonce the verifier supplied | Freshness: this token was made for this challenge |
+| `measres` | Whether measurements matched the reference values | That the firmware measured equalled what the vendor published |
+| `secboot` | Whether secure boot is enabled | A configuration flag, as reported by the platform being appraised |
+| `dbgstat` | Debug status, for example `disabled` | Whether a debug path was open at measurement time |
+| `x-nvidia-gpu-vbios-version`, `x-nvidia-gpu-driver-version` | Firmware and driver versions | What was loaded, by version string |
+| `x-nvidia-gpu-attestation-report-signature-verified`, `x-nvidia-gpu-vbios-rim-signature-verified` | Whether the report and the reference-measurement signatures checked out | That the vendor's keys signed the report and the reference values |
+
+The appraisal can run locally or against NVIDIA's Remote Attestation Service,
+which returns the token. Read the columns: every row is about the device's own
+identity and launch-time state, and the right-hand column never reaches
+quantity, workload, location, or authority.
+
+<Src>NVIDIA, [“Hopper Single GPU Attestation Example”](https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/hopper_single_gpu.html) and [“Architecture Overview,”](https://docs.nvidia.com/attestation/quick-start-guide/latest/architecture.html) *Attestation Quick Start Guide*, documentation current August 2026. First-party implementation documentation, not an independent adversarial evaluation.</Src>
+
+<Callout variant="note" title="Who holds the keys">
+The token above is signed under one vendor's key hierarchy, and the reference
+values it is checked against are published by the same vendor. The FLI *Draft
+Articles* keep that shape, with a single signer authorising chips. An
+alternative is split custody, where no one party can issue or revoke alone.
+Each buys something and costs something, and 2.1.6 red-teams the pair.
+</Callout>
+
+#### Dossier Row: Trust-Chain Autopsy
+
+<Exercise id="v-hw-trust-chain-autopsy" />
+
+<PageBreak title="Return to the Opening Puzzle" />
+
+#### Return to the Opening Puzzle
+
+You judged the laboratory's 20,000 tokens before this page. Two of those rows
+are now settled by the evidence above: whether the devices are genuine, and
+whether their certificates and approved configurations were valid when checked.
+A current attestation result supports both, inside the vendor's key boundary
+and at the moment of measurement. Nothing on this page has moved the rows
+about topology, workload, cumulative compute, unregistered hardware, or the
+authority to suspend.
+
+<ClaimLedger id="hw-opening-puzzle" set="hardware-opening" recall />

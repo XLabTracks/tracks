@@ -20,7 +20,39 @@ For example:
 
 Each proposition can be true while the treaty is still violated. A registered device may run prohibited work after attestation. A counter may omit activity on unregistered hardware. A classifier may correctly label every trace it sees while an operator bypasses the telemetry path. A license may be valid but issued by the wrong authority.
 
-#### Authenticity, correctness, and completeness
+#### Identify, Measure, Restrict
+
+Those propositions divide into three jobs, and the division is the one to
+carry through the rest of the section. A mechanism can **identify** (this is a
+covered device, here, in this configuration), **measure** (this much work
+happened, and it was of this kind), or **restrict** (this work was permitted,
+and unpermitted work does not run). They are not a ladder. Identity is the
+most mature of the three and answers none of the questions a threshold rule
+asks; restriction is the least mature and the most politically loaded, because
+it needs an authority holding a key.
+
+A proposal that sounds like all three usually does one and inherits the others
+by assertion. Naming which job a mechanism does is the first move of every
+appraisal in this section.
+
+<ReadingCard
+  id="hw-harack-verification"
+  href="https://aigi.ox.ac.uk/publications/verification-for-international-ai-governance/"
+  title="Verification for International AI Governance"
+  author="Harack, Trager, Reuel, et al. | Oxford Martin AI Governance Initiative"
+  year="2025"
+  mins="25 min"
+>
+
+Read the executive summary and the limits section: why leading-node chips
+cannot currently be verified non-destructively, and why the authors treat
+off-chip measurement as the near-term path. Read it with one question in hand:
+if off-chip is the near-term path, which of the three jobs above can the chip
+still be trusted to do on its own?
+
+</ReadingCard>
+
+#### Authenticity, Correctness, and Completeness
 
 Three questions recur throughout hardware verification.
 
@@ -32,10 +64,33 @@ Three questions recur throughout hardware verification.
 
 Hardware-rooted cryptography is often strongest on authenticity. Carefully designed measurement can improve correctness. Completeness usually requires evidence beyond the device itself.
 
-#### Notebook: initial claim map
+| Mechanism | Authenticity | Correctness | Completeness |
+| --- | --- | --- | --- |
+| Device identity and attestation | Strong, within the key boundary | Nothing, unless the state it measures is the state the rule names | Nothing |
+| Protected compute counter | Strong for the record, if the counter is protected | Partial: counts operations, not permission | Nothing |
+| Workload classifier on protected telemetry | As strong as the channel carrying the telemetry | Partial, and probabilistic | Nothing |
+| License token and offline authorization | Strong | Establishes permission, not what was done | Nothing |
+| Registry of covered devices | As strong as the entries' provenance | Nothing | Only over devices that were enrolled |
 
-Complete three sentences for the opening puzzle.
+The completeness column is the finding. Every on-chip mechanism in this
+section is blank there, and the last row is blank for anything that never
+entered the registry. Completeness is not a harder version of the same
+problem; it is a different kind of evidence, and it comes from customs
+records, foundry output, site inspection, power, and people.
 
-- The artifact directly supports…
-- It could support… if…
-- It does not support…
+<Check
+  id="hw-claim-acc-column"
+  q="A laboratory returns valid attestation from all 20,000 declared accelerators, plus protected counters showing every one of them stayed under threshold T. Which question is still entirely unanswered?"
+  options={[
+    "Whether accelerators outside the declared set ran the prohibited work",
+    "Whether the declared devices are genuine",
+    "Whether the counters were fresh at the time of reading",
+    "Whether the firmware matched an approved reference value",
+  ]}
+  answer={0}
+  why="Attestation and counters both begin with a device that is already inside the regime. Nothing they produce says anything about hardware that never enrolled, which is why completeness is the column that stays empty."
+/>
+
+#### Dossier Row: The Claim
+
+<Exercise id="v-hw-dossier-claim" />

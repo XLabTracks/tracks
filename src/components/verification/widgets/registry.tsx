@@ -154,6 +154,15 @@ const LocatingCompute = dynamic<VerificationWidgetProps>(
   { loading: WidgetLoading },
 );
 
+const MonitorEvader = dynamic<VerificationWidgetProps>(
+  () => import("./monitor-evader").then((module) => module.MonitorEvader),
+  { loading: WidgetLoading },
+);
+const ChainBuilder = dynamic<VerificationWidgetProps>(
+  () => import("./chain-builder").then((module) => module.ChainBuilder),
+  { loading: WidgetLoading },
+);
+
 export const verificationWidgets: Record<
   string,
   ComponentType<VerificationWidgetProps>
@@ -170,6 +179,8 @@ export const verificationWidgets: Record<
   "drills-intel-assessment": DrillsIntelAssessment,
   "datacenter-power": DatacenterPower,
   "locating-compute": LocatingCompute,
+  "monitor-evader": MonitorEvader,
+  "chain-builder": ChainBuilder,
   "policy-cost": PolicyCost,
   "mechanism-sort": MechanismSort,
   "mechanism-sort-reveal": MechanismSortReveal,

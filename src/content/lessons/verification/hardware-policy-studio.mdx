@@ -13,7 +13,20 @@ The most common error in this area is maturity inflation. Separate five stages.
 
 Do not infer stage five from evidence at stages one or two.
 
-#### Current assessment, dated August 2026
+<Check
+  id="hw-maturity-inflation"
+  q="A vendor writes: “Our confidential-computing GPUs are deployed at scale today, so treaty-grade compute verification is a deployment question, not a research question.” Which move does that sentence make?"
+  options={[
+    "It reads a stage-five claim off stage-one evidence: a shipping security feature is not an operating governance regime",
+    "It overstates the maturity of confidential computing, which is still a prototype",
+    "It confuses an end-to-end prototype with a relevant-scale pilot",
+    "Nothing: deployed hardware is the hard part, and the rest is institutional",
+  ]}
+  answer={0}
+  why="The premise is true. Confidential computing does ship, and it is a real deployed primitive. Everything after the comma is the inflation: nothing about a deployed confidentiality feature supplies metering, classification, coverage of unenrolled hardware, or an institution with the authority to act, and each of those is a separate stage with separate evidence."
+/>
+
+#### Current Assessment, Dated August 2026
 
 The evidence supports a bounded judgment.
 
@@ -40,11 +53,63 @@ The evidence supports a bounded judgment.
 - Reliable detection of all undeclared compute;
 - A politically accepted international authority for keys, reference values, suspension, appeal, and enforcement.
 
+Two facts belong in that judgement and are easy to leave out. The anti-spoofing
+guarantee of proof-of-learning is currently broken in the general case, so a
+checkpoint chain is cheap evidence rather than strong evidence. And the sound
+alternatives are held back by cost rather than by any political objection: the
+published zero-knowledge proof of training runs at about fifteen minutes of
+prover time per iteration on a ten-million-parameter network, and attested
+evaluation inside an enclave exists as a prototype rather than as a costed
+production path.
+
 A useful hardware recommendation therefore gives hardware a bounded job inside a layered regime. It names the corroborating evidence for the blind spot and the condition under which the recommendation expires.
 
-<PageBreak title="Hardware mechanism dossier" />
+<PageBreak title="Two Axes" />
 
-#### Hardware mechanism dossier
+#### Place the Mechanisms on Two Axes
+
+Take every mechanism this section has met, from device attestation to the rack
+meter, and place each on two axes: deployed today against proposed, and trusts
+the hardware against trusts access and consolidation.
+
+<Check
+  id="hw-two-axis"
+  q="Where does the bulk of what you have studied land?"
+  options={[
+    "Proposed, and trusting the hardware",
+    "Deployed, and trusting the hardware",
+    "Proposed, and trusting access",
+    "Spread evenly across the four quadrants",
+  ]}
+  answer={0}
+  why="Attestation and confidential computing are deployed and trust the hardware. Almost everything else that would answer a treaty question, metering, classification, location, licensing, is proposed and also trusts the hardware. The quadrant that trusts access and consolidation instead is nearly empty in this section, which is not evidence that it is wrong. It is evidence that this section is not where it is argued."
+/>
+
+#### What the Treaty Text Does With That
+
+<Callout variant="note" title="Reading: FLI Draft Articles, Annex B.2 and Annex C (20 min)">
+Read the verification annex and the enforcement annex from the copy in the
+course references. Surface one bullet in particular: the authorize, suspend,
+revoke and override powers, and who holds each. That list is the institutional
+half of every mechanism on the two axes above, and it is the half no chip
+supplies.
+</Callout>
+
+The FLI text and MIRI's proposed agreement make opposite bets with the same
+technology. FLI defines its trigger by risk and enforces it through the chips,
+by authorizing them in clock cycles. MIRI triggers on compute directly and
+leans on consolidating and watching the hardware itself rather than trusting
+what a chip reports.
+
+<Exercise id="v-hw-fli-miri" />
+
+<PageBreak title="Hardware Mechanism Dossier" />
+
+#### Hardware Mechanism Dossier
+
+Your rows from 2.1.1 through 2.1.6 are the raw material for this. Open them in
+your saved work and carry them across; what is left to write here is the
+judgement, not the description.
 
 Use the following common anatomy for any proposal.
 
@@ -71,16 +136,19 @@ Use the following common anatomy for any proposal.
 - Update condition and as-of date
 - Confidence and source notes
 
-#### Final written output: hardware assurance brief
+#### Final Written Output: The Bundle Decision
 
 **Length:** 700–1,000 words.
 **Audience:** a named national delegation or joint drafting group considering a three-month U.S.–China pause.
 
-<Prompt>Assess the role one proposed hardware architecture should play in verifying a rule that prohibits unlicensed above-threshold training while permitting inference and approved safety evaluations. Recommend a bounded use, a pilot or deployment pathway, and the independent evidence needed to cover the mechanism’s principal blind spot.</Prompt>
+<Prompt>The laboratory's evidence bundle is in front of your delegation: valid attestation from 20,000 declared accelerators, a registry extract with 240 devices in transit and one site without a location anchor, a counter record with thirty days missing, and a facility power record. Recommend one of three responses, and defend it: accept the bundle as evidence of compliance, request specified additional evidence, or reject it as insufficient. Then state what hardware should be built into the agreement itself, bounded, with the layer that covers what it cannot reach.</Prompt>
+
+This is a decision on a case, not a survey of the field. The assessment table
+above is reference material for it; 2.3 is where the landscape memo lives.
 
 Your brief must include:
 
-1. **Goal, rule, and claim.** State the policy objective, legal obligation, and exact proposition the mechanism tests.
+1. **Goal, rule, and claim.** State the policy objective, legal obligation, and exact proposition the bundle is offered as evidence for.
 2. **Actors and authority.** Name the prover, verifier, evidence producer, key or reference-value authority, decision authority, and enforcing institution.
 3. **Evidence and trust chain.** Explain what is measured, how evidence reaches the verifier, and which components or actors must remain trustworthy.
 4. **Maturity and deployment path.** Separate deployed primitives, demonstrated components, proposed components, and missing institutions.
@@ -104,9 +172,9 @@ Your brief must include:
 
 <MemoDesk lesson="hardware-policy-studio" />
 
-<PageBreak title="Return to the opening puzzle" />
+<PageBreak title="Return to the Opening Puzzle" />
 
-#### Return to the opening puzzle
+#### Return to the Opening Puzzle
 
 <ClaimLedger id="hw-opening-puzzle" set="hardware-opening" recall />
 

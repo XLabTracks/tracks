@@ -156,7 +156,7 @@ window.COURSE = {
           "id": "2.1",
           "title": "Hardware",
           "kind": "explainer",
-          "mins": "165–180 min",
+          "mins": "9 h core, 45 min optional",
           "href": "/tracks/verification/verification-infrastructure/hardware-attestation",
           "lessons": [
             "hardware-attestation",

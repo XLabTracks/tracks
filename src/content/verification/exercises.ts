@@ -175,4 +175,103 @@ export const verificationExercises: Exercise[] = [
     sampleAnswer:
       "- Diversion: public indictments and investigative reporting on chips leaving legitimate supply chains — Supermicro employees accused of diverting $2.5 billion of Nvidia servers to a pass-through entity, a Singaporean cloud provider with tens of thousands fewer chips in its Malaysian datacenters than it imported, and a table of smaller cases; allegations total about 282,000 H100-equivalents.\n\n- Resale: reporting on the grey market inside China — more than seventy distributors on one marketplace, nearly a hundred stores on another, orders of two or three hundred chips at a time and one of two thousand, contracts and photographs of chips physically present.\n\n- Which of the three streams it uses: none. No customs records, no export-licence data, no financial intelligence — those sit with governments. The public estimate rests on what enforcement has already surfaced (indictments) and what reporters found, and its largest guess is the share nobody detected: a detection rate of 10–80% with a median of 25%, plus whether alleged diversions arrived.\n\n- What that tells you: an outside observer sees the procurement trail only where a prosecutor or a journalist has already pulled it into the open. The rest is modelled, and the interval is the width of that model's uncertainty.\n\n- The one action: the Supermicro indictment. Its roughly 80,000 chips, about 141,000 H100-equivalents, are the largest single allegation on the diversion side, close to half of the ~300,000 H100-equivalents alleged in total; Megaspeed is next at about 111,000. Without it the diversion side loses its anchor and the estimate leans on the resale side alone.",
   },
+  {
+    id: "v-hw-dossier-claim",
+    type: "writing-prompt",
+    format: "free-form",
+    prompt:
+      "Dossier row: the claim. Complete three sentences about the laboratory's evidence bundle, then answer one question.\n\n- The bundle directly supports…\n- It could support… if…\n- It does not support…\n\nThe question: of identify, measure and restrict, which job is the bundle actually doing, and which is it asserting?",
+    sampleAnswer:
+      "- Directly supports: that 20,000 devices carrying credentials in the vendor's identity scheme existed, answered a fresh challenge, and reported firmware matching the vendor's published reference values at the moment they were asked.\n\n- Could support, if: it could support a statement about the configuration of a cluster if the evidence fields included topology and the product and mode attested switches rather than devices one at a time; it could support a statement about quantity if a protected counter with an unbroken record were part of the bundle.\n\n- Does not support: that the counted work stayed under the threshold, that the workload was inference rather than training, that the devices were where the laboratory says they were, that no unenrolled accelerator ran the prohibited work, or that anyone has the authority to switch them off.\n\n- The job: identify, and only identify. The bundle asserts measurement and restriction by association, in the sense that a compliant-looking cluster is offered as evidence of compliant behaviour, but nothing in it measures work or constrains it.",
+    minWords: 120,
+    maxWords: 250,
+  },
+  {
+    id: "v-hw-trust-chain-autopsy",
+    type: "writing-prompt",
+    format: "free-form",
+    prompt:
+      "Trust-chain autopsy. Work the attestation result on this page and commit four short answers before opening the model answer.\n\n1. The exact claim the result makes, and the root or roots of trust that claim inherits.\n2. The component that performs the measurement, and who publishes the reference values it is compared against.\n3. Who can update the firmware, who can revoke a key or a reference value, who appraises the evidence, and who decides what follows from the appraisal.\n4. The strongest adversary this evidence is exposed to in a treaty setting, one failure that would take several of these links down at once, and one corroborating source that does not depend on the device's key.",
+    sampleAnswer:
+      "1. The claim: at the moment this nonce was answered, a device with this identifier, of this model, was running firmware and driver versions whose measurements equalled the vendor's published reference values, with secure boot on and debug off. It inherits the on-die key provisioned in manufacturing, the vendor's certificate hierarchy over that key, and the integrity of the reference measurements the comparison is made against.\n\n2. The measurement is taken by the device's own boot and firmware measurement path, and the reference values are published by the same manufacturer that made the device and provisioned its key. Measurement and standard have one owner.\n\n3. Firmware updates come from the vendor, usually through the operator, who chooses when to apply them. Revocation of a key, a certificate or a reference value is the vendor's. Appraisal can run locally or at the vendor's attestation service. The decision that follows belongs to whoever the agreement names, which in this case is nobody yet: that is the gap the section keeps returning to.\n\n4. The strongest adversary is the owner with unlimited physical access and time, which is the treaty case rather than the cloud case the design was built for. The common-mode failure is the vendor's key hierarchy: compromise or coercion there invalidates identity, measurement and any licensing built on the same root at once, however many separate mechanisms they appear to be. Independent corroboration would be evidence that does not pass through that key at all: a rack meter installed and sealed by the verifying party, a physical inspection of the enclosure, customs and foundry records for the devices themselves.",
+    minWords: 200,
+    maxWords: 400,
+  },
+  {
+    id: "v-hw-dossier-accounting",
+    type: "writing-prompt",
+    format: "free-form",
+    prompt:
+      "Dossier row: accounting. In three short paragraphs, using the registry extract: what the registry establishes about the laboratory's holdings, what the gap is and which stream would close it, and which question you would put to the operator first.",
+    sampleAnswer:
+      "- What it establishes: that 20,000 device identities are enrolled and that 19,760 of them produced device evidence inside the window. That is a reconciliation between two records the regime holds, and it is worth having, because it makes any later discrepancy visible.\n\n- The gap: 240 devices produced no evidence at all and 1,460 produced device evidence with nothing tying it to a place, so 1,700 sit outside a claim that joins identity to location. Shipping and customs records would close the first; a location anchor at Site C, or a physical count there, would close the second. Neither stream is produced by this section, and both belong to institutions outside the laboratory.\n\n- The first question: the transit records for the 240, with dates and destinations, because it is the cheapest question, it is answerable from documents the operator already holds, and an operator who cannot answer it has told you something more useful than the answer would have.",
+    minWords: 100,
+    maxWords: 250,
+  },
+  {
+    id: "v-hw-dossier-measuring",
+    type: "writing-prompt",
+    format: "free-form",
+    prompt:
+      "Dossier row: measurement. What did the meter record, how closely does that quantity match the legal rule, and what would the classifier have to be wired into before its output could be used against a state-backed owner?",
+    sampleAnswer:
+      "- What the meter recorded: 4.2 × 10^26 counted operations across 60 of the 90 days, on the devices that were enrolled and reporting. Thirty days are missing from the record, and the memory plateau across those days says the machines were not idle.\n\n- Against the rule: the rule is about unlicensed training above a threshold. The meter counts operations, without regard to whether they were training or whether they were licensed, and it counts them only where a counter was installed and running. It is evidence about one term of a three-term rule, with a hole in it.\n\n- What the classifier would need: tamper-resistant telemetry rooted in hardware rather than in the operator's software, an authenticated channel to the verifier, protected monitoring code, aggregation rules across devices and time that the operator cannot silently rewrite, and coverage of the hardware the laboratory did not enrol. The published result is a classifier evaluated on a corpus; none of those components exist in a product, and the study assumes the first two rather than providing them.",
+    minWords: 120,
+    maxWords: 280,
+  },
+  {
+    id: "v-hw-dossier-authorization",
+    type: "writing-prompt",
+    format: "free-form",
+    prompt:
+      "Dossier row: authorization. For the license token on this page: who issues it, what it can and cannot enforce, and what the design does when the issuer is unreachable. Then one line on which failure you would rather the treaty own.",
+    sampleAnswer:
+      "- Issuer: a single signing key. In the FLI text that is the Agency's; in an export-control framing it would be one government's; in a bilateral pilot it might be split across parties, which is a different design with different failure modes.\n\n- Can enforce: a quantity, as a clock-cycle allowance the device draws down, and a window, against the device's own clock. Cannot enforce: the workload condition written into the same token, because the chip has no way to test whether what it is running is training. That condition is enforced by the counter, the classifier or an inspection, or it is not enforced at all.\n\n- Unreachable issuer: the design has to choose. Fail open converts every outage into permission and rewards anyone who can cause one. Fail closed hands whoever can cut a link the power to stop lawful work, which is the instrument the treaty was trying to place under an authority in the first place.\n\n- Which failure to own: the treaty should own the false denial, because a false denial is visible, appealable and compensable, while a silent grant of permission during an outage is none of those. That is a judgement rather than a fact, and it should be argued in the text rather than left to firmware.",
+    minWords: 120,
+    maxWords: 280,
+  },
+  {
+    id: "v-hw-key-custody",
+    type: "writing-prompt",
+    format: "free-form",
+    prompt:
+      "Key custody, red team. Two custody designs for the key that authorises chips: a single hardware security module in one jurisdiction, and a 3-of-5 threshold split across rival states. Name the new failure each one introduces, not the one it removes. Then say which you would sign, and what you would demand alongside it.",
+    sampleAnswer:
+      "- Single HSM: one theft, one coercion, or one lawful order in one jurisdiction reaches every chip in the regime at once. The failure is not only compromise but leverage: whoever hosts it can be pressured, and every party knows it, which makes the mechanism hard to accept and easy to walk away from.\n\n- 3-of-5 across rivals: no single party can authorise or revoke alone, and the new failures are collusion and deadlock. Three parties who agree can act against the other two, and five parties who disagree can leave a legitimate suspension unsigned while the clock runs. Threshold custody converts a security problem into a diplomatic one, and diplomatic problems do not resolve on the timescale of a training run.\n\n- Which to sign: the threshold split, because the single-HSM failure is unbounded and the threshold failures are at least visible and negotiable. Alongside it: a written time limit on how long a request may sit unsigned, a defined emergency path with mandatory review afterwards, published logs of every signature and refusal, and a recovery procedure for a compromised share that does not require re-provisioning every chip.\n\n- Out of scope here: whether the institution holding the shares is independent enough to be trusted with them. That is 2.3.9's question, and it is not answered by cryptography.",
+    minWords: 150,
+    maxWords: 320,
+  },
+  {
+    id: "v-hw-dossier-trust",
+    type: "writing-prompt",
+    format: "free-form",
+    prompt:
+      "Dossier row: trust placement. For the pilot on this page, answer four things. What would the host delegation distrust, what would the visiting delegation distrust, whose cooperation is indispensable, and what is the smallest result that would justify a larger deployment?",
+    sampleAnswer:
+      "- Host distrusts: foreign-supplied hardware inside its electrical room, the possibility that a meter carries more capability than its design admits, and the inference a rival can draw from a facility's hourly load about work that has nothing to do with the agreement.\n\n- Visitor distrusts: that the host installed the meters where it said, that a paused meter was paused for the reason given, and that the racks being measured are the racks doing the work.\n\n- Indispensable cooperation: the site operator's, because nothing here is installed against the will of the party that owns the building. That is the standing weakness of every in-facility mechanism and the reason evidence from outside the fence keeps its value.\n\n- Smallest justifying result: a year of readings in which the two sides agree on what the record shows, no meter is paused without an accepted reason, and at least one engineered attempt to defeat a sealed meter is documented and either succeeds or fails on the record. If the parties cannot agree on the meaning of an uncontested reading at a commercial site with nothing at stake, they will not agree on a contested one under a pause.",
+    minWords: 130,
+    maxWords: 300,
+  },
+  {
+    id: "v-hw-verification-budget",
+    type: "writing-prompt",
+    format: "free-form",
+    prompt:
+      "Buy assurance with a verification budget. A declared training transcript arrives with a verification-compute budget worth a few percent of the original run. Allocate it across full re-running, random segment sampling, checkpoint checks, code and data commitments, physical compute totals, telemetry-timing comparison, and random chip inspection. For each thing you fund, state the cost, what it exposes commercially, where a prover would attack it, and what it buys. Then name the claim your allocation leaves untested.",
+    sampleAnswer:
+      "- Not funded: full re-running. It roughly doubles the cost of the original run, which the budget cannot carry, and it is the option people reach for because it sounds complete rather than because it is affordable.\n\n- Funded, most of the budget: random segment sampling against the transcript. Cost scales with the sample rather than the run; exposure is high, because segments reveal data and hyperparameters; a prover attacks it by predicting which segments will be drawn, so the draw must be unpredictable and made after the transcript is committed; it buys probabilistic evidence that the declared process produced the declared checkpoints.\n\n- Funded, small: code and data commitments taken before the run, and checkpoint hashes. Nearly free, minimal exposure, and they are what makes the sampling mean anything: sampling against a transcript the prover could rewrite afterwards tests nothing.\n\n- Funded, small: physical compute totals and telemetry-timing comparison, as a cross-check from a different stream. Cheap, low exposure, coarse. A prover attacks them by shaping the load, and the value is not the number but the disagreement it can surface with the transcript.\n\n- Funded, minimal: random chip inspection, as a deterrent rather than a measurement.\n\n- Untested: fleet completeness. Every item above is evidence about the run that was declared. None of it says a second run did not happen on hardware that never entered the regime, and no allocation of this budget can, because the budget is spent inside the declaration.\n\n- Worth stating in the allocation: a checkpoint chain is cheap evidence and not strong evidence, because the anti-spoofing guarantee behind proof-of-learning is currently broken in the general case, and the sound alternatives are priced out of a budget this size: the published zero-knowledge proof of training costs about fifteen minutes of prover time per iteration at ten million parameters, and attested evaluation in an enclave is a prototype rather than a costed path.",
+    minWords: 200,
+    maxWords: 400,
+  },
+  {
+    id: "v-hw-fli-miri",
+    type: "writing-prompt",
+    format: "free-form",
+    prompt:
+      "One paragraph, saved for your brief. FLI's agreement triggers on risk and enforces through the chips; MIRI's triggers on compute and leans on consolidating and watching the hardware. Which of the two can the hardware you have just studied actually enforce, and what does the other one lean on instead?",
+    sampleAnswer:
+      "The hardware in this section can enforce the compute-shaped half of either scheme and neither of the risk-shaped halves. Clock-cycle authorization, a protected counter, and a device that refuses to compute without a valid token are all instruments for bounding a quantity on an enrolled chip, and FLI's Annex C is exactly that instrument attached to a rule whose trigger no chip can evaluate: the Agency's judgement about uses, risks and capabilities is made by people reading a document. MIRI's compute trigger is the one a meter could in principle test, but its verification does not rest on the chip reporting honestly; it rests on knowing where the chips are and keeping them in a small number of watched places, which is a claim about custody and counting rather than about telemetry. The practical difference is what each fails to: FLI fails to a chip whose owner has defeated it, and MIRI fails to a chip that was never counted. Both of those are covered, if at all, from outside the box.",
+    minWords: 120,
+    maxWords: 260,
+  },
 ];

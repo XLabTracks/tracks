@@ -46,7 +46,7 @@ import {
    the neighbouring lesson's title at the ends. They paint with border/muted
    tokens only, never --destructive: public/verification/theme.css re-points
    the palette on the Verification routes but never defines --destructive, so
-   anything painted with it would ignore the high-contrast theme and stay the
+   anything painted with it would ignore the Verification theme and stay the
    app's generic red.
 
    Parts are hidden, never unmounted: an embedded exercise or widget holds a

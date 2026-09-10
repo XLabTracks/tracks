@@ -1,34 +1,27 @@
-/* Theme switch for the standalone verification pages. Three themes — day,
-   night, high contrast — written to data-theme on <html> and remembered.
+/* Theme switch for the standalone verification pages. Two themes — day and
+   night — written to data-theme on <html> and remembered.
 
    Trap: the class has to land before first paint or the page flashes the
    wrong ground, so the head carries a tiny inline copy of the read step
    (see BOOT below) and this file only wires the control. Keep the two in
-   agreement: same storage key, same attribute, same values.
-
-   High contrast is never inferred from the system. prefers-color-scheme
-   chooses between day and night only. */
+   agreement: same storage key, same attribute, same values. */
 
 (function () {
   var KEY = "xlab-verification-theme";
-  var THEMES = ["light", "dark", "contrast"];
+  var THEMES = ["light", "dark"];
 
   var ICONS = {
     light:
       '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
     dark: '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>',
-    contrast:
-      '<circle cx="12" cy="12" r="9"/><path d="M12 3v18a9 9 0 0 0 0-18z" fill="currentColor" stroke="none"/>',
   };
   var LABELS = {
     light: "Day",
     dark: "Night",
-    contrast: "High contrast and larger text",
   };
   var SHORT = {
     light: "Day",
     dark: "Night",
-    contrast: "High contrast",
   };
 
   function stored() {
@@ -69,7 +62,6 @@
     // The native Verification palette uses data-theme; app chrome and shadcn
     // use Tailwind's classes. Keep both surfaces on the selected theme.
     root.classList.toggle("dark", theme !== "light");
-    root.classList.toggle("contrast", theme === "contrast");
     try {
       localStorage.setItem(KEY, theme);
     } catch (e) {

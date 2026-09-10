@@ -17,8 +17,7 @@ import type { Track } from "@/lib/content/types";
  * The finished card follows the course owner's artwork: maroon ground, a
  * white disc with the tick in it, then the two lines. Its colours are
  * theme.css tokens, never the artwork's literal hex — the same card has to
- * survive the day and high-contrast grounds, where the maroon is a different
- * value or not maroon at all.
+ * survive the day and night grounds, where the maroon is a different value.
  */
 
 export interface CompletionState {
@@ -60,9 +59,8 @@ export function CompletionHeader({
   if (unitsLeft <= 0 && writingLeft <= 0) {
     return (
       <section className="bg-primary text-primary-foreground shadow-soft-lg mt-6 rounded-2xl px-6 py-10 text-center sm:px-10">
-        {/* The artwork's white disc with the maroon tick, said in tokens: the
-            pair inverts with the ground, so high contrast gets a black disc
-            and a yellow tick rather than a yellow tick on white. */}
+        {/* The artwork's white disc with the maroon tick, said in tokens, so
+            the pair re-solves with the ground on the night theme. */}
         <span
           aria-hidden
           className="bg-primary-foreground text-brand-ink mx-auto flex size-16 items-center justify-center rounded-full"

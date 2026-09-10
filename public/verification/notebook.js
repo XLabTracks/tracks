@@ -15,7 +15,7 @@
 
    Mechanics follow the Pony Arena notebook in the design repo; the surface is
    this site's — theme.css variables only, no literal colour, so it follows
-   day, night and high contrast untouched.
+   day and night untouched.
 
    Exposes window.VTNotebook = { open, close, addNote, addQuote, count } so a
    page script can push a selection straight in.

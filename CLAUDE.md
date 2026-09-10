@@ -695,7 +695,7 @@ Traps that cost time already, so they are written down:
 - `public/verification/` is outside `tsconfig`'s include and outside vitest's
   (`src/**/*.test.ts`). Nothing there is typechecked or tested, and a green
   suite says nothing about it. Drive it in a browser.
-- `theme.css` is the only file that knows a colour; three themes over one set
+- `theme.css` is the only file that knows a colour; two themes over one set
   of variable names. `--primary` fills and `--brand-ink` writes. The two
   wordmark files are chosen by CSS, and those rules must stay **after**
   `.brand-mark` — it sets `display:block` at equal specificity, so ordering is
@@ -750,8 +750,8 @@ Traps that cost time already, so they are written down:
 
 The course pages' own mechanics, for as long as they are scripts:
 
-- **`theme.css` is the only file that knows a colour.** Three themes — day,
-  night, high contrast — over one set of variable names, so a rule reading
+- **`theme.css` is the only file that knows a colour.** Two themes — day and
+  night — over one set of variable names, so a rule reading
   `--border` or `--primary` follows the switch untouched. `--primary` fills
   and `--brand-ink` writes (maroon is a fine surface on dark and unreadable
   as text on it); `--mod-0…4` run **Chinese Red · Satsuma · Lunar Yellow ·
@@ -762,12 +762,12 @@ The course pages' own mechanics, for as long as they are scripts:
   for its own ground, so day is those five darkened to carry as text, not five
   other colours; every value clears 4.5:1 where it is set. They stay
   decorative — warm neighbours converge for a protanope — so they and
-  `--ok`/`--no` (Wong) are always accompanied by a word, glyph or fraction. High
-  contrast is picked, never inferred. The read step runs inline in
+  `--ok`/`--no` (Wong) are always accompanied by a word, glyph or fraction. The
+  read step runs inline in
   `src/app/layout.tsx` (`THEME_BOOT`) before the body does, so the ground is
   right at first paint — `theme.js` runs after hydration, and on its own it
   paints the day ground and then repaints. Keep the two in step: same
-  storage key, same attribute, same three values. `fonts.css` carries Space Grotesk
+  storage key, same attribute, same two values. `fonts.css` carries Space Grotesk
   as a data URI.
 - **`platform.js` owns the shared runtime**; `platform.css` the components on
   top of `theme.css`. Its `VT.mountChrome()` / `VT.mountFoot()` are dead on

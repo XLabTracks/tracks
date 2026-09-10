@@ -28,6 +28,13 @@ export default function Error({
         The page hit an unexpected error. This is usually temporary — try again,
         or head back to your tracks.
       </p>
+      {/* The digest is the only thread between a reader's screenshot and the
+          thrown error in the Workers log, which is where the cause is. */}
+      {error.digest && (
+        <p className="text-muted-foreground mt-3 font-mono text-xs">
+          Error ID: {error.digest}
+        </p>
+      )}
       <div className="mt-6 flex gap-3">
         <Button onClick={reset}>Try again</Button>
         <Button asChild variant="outline">

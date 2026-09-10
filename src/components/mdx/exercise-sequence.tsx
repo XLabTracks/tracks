@@ -1,6 +1,5 @@
 import { getExerciseById } from "@/lib/content";
-import { getCurrentUser } from "@/lib/auth";
-import { getExerciseSubmissionMap } from "@/lib/progress";
+import { getViewerSubmissions } from "@/lib/progress";
 import { isChoiceExercise, type TapRevealRating } from "@/lib/content/types";
 import { toPublicChoice } from "@/lib/content/exercise-view";
 import {
@@ -20,10 +19,9 @@ export interface ExerciseSequenceProps {
 // For signed-in users, prior tap-reveal ratings are loaded so already-reviewed
 // parts start completed. Choice parts strip their answer key via toPublicChoice.
 export async function ExerciseSequence({ ids, label }: ExerciseSequenceProps) {
-  const user = await getCurrentUser();
-  // One query for all of this user's exercise submissions (shared, request-
+  // One query for all of this reader's exercise submissions (shared, request-
   // cached), instead of a sequential point lookup per tap-reveal part.
-  const submissions = user ? await getExerciseSubmissionMap(user.id) : null;
+  const { submissions } = await getViewerSubmissions();
 
   const parts: SequencePart[] = [];
   for (const id of ids) {
@@ -51,7 +49,7 @@ export async function ExerciseSequence({ ids, label }: ExerciseSequenceProps) {
         exercise: toPublicChoice(exercise),
       });
     } else if (exercise.type === "tap-reveal") {
-      const submission = submissions?.get(exercise.id) ?? null;
+      const submission = submissions.get(exercise.id) ?? null;
       const initialRating =
         (submission?.responseJson as { rating?: TapRevealRating } | null)
           ?.rating ?? null;

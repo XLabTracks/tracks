@@ -17,8 +17,7 @@ import {
   type StagedQuestionEntry,
 } from "@/lib/content/exercise-view";
 import { writingPromptHtml } from "@/lib/content/writing-prompt-html";
-import { getCurrentUser } from "@/lib/auth";
-import { getExerciseSubmissionMap } from "@/lib/progress";
+import { getViewerSubmissions } from "@/lib/progress";
 import {
   reopenWriting,
   saveWritingDraft,
@@ -60,6 +59,13 @@ function storedGradeProps(
   };
 }
 
+// The grading card's key picker is an extra, and it reads the DB: a failed
+// read hides the picker (grading falls back to the automatic choice) rather
+// than taking the lesson down with it.
+async function graderKeyView(userId: string) {
+  return getGraderKeyView(userId).catch(() => null);
+}
+
 export interface ExerciseProps {
   id: string;
 }
@@ -81,10 +87,8 @@ export async function Exercise({ id }: ExerciseProps) {
   }
 
   if (exercise.type === "flowchart") {
-    const user = await getCurrentUser();
-    const submission = user
-      ? ((await getExerciseSubmissionMap(user.id)).get(exercise.id) ?? null)
-      : null;
+    const { submissions } = await getViewerSubmissions();
+    const submission = submissions.get(exercise.id) ?? null;
     const stored = (
       submission?.responseJson as {
         stages?: Record<
@@ -119,10 +123,8 @@ export async function Exercise({ id }: ExerciseProps) {
   }
 
   if (exercise.type === "tap-reveal") {
-    const user = await getCurrentUser();
-    const submission = user
-      ? ((await getExerciseSubmissionMap(user.id)).get(exercise.id) ?? null)
-      : null;
+    const { submissions } = await getViewerSubmissions();
+    const submission = submissions.get(exercise.id) ?? null;
     const initialRating =
       (submission?.responseJson as { rating?: TapRevealRating } | null)
         ?.rating ?? null;
@@ -130,10 +132,8 @@ export async function Exercise({ id }: ExerciseProps) {
   }
 
   if (exercise.type === "allocation") {
-    const user = await getCurrentUser();
-    const submission = user
-      ? ((await getExerciseSubmissionMap(user.id)).get(exercise.id) ?? null)
-      : null;
+    const { user, submissions } = await getViewerSubmissions();
+    const submission = submissions.get(exercise.id) ?? null;
     const initialScenarios = (
       submission?.responseJson as {
         scenarios?: Record<string, AllocationScenarioEntry>;
@@ -154,10 +154,8 @@ export async function Exercise({ id }: ExerciseProps) {
   }
 
   if (exercise.type === "control-scenarios") {
-    const user = await getCurrentUser();
-    const submission = user
-      ? ((await getExerciseSubmissionMap(user.id)).get(exercise.id) ?? null)
-      : null;
+    const { user, submissions } = await getViewerSubmissions();
+    const submission = submissions.get(exercise.id) ?? null;
     const initialScenarios = (
       submission?.responseJson as {
         scenarios?: Record<string, ControlScenarioEntry>;
@@ -173,10 +171,8 @@ export async function Exercise({ id }: ExerciseProps) {
   }
 
   if (exercise.type === "staged-questions") {
-    const user = await getCurrentUser();
-    const submission = user
-      ? ((await getExerciseSubmissionMap(user.id)).get(exercise.id) ?? null)
-      : null;
+    const { user, submissions } = await getViewerSubmissions();
+    const submission = submissions.get(exercise.id) ?? null;
     const initialQuestions = (
       submission?.responseJson as {
         questions?: Record<string, StagedQuestionEntry>;
@@ -192,10 +188,8 @@ export async function Exercise({ id }: ExerciseProps) {
   }
 
   if (exercise.type === "commit-construct") {
-    const user = await getCurrentUser();
-    const submission = user
-      ? ((await getExerciseSubmissionMap(user.id)).get(exercise.id) ?? null)
-      : null;
+    const { user, submissions } = await getViewerSubmissions();
+    const submission = submissions.get(exercise.id) ?? null;
     const responseJson = submission?.responseJson as {
       commit?: CommitConstructCommitEntry;
       construct?: CommitConstructConstructEntry;
@@ -211,10 +205,8 @@ export async function Exercise({ id }: ExerciseProps) {
   }
 
   if (exercise.type === "argue-reveal") {
-    const user = await getCurrentUser();
-    const submission = user
-      ? ((await getExerciseSubmissionMap(user.id)).get(exercise.id) ?? null)
-      : null;
+    const { user, submissions } = await getViewerSubmissions();
+    const submission = submissions.get(exercise.id) ?? null;
     const responseJson = submission?.responseJson as {
       items?: Record<string, ArgueRevealItemEntry>;
       construction?: ArgueRevealConstructionEntry;
@@ -235,7 +227,7 @@ export async function Exercise({ id }: ExerciseProps) {
             <TransparencyFeedback
               contentId={exercise.id}
               kind="exercise"
-              keyView={(await getGraderKeyView(user.id)) ?? undefined}
+              keyView={(await graderKeyView(user.id)) ?? undefined}
               {...storedGradeProps(submission)}
             />
           ) : undefined
@@ -255,12 +247,11 @@ export async function Exercise({ id }: ExerciseProps) {
 
   if (isWritingExercise(exercise)) {
     const promptHtml = writingPromptHtml(exercise.prompt);
-    const user = await getCurrentUser();
+    const { user, submissions } = await getViewerSubmissions();
     if (!user) {
       return <WritingExerciseCard exercise={exercise} promptHtml={promptHtml} />;
     }
-    const submission =
-      (await getExerciseSubmissionMap(user.id)).get(exercise.id) ?? null;
+    const submission = submissions.get(exercise.id) ?? null;
     return (
       <>
         {/* Keyed on the submission's lifecycle, not its updatedAt: submit and
@@ -301,7 +292,7 @@ export async function Exercise({ id }: ExerciseProps) {
               <TransparencyFeedback
                 contentId={exercise.id}
                 kind="exercise"
-                keyView={(await getGraderKeyView(user.id)) ?? undefined}
+                keyView={(await graderKeyView(user.id)) ?? undefined}
                 {...storedGradeProps(submission)}
               />
             </div>

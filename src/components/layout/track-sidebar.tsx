@@ -637,7 +637,17 @@ function usePersistedDimension(key: string, clamp: (value: number) => number) {
   const [value, setValue] = useState<number | null>(null);
 
   useLayoutEffect(() => {
-    const stored = Number(window.localStorage.getItem(key));
+    // Guarded like the write below and like every other stored preference in
+    // the app: a browser that refuses site data throws on the *access*, and
+    // an effect that throws takes the nearest error boundary with it — which
+    // here is the whole track layout, sidebar and lesson both, replaced by
+    // "Something went wrong" on a page that needs no storage to be read.
+    let stored = NaN;
+    try {
+      stored = Number(window.localStorage.getItem(key));
+    } catch {
+      return;
+    }
     if (Number.isFinite(stored) && stored > 0) {
       // One deliberate mount-time re-render, before paint: localStorage is
       // unreadable during SSR/hydration, and applying the stored value after

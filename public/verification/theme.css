@@ -758,11 +758,15 @@ button,
 
 /* A floor, not a fixed size: at the default size neither one's content reaches
    it, so both settle on exactly the same number — which is the point. Setting
-   `width` instead would clip the label the moment the type grew. */
-.header-right .theme-switch,
+   `width` instead would clip the label the moment the type grew. The theme
+   switch shares only the height: with two segments its content is narrower
+   than the floor, and a width floor would leave dead ground inside its border. */
 .header-right > .btn.small,
 .header-right > #verification-notebook-launcher {
   min-width: var(--hdr-action-w);
+  min-height: var(--hdr-action-h);
+}
+.header-right .theme-switch {
   min-height: var(--hdr-action-h);
 }
 
@@ -771,15 +775,7 @@ button,
 .theme-switch {
   display: inline-flex;
   align-items: center;
-  /* The switch shares the account button's width floor, and at the large
-     text size the floor (sized for that button's grown label) exceeds the two
-     segments' content. Space-between feeds the slack into the two
-     inter-segment gaps so the end segments stay against the padding on both
-     sides — flex-start pools all of it after the selected segment, a stretch
-     of dead ground inside the border. `gap` is the floor the gaps never drop
-     below; at the default size content meets the width floor and nothing
-     moves. */
-  justify-content: space-between;
+  /* Content-sized: two squares, one 2px gap, the padding, the border. */
   gap: 2px;
   padding: 2px;
   border: var(--hairline) solid var(--border);

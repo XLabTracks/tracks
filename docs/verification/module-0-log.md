@@ -1020,3 +1020,21 @@ Then, on the owner's next instruction, the verdict marks return without
 words: once a row has been opened, 1–3 carry a red X and their question is
 struck through, and 4 carries a green checked box; the marks persist after
 the row is closed. `holds` is back in the data for that one distinction.
+
+## 2026-09-12 — 0.1: The Future Society card before the field map
+
+Owner's instruction: a card for the organization's international AI
+verification page, in the paragraph before the landscape map, at the end of
+"What has AI verification looked like so far?".
+
+The card carries the link, the title as the page's own URL names it, and the
+organization. It carries no description of the page's contents, because the
+page could not be read from here: thefuturesociety.org answers every
+datacenter request with a CAPTCHA redirect (direct, through a text relay,
+and through a real headless browser alike), the Wayback Machine has no
+snapshot, and no search index would return one. The URL therefore went into
+the citations registry's `pending` list rather than getting an invented
+entry, so the lesson's appendix counts it as awaiting verification instead
+of printing facts nobody checked. Owner: send the page's real title and a
+line on what it is, and both the card and the registry entry can be
+finished.

@@ -248,6 +248,13 @@
       "container": "arXiv",
       "date": "July 2025"
     },
+    "https://arxiv.org/html/2511.10783v1": {
+      "title": "An International Agreement to Prevent the Premature Creation of Artificial Superintelligence",
+      "about": "MIRI's draft agreement, read here for its two training-compute thresholds: a Strict Threshold above which training is prohibited and a lower Monitored Threshold above which a run must be approved and monitored.",
+      "authors": "Scher, Aaron, David Abecassis, Peter Barnett, et al.",
+      "container": "arXiv",
+      "date": "Nov. 2025"
+    },
     "https://arxiv.org/pdf/2506.15867#page=128": {
       "title": "Mechanisms to Verify International Agreements About AI Development",
       "about": "MIRI's mechanism-by-mechanism study of how countries could verify compliance with negotiated AI rules, across three policy scenarios.",
@@ -628,6 +635,12 @@
       "org": "Arms Control Association",
       "date": "2024"
     },
+    "https://www.armscontrol.org/factsheets/new-start-glance": {
+      "title": "New START at a Glance",
+      "about": "The treaty's limits and counting rules: 1,550 accountable deployed strategic warheads, warheads on deployed missiles counted as actual reentry vehicles, and each heavy bomber counted as one warhead whatever it could carry.",
+      "org": "Arms Control Association",
+      "date": "2026"
+    },
     "https://www.bellingcat.com/resources/2025/08/14/llms-vs-geolocation-gpt-5-performs-worse-than-other-ai-models/": {
       "title": "LLMs vs. Geolocation: GPT-5 Performs Worse Than Other AI Models",
       "about": "Bellingcat's second round of 500 geolocation trials, language models against Google Lens on the team's own holiday photos: strongest on scenes with signs and architecture, weakest on remote landscapes, and every model hallucinating at some point.",
@@ -682,6 +695,13 @@
       "authors": "Heim, Lennart, and Leonie Koessler",
       "publisher": "Centre for the Governance of AI",
       "date": "7 Aug. 2024"
+    },
+    "https://www.govinfo.gov/content/pkg/BILLS-119hr3447ih/html/BILLS-119hr3447ih.htm": {
+      "title": "Chip Security Act (H.R. 3447, 119th Congress, as introduced in the House)",
+      "about": "The introduced House bill directing Commerce to require location-verification mechanisms on covered advanced chips before export, and to require reporting of location discrepancies, diversion, and tampering; its definitions section sets out what counts as a chip security mechanism.",
+      "org": "United States Congress",
+      "date": "15 May 2025",
+      "standalone": true
     },
     "https://www.iaea.org/publications/magazines/bulletin/57-2/completing-the-picture-using-satellite-imagery-to-enhance-iaea-safeguards-capabilities": {
       "title": "Completing the Picture: Using Satellite Imagery to Enhance IAEA Safeguards Capabilities",
@@ -864,7 +884,8 @@
     "https://arxiv.org/abs/2103.05633",
     "https://arxiv.org/abs/2108.09454",
     "https://arxiv.org/abs/2208.03567",
-    "https://arxiv.org/abs/2307.00682"
+    "https://arxiv.org/abs/2307.00682",
+    "https://thefuturesociety.org/international-ai-verification"
   ],
   "excluded": [
     "https://creativecommons.org/licenses/by/4.0/",

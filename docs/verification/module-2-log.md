@@ -3206,3 +3206,42 @@ listed sources and the Src citation block ("this is not supposed to be
 there"). The five sources stay in the registry because 2.1's later sections
 link them. The page is now: objectives, Why Compute, in the Words of the
 Field, the two cards, Test Your Judgement, The Central Question.
+
+## 2026-09-12 — 2.1.1 rebuilt to the owner's edit document
+
+Owner's text, applied as written, replacing the old "Start with the claim,
+not the mechanism": the title becomes "2.1.1 Break down the claim"
+(curriculum and the body's own first heading in the same edit, so the reader
+keeps dropping it); her three objectives open the page as an Objectives
+block scoped to this section, and the heading "What you will be able to do"
+goes, as on the 2.1 head; then "Start with the Claim" with the
+policy-goal/legal-rule/verification-claim table, the two worked examples
+(MIRI's Strict and Monitored Thresholds; the Chip Security Act's location
+verification), the comparison table, the New START counting-rule passage,
+authenticity/correctness/completeness, the compute-counter example with its
+missing-link table, and the notebook task. Her "Estimated time: 30 minutes"
+became the curriculum's estimatedMinutes, 5 → 30; course.js regenerated.
+
+Formatting mine: headings in Title Case per the standing rule; her `#`/`##`
+levels set as the `###`/`####` the other 2.1 lessons use; the two exponents
+as inline math ($3.1 \times 10^{21}$, $10^{24}$); GFM tables.
+
+Facts checked against the sources. MIRI: the Strict Threshold at 10^24 FLOP
+prohibits training above it, the Monitored Threshold at 10^22 FLOP makes a
+run subject to approval and monitoring — as her sentence says. H.R. 3447 as
+introduced in the House on 15 May 2025: section 3 defines a chip security
+mechanism as "a software-, firmware-, or hardware-enabled security mechanism
+or a physical security mechanism", section 4 requires location verification
+before export, reexport or in-country transfer and reporting of a product in
+a location other than the one in the licence application, diversion to
+another user, or tampering. The Arms Control Association's factsheet: 1,550
+accountable deployed strategic warheads, warheads on deployed missiles
+counted as actual reentry vehicles, each heavy bomber counted as one warhead
+against a maximum loading of 16–20, bomber weapons normally kept in storage.
+Three works registered (the bill, the factsheet, the treaty draft's HTML
+version she links); RFC 9334 was registered already. The appendix lists 4.
+
+Flag: two lead-ins announce their own item counts — "distinguish three
+things" and "Use three questions to examine that relationship" — which the
+2026-09-08 ruling forbids. Kept verbatim under "use exactly my text"; say
+the word and they go.

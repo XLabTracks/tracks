@@ -255,9 +255,9 @@ export const verificationLessons: Lesson[] = [
     slug: "hardware-claim",
     moduleId: "v-infrastructure",
     sectionItemId: "v-hw-attestation",
-    title: "2.1.1 Start with the claim, not the mechanism",
+    title: "2.1.1 Break down the claim",
     contentRef: "verification/hardware-claim",
-    estimatedMinutes: 5,
+    estimatedMinutes: 30,
   },
   {
     id: "v-hw-trusted-statement",

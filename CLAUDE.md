@@ -583,10 +583,15 @@ add must reduce the duplication, never widen it.
   flag: long lessons carry real headings, not bold lines pretending (the
   scoping-actors/covert-\* repairs), and a wide table scrolls in its own box
   (`.lesson-body table` in globals.css), never the page.
-  **One pager, and it is shared** — `src/components/learn/reading-pager.tsx`.
-  Previous/Next roll into the neighbouring item at the ends, so the page
-  hands the reader its footer and drops `LessonNav`; one component serves
-  the lesson and paper readers so they cannot drift apart.
+  **Two pager tiers, and they are shared** —
+  `src/components/learn/reading-pager.tsx`. Course owner (2026-09-13): the
+  buttons that move within a submodule and the buttons that move between
+  submodules sit on different levels, never the same row. `PartPager` is
+  the light button row that steps through the item's pages and stops at
+  its ends; `ReadingPager`'s cards under it, labelled "Previous lesson" /
+  "Next lesson", only ever leave the item. The page hands the reader its
+  footer and drops `LessonNav`; one pair of components serves the lesson
+  and paper readers so they cannot drift apart.
   **Papers, when the flag is on, read the same way** — `PaperPartsReader`
   (`src/components/papers/`) chunks at the paper's OWN toc headings
   (`ax-sec-`/`sb-sec-`/`lw-sec-` ids), so an Article of a treaty is a page and

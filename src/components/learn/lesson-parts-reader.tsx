@@ -20,6 +20,7 @@ import { MIN_PARTS, planParts } from "@/lib/reading/lesson-parts";
 import { PartsProgress } from "@/components/learn/parts-progress";
 import {
   PagerCard,
+  PartPager,
   ReadingPager,
   type PagerLink,
 } from "@/components/learn/reading-pager";
@@ -34,13 +35,11 @@ import {
    thing twice. What stays at the top is the single control the sidebar can't
    carry: the whole-lesson toggle. What stays at the bottom is one pager.
 
-   That pager is unified: Previous/Next move part by part, and at the ends they
-   roll into the neighbouring lesson — Next off the last part opens the next
-   lesson at its first part, Previous off the first opens the previous lesson
-   at its last (via ?p=last). So there is no separate lesson pager, and Next
-   always means "the next thing to read". The page hands this reader the
-   works-cited / complete footer so it renders above the pager, and drops its
-   own LessonNav.
+   The pagers are two tiers (reading-pager.tsx): PartPager steps within the
+   lesson and stops at its ends; the ReadingPager cards under it go to the
+   neighbouring lessons and nothing else. The page hands this reader the
+   works-cited / complete footer so it renders above both, and drops its own
+   LessonNav.
 
    Position is the progress bar under the toolbar (PartsProgress, shared with
    the paper reader): one segment per page, "Part n of m" and how many are
@@ -99,8 +98,8 @@ function readMode(): "parts" | "whole" {
   }
 }
 
-/** `?p=<1-based>` deep-links a part; `?p=last` lands on the final part, which
- *  is how the pager rolls in from the next lesson pressing Previous. */
+/** `?p=<1-based>` deep-links a part; `?p=last` lands on the final part, kept
+ *  so a shared link to the last page keeps working. */
 function partFromUrl(max: number): number {
   const raw = new URLSearchParams(location.search).get("p") ?? "1";
   if (raw === "last") return max;
@@ -374,31 +373,38 @@ export function LessonPartsReader({
 
       {footer}
 
+      <PartPager
+        prev={
+          prevIsPart
+            ? { title: parts[at - 1].label, onClick: () => goTo(at - 1) }
+            : null
+        }
+        next={
+          nextIsPart
+            ? { title: parts[at + 1].label, onClick: () => goTo(at + 1) }
+            : null
+        }
+      />
+
       <ReadingPager
         left={
-          prevIsPart ? (
+          prev ? (
             <PagerCard
               dir="prev"
-              title={parts[at - 1].label}
-              onClick={() => goTo(at - 1)}
-            />
-          ) : prev ? (
-            <PagerCard
-              dir="prev"
+              label="Previous lesson"
               title={prev.title}
-              href={`${prev.href}?p=last`}
+              href={prev.href}
             />
           ) : null
         }
         right={
-          nextIsPart ? (
+          next ? (
             <PagerCard
               dir="next"
-              title={parts[at + 1].label}
-              onClick={() => goTo(at + 1)}
+              label="Next lesson"
+              title={next.title}
+              href={next.href}
             />
-          ) : next ? (
-            <PagerCard dir="next" title={next.title} href={next.href} />
           ) : null
         }
       />

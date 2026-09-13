@@ -184,12 +184,12 @@ window.VTNotebook = (function () {
       if (unit) wrap.appendChild(mk('p', 'nb-source', esc('Unit ' + unit)));
 
       if (!store) {
-        wrap.appendChild(mk('p', 'nb-source', 'The memo desk is not loaded on this page.'));
+        wrap.appendChild(mk('p', 'nb-source', 'The Memo Desk is not loaded on this page.'));
         return wrap;
       }
 
       const ta = mk('textarea', 'nb-text');
-      ta.placeholder = 'Draft it here or on the memo desk — it is the same document.';
+      ta.placeholder = 'Draft it here or on the Memo Desk — it is the same document.';
       ta.value = (store.read(block.slot) || {}).body || '';
       ta.rows = 6;
       ta.oninput = function () {
@@ -199,7 +199,7 @@ window.VTNotebook = (function () {
       };
       wrap.appendChild(ta);
 
-      const link = mk('a', 'nb-memo-link', 'Open on the memo desk &rarr;');
+      const link = mk('a', 'nb-memo-link', 'Open on the Memo Desk &rarr;');
       // The desk is an app route now, and this link is raised from inside a
       // panel that opens on every page — a relative one resolved against
       // whatever page that was, and 404'd from all of them.
@@ -479,7 +479,7 @@ window.VTNotebook = (function () {
              page with a session behind it. */
           '<nav class="nb-tools" aria-label="Course tools">' +
             '<a class="btn small outline" href="/verification/map">Skill Map</a>' +
-            '<a class="btn small outline" href="/verification/memo-desk">Memo desk</a>' +
+            '<a class="btn small outline" href="/verification/memo-desk">Memo Desk</a>' +
           '</nav>' +
           '<button class="nb-x" type="button" data-close aria-label="Close notebook">&times;</button>' +
         '</header>' +

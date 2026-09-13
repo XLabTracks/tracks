@@ -392,3 +392,67 @@ input::placeholder, textarea::placeholder { color: var(--muted-foreground); opac
 .brief ul { margin: 6px 0 0 18px; }
 .brief li { margin-bottom: 4px; }
 .brief p + p, .brief p + ul { margin-top: 8px; }
+
+/* ---------- written elsewhere ---------- */
+
+/* A lesson task or a page slot: the desk is the index, not the editor. The
+   instruments a memo needs are hidden and the pane says where the writing
+   lives; the rail row says it too, in words. */
+.desk.elsewhere .deskq,
+.desk.elsewhere .letterhead,
+.desk.elsewhere .body-in,
+.desk.elsewhere .desk-tools,
+.desk.elsewhere .desk-note,
+.desk.elsewhere .genre-hint,
+.desk.elsewhere .check-rail { display: none; }
+.slot-btn .where { color: var(--muted-foreground); }
+.task-pane {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-md);
+  line-height: 1.62;
+}
+.task-pane .bk {
+  font-family: var(--label);
+  font-size: var(--fs-2xs);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin-bottom: 6px;
+}
+.task-pane p + p { margin-top: 10px; }
+.task-pane .answer-note { color: var(--muted-foreground); }
+.task-pane .answer {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--muted);
+}
+.task-pane .answer-status {
+  margin-left: 6px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--brand-ink);
+}
+.task-pane .answer-text { white-space: pre-wrap; font-size: var(--fs-sm); }
+
+/* A grouped slot's steps: the lesson's prompted questions, ruled apart. */
+.task-pane .steps { list-style: none; margin-top: 14px; }
+.task-pane .step + .step { margin-top: 14px; padding-top: 14px; border-top: var(--hairline) solid var(--border); }
+.task-pane .step-title { font-weight: 600; }
+.task-pane .step-brief { margin-top: 6px; font-size: var(--fs-sm); color: var(--muted-foreground); }
+.task-pane .step-brief p + p, .task-pane .step-brief ul { margin-top: 6px; }
+.task-pane .step-brief ul { padding-left: 1.2em; list-style: disc; }
+.task-pane .step-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin-top: 8px;
+  font-family: var(--label);
+  font-size: var(--fs-2xs);
+  color: var(--muted-foreground);
+}
+.task-pane .step-meta a { color: var(--brand-ink); }

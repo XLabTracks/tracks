@@ -90,6 +90,10 @@ window.VTMemoDesk = (function () {
       '<h2 class="slot-title" id="slotTitle">&mdash;</h2>',
       '<p class="slot-meta" id="slotMeta"></p>',
       '<div id="slotBrief"></div>',
+      /* A lesson task or a page slot is written elsewhere: this pane says
+         where, links there, and shows the saved answer once signed in. The
+         desk's own instruments below are hidden for it. */
+      '<div class="task-pane" id="taskPane" hidden></div>',
       '<div class="genre-hint" id="genreHint" hidden></div>',
 
       /* Two questions the memo has to survive, asked before it is written and
@@ -220,6 +224,8 @@ window.VTMemoDesk = (function () {
   });
 
   var STATUS_WORD = { specified: 'brief', named: 'named only', unspecified: 'no brief yet' };
+  var elsewhere = function (s) { return !!(s.task || s.steps || s.href); };
+  var stepsOf = function (s) { return s.steps || (s.task ? [{ task: s.task, title: s.title, brief: null, words: s.words, wordsMin: s.wordsMin, href: s.href, optional: s.optional }] : []); };
   var byId = {};
   SLOTS.forEach(function (s) { byId[s.id] = s; });
   var current = SLOTS[0];
@@ -274,7 +280,9 @@ window.VTMemoDesk = (function () {
             '<span class="t">' + esc(s.unit) + ' — ' +
             (s.optional ? '<span class="optional-prefix">Optional:</span> ' : '') + esc(s.title) + '</span>' +
             '<span class="m"><span class="status ' + s.status + '">' + STATUS_WORD[s.status] + '</span>' +
-            (hasDraft(s.id) ? '<span class="drafted">· drafted</span>' : '') + '</span></button></li>';
+            (s.task || s.steps ? '<span class="where">· in the lesson</span>' : s.href ? '<span class="where">· its own page</span>' : '') +
+            (s.steps ? stepsMark(s) : s.task ? answerMark(s.task) : hasDraft(s.id) ? '<span class="drafted">· drafted</span>' : '') +
+            '</span></button></li>';
         }).join('') +
         '</ul></div>'
       );
@@ -286,6 +294,89 @@ window.VTMemoDesk = (function () {
     var b = e.target.closest('.slot-btn');
     if (b) select(b.dataset.id);
   });
+
+  /* ---------- lesson tasks: the answer lives in the lesson ---------- */
+
+  /* Answers to lesson tasks are Submission rows the lesson's editor writes;
+     the desk shows them through the same route the notebook's Written work
+     page reads, and keeps no copy. Fetched once, on the first task selected;
+     signed out the route says so and this says so back. */
+  var answers = null;
+  var answersLoad = null;
+  function loadAnswers(then) {
+    if (answers) { then(); return; }
+    if (answersLoad) { answersLoad.then(then); return; }
+    answersLoad = fetch('/api/verification/writing', { headers: { Accept: 'application/json' } })
+      .then(function (r) { return r.status === 401 ? { signedIn: false, items: [] } : r.json(); })
+      .then(function (res) { answers = { signedIn: !!res.signedIn, items: res.items || [] }; })
+      .catch(function () { answers = { error: true, items: [] }; })
+      .then(then);
+  }
+  function answerFor(task) {
+    if (!answers) return null;
+    for (var i = 0; i < answers.items.length; i++) if (answers.items[i].id === task) return answers.items[i];
+    return null;
+  }
+  function answerMark(task) {
+    var a = answerFor(task);
+    if (!a) return '';
+    return '<span class="drafted">· ' + (a.status === 'submitted' ? 'handed in' : 'drafted') + '</span>';
+  }
+  function stepsMark(s) {
+    if (!answers) return '';
+    var n = s.steps.filter(function (st) { return !!answerFor(st.task); }).length;
+    return n ? '<span class="drafted">· ' + n + '/' + s.steps.length + ' written</span>' : '';
+  }
+
+  function answerHtml(task) {
+    if (!answers) return '<p class="answer-note">Looking for your saved answer…</p>';
+    if (answers.error) return '<p class="answer-note">Your saved answer could not be fetched just now; the lesson has it.</p>';
+    if (!answers.signedIn) return '<p class="answer-note">Sign in to see your saved answer here.</p>';
+    var a = answerFor(task);
+    return a
+      ? '<div class="answer"><p class="bk">Your answer <span class="answer-status">' +
+        (a.status === 'submitted' ? 'handed in' : 'draft') + '</span></p>' +
+        '<div class="answer-text">' + esc(a.text) + '</div></div>'
+      : '<p class="answer-note">Nothing saved for this one yet.</p>';
+  }
+
+  function renderTaskPane(s) {
+    var pane = el('taskPane');
+    if (!elsewhere(s)) { pane.hidden = true; pane.innerHTML = ''; return; }
+    var out = '<p class="bk">Where it is written</p>';
+    if (s.task) {
+      out += '<p>This one is answered inside the lesson, in the writing box under its prompt. ' +
+        'Signed in, the answer saves to your account and shows here.</p>';
+      out += '<p><a class="btn" href="' + esc(s.href) + '">Open it in the lesson &rarr;</a></p>';
+      out += answerHtml(s.task);
+    } else if (s.steps) {
+      /* A grouped slot: the lesson's prompted questions, each with its own
+         brief, budget, link and saved answer, in the lesson's order. */
+      out += '<p>This essay is built in the lesson, one prompted question at a time, each in its own writing box. ' +
+        'Signed in, the answers save to your account and show here.</p>';
+      out += '<ol class="steps">' + s.steps.map(function (st) {
+        return '<li class="step"><p class="step-title">' +
+          (st.optional ? '<span class="optional-prefix">Optional:</span> ' : '') + esc(st.title) + '</p>' +
+          '<div class="step-brief">' + briefHtml(st.brief) + '</div>' +
+          '<p class="step-meta">' +
+            (st.words ? '<span>' + (st.wordsMin ? st.wordsMin + '–' + st.words : 'about ' + st.words) + ' words</span>' : '') +
+            '<a href="' + esc(st.href) + '">Open in the lesson &rarr;</a></p>' +
+          answerHtml(st.task) + '</li>';
+      }).join('') + '</ol>';
+    } else {
+      out += '<p>This one is written on its own page, which keeps its draft.</p>';
+      out += '<p><a class="btn" href="' + esc(s.href) + '">Open it &rarr;</a></p>';
+    }
+    /* A draft left here before the slot moved into the lesson is still the
+       learner's writing: shown, never silently dropped. */
+    var legacy = STORE.read(s.id);
+    if (legacy && legacy.body) {
+      out += '<div class="answer legacy"><p class="bk">An earlier draft from this desk</p>' +
+        '<div class="answer-text">' + esc(legacy.body) + '</div></div>';
+    }
+    pane.innerHTML = out;
+    pane.hidden = false;
+  }
 
   /* ---------- the brief ---------- */
 
@@ -320,7 +411,9 @@ window.VTMemoDesk = (function () {
       out +=
         '<div class="brief"><p class="bk">The outline’s brief</p>' + briefHtml(s.brief) + '<dl>' +
         (s.audience ? '<div><dt>Reader</dt><dd>' + esc(s.audience) + '</dd></div>' : '') +
-        (s.words ? '<div><dt>Budget</dt><dd>about ' + s.words + ' words</dd></div>' : '') +
+        (s.words ? '<div><dt>Budget</dt><dd>' +
+          (s.wordsMin ? s.wordsMin + '–' + s.words + ' words' : 'about ' + s.words + ' words') +
+          '</dd></div>' : '') +
         '</dl></div>';
     }
     if (s.gap) {
@@ -362,7 +455,12 @@ window.VTMemoDesk = (function () {
   function select(id) {
     if (!byId[id]) return;
     current = byId[id];
+    host.classList.toggle('elsewhere', elsewhere(current));
     applyGenre();
+    renderTaskPane(current);
+    if (current.task || current.steps) loadAnswers(function () {
+      if (current.task || current.steps) { renderTaskPane(current); renderRail(); }
+    });
     var d = STORE.read(id) || {};
     Object.keys(F).forEach(function (k) { F[k].value = d[k] || ''; });
     if (ownsHash && history.replaceState) history.replaceState(null, '', '#' + id);

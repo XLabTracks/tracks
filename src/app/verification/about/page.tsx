@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { verificationModules } from "@/content/verification/curriculum";
 import { memoSlots } from "@/content/verification/memos";
+import { SKILL_NODES } from "@/lib/verification/data/skills";
 
 /* About the Verification track — one of the course's own pages.
  *
@@ -31,13 +32,15 @@ export default function Page() {
             </p>
 
             {/* Counted from the sources, never typed in: the written-output
-                figure was three memos stale the first time a slot moved, and a
-                page that states the course's own size has to be right about it.
-                Skills stay a literal — the rungs live in the static
-                data/skills.js, which is outside the app's imports. */}
+                figure was three memos stale the first time a slot moved, the
+                skill count sat at 27 for a whole rewrite of the graph, and a
+                page that states the course's own size has to be right about
+                it. The skill graph lives in the static data/skills.js,
+                outside the app's imports; skills.ts is its mirror, and
+                completion-stats.test.ts fails when the two disagree. */}
             <dl className="facts">
               <div><dt>Modules</dt><dd>{verificationModules.length}</dd></div>
-              <div><dt>Skills</dt><dd>27</dd></div>
+              <div><dt>Skills</dt><dd>{SKILL_NODES.length}</dd></div>
               <div><dt>Written outputs</dt><dd>{memoSlots.length}</dd></div>
               <div><dt>Level</dt><dd>Intermediate</dd></div>
             </dl>
@@ -71,13 +74,20 @@ export default function Page() {
               and the later ones only stand up once the earlier ones do — the
               constellation on the <a href="/verification/landing">front page</a> is that
               graph, and the course objectives are read straight off it so the two
-              cannot drift apart.
+              cannot drift apart. The <a href="/verification/map">Skill Map</a> shows
+              the same graph with your own progress filled in, and it opens from
+              your notebook on any course page.
             </p>
             <p>
-              Most modules end in one short written output — a memo, brief, critique
-              or design note — applied to a concrete verification problem. The
-              <a href="/verification/memo-desk">memo desk</a> is where you draft them,
-              brief beside the page.
+              The course asks for writing throughout: short written tasks inside
+              the lessons, and most modules end in one longer written output — a
+              memo, brief, map or essay — applied to a concrete verification
+              problem. The <a href="/verification/memo-desk">memo desk</a> lists
+              every one of them by module: the memos and briefs are drafted there,
+              brief beside the page, and each lesson task links back to the
+              lesson it is answered in, with your saved answer beside it once you
+              are signed in. Like the Skill Map, the desk opens from your
+              notebook.
             </p>
 
             <h2>Taking it</h2>

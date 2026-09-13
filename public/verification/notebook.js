@@ -5,14 +5,6 @@
    exports to Markdown. The page number in the counter is editable: type a
    number and the book opens there.
 
-   The last page is always the skill map — a read-only ladder derived from
-   window.SKILLS and vt-progress at paint time. It is never stored: it sits
-   past the end of data.pages, so the saved book and the account sync carry
-   only the learner's own pages. The chrome loads this file on the app's
-   course routes too, where neither data/skills.js nor platform.js is present,
-   so the skill page fetches the data file itself and does its own rung
-   arithmetic — keep that arithmetic in step with VT.rungFill/skillProgress.
-
    Mechanics follow the Pony Arena notebook in the design repo; the surface is
    this site's — theme.css variables only, no literal colour, so it follows
    day and night untouched.
@@ -63,10 +55,7 @@ window.VTNotebook = (function () {
     paintBadge();
   }
 
-  /* One index past the stored pages is the skill-map page, so it is a valid
-     position for `cur` but never a slot in data.pages. */
-  function pageCount() { return (data.pages || []).length + 1; }
-  function onSkillPage() { return cur === (data.pages || []).length; }
+  function pageCount() { return (data.pages || []).length; }
   function clamp(i) { return Math.max(0, Math.min(i, pageCount() - 1)); }
   function page() { return data.pages[cur]; }
   function count() {
@@ -101,9 +90,6 @@ window.VTNotebook = (function () {
   /* ---------- blocks ---------- */
 
   function pushBlock(block) {
-    // The skill page takes no blocks; a capture made while it is open lands
-    // on the learner's last real page instead of being dropped.
-    if (onSkillPage()) cur = data.pages.length - 1;
     page().blocks.push(block);
     save();
     if (root) paintPage();
@@ -449,110 +435,10 @@ window.VTNotebook = (function () {
     });
   }
 
-  /* ---------- the skill-map page ---------- */
-
-  /* Derived at paint time from window.SKILLS and vt-progress — nothing here
-     is ever written back. The arithmetic mirrors VT.rungFill/skillProgress in
-     platform.js (including the compound 2.1–2.3 rung); keep the two in step. */
-
-  let skillsLoad = null; // null | 'loading' | 'failed'
-
-  function readUnits() {
-    try {
-      const raw = JSON.parse(localStorage.getItem('vt-progress') || '{}');
-      return (raw && typeof raw.units === 'object' && raw.units) ? raw.units : {};
-    } catch (e) { return {}; }
-  }
-
-  function rungFill(units, tag, S) {
-    if (tag === S.compoundRung) {
-      const hit = S.compoundUnits.filter(function (u) {
-        return Object.prototype.hasOwnProperty.call(units, u);
-      }).length;
-      return hit / S.compoundUnits.length;
-    }
-    return Object.prototype.hasOwnProperty.call(units, tag) ? 1 : 0;
-  }
-
-  function loadSkills() {
-    if (skillsLoad === 'loading') return;
-    skillsLoad = 'loading';
-    const s = document.createElement('script');
-    s.src = '/verification/data/skills.js';
-    s.onload = function () { skillsLoad = null; if (root && !root.hidden && onSkillPage()) paintPage(); };
-    s.onerror = function () { skillsLoad = 'failed'; if (root && !root.hidden && onSkillPage()) paintPage(); };
-    document.head.appendChild(s);
-  }
-
-  function paintSkills() {
-    pagesEl.innerHTML = '';
-    const head = mk('div', 'nb-skills-head');
-    head.appendChild(mk('h3', null, 'Skill map'));
-    const a = mk('a', 'btn small outline', 'Open the full map');
-    a.href = '/verification/map';
-    head.appendChild(a);
-    pagesEl.appendChild(head);
-
-    const S = window.SKILLS;
-    if (!S) {
-      if (skillsLoad === 'failed') {
-        pagesEl.appendChild(mk('p', 'nb-empty',
-          'The skill data could not be loaded just now. The full map has it.'));
-      } else {
-        loadSkills();
-        pagesEl.appendChild(mk('p', 'nb-empty', 'Loading the skill data…'));
-      }
-      return;
-    }
-
-    const units = readUnits();
-    const prog = S.nodes.map(function (n) {
-      let filled = 0;
-      n.rungs.forEach(function (r) { filled += rungFill(units, r[0], S); });
-      const frac = n.rungs.length ? filled / n.rungs.length : 0;
-      return {
-        node: n,
-        done: Math.round(filled * 100) / 100,
-        total: n.rungs.length,
-        frac: frac,
-        state: frac >= 1 ? 'complete' : (frac > 0 ? 'in progress' : 'locked')
-      };
-    });
-
-    const full = prog.filter(function (p) { return p.frac >= 1; }).length;
-    pagesEl.appendChild(mk('p', 'nb-skill-sum',
-      full + ' of ' + prog.length + ' skills complete'));
-
-    S.moduleNames.forEach(function (name, m) {
-      const rows = prog.filter(function (p) { return p.node.mod === m; });
-      if (!rows.length) return;
-      const sec = mk('section', 'nb-skill-mod');
-      sec.style.setProperty('--mod', 'var(--mod-' + m + ')');
-      sec.appendChild(mk('p', 'nb-skill-modname', 'M' + m + ' &middot; ' + esc(name)));
-      rows.forEach(function (p) {
-        const row = mk('div', 'nb-skill');
-        row.appendChild(mk('span', 'nb-skill-name', esc(p.node.label)));
-        const bar = mk('span', 'nb-skill-bar');
-        const fill = mk('i');
-        fill.style.width = Math.round(p.frac * 100) + '%';
-        bar.appendChild(fill);
-        row.appendChild(bar);
-        row.appendChild(mk('span', 'nb-skill-frac',
-          p.done + '/' + p.total + ' &middot; ' + p.state));
-        sec.appendChild(row);
-      });
-      pagesEl.appendChild(sec);
-    });
-  }
-
   function paintPage() {
     if (!pagesEl) return;
     if (written) { paintWritten(); return; }
-    root.querySelectorAll('[data-add]').forEach(function (b) { b.disabled = onSkillPage(); });
-
-    if (onSkillPage()) {
-      paintSkills();
-    } else {
+    {
       pagesEl.innerHTML = '';
       const p = page();
 
@@ -587,6 +473,14 @@ window.VTNotebook = (function () {
       '<aside class="nb-panel" role="dialog" aria-modal="true" aria-label="Notebook">' +
         '<header class="nb-head">' +
           '<h2>Notebook</h2>' +
+          /* The course's two learner surfaces that are not lessons, in the
+             book's own chrome: the map of what the reading has filled and
+             the desk that indexes the writing. Links, not views — each is a
+             page with a session behind it. */
+          '<nav class="nb-tools" aria-label="Course tools">' +
+            '<a class="btn small outline" href="/verification/map">Skill Map</a>' +
+            '<a class="btn small outline" href="/verification/memo-desk">Memo desk</a>' +
+          '</nav>' +
           '<button class="nb-x" type="button" data-close aria-label="Close notebook">&times;</button>' +
         '</header>' +
         '<div class="nb-pages"></div>' +
@@ -737,15 +631,6 @@ window.VTNotebook = (function () {
     open();
   }
 
-  /* The skill map is the book's permanent last page — one index past the
-     stored pages, a position and never a slot in data.pages — so opening it
-     is setting `cur` there, nothing is created and nothing is written back. */
-  function openSkills() {
-    cur = data.pages.length;
-    save();
-    open();
-  }
-
   function addQuote(text, source, href) {
     build();
     return pushBlock({
@@ -772,7 +657,6 @@ window.VTNotebook = (function () {
     bindMemo: bindMemo,
     mount: mountButton,
     openMemo: openMemo,
-    openSkills: openSkills,
     count: count,
     toMarkdown: toMarkdown
   };

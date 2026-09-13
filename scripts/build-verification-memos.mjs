@@ -10,10 +10,19 @@
  *   npm run verification:memos            # write the data file
  *   npm run verification:memos -- --check # fail if it has drifted (CI)
  *
- * `lesson` is dropped on the way out: it says which app lesson carries the
- * card, which is meaningless to a page that has no lessons.
+ * A slot is one of three shapes, and the desk needs each resolved:
  *
- * Zero dependencies and no tsc: the source is flat literals, read with a
+ *   - a desk slot carries its brief in memos.ts and passes through;
+ *   - a lesson task (`task`) is answered in the lesson's writing exercise, so
+ *     its brief IS that exercise's prompt — read here from exercises.ts, never
+ *     copied into memos.ts — and it gets an `href` to the exercise on its
+ *     lesson page, resolved from curriculum.ts;
+ *   - a page slot (`href`) points at another app surface and passes through.
+ *
+ * `lesson` is dropped on the way out: it says which app lesson carries the
+ * work, which the static desk reaches through `href` instead.
+ *
+ * Zero dependencies and no tsc: the sources are flat literals, read with a
  * narrow parser that fails loudly rather than guessing. Output is
  * deterministic so --check diffs byte for byte.
  */
@@ -23,7 +32,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
-const SRC = path.join(ROOT, "src", "content", "verification", "memos.ts");
+const CONTENT = path.join(ROOT, "src", "content", "verification");
+const SRC = path.join(CONTENT, "memos.ts");
+const EXERCISES = path.join(CONTENT, "exercises.ts");
+const CURRICULUM = path.join(CONTENT, "curriculum.ts");
 const OUT = path.join(ROOT, "public", "verification", "data", "memos.js");
 
 const src = fs.readFileSync(SRC, "utf8");
@@ -34,16 +46,16 @@ function fail(msg) {
 }
 
 /** The body of `export const NAME … [ … ];`, brace/bracket balanced. */
-function block(name, open, close) {
-  const start = src.indexOf(`export const ${name}`);
+function block(text, name, open, close) {
+  const start = text.indexOf(`export const ${name}`);
   if (start < 0) fail(`could not find "export const ${name}"`);
-  const from = src.indexOf(open, src.indexOf("=", start));
+  const from = text.indexOf(open, text.indexOf("=", start));
   let depth = 0,
     i = from,
     inStr = false,
     q = "";
-  while (i < src.length) {
-    const c = src[i];
+  while (i < text.length) {
+    const c = text[i];
     if (inStr) {
       if (c === "\\") {
         i += 2;
@@ -60,24 +72,20 @@ function block(name, open, close) {
     }
     i++;
   }
-  return src.slice(from, i + 1);
+  return text.slice(from, i + 1);
 }
 
-/* One record per top-level `{ … }` inside the array literal. Fields are read
+/* One record per top-level `{ … }` inside an array literal. Fields are read
    with JSON.parse on the quoted value, so escapes and the outline's own
    quotation marks survive intact. */
-function records() {
-  const body = block("memoSlots", "[", "]");
+function records(text, name) {
+  const body = block(text, name, "[", "]");
   const chunks = body.split(/\n  \{\n/).slice(1);
   const out = [];
   for (const rawChunk of chunks) {
     const rec = {};
-    /* Drop whole-line block comments before reading the fields.
-       memos.ts is where a slot's placement is argued — the header says so —
-       so a note between two fields is the expected way to record why a slot
-       sits on the lesson it sits on. Left in, it was swallowed by the value
-       above it and the build failed on a comment. Whole-line only: a `/*`
-       inside a quoted brief is still a brief. */
+    /* Drop whole-line block comments before reading the fields. Whole-line
+       only: a `/*` inside a quoted brief is still a brief. */
     const chunk = rawChunk.replace(/^[ \t]*\/\*[\s\S]*?\*\/[ \t]*\n/gm, "");
     for (const [, key, raw] of chunk.matchAll(
       /^\s{4}(\w+):\s*([\s\S]*?),?\n(?=\s{4}\w+:|\s{2}\},)/gm,
@@ -86,7 +94,12 @@ function records() {
       if (value === "null") rec[key] = null;
       else if (value === "true" || value === "false") rec[key] = value === "true";
       else if (/^\d+$/.test(value)) rec[key] = Number(value);
-      else if (value.startsWith("[")) {
+      else if (key === "steps") {
+        rec.steps = [...value.matchAll(/task:\s*"([^"]+)",\s*title:\s*"((?:[^"\\]|\\.)*)"/g)].map(
+          (m) => ({ task: m[1], title: JSON.parse(`"${m[2]}"`) }),
+        );
+        if (!rec.steps.length) fail(`could not read steps in ${rec.id ?? "a record"}`);
+      } else if (value.startsWith("[")) {
         rec[key] = [...value.matchAll(/"((?:[^"\\]|\\.)*)"/g)].map((m) =>
           JSON.parse(`"${m[1]}"`),
         );
@@ -95,44 +108,108 @@ function records() {
         // holding a double quote is written in single quotes.
         const joined = value.replace(/"\s*\+\s*\n\s*"/g, "");
         const m = /^(['"])([\s\S]*)\1$/.exec(joined.trim());
-        if (!m) fail(`could not read ${key} in ${rec.id ?? "a slot"}: ${value.slice(0, 60)}`);
+        if (!m) fail(`could not read ${key} in ${rec.id ?? "a record"}: ${value.slice(0, 60)}`);
         rec[key] = m[1] === '"' ? JSON.parse(`"${m[2]}"`) : m[2].replace(/\\'/g, "'");
       }
     }
     if (rec.id) out.push(rec);
   }
-  if (!out.length) fail("memoSlots parsed empty");
+  if (!out.length) fail(`${name} parsed empty`);
   return out;
 }
 
-const modules = [...block("memoModules", "[", "]").matchAll(/"([^"]+)"/g)].map(
+/* ---------- the two sources a task slot resolves against ---------- */
+
+const exercisesSrc = fs.readFileSync(EXERCISES, "utf8");
+const exerciseById = new Map(
+  records(exercisesSrc, "verificationExercises").map((e) => [e.id, e]),
+);
+
+const curriculumSrc = fs.readFileSync(CURRICULUM, "utf8");
+const lessons = records(curriculumSrc, "verificationLessons");
+const modules = [...block(curriculumSrc, "verificationModules", "[", "]").matchAll(
+  /id:\s*"([^"]+)",\s*\n\s*slug:\s*"([^"]+)"/g,
+)].map((m) => ({ id: m[1], slug: m[2] }));
+const moduleSlug = new Map(modules.map((m) => [m.id, m.slug]));
+
+/** The page a lesson lives on, by its contentRef stem. */
+function lessonHref(stem) {
+  const lesson = lessons.find((l) => l.contentRef === `verification/${stem}`);
+  if (!lesson) fail(`no lesson has contentRef verification/${stem}`);
+  const slug = moduleSlug.get(lesson.moduleId);
+  if (!slug) fail(`lesson ${lesson.id} names module ${lesson.moduleId}, which has no slug`);
+  return `/tracks/verification/${slug}/${lesson.slug}`;
+}
+
+/* ---------- the slots ---------- */
+
+const memoModules = [...block(src, "memoModules", "[", "]").matchAll(/"([^"]+)"/g)].map(
   (m) => m[1],
 );
-if (modules.length !== 5) fail(`memoModules parsed ${modules.length} names, expected 5`);
+if (memoModules.length !== 5) fail(`memoModules parsed ${memoModules.length} names, expected 5`);
 
-const slots = records().map((slot) => {
-  // `lesson` is an app-side placement and means nothing on the static desk.
-  const { lesson: _lesson, ...rest } = slot;
-  void _lesson;
-  return rest;
+/** A lesson task resolved against its exercise: brief, budget, link. */
+function resolveTask(slotId, task, lesson) {
+  const exercise = exerciseById.get(task);
+  if (!exercise) fail(`${slotId} names task ${task}, which exercises.ts does not declare`);
+  if (exercise.type !== "writing-prompt") {
+    fail(`${slotId} names task ${task}, which is a ${exercise.type}, not writing`);
+  }
+
+  /* The prompt's opening "Optional: …" line is the task's own title line in
+     the lesson; the slot carries the title, so the brief starts after it. */
+  let brief = exercise.prompt;
+  const optionalLead = /^Optional:\s*/.exec(brief);
+  if (optionalLead) {
+    const firstBreak = /\n\s*\n/.exec(brief);
+    brief = firstBreak ? brief.slice(firstBreak.index + firstBreak[0].length) : brief.slice(optionalLead[0].length);
+  }
+
+  return {
+    ...(exercise.optional || optionalLead ? { optional: true } : {}),
+    brief,
+    words: exercise.maxWords ?? 0,
+    ...(exercise.minWords ? { wordsMin: exercise.minWords } : {}),
+    href: `${lessonHref(lesson)}#${task}`,
+  };
+}
+
+const slots = records(src, "memoSlots").map((slot) => {
+  const { lesson, ...rest } = slot;
+  if (rest.steps) {
+    /* A grouped slot: one row on the desk, the lesson's prompted questions
+       inside it. The group keeps its own brief; each step carries its own. */
+    const steps = rest.steps.map((step) => ({
+      ...step,
+      ...resolveTask(rest.id, step.task, lesson),
+    }));
+    return { ...rest, steps, href: steps[0].href };
+  }
+  if (!rest.task) return rest;
+  return { ...rest, ...resolveTask(rest.id, rest.task, lesson) };
 });
 
 for (const slot of slots) {
   if (slot.status !== "specified" && !slot.gap) {
     fail(`${slot.id} is "${slot.status}" and carries no gap note — say what is missing`);
   }
+  if (slot.status === "specified" && !slot.brief) {
+    fail(`${slot.id} is "specified" but resolved to no brief`);
+  }
 }
 
 const banner =
   `/* GENERATED FILE - do not edit by hand.\n` +
-  `   Source: src/content/verification/memos.ts\n` +
+  `   Source: src/content/verification/memos.ts (+ exercises.ts for task prompts,\n` +
+  `   curriculum.ts for lesson links)\n` +
   `   Regenerate: npm run verification:memos\n\n` +
   `   Every place the course asks for a written output. The briefs are the\n` +
-  `   outline's own words; \`status\` says how much of each one exists. */\n`;
+  `   outline's own words; \`status\` says how much of each one exists; a slot\n` +
+  `   with \`task\` is answered in the lesson at \`href\`, not drafted on the desk. */\n`;
 
 const text =
   banner +
-  `window.VERIFICATION_MEMO_MODULES = ${JSON.stringify(modules, null, 2)};\n\n` +
+  `window.VERIFICATION_MEMO_MODULES = ${JSON.stringify(memoModules, null, 2)};\n\n` +
   `window.VERIFICATION_MEMOS = ${JSON.stringify(slots, null, 2)};\n`;
 
 if (process.argv.includes("--check")) {

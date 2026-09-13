@@ -8,7 +8,6 @@ import { getDb } from "@/lib/db";
 import {
   verificationTaskIds,
   verificationTasksByModule,
-  TASK_PREFIX,
 } from "@/lib/verification/cohort";
 
 export const metadata: Metadata = { title: "Cohort — Verification" };
@@ -211,8 +210,8 @@ export default async function CohortPage({
 
       {modules.length === 0 && (
         <p className="text-muted-foreground mt-3 text-sm">
-          The track sets no written tasks yet — nothing with a{" "}
-          <code>{TASK_PREFIX}</code> id is placed in a lesson.
+          The track sets no written tasks yet — no lesson task is registered on
+          the memo desk.
         </p>
       )}
     </main>

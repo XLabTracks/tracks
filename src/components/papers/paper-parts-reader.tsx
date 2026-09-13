@@ -7,6 +7,7 @@ import {
   ReadingPager,
   type PagerLink,
 } from "@/components/learn/reading-pager";
+import { PartsProgress } from "@/components/learn/parts-progress";
 import { cn } from "@/lib/utils";
 
 /* Reads a paper one section at a time, the way LessonPartsReader reads a
@@ -256,6 +257,15 @@ export function PaperPartsReader({
             {mode === "whole" ? "Read section by section" : "Read the whole paper"}
           </Button>
         </div>
+      )}
+
+      {paged && (
+        <PartsProgress
+          at={at}
+          labels={parts.map((p) => p.label)}
+          unit="Section"
+          className="mb-6"
+        />
       )}
 
       <div ref={hostRef}>{children}</div>

@@ -3418,3 +3418,35 @@ Flags: 2.1's head still reads 25 minutes and 2.3.3 still reads 40, now that
 530 optional words have moved between them; say the word and either changes.
 The alternative home for the fold was 2.1.4, which is where compute counting
 is taught, rather than the section head.
+
+## 2026-09-13 — 2.1 head: the compute primer gets its lead-in and moves to the top
+
+The owner supplied one paragraph, used verbatim: "The compute primer is
+optional: we assume you are already familiar with FLOP, model parameters, and
+training compute. If these concepts are new to you—or you are unsure how FLOP
+differs from FLOP/s—read the primer before continuing."
+
+It names the fold that arrived here from 2.3.3 the day before, so the fold
+moved up with it: the pair now sits directly under the objectives and above
+"Why Compute, in the Words of the Field", rather than after the reading
+cards. "Read the primer before continuing" is only literally true if the
+primer is reachable before the rest of the page, and the Sastry passage that
+used to come first quantifies performance in operations per second, which is
+exactly the distinction the paragraph says a reader may be unsure of. The
+fold's own text, label and citations are unchanged; nothing else on the page
+moved.
+
+Flags: the lead-in says the primer is optional and the fold's label says
+"Optional: Power, From Watts to FLOP", so the word prints twice in two
+adjacent lines. The label is left alone because it is the platform's standing
+mark for optional material and it came over from 2.3.3 with the block; drop
+the prefix, or rename the label to say "compute primer", on a word.
+
+Second flag, older than this edit: section 2.1 is the only part of the course
+whose lessons set their sections at `####`. Seven of its nine do, so those
+lessons have no docked "In this lesson" nav at all — the nav is built from
+`##`/`###` — while every other lesson in modules 0 through 4, and 2.1.2 and
+2.1.3, has one. The head is among the seven and stayed that way in this pass:
+choosing whether 2.1 wants the nav its neighbours have is a design call, not
+a typo, and conforming one file of seven would only split the section
+further.

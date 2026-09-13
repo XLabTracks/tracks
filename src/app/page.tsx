@@ -1,9 +1,23 @@
 import Link from "next/link";
+import { TriangleAlert } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center gap-8 px-6 py-24 text-center">
+      {/* Temporary service notice: remove once the database is reachable again. */}
+      <Alert className="mb-4">
+        <TriangleAlert aria-hidden />
+        <AlertTitle className="font-semibold">
+          We are currently experiencing a database issue.
+        </AlertTitle>
+        <AlertDescription>
+          Everything on the site can still be read, but progress, answers, and
+          written work are not being saved right now. We are working on a fix
+          and will restore saving as soon as possible.
+        </AlertDescription>
+      </Alert>
       <div className="space-y-5">
         <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
           Tracks @ XLab

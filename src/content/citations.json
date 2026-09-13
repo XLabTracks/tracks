@@ -108,13 +108,6 @@
       "container": "arXiv",
       "date": "Aug. 2024"
     },
-    "https://arxiv.org/abs/2505.03742": {
-      "title": "Hardware-Enabled Mechanisms for Verifying Responsible AI Development",
-      "about": "A study of hardware-enabled mechanisms for verifiable reporting of AI training activity — compute usage, cluster configuration, and workload claims.",
-      "authors": "O'Gara, Aidan, Gabriel Kulp, Will Hodgkins, et al.",
-      "container": "arXiv",
-      "date": "Apr. 2025"
-    },
     "https://arxiv.org/abs/2506.15867": {
       "title": "Mechanisms to Verify International Agreements About AI Development",
       "about": "The MIRI Technical Governance Team's building-blocks catalog for AI-agreement verification; its appendix table of locating-compute mechanisms, with self-described preliminary feasibility ratings, powers the feasibility cards.",
@@ -949,8 +942,8 @@
       "date": "May 2018"
     },
     "https://arxiv.org/html/2507.15916v1": {
-      "title": "Verifying International Agreements on AI — §4.2.1.1: Prerequisites, Off-Chip Devices",
-      "about": "The full-text render, cited in 2.1.6 for the off-chip prerequisites section: network taps and analog sensors as separate collectors, trusted chips on-site or off-site for analysis, and the two-sided security problem — devices that could carry hidden functions for espionage or sabotage, against a Verifier that needs confidence the same devices have not been altered.",
+      "title": "Verifying International Agreements on AI (full text)",
+      "about": "The full-text render, assigned twice. 2.1.4 takes Appendix A.6, “Compute Accounting via Analog Sensors”, whose Background compares estimated sources of compute with declared uses rather than seeking one total, and separates model FLOP from hardware FLOP because the latter counts recomputed operations. 2.1.6 takes §4.2.1.1, “Prerequisites: Off-Chip Devices”: network taps and analog sensors as separate collectors, trusted chips on-site or off-site for analysis, and the two-sided security problem — devices that could carry hidden functions for espionage or sabotage, against a Verifier that needs confidence the same devices have not been altered.",
       "authors": "Baker, Mauricio, Gabriel Kulp, Oliver Marks, et al.",
       "container": "arXiv",
       "date": "2025"
@@ -996,6 +989,27 @@
       "authors": "Peigné, Pierre, Ky Nguyen, and Paul Wang",
       "container": "arXiv",
       "date": "22 Aug. 2026"
+    },
+    "https://docs.nvidia.com/datacenter/dcgm/latest/user-guide/feature-overview.html#metrics": {
+      "title": "DCGM Feature Overview: Profiling Metrics",
+      "about": "NVIDIA's definitions of the Data Center GPU Manager profiling metrics, assigned in 2.1.4. Graphics Engine Activity and SM Activity are fractions of time, Tensor Activity a fraction of cycles; “active” includes warps waiting on memory requests, and every value is an interval average, so a 20% tensor reading can mean a fifth of the SMs at full utilisation or all of them at a fifth.",
+      "authors": "NVIDIA",
+      "container": "NVIDIA Data Center GPU Manager documentation",
+      "date": "accessed 13 Sept. 2026"
+    },
+    "https://developer.nvidia.com/blog/confidential-computing-on-h100-gpus-for-secure-and-trustworthy-ai/": {
+      "title": "Confidential Computing on NVIDIA H100 GPUs for Secure and Trustworthy AI",
+      "about": "NVIDIA's account of the H100's three confidential-computing modes. Cited in 2.1.4 for CC-On, where “all performance counters have been disabled to prevent their use in side-channel attacks” — the reason a monitoring design cannot assume every metric survives a protected mode.",
+      "authors": "NVIDIA",
+      "container": "NVIDIA Technical Blog",
+      "date": "accessed 13 Sept. 2026"
+    },
+    "https://arxiv.org/html/2606.19262v1": {
+      "title": "Detecting Hidden ML Training With Zero-Overhead Telemetry",
+      "about": "The optional critical reading in 2.1.4. Zero-overhead NVML telemetry classifies training against non-training at 98.2% binary accuracy across the whole corpus and 43–87% against the hardest unexpected workloads when adversarially disguised, over 20 evasion families and 9 GPU models; Appendix F states the experiments were single-node, on instances up to eight GPUs.",
+      "authors": "Rahman, Robi, and Sabiha Tajdari",
+      "container": "arXiv",
+      "date": "17 Jun. 2026"
     }
   },
   "pending": [

@@ -281,9 +281,9 @@ export const verificationLessons: Lesson[] = [
     slug: "hardware-measuring-use",
     moduleId: "v-infrastructure",
     sectionItemId: "v-hw-attestation",
-    title: "2.1.4 Measuring and classifying use",
+    title: "2.1.4 Measuring and Classifying Use",
     contentRef: "verification/hardware-measuring-use",
-    estimatedMinutes: 10,
+    estimatedMinutes: 60,
   },
   {
     id: "v-hw-authorization",

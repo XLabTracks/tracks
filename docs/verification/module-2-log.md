@@ -3739,3 +3739,90 @@ Still owed, and flagged to her:
   2.1.1 claim, so there is nothing to edit until the rest of the sentence and
   its home arrive.
 - 2.1.1's current text has never been sent to her for review.
+
+## 2026-09-13 — 2.1.4 rebuilt as Measuring and Classifying Use
+
+Built from Part A of the owner's draft, with the four changes she attached to
+it. Unit is 60 minutes (10 + 25 + 25) plus a separately labelled optional
+activity of 20; the old body was the outline transcription — compute
+accounting, a classifier summary, an attack table and a four-statement
+activity, with no exercise and no job J.
+
+Her four instructions, as applied:
+
+- The exercise is **"Exercise — Assessing Job J"**. The draft's heading, "One
+  job, several incomplete answers", reported the finding, which is what she
+  objects to in a heading.
+- The packet's classification row lost "operations per window are not
+  supplied". It now reads "80% of observed equal-duration windows are labeled
+  training" — the equal-duration condition is kept, because without it the
+  arithmetic is undefined; the reason the reader cannot multiply by 0.8 is no
+  longer handed over.
+- Q3 asks for overall accuracy, precision, recall **and** the fraction of
+  training windows missed, then "What conclusions about job J, if any, can be
+  drawn from these evaluation results? Justify your answer." The draft's
+  closing instruction stated the verdict in advance.
+- Answer 4 no longer calls "No run is established to exceed 90 units" a
+  stronger verification claim. The claim under test and the finding about J
+  are now two separate quoted statements: the claim keeps its unit and
+  aggregation boundary and does not move with the evidence; the finding says
+  J's compute lies between 81 and 93 units, its category is under
+  investigation, its authorization is unresolved, and its status cannot be
+  decided on this packet. The key says explicitly why the substitution is
+  wrong — a claim phrased as "no run is established to exceed" converts the
+  proposition under test into a statement about how much evidence was
+  gathered, which a regime could satisfy by gathering less. Question 4's tail
+  was changed to match, since it had asked for the two to be written as one.
+
+Arithmetic re-checked: 32 + 21 + 28 = 81, plus a gap of [0, 12] gives
+[81, 93] against a threshold of 90; the operator's 49 is 21 + 28 with the
+pre-restart 32 dropped; accuracy 945/1,000 = 94.5%, precision 90/135 = 2/3
+≈ 66.7%, recall 90/100 = 90%, missed 10/100 = 10%.
+
+Sources checked on 13 September 2026. NVIDIA's DCGM page defines Graphics
+Engine Activity and SM Activity as fractions of *time* and Tensor Activity as
+a fraction of *cycles*; SM Activity says in its own words that "warps waiting
+on memory requests are considered active"; and the Tensor Activity note gives
+the interval-average point exactly — an activity of 0.2 "could indicate 20%
+of the SMs are at 100% utilization over the entire time period, 100% of the
+SMs are at 20% utilization". The `#metrics` anchor exists. Baker's Appendix
+A.6 is "Compute Accounting via Analog Sensors", its Background compares
+"sources of compute" with "uses of compute" rather than seeking one total,
+separates model FLOP from hardware FLOP because the latter counts recomputed
+operations, states that "there is no simple way to deduce an AI chip's rate
+of computation, even with analog measurements", and cites Table 13 where the
+excerpt stops. The H100 blog states that in CC-On "all performance counters
+have been disabled to prevent their use in side-channel attacks". The
+distributed-training paper is Robi Rahman, 28 May 2026. Rahman and Tajdari is
+arXiv:2606.19262v1, 17 June 2026; §2.2 is "Threat Model" and carries the
+cloud-tenant/hardware-operator distinction, §5.2 is "Adversary–Defender
+Iteration" and **Table 3 is indeed its summary table**, §6.5 is "Implications
+for HEMs", Appendix F is "Limitations and Future Work" and says the
+experiments were "conducted exclusively on single-node hardware
+configurations, testing workloads on instances up to only 8 GPUs"; the
+abstract gives 98.2% across the whole corpus and 43–87% against the most
+challenging unexpected workloads.
+
+One correction to the draft: it cites the CC-On reference as NVIDIA Technical
+Blog, "Hardware security for NVIDIA H100 GPUs". The page is titled
+"Confidential Computing on NVIDIA H100 GPUs for Secure and Trustworthy AI",
+and the real title is used.
+
+Three works registered (the DCGM anchor, the H100 blog, the versioned
+Rahman–Tajdari render); the entry for Baker's full text now records both
+assigned excerpts, since 2.1.4 and 2.1.6 read different parts of it. O'Gara
+et al., arXiv:2505.03742, was cited only by the old body and its entry went
+with it; it is the hardware-mechanism survey behind the old note that
+ordinary counters can be reset by users, and comes back in one edit.
+
+Presentation: "Optional:" is printed once, on the section heading, and the
+optional reading card does not repeat it. The review guide is a single
+collapsed fold after the four questions, so its 98.2% and 43–87% figures are
+not visible until the reader has attempted them. Two of the four tables take
+`.trio-table`; the confusion matrix keeps its right-aligned number columns.
+
+Flags: "Four Questions to Ask About a Classification Result" announces an
+item count, which the 2026-09-08 ruling forbids. Kept verbatim, as in 2.1.1
+and 2.1.5, because it is the owner's own heading. Question 4's first half
+still names what each recommendation must identify; that matches the
+structure she said to keep in 2.1.5's Q4, so it was left alone.

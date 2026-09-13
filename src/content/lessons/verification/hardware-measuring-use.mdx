@@ -1,78 +1,279 @@
+<Objectives scope="this lesson">
+1. Separate how much compute occurred, what kind of workload it was, and whether it was authorized.
+2. Evaluate compute accounting across devices, sites, restarts, and reporting periods.
+3. Explain what telemetry-based workload classification measures and what its errors mean for verification.
+4. Distinguish promising component demonstrations from end-to-end verification under an adversarial threat model.
+</Objectives>
 
-### 2.1.4 Measuring and classifying use
+Allow approximately 10 minutes for required external reading, 25 minutes for the lesson, and 25 minutes for the exercise and answer review. A separate optional critical-reading activity takes approximately 20 additional minutes and is not required to complete the lesson. No code, software installation, GPU access, or execution of the linked examples is required. Read the excerpts where their cards appear. Inline references are supporting sources, not additional assignments.
 
-The working rule prohibits **unlicensed training above threshold T** while permitting inference and approved safety evaluations. Verifying that rule requires answers to three separate questions:
+### Three Questions, Three Different Kinds of Evidence
 
-1. How much counted compute occurred?
-2. What kind of workload was it?
-3. Was that workload authorized?
+Return to the pause example from [2.1.1](/tracks/verification/verification-infrastructure/hardware-claim): a covered party must not conduct an unlicensed training run above threshold T. In [2.1.3](/tracks/verification/verification-infrastructure/hardware-accounting), we asked which devices the regime could account for. Suppose, for this lesson, that the relevant devices are known. What would establish whether their use broke the rule?
 
-A system may answer one and fail the others.
+<div className="trio-table">
 
-#### Compute accounting
+| Question | Relevant evidence | Tempting but invalid shortcut |
+| --- | --- | --- |
+| **How much compute occurred?** | Defined operation counts or bounded estimates, with device and time coverage | A busy GPU must have performed its advertised maximum FLOP rate |
+| **What kind of workload was it?** | Workload measurements, classification, and corroborating execution records | A large workload must be training |
+| **Was that use authorized?** | The applicable rule, an authentic authorization, and evidence tying its scope to the actual work | An operator called the job “safety evaluation,” so it was permitted |
 
-Training thresholds are usually expressed in total operations, commonly total training FLOP. Throughput, such as FLOP per second, is a different quantity.
+</div>
 
-A treaty-grade accounting rule must define:
+An answer to one question does not answer the others. A large inference workload may be permitted. A genuine safety evaluation may include a specifically approved training procedure. A smaller training run may fall below a licensing threshold. “Training” is a technical classification; “prohibited” is a conclusion under a rule.
 
-- Which operations count;
-- Whether low-precision, sparse, skipped, duplicated, or recomputed operations count differently;
-- Where counting occurs in the hardware or software stack;
-- How per-device records aggregate across a run, customer, cluster, facility, site, and time window;
-- How interrupted, resumed, sequential, or distributed runs are joined;
-- How counter resets, rollbacks, overflow, missing records, and clock changes are handled;
-- How the verifier detects padding or deliberately inefficient work intended to distort the count.
+The Chip Security Act claim from the preceding sections remains separate: evidence that hardware is in an allowed jurisdiction does not establish allowed use. Here we develop the pause agreement’s use claim. Keep both claims in your notebook rather than letting one stand in for the other.
 
-Existing performance counters and management telemetry can measure useful quantities, but ordinary counters are not automatically suitable for adversarial verification. Hardware-mechanism surveys note that some existing counters can be reset or controlled by users. A stronger design needs a protected measurement path, secure state, authenticated reporting, freshness, and aggregation rules that the operator cannot silently rewrite.
+### What Does a Compute Number Count?
 
-<Src>O’Gara et al., *Hardware-Enabled Mechanisms for Verifying Responsible AI Development* — [arXiv:2505.03742](https://arxiv.org/abs/2505.03742), 2025; the sections on compute accounting, workload classification, cluster configuration, location verification, and offline licensing.</Src>
+A **FLOP** is a floating-point operation. **FLOP/s** measures a rate; a total over a run is measured in FLOP. A **GPU-hour** measures time allocated to or used by a GPU, depending on the accounting convention. None of these terms alone specifies the legal counting rule.
 
-Even perfect accounting verifies the threshold, not the policy goal. Algorithmic, architectural, and data improvements can produce more capability at the same counted compute. A fixed threshold therefore has an update condition.
+An agreement needs to say which operations count. Does a multiplication followed by an addition count as two operations? How are different numerical precisions treated? Are operations repeated after a failed attempt included? What about computations repeated to avoid storing intermediate results? Is the limit attached to a run, a model-development project, a customer, or a period?
 
-<Prompt label="Question to keep visible">What quantity did the meter record, and how closely does that quantity match the legal rule?</Prompt>
+These choices should be explicit before comparing a measurement with T. Two exact counters can disagree without either being broken if they count different things.
 
-<PageBreak title="Workload classification" />
+<ReadingCard
+  id="reading-metrics"
+  href="https://docs.nvidia.com/datacenter/dcgm/latest/user-guide/feature-overview.html#metrics"
+  title="Read a metric definition, not a dashboard label"
+  author="NVIDIA | DCGM documentation, a vendor source for deployed monitoring tools"
+  mins="4 min"
+>
 
-#### Workload classification
+**Required reading 1.** NVIDIA, “Feature Overview,” DCGM documentation.
 
-A compute counter cannot determine whether the operations were training, inference, evaluation, fine-tuning, or another permitted activity. Workload classification uses additional signals, such as temporal GPU telemetry, memory behavior, communication patterns, or authenticated code and configuration.
+**Read:** Under “Profiling Metrics” → “Metrics,” read the definitions of Graphics Engine Activity, SM Activity, and Tensor Activity. Skip field identifiers, commands, installation instructions, and all other sections.
 
-A June 2026 preprint by Rahman and Tajdari tested whether temporal GPU telemetry could detect hidden machine-learning training. Across its full corpus, the study reported 98.2 percent binary classification accuracy over nine NVIDIA GPU models and twenty evasion families. The result is important evidence that training leaves detectable temporal patterns under tested conditions.
+**Reading focus:** What does “active” mean in each definition? Which quantities are averaged over a time interval?
 
-<Src>M. S. Rahman and M. Tajdari, *Detecting Hidden ML Training With Zero-Overhead Telemetry* — [arXiv:2606.19262](https://arxiv.org/abs/2606.19262), June 2026. A preprint, to be presented as a component demonstration.</Src>
+Here, **DCGM** is NVIDIA’s Data Center GPU Manager. An **SM** is a processing unit within a GPU; **Tensor Cores** are specialized arithmetic units. You do not need their implementation details, and you do not need to run anything.
 
-The limitations are equally important:
+</ReadingCard>
 
-- Difficult previously unseen adversarial workloads produced materially lower performance, reported in the study as 43–87 percent for the hardest cases;
-- Experiments were limited to single-node systems of up to eight GPUs;
-- Frontier-scale multi-node clusters were not tested;
-- Custom low-level kernels were not exhaustively covered;
-- The experiments used NVIDIA hardware;
-- Treaty relevance depends on a tamper-resistant telemetry source, an authenticated channel, and protected monitoring software;
-- Simple static heuristics are inadequate, because some inference configurations occupy the same basic utilization or arithmetic-intensity range as training.
+NVIDIA defines these activity metrics in terms of time or cycles, not a direct total of floating-point operations. Its SM Activity definition includes work waiting for memory. Tensor Activity is an interval average and can correspond to different distributions of activity across the chip and time. [Reference: NVIDIA DCGM metric definitions.](https://docs.nvidia.com/datacenter/dcgm/latest/user-guide/feature-overview.html#metrics)
 
-This is an **empirical component demonstration**, not an end-to-end verification regime.
+Thus “80% utilization” is not sufficient evidence that the GPU performed 80% of its peak advertised operations. The conversion would require a validated model of the specific metric, hardware, instructions, and workload. Power consumption is also a signal, not a universal FLOP meter.
 
-#### Separate attacks by what they target
+There are several ways to produce a compute estimate, each with a different dependency:
 
-A verifier should not treat every weakness as a classifier problem.
-
-| Adversary move | What it attacks |
+| Approach | What must be established |
 | --- | --- |
-| Dilute training with benign work, alter timing, or use unusual kernels | The classifier’s generalization |
-| Forge, suppress, replay, or reroute telemetry | The evidence channel |
-| Replace or modify monitoring software | The trusted measurement boundary |
-| Fragment activity across sites or devices | Aggregation and the legal definition of a run |
-| Shift to uninstrumented hardware | Coverage and completeness |
-| Stay under the compute line through algorithmic improvement | The policy proxy itself |
+| Count execution events and convert them into operations | That relevant events are captured, their conversion is defined, and the counting path cannot be bypassed |
+| Infer operations from the declared model and execution plan | That the declaration matches execution, including repetitions, variants, and relevant additional work |
+| Bound work using hardware capacity and elapsed time | A valid maximum rate for the actual hardware and counting convention; this is a bound, not a measured total |
+| Estimate work from activity or physical measurements | A validated relationship with operations and an uncertainty range for the relevant operating conditions |
 
-#### Activity: from result to policy claim
+This is an analytic comparison, not a claim that every approach is already available as a tamper-resistant regulatory product.
 
-For the telemetry study, write four statements.
+### Accounting Means Reconciling Observations With Uses
 
-- **Observation:** What did the experiment measure?
-- **Supported inference:** What conclusion is justified within that setting?
-- **Unsupported policy leap:** What stronger claim would exceed the evidence?
-- **Deployment dependencies:** What additional technical and institutional components would be required?
+<ReadingCard
+  id="reading-accounting"
+  href="https://arxiv.org/html/2507.15916v1"
+  title="Can the declared work explain the observed activity?"
+  author="Baker, Mauricio, et al. | RAND working paper, arXiv:2507.15916v1"
+  year="2025"
+  mins="6 min"
+>
 
-A well-bounded answer will not claim that the study proves treaty-grade detection across frontier clusters or against a state controlling the measurement path.
+**Required reading 2.** Mauricio Baker et al., *Verifying International Agreements on AI: Six Layers of Verification for Rules on Large-Scale AI Development and Deployment*. 2025. A working paper.
+
+**Read:** Appendix A.6, “Compute Accounting via Analog Sensors”: the opening “Background” discussion, ending before Table 13. Skip the table, equations, and detailed implementation options.
+
+**Reading focus:** Why do the authors compare sources of compute with declared uses, rather than simply seek one total?
+
+</ReadingCard>
+
+Baker and colleagues propose comparing observed compute activity with verified declared uses. Their discussion distinguishes operations required by a model from extra operations actually executed, including recomputation. They also identify the difficulty of deriving an operation rate from physical measurements. This is an accounting proposal with implementation challenges, not a demonstrated universal sensor-to-FLOP conversion. [Reference: Baker et al., Appendix A.6.](https://arxiv.org/html/2507.15916v1)
+
+Consider an operator who explains every observed hour of GPU activity as permitted inference. The explanation is useful only if the declared inference really occurred and its claimed compute cost is credible. Inflating the declared cost could make unreported work appear accounted for. Conversely, a mismatch may reflect a poor cost model or equipment inefficiency rather than prohibited work.
+
+A useful report therefore preserves both the evidence and the uncertainty. “Between 81 and 93 units under convention C” may be a more defensible statement than “87 units,” particularly when the legal threshold is 90.
+
+### A Restart Is Not a New Legal Run
+
+Counter readings belong to a device, a time interval, and a counting convention. They also need continuity information. If a counter restarts from zero after reboot, its latest reading does not include earlier execution. Resetting the device does not erase that execution from the agreement’s accounting.
+
+For a period with uninterrupted evidence, compute can be summed over disjoint intervals and devices. The harder cases are bookkeeping and scope:
+
+- **Restarts:** retain the last authenticated pre-reset value and identify the new counter epoch, meaning the period since its initialization. A gap between them remains a gap.
+- **Overlapping records:** do not add both raw interval counts and a cumulative total covering the same intervals.
+- **Work spread across sites:** combine records belonging to the same legally defined run even if they have different local job identifiers.
+- **Shared devices:** distinguish the device’s total work from the portion attributable to the relevant job. A whole-device counter alone does not assign operations to a tenant.
+- **Changing conventions:** record which counting rule produced each value. Do not add incompatible units or silently apply a new conversion to old evidence.
+
+Evidence linking jobs may include authenticated scheduler records, checkpoint lineage, and transfer records. A **checkpoint** is a saved model state from which work can continue. Such evidence needs its own trust and confidentiality protections. Merely asserting that two jobs are unrelated should not determine whether their compute is aggregated; neither should the verifier aggregate unrelated jobs solely because they shared a building.
+
+Distribution does not make compute disappear. It makes the relationship between records harder to establish. Work on distributed-training governance examines why large-cluster assumptions can miss activity spread across smaller installations; it is a reason to define the accounting boundary carefully, not evidence that every distributed evasion is feasible. [Reference: Rahman, *Does Distributed Training Undermine Compute Governance?*](https://arxiv.org/abs/2605.29359)
+
+### Recognizing a Workload From Telemetry
+
+**Telemetry** is a sequence of measurements such as power draw, memory use, utilization, and data movement. A **classifier** uses patterns in those measurements to assign a label, such as training or non-training.
+
+In conventional neural-network training, the system computes outputs, calculates how parameters should change, and updates them. Inference uses a model to compute outputs. Those activities can produce different patterns, but both involve arithmetic and memory access. Batching, model size, optimization, hardware, and mixtures of work can change the observed pattern. No single “high utilization” label identifies training.
+
+For policy purposes, the useful question is not whether a classifier’s headline accuracy sounds high. It is which errors remain, under which conditions, and what decision the evidence will support. The framework below can be applied to any proposed classifier; completing this lesson does not depend on accepting a particular recent research result.
+
+### Four Questions to Ask About a Classification Result
+
+**1. What was the unit of evaluation?** An accurate label for a short observation window is not automatically an accurate label for an entire run. Nor is the fraction of windows labeled training the fraction of operations spent training: windows may contain very different amounts or mixtures of work.
+
+**2. Which errors matter?** A false negative misses training. A false positive flags non-training. Overall accuracy combines both and depends on the mix of examples. Even a modest false-positive rate can create many alerts when almost all observed activity is permitted. An alert is evidence to appraise, not a legal finding.
+
+**3. Was the test meaningfully new?** Measurements from the same run can look similar. Holding out some nearby windows is a weaker test of generalization than holding out entire workloads, hardware configurations, or attack strategies. Performance after learning a particular evasion shows successful adaptation to that evasion; it does not establish resistance to the next one. Repeated windows also need not provide independent evidence.
+
+**4. Could the adversary change the evidence rather than the workload?** A tenant who controls its application and an operator who controls the host are different adversaries. A classifier may accurately label every trace it receives while the operator supplies a substitute trace or disables collection. A secure design needs to bind measurements to the device, interval, and workload and make missing evidence visible.
+
+This is the direct connection to [2.1.2](/tracks/verification/verification-infrastructure/hardware-trusted-statement): attesting the classifier’s code does not establish that its input is genuine. It is also the connection to 2.1.3: a complete trace from one registered machine does not reveal activity on an unregistered one.
+
+The confidentiality trade-off remains. H100 CC-On’s disabled performance counters, discussed in 2.1.2, are a warning to verify the actual measurement path. Do not assume that all low-rate management telemetry and all profiling counters are interchangeable, or that every metric is available in every protected mode. A deployment needs a metric-by-metric compatibility and integrity check. [Reference for the CC-On restriction: NVIDIA Technical Blog, “Confidential Computing on NVIDIA H100 GPUs for Secure and Trustworthy AI.”](https://developer.nvidia.com/blog/confidential-computing-on-h100-gpus-for-secure-and-trustworthy-ai/)
+
+### Authorization Is Not Another Classifier Label
+
+Suppose the classifier correctly detects parameter updates. The operator presents a genuine authorization for a safety evaluation. Neither fact settles compliance: the authorization may permit those updates, prohibit them, or allow them only within specified models, procedures, devices, dates, or compute limits.
+
+Likewise, an inference classification is not a safety certificate. Whether inference is allowed follows from the agreement; another agreement might restrict particular inference uses.
+
+For the pause claim, the verifier needs evidence for all relevant elements: the activity falls within the covered training category; its counted compute exceeds the applicable threshold when aggregated correctly; and no applicable authorization permits it. Uncertainty in one element cannot be erased by a confident answer to another.
+
+The appropriate response to an unresolved case might be obtaining additional evidence, applying a separately defined reporting rule, or referring the case for review. Whether suspension is permitted, who can order it, and how it is reversed belong to the authorization framework examined in [2.1.5](/tracks/verification/verification-infrastructure/hardware-authorization).
+
+### Exercise — Assessing Job J
+
+This is a hypothetical continuation of the pause claim from 2.1.1. The quantities and evaluation results below are invented for the exercise, not findings from the assigned paper.
+
+The rule requires a license for a covered training run exceeding **90 compute units**. One unit is 10²⁴ operations under a fixed convention C. All executed operations of a covered training run count under C, including repeated work. A restart, site change, or local job-name change does not create a new run.
+
+For this exercise, independently checked records establish that the following activity belongs to job J and covers all its participating devices. Counter integrity and convention C are accepted except for the explicitly missing interval. The regulator is still investigating the job’s workload type and authorization.
+
+| Evidence | Finding |
+| --- | --- |
+| Site A, before restart | Preserved authenticated records establish 32 units |
+| Site A, after restart | A new counter epoch establishes another 21 units; no overlap with the first interval |
+| Site B | Records establish 28 units, distinct from the A records |
+| Missing interval at A | An independently validated capacity-and-duration bound permits between 0 and 12 additional units |
+| Workload classification | 80% of observed equal-duration windows are labeled training |
+| Authorization | The issuer confirms that the signed authorization is genuine and permits only evaluation of a fixed model, with no parameter updates, during the relevant period |
+
+The operator says:
+
+> Our latest counters total only 49 units. Even if you count earlier activity, the classifier proves that only 80% was training. The genuine safety-evaluation authorization settles the rest.
+
+**1.** Calculate the range of job J’s total compute supported by the packet. Explain what that range establishes about the threshold, assuming J is a covered training run.
+
+**2.** Evaluate the operator’s use of the classifier and authorization. Identify what additional evidence would be needed to decide whether the authorization covers the actual work.
+
+**3.** A separate classifier evaluation produces the following results. Calculate overall accuracy, precision, recall, and the fraction of training windows that were missed. What conclusions about job J, if any, can be drawn from these evaluation results? Justify your answer.
+
+<div className="trio-table">
+
+| Actual workload | Labeled training | Labeled non-training |
+| --- | ---: | ---: |
+| Training | 90 | 10 |
+| Non-training | 45 | 855 |
+
+</div>
+
+**4.** The team proposes signing classifier outputs and increasing the frequency of classification. Recommend two further changes that would most improve the basis for a compliance decision in this case. For each, identify the uncertainty addressed and the evidence or system property needed. Then rewrite the pause verification claim from 2.1.1 so that its unit and aggregation boundary are explicit, and state separately what your procedure does with a run whose evidence cannot resolve it.
+
+### Answer Key
+
+<Fold label="Show answer 1">
+
+Known compute is 32 + 21 + 28 = **81 units**. Including the bounded gap yields **81–93 units**, or 8.1 × 10²⁵ to 9.3 × 10²⁵ counted operations. The operator’s 49 omits the preserved pre-restart work.
+
+If J is a covered training run, the interval straddles the 90-unit threshold. The packet establishes neither that J stayed at or below it nor that J exceeded it. The upper bound is possible work, not proof that 12 units occurred. The lower bound is known work, not the final total.
+
+</Fold>
+
+<Fold label="Show answer 2">
+
+Eighty percent of windows is not eighty percent of operations, and classifier labels are fallible. Multiplying total compute by 0.8 is unsupported. Under the hypothetical rule, once J qualifies as a covered training run, its counted operations are determined by convention C and the rule’s scope, not by selecting classifier-positive windows.
+
+The authorization’s authenticity establishes the issuer’s document, not conformity of J with its conditions. Evidence about whether J updated parameters is central to this authorization. A suitably protected audit of execution records, code and model-state changes could reduce that uncertainty, subject to coverage and confidentiality safeguards. A training alert justifies investigating the issue; it does not independently establish parameter updates or their absence throughout the run.
+
+Even if updates were established and the evaluation authorization did not cover them, threshold exceedance would remain unresolved. A separate contractual or reporting breach should not be confused with the specific above-threshold training violation being tested.
+
+</Fold>
+
+<Fold label="Show answer 3">
+
+There are 1,000 examples.
+
+- **Overall accuracy:** correct classifications are 90 + 855 = 945, so 945 / 1,000 = **94.5%**.
+- **Precision:** there are 135 training alerts, of which 90 are correct, so 90 / 135 = two-thirds, approximately **66.7%**.
+- **Recall:** there are 100 actual training examples, of which 90 were labeled training, so **90%**.
+- **Missed training windows:** the remaining 10 of 100, or **10%**. Recall and the missed fraction are the same measurement stated from either end.
+
+Each answers a different question. Accuracy asks how often any label is right across this example mix. Precision asks how often a training alert is right. Recall asks how much of the training present was found. A different prevalence of training, different workloads, or an adaptive operator can change all of them in deployment.
+
+About job J, these results support nothing directly. They describe one classifier’s behavior on a separate labeled set; J is not in it. What they do is tell you how much weight the packet’s “80% of windows labeled training” can carry: a label of that kind comes with a substantial false-alarm rate and a real miss rate, so it is a reason to investigate rather than a measurement of J’s workload. The evaluation also concerns workload labels only. It says nothing about J’s counted compute or its authorization, and it therefore supplies no probability that J violated the agreement.
+
+</Fold>
+
+<Fold label="Show answer 4">
+
+One defensible pair is:
+
+- **Close or tighten the accounting gap.** Seek independent preserved interval evidence; for future runs, protect continuity across resets with authenticated epoch transitions and explicit gap records. This addresses whether total compute crossed 90, not whether the work was authorized. A missing interval cannot be reconstructed merely by signing later readings.
+- **Verify the activity against the authorization’s condition.** Use a protected, appropriately scoped audit to establish whether parameters were updated and bind the findings to J’s execution. This addresses the fixed-model condition, not the unknown amount of work during the gap.
+
+Other answers may prioritize measurement-path protection, adversarial testing, or workload attribution, provided they explain the gap addressed and respect the scenario’s accepted assumptions. Signing output proves who issued that output; it does not validate a substituted input trace. More frequent labels do not automatically produce independent evidence or operation counts.
+
+The claim from 2.1.1 can be written so that its unit and aggregation boundary are explicit:
+
+> No covered training run during the reporting period exceeded 90 units of compute, counted under convention C and aggregated across all participating devices, sites, and restart epochs, without an applicable authorization.
+
+That is the proposition the regime sets out to test, and it stays fixed whatever the evidence turns out to be. The finding about J is a separate statement:
+
+> On the supplied evidence, J’s counted compute lies between 81 and 93 units, its workload category is still under investigation, and whether the authorization covers the work performed is unresolved. J’s status under the claim cannot be decided on this packet.
+
+Keep the two apart, and let the procedure report a run in that condition as unresolved rather than certifying it compliant. Rewriting the claim itself as something like “no run is established to exceed 90 units” would collapse the distinction: it converts the proposition under test into a statement about how much evidence was gathered, which a regime could satisfy by gathering less. What the evidence supports is a finding about J; what the regime must test is the rule.
+
+</Fold>
+
+### Carry Forward
+
+At this point, a hardware regime has three separate outputs: an inventory with coverage limits, a compute account with continuity and uncertainty, and an appraisal of workload evidence against the rule. None is yet a decision about who may stop a machine. Section 2.1.5 examines that authority and the safeguards around it.
+
+### Optional: What Does This Paper Actually Establish?
+
+**Additional time: approximately 20 minutes** — 10 minutes reading and 10 minutes for written reflection and review. This activity is not a prerequisite for the next lesson.
+
+<ReadingCard
+  id="reading-classifier"
+  href="https://arxiv.org/html/2606.19262v1"
+  title="Detecting Hidden ML Training With Zero-Overhead Telemetry"
+  author="Rahman, Robi, and Sabiha Tajdari | arXiv:2606.19262v1, a research paper"
+  year="2026"
+  mins="20 min, including reflection"
+>
+
+**Read:** Abstract; §2.2; Table 3 in §5.2 with its notes; §6.5; and Appendix F. Skip code and algorithm details; nothing here needs to be run.
+
+**Purpose:** Assess a recent contribution using the lesson’s framework. Inclusion is not an endorsement of its strongest claims or evidence of field-wide consensus.
+
+</ReadingCard>
+
+Vocabulary: “hardened” means revised after exposure to attacks; “unseen” means withheld from the relevant classifier training; “white-box” means the attacker can inspect the classifier. A classification window is an interval of observations treated as one input.
+
+**1.** State the paper’s central empirical claim in one sentence. Identify the observations, evaluation unit, hardware coverage, and conditions to which it applies. Distinguish anything you cannot establish from the selected excerpts.
+
+**2.** Choose two results that could lead a policymaker to different assessments. Explain what differs between their evaluation settings and which would be more relevant to an operator adapting to monitoring.
+
+**3.** For an operator who controls the host, separate protections demonstrated by the experiment from protections assumed or proposed. Explain how that distinction changes a deployment recommendation.
+
+**4.** Write a three-sentence briefing: what the paper contributes, what it does not yet establish, and what further test or evidence you would request before relying on it. Explain what “zero-overhead” would need to cover to support a claim about total monitoring-system cost.
+
+<Fold label="Open review guide">
+
+There is no required positive or negative verdict. Assess whether your account preserves the evaluation conditions, distinguishes evidence from assumptions, and names a follow-up that tests the gap you identify.
+
+The paper reports 98.2% overall binary accuracy and 43–87% detection on unseen white-box strategies after hardening; these are not interchangeable evaluation settings. Its experiments are single-node, up to eight GPUs. The hardware-operator case depends on protected telemetry collection and delivery beyond a classifier alone. [Reference: Rahman and Tajdari, abstract, §2.2, §5.2, §6.5, and Appendix F.](https://arxiv.org/html/2606.19262v1)
+
+A good briefing can recognize a useful empirical contribution without inferring reliable enforcement across a fleet. Further evidence could test generalization to independently selected workloads and multi-node systems, or validate the entire input path against a hostile operator. Specify what would count as a failure, not merely that more testing is desirable.
+
+Distinguish low measured workload overhead from the costs of collection, authentication, transmission, storage, analysis, incident review, and maintaining security. A title is not an estimate of all those costs. If the excerpts do not identify an evaluation detail precisely enough, mark it unknown and identify which methods or data you would inspect; do not infer it from a headline percentage.
+
+</Fold>

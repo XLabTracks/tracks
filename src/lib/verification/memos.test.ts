@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import {
-  memoDeskSlotsForLesson,
+  memoCardSlotsForLesson,
   memoGenreLabels,
   memoModules,
   memoSlots,
@@ -28,7 +28,7 @@ function body(lesson: string): string {
   return readFileSync(path, "utf8");
 }
 
-const deskSlots = memoSlots.filter((slot) => !slot.task && !slot.steps && !slot.href);
+const cardSlots = memoSlots.filter((slot) => !slot.task && !slot.steps);
 const tasks = memoSlots.flatMap((slot) =>
   memoSlotTasks(slot).map((step) => ({ slot, step })),
 );
@@ -42,8 +42,8 @@ describe("verification written outputs", () => {
     }
   });
 
-  it("every lesson that owes a desk-drafted output embeds the card once", () => {
-    const owed = new Set(deskSlots.map((slot) => slot.lesson));
+  it("every lesson that owes a desk-drafted or page output embeds the card once", () => {
+    const owed = new Set(cardSlots.map((slot) => slot.lesson));
     for (const lesson of owed) {
       const embeds = body(lesson).split(`<MemoDesk lesson="${lesson}" />`).length - 1;
       expect(embeds, `${lesson}.mdx must embed its written output exactly once`).toBe(1);
@@ -62,8 +62,8 @@ describe("verification written outputs", () => {
       }
       if (found.length) {
         expect(
-          memoDeskSlotsForLesson(name).length,
-          `${name} embeds a card but owes no desk-drafted output`,
+          memoCardSlotsForLesson(name).length,
+          `${name} embeds a card but owes no desk-drafted or page output`,
         ).toBeGreaterThan(0);
       }
     }

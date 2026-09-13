@@ -80,3 +80,9 @@ go against earlier teammates' decisions on purpose — review before merging.
   learner surfaces that are not lessons. `CourseTools` in
   `track-sidebar.tsx`, Verification routes only. The landing's skill-map
   intro now says the map is at the bottom of the course sidebar.
+- **4.2 links the workspace.** The capstone's registry entry (`m4-capstone`,
+  an `href` slot) now renders in the lesson as the same "Written output"
+  card the desk slots use, with a filled "Open the capstone workspace"
+  button, placed under the lesson's opening line before the sign-up sheet
+  and the bank. `memoCardSlotsForLesson` is desk + page slots; task slots
+  are still the exercise embed.

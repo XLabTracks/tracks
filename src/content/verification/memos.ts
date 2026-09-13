@@ -337,6 +337,10 @@ export function memoDeskSlotsForLesson(lesson: string): MemoSlot[] {
   );
 }
 
+export function memoCardSlotsForLesson(lesson: string): MemoSlot[] {
+  return memoSlotsForLesson(lesson).filter((slot) => !slot.task && !slot.steps);
+}
+
 export function memoSlotTasks(slot: MemoSlot): MemoStep[] {
   if (slot.steps) return slot.steps;
   return slot.task ? [{ task: slot.task, title: slot.title }] : [];

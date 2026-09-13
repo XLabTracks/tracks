@@ -620,17 +620,21 @@
    get their own accent.
 
    A wide table scrolls inside its own box — the page must never scroll
-   sideways. `display: block` is what makes overflow-x apply; `separate` +
-   zero spacing is what lets the box round its corners and the header band
-   clip to them, which collapsed borders cannot do. */
-.lesson-body table {
-  display: block;
+   sideways. The box is the `.table-scroll` wrapper the MDX `table` renderer
+   adds (mdx-components.tsx), so the table itself can be a real
+   `display: table` filling the box: auto layout then gives each column a
+   share of the width in proportion to its text, and a short label column
+   stops being squeezed to one word per line while its neighbour hoards the
+   slack. Rounded corners and the header band clipping to them come from the
+   wrapper's overflow; `separate` + zero spacing keeps the hairlines single. */
+.lesson-body .table-scroll {
+  margin-block: 28px;
   max-width: 100%;
   overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  border-collapse: separate;
-  border-spacing: 0;
   box-shadow: var(--shadow-soft);
 
   /* A shadow at whichever edge still has content behind it. At 1280 no table
@@ -665,6 +669,23 @@
   background-size: 26px 100%, 26px 100%, 13px 100%, 13px 100%;
   background-attachment: local, local, scroll, scroll;
 }
+.lesson-body .table-scroll table {
+  display: table;
+  width: 100%;
+  table-layout: auto;
+  margin: 0;
+  border: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+/* The wrappers below carry this chrome themselves; the renderer's box
+   steps out of the way so it neither doubles the border nor traps the
+   table in a second scroll box. */
+.lesson-body
+  :is(.pair-table, .trio-table, .rubric-table, .quad-table, .elements-grid)
+  .table-scroll {
+  display: contents;
+}
 
 .lesson-body thead th {
   background: var(--muted);
@@ -692,23 +713,6 @@
 .lesson-body tbody td:first-child {
   font-weight: 500;
   color: var(--foreground);
-}
-
-/* The last column absorbs the slack.
-   `.lesson-body table` is a block-level scroll box, so its rows are laid out
-   in an anonymous table that shrinks to its content: on a wide screen the
-   header rule stopped 116px short of the box it sits in and the table looked
-   broken. It only became visible when the reading column stopped being capped
-   at 832px, but the behaviour was always there.
-
-   `width: 100%` on the last cell is a preference, not a command — auto table
-   layout satisfies it with whatever is left over, and ignores it entirely
-   when the columns genuinely need more room than the box has. So a table that
-   has to scroll still scrolls; verified at 390px, where every table in this
-   course does. min-width on the row groups, width on the rows and
-   max-content on the table were all tried first and none of them moved it. */
-.lesson-body table:not(.elements-grid, .elements-grid *) :is(th, td):last-child {
-  width: 100%;
 }
 
 /* 1.0.1's paired compute/capability table (`<div className="pair-table">`

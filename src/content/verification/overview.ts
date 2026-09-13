@@ -24,7 +24,7 @@ export const courseOverview: CourseOverviewSection[] = [
   {
     id: "who",
     kind: "numbered",
-    title: "You should take this course if you are",
+    title: "You Should Take This Course if You Are",
     groups: [
       [
         "A technical AI safety researcher aiming to translate technical knowledge into politically feasible and effective policy",
@@ -35,7 +35,7 @@ export const courseOverview: CourseOverviewSection[] = [
   {
     id: "learn",
     kind: "numbered",
-    title: "Throughout the course, you will learn",
+    title: "Throughout the Course, You Will Learn",
     groups: [
       [
         "Why is verification important? What would happen without verification?",
@@ -60,7 +60,7 @@ export const courseOverview: CourseOverviewSection[] = [
   {
     id: "outcomes",
     kind: "numbered",
-    title: "By the end of this course, you will be able to",
+    title: "By the End of This Course, You Will Be Able To",
     groups: [
       [
         "Translate a proposed international AI commitment into verifiable claims by specifying the covered actors, activities, thresholds, declarations, evidence requirements, and conditions that would constitute compliance or non-compliance.",
@@ -75,7 +75,7 @@ export const courseOverview: CourseOverviewSection[] = [
   {
     id: "how",
     kind: "prose",
-    title: "How to use this course",
+    title: "How to Use This Course",
     paragraphs: [
       {
         label: "If you are async",

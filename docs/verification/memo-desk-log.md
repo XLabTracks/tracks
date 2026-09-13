@@ -90,3 +90,7 @@ go against earlier teammates' decisions on purpose — review before merging.
   notebook keeps the two surfaces instead, as buttons in its header beside
   the title — Skill Map and Memo desk — rather than the old hidden last
   page; the footer's row stays what it was (Note, Sketch, Written work).
+- **Copy that says where they live.** The about page (both the graph
+  paragraph and the writing paragraph), the landing overview's notebook
+  paragraph and the desk's own intro all say the Skill Map and the memo
+  desk open from the notebook.

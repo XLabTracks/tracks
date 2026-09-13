@@ -28,9 +28,10 @@ export default function Page() {
           <div className="desk-head">
             <h1>Memo desk</h1>
             <p>
-              Every written output the track asks for, in one place. Where the
-              assignment has a brief, it is quoted below in full; where it does not
-              have one yet, this page says so rather than inventing one.
+              Every written output the track asks for, in one place — it opens
+              from your notebook on any course page. Where the assignment has a
+              brief, it is quoted below in full; where it does not have one yet,
+              this page says so rather than inventing one.
             </p>
           </div>
 

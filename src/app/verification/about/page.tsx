@@ -74,7 +74,9 @@ export default function Page() {
               and the later ones only stand up once the earlier ones do — the
               constellation on the <a href="/verification/landing">front page</a> is that
               graph, and the course objectives are read straight off it so the two
-              cannot drift apart.
+              cannot drift apart. The <a href="/verification/map">Skill Map</a> shows
+              the same graph with your own progress filled in, and it opens from
+              your notebook on any course page.
             </p>
             <p>
               The course asks for writing throughout: short written tasks inside
@@ -84,7 +86,8 @@ export default function Page() {
               every one of them by module: the memos and briefs are drafted there,
               brief beside the page, and each lesson task links back to the
               lesson it is answered in, with your saved answer beside it once you
-              are signed in.
+              are signed in. Like the Skill Map, the desk opens from your
+              notebook.
             </p>
 
             <h2>Taking it</h2>

@@ -3364,3 +3364,57 @@ Flags for the owner:
   but visible in a deep link; say the word and the ids become `rats` and so on.
 - 2.1.2's section headings now render at `h3` while 2.1.1's render at `h4`.
   Aligning 2.1.1 is a one-line change whenever wanted.
+
+## 2026-09-13 — 2.1.3 rebuilt as Accounting for Hardware; the FLOP fold moves to 2.1
+
+Owner's content and implementation brief, Part A applied, Part B kept out of
+the page. The lesson replaces the old accounting page: the perfect report
+from an incomplete fleet, the registry schema and its reconciliation
+identity, location verification as a bound on the responder rather than a
+pin, topology as a separate question from location, the three populations
+and their denominator, the checklist for testing a register from outside it,
+the fleet-reconciliation exercise, its four answers, and the hand-off to
+2.1.4. Title "2.1.3 Accounting for Hardware", 45 minutes, card times summing
+to the 15 minutes of excerpts.
+
+Three required readings at their points in her order, with the ids the brief
+specifies: reading-registry, reading-location, reading-topology. The topology
+card carries both NVIDIA example links, as the brief requires; the other two
+carry one each. Four answers are separate Folds labelled only "Show answer 1"
+to "Show answer 4", collapsed on load, keyboard-operable. No simulator, no
+form, no scoring, no backend; the whole evidence packet is visible before the
+answers. The proof-of-learning bibliography was not moved into this lesson
+and 2.1.7 keeps it untouched. The Chip Security Act does not reappear here.
+
+Headings are Title Case and set at `###`, as in 2.1.2 and for the same
+reason: the in-lesson nav is built from `##`/`###` headings plus cards and
+folds, so at `####` the sidebar would list three sources and four answers
+with no sections under which to hang them. The body's own title heading is
+dropped rather than repeated.
+
+Sources checked on 13 September 2026. The CNAS working paper is by Tim Fist
+and Erich Grunewald, dated 24 October 2023, and carries "Recommendation 1:
+BIS should pilot an AI chip registry and inspection program" and the
+"Program steps" list inside "Technical annex: random chip sampling program
+logistics", ending where the brief says to stop. The IAPS page states in its
+own words that the issue brief was written May 2025 by Asher Brass and that
+the full 2024 report is by Asher Brass and Onni Aarne, so the two are kept
+apart as the brief instructs; the full report's "Delay-based methods for The
+General Geolocation Problem" section is at page 17 and stays an inline
+reference. The Hopper PPCIE page sits under NVIDIA's deprecated Python SDK
+examples and says its attestation covers GPUs and NVSwitch devices and
+checks that the topology matches the expected configuration, against the
+Blackwell example's independent per-GPU attestation. Four works registered;
+the Blackwell page was already registered from 2.1.2.
+
+Also in this pass, on the owner's instruction: the optional "Power, From
+Watts to FLOP" fold moves out of 2.3.3 into the 2.1 head, still optional and
+unchanged, where it sits after the compute readings and before Test Your
+Judgement. Its four citations travel with it, so 2.3.3's appendix drops from
+11 works to 7 and 2.1's grows. Minutes were not adjusted on either page: the
+block is optional on both, and both numbers are the owner's.
+
+Flags: 2.1's head still reads 25 minutes and 2.3.3 still reads 40, now that
+530 optional words have moved between them; say the word and either changes.
+The alternative home for the fold was 2.1.4, which is where compute counting
+is taught, rather than the section head.

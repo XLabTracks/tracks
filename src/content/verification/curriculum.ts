@@ -273,9 +273,9 @@ export const verificationLessons: Lesson[] = [
     slug: "hardware-accounting",
     moduleId: "v-infrastructure",
     sectionItemId: "v-hw-attestation",
-    title: "2.1.3 Accounting for hardware: identity, location, topology, and completeness",
+    title: "2.1.3 Accounting for Hardware",
     contentRef: "verification/hardware-accounting",
-    estimatedMinutes: 5,
+    estimatedMinutes: 45,
   },
   {
     id: "v-hw-measuring-use",

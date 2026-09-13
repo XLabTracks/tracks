@@ -350,6 +350,12 @@
       "org": "NVIDIA Corporation",
       "container": "NVIDIA Attestation Quick Start Guide"
     },
+    "https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/hopper_ppcie.html": {
+      "title": "Hopper Multi-GPU (PPCIE) Attestation Example",
+      "about": "NVIDIA's worked example for Hopper multi-GPU attestation, which verifies GPUs and NVSwitch devices together and checks the system's topology against an expected configuration; the counterpart to the Blackwell example, which attests each GPU alone.",
+      "org": "NVIDIA Corporation",
+      "container": "NVIDIA Attestation Quick Start Guide"
+    },
     "https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/hopper_single_gpu.html": {
       "title": "Hopper Single GPU Attestation Example",
       "about": "NVIDIA's own quick-start walkthrough of remotely attesting an H100 GPU in Confidential Computing mode — the working evidence that remote attestation already ships on AI hardware.",
@@ -596,6 +602,14 @@
       "about": "The source page of the one-page infographic 0.1.2 reproduces — an organization's whole theory of change made legible on a single sheet.",
       "org": "Slow Food USA"
     },
+    "https://static1.squarespace.com/static/64edf8e7f2b10d716b5ba0e1/t/6670467ebe2a477eb1554f40/1718634112482/Location%2BVerification%2Bfor%2BAI%2BChips.pdf": {
+      "title": "Location Verification for AI Chips",
+      "about": "The full 2024 report behind the issue brief: a survey of location-verification methods, the delay-based approach to the general geolocation problem, and why a physical speed limit is a more conservative bound than a model fitted to typical internet routes.",
+      "authors": "Brass, Asher, and Onni Aarne",
+      "publisher": "Institute for AI Policy and Strategy",
+      "date": "2024",
+      "standalone": true
+    },
     "https://techcrunch.com/2025/06/18/xai-is-facing-a-lawsuit-for-operating-over-400-mw-of-gas-turbines-without-permits/": {
       "title": "xAI Is Facing a Lawsuit for Operating over 400 MW of Gas Turbines without Permits",
       "about": "How aerial and thermal photography commissioned by the Southern Environmental Law Center established the number of gas turbines running at xAI's Memphis site.",
@@ -705,6 +719,13 @@
       "org": "Center for a New American Security",
       "date": "June 2025"
     },
+    "https://www.cnas.org/publications/reports/preventing-ai-chip-smuggling-to-china": {
+      "title": "Preventing AI Chip Smuggling to China",
+      "about": "A working paper proposing that the Bureau of Industry and Security pilot a chip-ownership registry tied to short-notice inspections, with reporting duties when chips are resold, destroyed or lost, and a random-sampling annex setting out the program steps.",
+      "authors": "Fist, Tim, and Erich Grunewald",
+      "publisher": "Center for a New American Security",
+      "date": "24 Oct. 2023"
+    },
     "https://www.cnas.org/publications/reports/technology-to-secure-the-ai-chip-supply-chain-a-primer": {
       "title": "Technology to Secure the AI Chip Supply Chain: A Working Paper",
       "about": "Argues that export controls on AI chips are hard to enforce and easy to evade through shell companies, and proposes hardware-enabled mechanisms instead. Cited in 1.2.1 for the fact that US controls now reach all chips using advanced high-bandwidth memory.",
@@ -754,6 +775,13 @@
       "org": "International Atomic Energy Agency",
       "date": "1997",
       "standalone": true
+    },
+    "https://www.iaps.ai/research/location-verification-for-ai-chips": {
+      "title": "Location Verification for AI Chips",
+      "about": "An issue brief on bounding where an AI chip is by timing authenticated challenge responses against trusted landmark servers, reporting an H100 prototype and the cases where a chip does not answer at all.",
+      "authors": "Brass, Asher",
+      "publisher": "Institute for AI Policy and Strategy",
+      "date": "May 2025"
     },
     "https://www.leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?article=&chapter=5.1.&division=2.&lawCode=LAB&part=3.&title=": {
       "title": "Whistleblower Protections: Catastrophic Risks in AI Foundation Models, Labor Code §§ 1107–1107.2",

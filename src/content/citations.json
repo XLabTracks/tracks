@@ -101,13 +101,6 @@
       "container": "arXiv",
       "date": "Feb. 2024"
     },
-    "https://arxiv.org/abs/2404.18308": {
-      "title": "Near-Term Enforcement of AI Chip Export Controls Using a Firmware-Based Design for Offline Licensing",
-      "about": "A design for firmware-based offline licensing that would disable AI chips lacking a regulatory license, as a near-term export-control enforcement mechanism.",
-      "authors": "Petrie, James",
-      "container": "arXiv",
-      "date": "Apr. 2024"
-    },
     "https://arxiv.org/abs/2408.16074": {
       "title": "Verification Methods for International AI Agreements",
       "about": "A survey of ten verification techniques for catching violations of international AI agreements, from unauthorized training runs to undeclared data centers.",
@@ -919,6 +912,41 @@
       "authors": "Newman, Lily Hay",
       "container": "WIRED",
       "date": "5 Aug. 2026"
+    },
+    "https://docs.nvidia.com/ai-enterprise/release-8/latest/infra-software/vgpu/licensing.html": {
+      "title": "Licensing",
+      "about": "NVIDIA's release-8 documentation for licensing AI Enterprise vGPU for Compute VMs: the license is enforced through software, an unlicensed VM has a 20-minute grace period and a licensed VM disconnected from the license server a 7-day CLS default, and full capability returns the moment a valid license is acquired. Required reading 1 in 2.1.5.",
+      "authors": "NVIDIA",
+      "container": "NVIDIA AI Enterprise, release-8 documentation",
+      "date": "accessed 13 Sept. 2026"
+    },
+    "https://www.rand.org/pubs/working_papers/WRA3056-1.html": {
+      "title": "Hardware-Enabled Governance Mechanisms: Developing Technical Solutions to Exempt Items Otherwise Classified Under Export Control Classification Numbers 3A090 and 4A090",
+      "about": "The RAND working paper that proposes hardware-enabled governance mechanisms, including the offline-licensing design of chapter 6: a per-device meter, a throttle that acts when the licence expires, and licences authenticated on-device against a stored public key, with verifying actual use treated as a separate problem. Publication page.",
+      "authors": "Kulp, Gabriel, Daniel Gonzales, Everett Smith, et al.",
+      "container": "RAND",
+      "date": "18 Jan. 2024"
+    },
+    "https://www.rand.org/content/dam/rand/pubs/working_papers/WRA3000/WRA3056-1/RAND_WRA3056-1.pdf": {
+      "title": "Hardware-Enabled Governance Mechanisms (working paper WR-A3056-1)",
+      "about": "The full PDF of the RAND working paper. 2.1.5 assigns chapter 6, printed pp. 37-38 up to “Subsystems”, and the “Discussion” section on printed p. 48 up to “Summary”; the PDF viewer numbers those pages 48-49 and 59.",
+      "authors": "Kulp, Gabriel, Daniel Gonzales, Everett Smith, et al.",
+      "container": "RAND",
+      "date": "18 Jan. 2024"
+    },
+    "https://arxiv.org/html/2402.08797v1": {
+      "title": "Computing Power and the Governance of Artificial Intelligence, §5.B",
+      "about": "The full-text render of the paper, cited in 2.1.5 for §5.B, “Guardrails for Compute Governance”: five principles whose fifth asks for substantive and procedural safeguards, limiting the types of control that may be imposed, the information regulators may request, and the entities subject to them, alongside review and public reporting.",
+      "authors": "Sastry, Girish, Lennart Heim, Haydn Belfield, et al.",
+      "container": "arXiv",
+      "date": "Feb. 2024"
+    },
+    "https://csrc.nist.gov/pubs/sp/800/193/final": {
+      "title": "Platform Firmware Resiliency Guidelines",
+      "about": "NIST SP 800-193, whose abstract frames platform-firmware security as protecting the platform against unauthorised changes, detecting changes that occur, and recovering from attacks rapidly and securely. Cited in 2.1.5 for the protection, detection and recovery triad, not as certification of any licensing system.",
+      "authors": "Regenscheid, Andrew",
+      "container": "National Institute of Standards and Technology",
+      "date": "May 2018"
     }
   },
   "pending": [

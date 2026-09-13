@@ -291,9 +291,9 @@ export const verificationLessons: Lesson[] = [
     slug: "hardware-authorization",
     moduleId: "v-infrastructure",
     sectionItemId: "v-hw-attestation",
-    title: "2.1.5 Authorization, licensing, and control",
+    title: "2.1.5 Authorization, Licensing, and Control",
     contentRef: "verification/hardware-authorization",
-    estimatedMinutes: 5,
+    estimatedMinutes: 75,
   },
   {
     id: "v-hw-where-trust-lives",

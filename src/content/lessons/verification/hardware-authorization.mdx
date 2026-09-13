@@ -1,49 +1,237 @@
+<Objectives scope="this lesson">
+1. Explain how hardware-backed licensing, throttling, suspension, and revocation could restrict covered computation.
+2. Trace an authorization from the legal rule through issuance, device checks, metering, restriction, review, and renewal.
+3. Identify who can permit, interrupt, or restore computation, including through control of updates and keys.
+4. Evaluate outages, compromised keys, legacy equipment, and emergency exceptions without treating either uninterrupted service or automatic shutdown as an unconditional good.
+</Objectives>
 
-### 2.1.5 Authorization, licensing, and control
+Allow 15 minutes for required external reading, 35 minutes for the lesson, and 25 minutes for the exercise and answer review. No code, software installation, GPU access, or cryptographic calculations are required. Read the specified excerpts, not the full documents. Inline references support factual claims; they are not additional reading assignments.
 
-A monitor produces evidence. A control mechanism changes what the machine can do. A complete policy still needs an authority that decides when control is justified.
+### A Valid Permission Is Not a Compliant Workload
 
-One proposed family of controls is offline licensing. The device performs only a bounded quantity or type of operation when it holds a valid authorization token. The token may encode a compute allowance, time window, location, workload condition, or other policy. A protected meter reduces the allowance as work occurs. A throttling or disabling mechanism responds when the allowance expires.
+In [2.1.4](/tracks/verification/verification-infrastructure/hardware-measuring-use), an operator presented a genuine authorization for a safety evaluation. That did not establish whether the work stayed within its scope. This lesson asks a further question: could a machine enforce the authorization before prohibited work happens?
 
-A complete authorization chain is:
+There are two different objects here. A **legal authorization** is permission under an agreement or regulatory system. A **license token** is a machine-readable instruction that a device can authenticate and apply. A software subscription is a third, commercial use of the word “license.” None automatically substitutes for another.
 
-> legal rule → license criteria → issuer → authenticated device and state → permitted operation → meter or expiration → suspension or revocation → appeal or override → renewal or termination
+Suppose an authority permits a specified evaluation on registered hardware, with no more than ten units of counted compute. A token might encode a device identifier and a numerical allowance. It does not acquire an understanding of “evaluation” merely because that word appears in the document from which it was generated.
 
-#### Questions a policy designer must answer
+The policy task is to establish both that the token accurately translates the permission and that the enforcement mechanism constrains the activity the rule actually covers. The authenticity, correctness, and completeness questions from [2.1.1](/tracks/verification/verification-infrastructure/hardware-claim) have not disappeared.
 
-- Who issues the authorization: one government, both parties, a multiparty authority, or another institution?
-- Which key or combination of keys is sufficient?
-- Can a chip vendor or one state disable lawful activity unilaterally?
-- What happens when the authorization service is unavailable?
-- Does the system fail open or fail closed?
-- Can emergency suspension occur before full adjudication?
-- Who can reverse a mistaken suspension?
-- What happens after key compromise or erroneous revocation?
-- Can the mechanism reach existing hardware through firmware, or does it require redesigned chips?
-- How are exceptional uses handled during emergencies?
-- Who bears the cost of false denials, downtime, replacement, and appeal?
-- What prevents the control infrastructure from becoming an espionage, sabotage, or coercion channel?
+### A Deployed Example: Permission Can Expire Without a Misconduct Finding
 
-James Petrie’s 2024 firmware-based offline-licensing design is a useful proposal to analyze. It argues that some existing accelerators might support a minimal design through a firmware update if they already contain relevant security features. The proposed timeline is an author estimate, not deployment evidence. The paper also states that physical attacks remain a concern without additional hardware changes. No publicly documented, treaty-grade offline-licensing regime for frontier AI compute is operating as of August 2026.
+NVIDIA documents software-enforced licensing for its AI Enterprise vGPU for Compute virtual machines. In the release-8 documentation, a VM without a license initially receives a 20-minute grace period; an already licensed VM disconnected from the cloud license service has a default seven-day grace period. Performance degrades if licensing is not restored, and full capability returns when a valid license is acquired. These are different situations, not two descriptions of the same timer. [Reference: NVIDIA, “Licensing,” *NVIDIA AI Enterprise*, release 8.](https://docs.nvidia.com/ai-enterprise/release-8/latest/infra-software/vgpu/licensing.html)
 
-<Src>J. Petrie, *Near-Term Enforcement of AI Chip Export Controls Using a Firmware-Based Design for Offline Licensing* — [arXiv:2404.18308](https://arxiv.org/abs/2404.18308), 2024.</Src>
+This is a real product behavior, not a reported enforcement incident. It illustrates a control that can restrict useful computation because permission is unavailable—not because anyone established prohibited use. The same distinction matters in a treaty system when a renewal server fails or a network route is interrupted.
 
-#### Control authority is part of the mechanism
+It also illustrates the limit of the analogy. The documentation explicitly calls this **software** enforcement. It does not establish resistance to a hostile equipment owner, physical attack, or state-sponsored modification. Do not read it as evidence that installed GPUs already implement a treaty-enforcement switch.
 
-A technically sound off-switch can be politically unacceptable when its control structure is vague. An international agreement might require:
+<ReadingCard
+  id="reading-permission-unavailable"
+  href="https://docs.nvidia.com/ai-enterprise/release-8/latest/infra-software/vgpu/licensing.html"
+  title="What happens when permission is unavailable?"
+  author="NVIDIA | AI Enterprise release-8 documentation, a living vendor document"
+  year="accessed 13 September 2026"
+  mins="5 min, including reflection"
+>
 
-- Split or threshold authorization, so no single party controls the switch;
-- Narrow, auditable conditions for suspension;
-- Logged and reviewable decisions;
-- Emergency action followed by time-bounded review;
-- A safe recovery path after false positives;
-- Independent tests for denial-of-service and abuse;
-- A plan for lawful legacy hardware and nonparticipating vendors.
+**Required reading 1.** NVIDIA. “Licensing.” *NVIDIA AI Enterprise*, release-8 documentation.
 
-The choice is not simply “control or no control.” It is a distribution of authority, risk, and failure.
+**Read:** The opening “Licensing” section through the grace-period table. Stop before “Verifying the License Status of a Licensed NVIDIA vGPU for Compute Guest VM.”
 
-#### Activity: build the authorization chain
+**Focus:** Identify what triggers restriction and what restores service. Which of those events establishes misconduct? Keep the new-client and disconnected-client cases separate.
 
-Assemble an end-to-end system for the working rule from the following components: device identity, attested firmware, protected counter, training classifier, signed record, cross-device aggregation, license token, revocation list, regulator, international notification, inspection trigger, and independent power measurement.
+**Technical boundary:** Skip commands, configuration, and troubleshooting. You are interpreting a documented policy, not configuring a GPU.
 
-Then answer: Which component measures the prohibited activity? Which only authenticates another component? Who decides the threshold was crossed? Which component can stop the activity? What detects an unregistered cluster? Which controls fail together if the manufacturer’s root key is compromised?
+</ReadingCard>
+
+### From Commercial Licensing to Hardware-Backed Control
+
+Kulp and colleagues’ 2024 RAND working paper proposes offline licensing: a device authenticates an allowance, meters its consumption, and restricts selected functionality when the allowance is exhausted. Tokens need not arrive through a live internet connection. The proposal separates this control from verifying what the permitted compute actually did. It is a design proposal, not evidence of an operating international regime. [Reference: Kulp et al., ch. 6.](https://www.rand.org/pubs/working_papers/WRA3056-1.html)
+
+<ReadingCard
+  id="reading-offline-control"
+  href="https://www.rand.org/content/dam/rand/pubs/working_papers/WRA3000/WRA3056-1/RAND_WRA3056-1.pdf"
+  title="What does an offline license actually control?"
+  author="Kulp, Gabriel, et al. | RAND working paper WR-A3056-1"
+  year="18 January 2024"
+  mins="10 min, including reflection"
+>
+
+**Required reading 2.** Kulp, Gabriel, et al. *Hardware-Enabled Governance Mechanisms: Developing Technical Solutions to Exempt Items Otherwise Classified Under Export Control Classification Numbers 3A090 and 4A090*. RAND, 18 Jan. 2024. Working paper WR-A3056-1.
+
+**Read:** Chapter 6, printed pp. 37–38, from the chapter heading to before “Subsystems”; then “Discussion” on printed p. 48, stopping before “Summary.” In the PDF viewer these are pages 48–49 and 59.
+
+**Focus:** Distinguish limiting a resource from verifying its use. Explain why withholding future tokens need not immediately stop work already enabled.
+
+**Technical boundary:** No implementation or equations are assigned. The excerpt’s workload assumptions are the authors’ framing, not an established training detector; evaluate them using 2.1.4.
+
+</ReadingCard>
+
+The rest of this lesson develops a course-authored design test. It is not a description of either product’s complete architecture or a claim that its institutional arrangements already exist.
+
+### Follow the Authorization, Not Just the Signature
+
+The chain starts before a signing key is used and continues after a device refuses work.
+
+| Stage | What must happen | Question for the policy designer |
+| --- | --- | --- |
+| Legal permission | An authorized body defines the allowed activity and limits. | Who may grant exceptions, and under which rule? |
+| Token issuance | An issuer translates that permission into device-enforceable conditions. | Can the issuer expand the permission or duplicate its budget? |
+| Device admission | The enforcement component checks the issuer, target device, and applicable conditions. | Are the device identity and accepted software state trustworthy against this adversary? |
+| Execution and accounting | The component charges relevant work to the correct allowance. | Do all covered operations pass through it, including after restarts? |
+| Restriction | The specified condition causes a defined reduction or suspension. | What stops, how quickly, and what unrelated work is affected? |
+| Review and restoration | A competent authority reviews the decision and authorizes a safe recovery or renewal. | Can a successful appeal actually restore service without restoring a compromised control? |
+
+The **issuer** signs tokens; it need not be the body legally empowered to authorize a run. A manufacturer could operate the signing service for an independent licensing authority. That division only works if the manufacturer cannot silently grant extra permissions—or if the regime explicitly accepts and audits that power.
+
+An **enforcement component** is the part of the system that permits or blocks the relevant operations. It might live on the chip or elsewhere. We compare those placements in [2.1.6](/tracks/verification/verification-infrastructure/hardware-where-trust-lives). Here, assume its location is known and ask what it must enforce.
+
+Consider three translation errors. A ten-unit allowance for an entire run becomes ten units on every device. A token issued for one device is accepted by another. Or an already consumed token is accepted again after a restart. All three can increase available computation without changing a signature. The design must preserve the aggregate budget, bind permissions to their intended recipients, and remember consumption across resets.
+
+That is the connection to the previous lessons: identity from [2.1.2](/tracks/verification/verification-infrastructure/hardware-trusted-statement), fleet coverage from [2.1.3](/tracks/verification/verification-infrastructure/hardware-accounting), and counting conventions and job aggregation from 2.1.4 become dependencies of control—not problems that licensing solves on its own.
+
+### Define What “Stop” Means
+
+**Throttling** reduces a rate or capability. **Suspension** stops specified activity pending a condition or decision. **Revocation** withdraws an authorization or trust in a credential. These can interact, but they are not interchangeable.
+
+A slower device may still complete the same work if given enough time. A finite compute allowance limits a quantity; a rate limit alone does not. If throttled work remains possible, account for it explicitly rather than treating the device as disabled.
+
+Suspending a whole accelerator also need not be equivalent to stopping a prohibited run. It can interrupt permitted inference, another tenant’s work, or processes needed to preserve execution records. Conversely, stopping one device may leave the run active elsewhere.
+
+The rule should therefore name the controlled activity and the permitted stopping procedure. Does the system reject new jobs, finish an in-progress operation, save a checkpoint, or halt immediately? Any computation allowed during shutdown belongs in the accounting. “Graceful shutdown” cannot be an unmetered extension that an operator can repeatedly invoke.
+
+Do not assume the hardware can separate training from inference sufficiently well to implement a narrowly targeted suspension. That is precisely the measurement question left open in 2.1.4. A design may have to choose a coarser restriction, with a correspondingly larger burden on permitted use.
+
+### Offline Operation Changes the Reach of a Decision
+
+Withdrawing legal permission and changing a remote device’s behavior are two separate events. An offline device cannot react to a new revocation message it has not received.
+
+An allowance can instead run out locally. But a remaining quantity of compute is not a deadline. If an operator pauses the device, the unused allowance may remain available later. Calendar expiry adds a time condition only if the component can reliably determine time and resist attempts to restore an earlier state.
+
+For a proposed regime, ask separately:
+
+- How much additional work can already accepted permissions enable?
+- How long can that permission remain usable?
+- Which path, if any, delivers a new restriction earlier?
+- Can unused tokens, emergency allowances, or other devices expand the bound?
+
+Shorter renewal intervals can reduce some exposure, but also make availability more dependent on renewal infrastructure. A server outage, an intentional blockade of communications, and an operator’s refusal to connect can look similar at the device boundary. The local response needs to be defined without assuming that the device knows which explanation is true.
+
+One design allows bounded continued operation during a communications failure. Another refuses further covered work when permission cannot be refreshed. Neither is “safe” without specifying the harm being prevented: unauthorized computation, disruption of permitted services, or both. The exercise below makes that choice concrete.
+
+### Who Controls the Controller?
+
+An attacker need not bypass a meter if they can obtain tokens the meter accepts. A dishonest official need not compromise a key if their office already controls issuance. Technical security and lawful use of authority are different requirements.
+
+Write down control of at least four functions: issuing permissions, suspending them, updating enforcement software, and recovering the system after compromise. Updating software can change what is counted or accepted. A recovery credential that bypasses ordinary checks can become the most powerful credential in the design.
+
+For each function, identify both the legal decision-maker and the actor technically able to make it happen. Then ask whether the arrangement remains acceptable if that actor is negligent, coerced, or politically opposed to the affected operator or state.
+
+One possible safeguard is requiring two independently controlled approvals for a particularly broad action. But two signatures from services administered by the same organization may add little independence. Requiring agreement from everyone can create a different failure: one participant can block urgent action. The design needs explicit choices about ordinary issuance, emergency restrictions, review, and recovery—not the same voting rule applied indiscriminately.
+
+Procedural safeguards are part of compute-governance design, not an afterthought. Sastry and colleagues explicitly discuss limits on the scope of controls and information demands, alongside oversight and review. The following requirements apply that concern to our hypothetical licensing system; they are recommendations for this course scenario, not a statement of existing legal entitlements. [Reference: Sastry et al., §5.B.](https://arxiv.org/html/2402.08797v1)
+
+A suspension procedure should specify the evidentiary threshold, authorized decision-maker, scope, reasons recorded, review deadline, and route to restoration. A provisional restriction is not a final finding of violation. If sensitive evidence cannot be disclosed publicly, the procedure still needs a credible reviewer who can examine it.
+
+Restoration must also be operational. Who can issue replacement permission? What if the original signing key was stolen? A successful appeal cannot safely mean “start trusting the stolen key again.” The system needs a way to install a replacement trust configuration, invalidate obsolete permissions where necessary, and reconcile the remaining budget without granting it twice.
+
+NIST’s firmware-resiliency guidance treats protection, detection, and recovery as complementary functions. It supports asking for a recovery design; it does not certify a particular licensing system or settle who should control recovery. [Reference: Regenscheid, *Platform Firmware Resiliency Guidelines*, abstract.](https://csrc.nist.gov/pubs/sp/800/193/final)
+
+### Exceptions and Equipment Outside the Control Boundary
+
+An emergency exception should describe an activity, not just a favored operator. Specify its devices, allowable work, budget, duration, approving authority, and subsequent review. If a special allowance is intended only for permitted inference, the design needs a credible way to restrict it to that use. An emergency label is not a workload classifier.
+
+Exceptions also affect the quantitative promise. If a nominal ten-unit cap has an additional five-unit emergency allowance, a claim of “at most ten units” is wrong unless it explicitly excludes that separately authorized work. Recovery operations and shutdown work need the same attention.
+
+Older or otherwise uncovered equipment remains the completeness problem from 2.1.3. Installing a license service does not give a chip a protected enforcement path it never had. An external control may be possible, but requires its own bypass analysis. A transition plan should state which hardware is covered, what restrictions or alternative evidence apply elsewhere, and how migration is verified.
+
+Return briefly to the Chip Security Act exercise: a location check could inform a decision to issue or renew a token. It does not itself confer authority to disable a chip, and an unanswered location challenge does not prove smuggling. Treat location verification, the legal consequences of missing evidence, and a proposed control mechanism as distinct choices. This lesson does not claim that the bill requires the control design developed here.
+
+### Exercise — The Authority Has Revoked Permission. What Has Actually Stopped?
+
+**This is a hypothetical extension of the course’s pause case, not an NVIDIA or RAND implementation.** It does not resolve the historical uncertainty about job J in 2.1.4. The authority is now considering a new, separately authorized activity.
+
+#### Rule and Evidence Packet
+
+An evaluation permit authorizes **ten further compute units in total across four registered devices**, A–D. Counted units use the agreement’s convention; no unit conversion is needed. The permit prohibits use outside the specified evaluation. The issuer is supposed to translate the aggregate permission into device allowances.
+
+At 12:00, the authority lawfully suspends that permission with immediate effect while reviewing a concern. The concern is not yet a finding of misconduct. At the same moment, the renewal service becomes unreachable from the facility. For this exercise, assume:
+
+| Item | Established fact |
+| --- | --- |
+| Token installation | A translation error gave each device its own allowance of ten units. Each still has ten units remaining at 12:00. |
+| Enforcement | All covered work on A–D is counted correctly. Budgets cannot be replayed, transferred, reset, or bypassed. Devices stop covered computation at zero, with no residual or shutdown compute. |
+| Offline behavior | Installed tokens have no calendar expiry and remain usable without renewal. Devices have received no suspension message. |
+| Scope | There are no spare tokens, emergency allowances, additional devices, or additional authorization paths in this exercise. |
+| Rate | Each device can consume at most two units per hour. Devices may idle. |
+| Authority | A review body can reverse a mistaken suspension. The procedure does not yet specify how to restore service after a signing-key compromise. |
+
+The program director proposes this announcement:
+
+> “Permission was revoked at noon, so the evaluation stopped at noon. In any event, hardware licensing limits any further work to ten units and guarantees that all four devices will be disabled by 17:00. If our decision was wrong, restoring the issuer’s key will make the operator whole.”
+
+#### Questions
+
+**1. What does the packet establish about the maximum further computation that the four devices could perform after noon?** Explain the relationship between that quantity and the legal permission. Identify the translation error and propose a way to prevent it without giving every device the full aggregate budget.
+
+**2. What, if anything, does the rate information establish about 17:00?** State the extra conditions needed for a deadline-based stopping claim. Rewrite the first three sentences of the announcement as a bounded, evidence-supported statement.
+
+**3. Suppose review later finds that the suspension was mistaken, but a separate investigation confirms that the issuer’s signing key was stolen.** Explain what changes in the argument about available compute and what must be resolved before restoring ordinary operation. Distinguish correcting the decision from recovering the technical control.
+
+**4. Write a short policy recommendation, up to 150 words, for handling the next renewal outage.** Choose and justify a default for covered computation. Include an exception rule, a review-and-restoration path, and one residual risk. You may disagree with automatic suspension, but make the alternative’s exposure explicit.
+
+### Answer Keys
+
+<Fold label="Show answer 1">
+
+The installed allowances can enable **up to 40 further units: 4 × 10**. This is a mechanical upper bound under the packet’s assumptions, not an observation that 40 units were performed. The original legal permission allowed only ten aggregate units, and that permission is suspended at noon. Continued technical capability is not continued legal authorization.
+
+The issuer replicated a fleet-level allowance as four independent device allowances. One correction is to divide the total into device-bound portions summing to no more than ten, such as 2.5 units each. A different allocation is equally valid if its sum is bounded. Moving unused allowance between devices requires evidence that it is no longer spendable at the old device; otherwise reassignment can duplicate permission. A coordinated shared budget is another possible design, but it introduces a coordination dependency absent from this packet.
+
+For this suspension, correcting future issuance alone does not erase the 40 units already accepted. Those permissions need to be replaced, invalidated through a delivered instruction, or exhausted under the stated enforcement rules.
+
+</Fold>
+
+<Fold label="Show answer 2">
+
+At maximum simultaneous use, each device exhausts ten units in **five hours: 10 ÷ 2**. But a maximum rate does not establish a minimum rate. Devices may slow down or idle. Therefore 17:00 is the earliest time by which all four could have consumed their entire balances at the stated maximum rates—not a guaranteed expiry or latest stopping time. Individual devices may simply stop working earlier while retaining unused allowance.
+
+A calendar stopping claim would require, for example, an enforceable expiry using trustworthy time, or a restriction message whose delivery and enforcement are established by the deadline. Any shutdown allowance must be included. None is present in the packet.
+
+A supported replacement is:
+
+“The authority suspended legal permission at noon. We have not established that computation stopped then. Under the stated enforcement and coverage assumptions, the four installed allowances could still enable up to 40 further units; the packet provides no guaranteed calendar deadline for their expiry.”
+
+This statement is about available capacity after suspension, not proof that the operator used it or committed a violation.
+
+</Fold>
+
+<Fold label="Show answer 3">
+
+A stolen signing key can enable new apparently authentic tokens wherever that key remains accepted. The original 40-unit bound depended on there being no additional authorization paths or tokens; it cannot simply be carried into this changed scenario without examining whether forged tokens can reach and be accepted by the devices. Disconnection from the renewal service does not, by itself, establish that every route for installing tokens is closed.
+
+Reversing the mistaken suspension corrects a legal decision. It does not repair trust in the stolen key. Recovery should establish the affected devices and tokens, disable acceptance of the compromised key through an authorized recovery path, install replacement trust material, and reconcile consumption and outstanding balances before issuing replacement allowances. Devices not yet recovered must be treated separately. If the design lacks a secure recovery path, physical servicing or continued restriction may be necessary; a policy instruction cannot create that capability retroactively.
+
+Finally, restoring service does not necessarily make the operator whole. Lost work, delay, and interruption may remain. A remedy process must consider those losses separately from restarting the machines.
+
+</Fold>
+
+<Fold label="Show answer 4">
+
+One defensible recommendation is:
+
+“During a renewal outage, permit only an already issued, finite allowance, then suspend covered computation. Do not replenish that allowance automatically because the service remains unavailable. Permit a separately budgeted emergency exception only for specified essential work whose scope can be enforced or independently supervised. Require a competent reviewer to assess contested restrictions promptly and provide an authenticated route to restore permission and reconcile remaining budgets. Use an independent recovery procedure if signing credentials are compromised. Record decisions and interruptions for later review and remedy. Residual risk remains: prohibited work may consume outstanding allowances before suspension, and permitted work may be interrupted after exhaustion.”
+
+Other answers can recommend immediate suspension or a bounded time-based grace period. Credit depends on specifying a feasible trigger, treatment of exceptions, accountability, and the harm left exposed—not on selecting the most restrictive policy. Unlimited automatic extension does not supply a finite exposure bound.
+
+</Fold>
+
+### Carry Forward
+
+Keep three sentences in your notebook:
+
+- This mechanism can restrict **[specified activity]** on **[covered equipment]**, subject to **[security and coverage assumptions]**.
+- After permission is withdrawn, already accepted allowances can still enable **[quantity and/or duration, or an acknowledged unknown]**.
+- **[Named authorities]** can issue, suspend, review, update, and restore permissions; the safeguards against misuse are **[specified checks]**.
+
+Licensing turns a permission into a technical constraint only where the enforcement path holds. It does not decide whether the permission is legitimate, prove how the compute was used, or reveal equipment outside that path. In 2.1.6, we ask where this enforcement and evidence machinery should live—and which actors each placement requires us to trust.

@@ -3450,3 +3450,80 @@ lessons have no docked "In this lesson" nav at all — the nav is built from
 choosing whether 2.1 wants the nav its neighbours have is a design call, not
 a typo, and conforming one file of seven would only split the section
 further.
+
+## 2026-09-13 — 2.1.5 rebuilt as Authorization, Licensing, and Control
+
+Built from the owner's Part A brief, which replaces the whole body. The old
+2.1.5 was a question list, a chain written as one arrow line, and an
+assembly activity; none of it survives except the subject. Title is now
+"2.1.5 Authorization, Licensing, and Control" and the unit reads 75 minutes,
+15 + 35 + 25 as the brief allocates, with the allocation sentence in the
+body and the total left to the page chrome that already prints it.
+
+Shape follows 2.1.2 and 2.1.3: no title heading, sections at `###`, the two
+required readings as ReadingCards, the four answers as Folds labelled only
+"Show answer 1" to "Show answer 4" and collapsed on load. The evidence
+packet, the director's announcement and all four questions are visible
+before any answer opens. No widget, no scoring, no simulated switch — the
+brief forbids all three and the lesson needs none. References to 2.1.1,
+2.1.2, 2.1.3, 2.1.4 and 2.1.6 are links to their real routes, as the brief
+asks; all five resolve.
+
+Sources checked on 13 September 2026, all four read in full at the assigned
+places. NVIDIA's release-8 "Licensing" page states in its own words that the
+licence "is enforced through software", and its Table 74 gives an unlicensed
+VM a 20-minute grace period and a licensed VM disconnected from the licence
+server 7 days (the CLS default, configurable for DLS), with full capability
+"restored immediately when a valid license is acquired"; the next heading is
+"Verifying the License Status of a Licensed NVIDIA vGPU for Compute Guest
+VM", which is exactly where the brief stops the excerpt. The RAND working
+paper is WR-A3056-1, 18 January 2024, by Kulp, Gonzales, Smith, Heim, Puri,
+Vermeer and Winkelman; printed page 37 is viewer page 48, so the offset of
+eleven the brief gives is right, chapter 6 opens "Offline Licensing
+Approach" on printed 37, "Subsystems" is on printed 38, and "Discussion" and
+"Summary" are both on printed 48. Sastry §5.B is "Guardrails for Compute
+Governance", whose fifth principle asks for substantive and procedural
+safeguards and names limits on the types of control imposed, on the
+information regulators may request, and on the entities covered, alongside
+review and public reporting — which is what the lesson attributes to it.
+NIST SP 800-193 is by Andrew Regenscheid, May 2018, and its abstract is
+protection, detection and recovery, nothing about licensing.
+
+Fetching trap worth keeping: rand.org answers a plain request with a
+CloudFront 403, and a headless browser with ERR_CONNECTION_RESET. curl with
+an ordinary desktop User-Agent gets both the publication page and the PDF.
+The PDF is not the AES-encrypted kind this log warned about for RR-A3686-1 —
+PyMuPDF reads its text layer directly.
+
+Five works registered: the NVIDIA page, the RAND publication page, the RAND
+PDF, the arXiv full-text render (a separate URL from the abstract page
+already registered, and the one that can carry a reader to §5.B), and the
+NIST page. The appendix prints five.
+
+One citation was removed, not lost: Petrie's "Near-Term Enforcement of AI
+Chip Export Controls Using a Firmware-Based Design for Offline Licensing"
+(arXiv:2404.18308, April 2024) was cited only by the old 2.1.5, so
+rebuilding the body orphaned it and the registry entry had to go with it.
+It is the closest published proposal to this lesson's subject and Part A
+does not mention it; say the word and it comes back as a further-reading
+card with its entry restored.
+
+Flags:
+
+- "Consider three translation errors", "at least four functions" and "Keep
+  three sentences in your notebook" announce item counts, which the
+  2026-09-08 ruling forbids. Kept verbatim, as in 2.1.1, because they are
+  the owner's own sentences.
+- The lesson says the primer is optional in one place and the fold's label
+  says "Optional:" in another — not this lesson; see the entry above.
+- A wide three-column table is laid out badly, and it is a platform rule
+  rather than this lesson: `.lesson-body table :is(th, td):last-child {
+  width: 100% }` in globals.css hands all the slack to the last column, so
+  in a 992px box the middle column resolves to about 109px and its sentences
+  set one or two words to the line while the last column has 781px. Every
+  three-column table in 2.1.3 is the same: 103px, 118px, 114px middle
+  columns against 774px, 767px, 749px last ones. Two-column tables are
+  unaffected. The rule exists so the header rule reaches the edge of the
+  box, which sharing the slack across every column after the first would
+  also do. Not changed here: it would repaint every table in the course,
+  which is the owner's call, not a side effect of a content brief.

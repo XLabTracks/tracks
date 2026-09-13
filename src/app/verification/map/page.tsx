@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { LegacyScripts } from "@/components/verification/legacy-scripts";
+import { SkillMapHost } from "@/components/verification/skill-map-host";
 
 /* Skill map — one of the course's own pages.
  *
@@ -8,18 +8,12 @@ import { LegacyScripts } from "@/components/verification/legacy-scripts";
  * so it could only ask an API whether somebody was signed in and never show
  * them their own account. The figure is the home page's skill web — the
  * same markup, drawn by the same skill-web.js — and map.js adds progress,
- * unit links and the objectives filter on top. */
+ * unit links and the panel's chips on top. The notebook carries the same
+ * map in its Skill Map view, which is where the header used to send people;
+ * this page stays as the full-width edition and the deep-link target
+ * (?skill=, ?unit= from the completion toast). */
 
 export const metadata: Metadata = { title: "Skill Map" };
-
-const SCRIPTS = [
-  "data/course.js",
-  "data/skills.js",
-  "data/chrome.js",
-  "platform.js",
-  "skill-web.js",
-  "map.js",
-];
 
 export default function Page() {
   return (
@@ -41,33 +35,8 @@ export default function Page() {
           </div>
         </header>
 
-        <div className="mod-filters" id="modFilters"></div>
-
-        <div className="constellation">
-          <div>
-            <div className="sky" id="sky"></div>
-            <div className="sky-legend">
-              <span>number inside a star — find it in the key below</span>
-              <span>ring around a star — how much of it you hold</span>
-              <span>solid beam — fed from inside the module</span>
-              <span>dashed line — fed from another module</span>
-              <span>
-                arm from the hub — the module&apos;s own shape, not a
-                dependency
-              </span>
-              <span className="on-hover">
-                click a star or a key row to pin it
-              </span>
-              <span className="on-touch">
-                tap a star or a key row to pin it
-              </span>
-            </div>
-            <ol className="sky-key" id="skyKey"></ol>
-          </div>
-          <div className="sky-panel" id="skyPanel"></div>
-        </div>
+        <SkillMapHost />
       </main>
-      <LegacyScripts src={SCRIPTS} />
     </>
   );
 }

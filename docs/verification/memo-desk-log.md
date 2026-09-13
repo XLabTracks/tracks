@@ -86,3 +86,7 @@ go against earlier teammates' decisions on purpose — review before merging.
   button, placed under the lesson's opening line before the sign-up sheet
   and the bank. `memoCardSlotsForLesson` is desk + page slots; task slots
   are still the exercise embed.
+- **Pilot revised, same day.** The sidebar block came out again. The
+  notebook keeps the two surfaces instead, as buttons in its header beside
+  the title — Skill Map and Memo desk — rather than the old hidden last
+  page; the footer's row stays what it was (Note, Sketch, Written work).

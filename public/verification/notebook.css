@@ -128,6 +128,15 @@
   border-bottom: var(--hairline) solid var(--border);
 }
 .nb-head h2 { font-size: var(--fs-xl); }
+.nb-head h2 { flex: 1 1 auto; }
+.nb-tools { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+.nb-tools .btn { white-space: nowrap; }
+/* A phone has no room beside the title: the tools take a row of their own
+   under it, and the close button keeps the corner. */
+@media (max-width: 480px) {
+  .nb-head { flex-wrap: wrap; }
+  .nb-tools { order: 3; flex-basis: 100%; margin-left: 0; }
+}
 
 .nb-x {
   width: 44px;

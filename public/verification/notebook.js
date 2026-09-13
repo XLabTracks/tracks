@@ -473,6 +473,14 @@ window.VTNotebook = (function () {
       '<aside class="nb-panel" role="dialog" aria-modal="true" aria-label="Notebook">' +
         '<header class="nb-head">' +
           '<h2>Notebook</h2>' +
+          /* The course's two learner surfaces that are not lessons, in the
+             book's own chrome: the map of what the reading has filled and
+             the desk that indexes the writing. Links, not views — each is a
+             page with a session behind it. */
+          '<nav class="nb-tools" aria-label="Course tools">' +
+            '<a class="btn small outline" href="/verification/map">Skill Map</a>' +
+            '<a class="btn small outline" href="/verification/memo-desk">Memo desk</a>' +
+          '</nav>' +
           '<button class="nb-x" type="button" data-close aria-label="Close notebook">&times;</button>' +
         '</header>' +
         '<div class="nb-pages"></div>' +
@@ -481,7 +489,6 @@ window.VTNotebook = (function () {
             '<button class="btn small outline" type="button" data-add="text">Note</button>' +
             '<button class="btn small outline" type="button" data-add="sketch">Sketch</button>' +
             '<button class="btn small outline" type="button" data-written>Written work</button>' +
-            '<a class="btn small outline" href="/verification/memo-desk">Memo desk</a>' +
           '</div>' +
           '<div class="nb-pager">' +
             '<button class="btn small outline" type="button" data-page="-1" aria-label="Previous page">&larr;</button>' +

@@ -1,4 +1,9 @@
-import { memoSlots, type MemoSlot } from "@/content/verification/memos";
+import {
+  memoSlots,
+  memoSlotTasks,
+  type MemoSlot,
+  type MemoStep,
+} from "@/content/verification/memos";
 import {
   getItemsForModule,
   getModulesForTrack,
@@ -7,14 +12,16 @@ import {
   itemTitleOf,
 } from "@/lib/content";
 
-const taskSlots: MemoSlot[] = memoSlots.filter(
-  (slot): slot is MemoSlot & { task: string } => typeof slot.task === "string",
+const taskSlots: { slot: MemoSlot; step: MemoStep }[] = memoSlots.flatMap((slot) =>
+  memoSlotTasks(slot).map((step) => ({ slot, step })),
 );
 
-export const verificationTaskIds: string[] = taskSlots.map((slot) => slot.task!);
+export const verificationTaskIds: string[] = taskSlots.map(({ step }) => step.task);
 
 export function taskTitle(taskId: string): string {
-  return taskSlots.find((slot) => slot.task === taskId)?.title ?? taskId;
+  const hit = taskSlots.find(({ step }) => step.task === taskId);
+  if (!hit) return taskId;
+  return hit.slot.steps ? `${hit.slot.title} — ${hit.step.title}` : hit.step.title;
 }
 
 export interface CohortTask {
@@ -39,14 +46,14 @@ export function verificationTasksByModule(): CohortModuleTasks[] {
       if (item.kind !== "lesson") continue;
       const id = itemIdOf(item);
       const stem = item.lesson.contentRef.replace(/^verification\//, "");
-      for (const slot of taskSlots) {
+      for (const { slot, step } of taskSlots) {
         if (slot.lesson !== stem) continue;
         tasks.push({
-          id: slot.task!,
-          title: slot.title,
+          id: step.task,
+          title: taskTitle(step.task),
           lessonId: id,
           lessonTitle: itemTitleOf(item),
-          lessonHref: `/tracks/verification/${mod.slug}/${itemSlugOf(item)}#${slot.task}`,
+          lessonHref: `/tracks/verification/${mod.slug}/${itemSlugOf(item)}#${step.task}`,
         });
       }
     }

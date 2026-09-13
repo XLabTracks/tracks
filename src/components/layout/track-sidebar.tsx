@@ -11,6 +11,8 @@ import {
   Flag,
   ListTree,
   Lock,
+  Map as MapIcon,
+  PenLine,
 } from "lucide-react";
 import {
   Accordion,
@@ -254,6 +256,73 @@ function SidebarNav({
           })}
         </Accordion>
       </nav>
+      {isVerificationRoute(pathname) && (
+        <CourseTools outline={outline} completed={completed} onNavigate={onNavigate} />
+      )}
+    </div>
+  );
+}
+
+/* Pinned under the outline on the Verification track: the course's two
+   learner surfaces that are not lessons — the Skill Map and the memo desk —
+   and one bar for the whole course. The fraction and the word carry the
+   state; the bar only repeats it. A pilot of the owner's (2026-09-13): the
+   Skill Map used to be the notebook's last page. */
+function CourseTools({
+  outline,
+  completed,
+  onNavigate,
+}: {
+  outline: SidebarOutline;
+  completed: Set<string>;
+  onNavigate?: () => void;
+}) {
+  const required = outline.modules.flatMap(({ items }) =>
+    items.filter((item) => !item.optional && !item.completion)
+  );
+  const done = required.filter((item) => itemDone(item, completed)).length;
+  const total = required.length;
+  const pct = total ? Math.round((done / total) * 100) : 0;
+  return (
+    // pb-20 clears the notebook's floating corner button, which the course
+    // chrome fixes over the sidebar's bottom-left.
+    <div className="border-border/70 border-t px-4 pt-3 pb-20">
+      <div className="flex items-baseline justify-between gap-3 text-xs">
+        <span className="text-muted-foreground font-medium tracking-wide uppercase">
+          Progress
+        </span>
+        <span className="tabular-nums">
+          {done} / {total} {done === total && total > 0 ? "· complete" : "read"}
+        </span>
+      </div>
+      <div
+        className="bg-muted mt-1.5 h-1.5 overflow-hidden rounded-full"
+        role="progressbar"
+        aria-valuemin={0}
+        aria-valuemax={total}
+        aria-valuenow={done}
+        aria-label="Course progress"
+      >
+        <div className="bg-primary h-full rounded-full" style={{ width: `${pct}%` }} />
+      </div>
+      <div className="mt-2.5 flex flex-col gap-0.5">
+        <Link
+          href="/verification/map"
+          onClick={onNavigate}
+          className="hover:bg-muted flex min-h-11 items-center gap-2 rounded-lg px-2 py-1.5 text-sm transition-colors lg:min-h-0"
+        >
+          <MapIcon className="text-muted-foreground size-4 shrink-0" aria-hidden />
+          Skill Map
+        </Link>
+        <Link
+          href="/verification/memo-desk"
+          onClick={onNavigate}
+          className="hover:bg-muted flex min-h-11 items-center gap-2 rounded-lg px-2 py-1.5 text-sm transition-colors lg:min-h-0"
+        >
+          <PenLine className="text-muted-foreground size-4 shrink-0" aria-hidden />
+          Memo desk
+        </Link>
+      </div>
     </div>
   );
 }

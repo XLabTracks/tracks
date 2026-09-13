@@ -12,6 +12,11 @@ export const memoGenreLabels: Record<MemoGenre, string> = {
   redline: "Red-line",
 };
 
+export interface MemoStep {
+  task: string;
+  title: string;
+}
+
 export interface MemoSlot {
   id: string;
   module: number;
@@ -21,6 +26,7 @@ export interface MemoSlot {
   genre?: MemoGenre;
   lesson: string;
   task?: string;
+  steps?: MemoStep[];
   href?: string;
   optional?: boolean;
   brief: string | null;
@@ -66,126 +72,46 @@ export const memoSlots: MemoSlot[] = [
     words: 0,
   },
   {
-    id: "m0-a1-strongest-mechanism",
-    module: 0,
-    unit: "0.2",
-    title: "A1. Identify the Regime's Strongest Mechanism or Recommendation",
-    status: "specified",
-    lesson: "intuitions",
-    task: "v-task-intuitions-5",
-    brief: null,
-    audience: null,
-    words: 0,
-  },
-  {
-    id: "m0-a2-weakest-link",
-    module: 0,
-    unit: "0.2",
-    title: "A2. Identify the Regime's Weakest Link(s)",
-    status: "specified",
-    lesson: "intuitions",
-    task: "v-task-intuitions-6",
-    brief: null,
-    audience: null,
-    words: 0,
-  },
-  {
-    id: "m0-a3-timeline",
-    module: 0,
-    unit: "0.2",
-    title: "A3. Stress-Test the Timeline",
-    status: "specified",
-    lesson: "intuitions",
-    task: "v-task-intuitions-7",
-    brief: null,
-    audience: null,
-    words: 0,
-  },
-  {
-    id: "m0-a4-covert-compute-margin",
-    module: 0,
-    unit: "0.2",
-    title: "A4. Assess the Covert-Compute Margin",
-    status: "specified",
-    lesson: "intuitions",
-    task: "v-task-intuitions-8",
-    brief: null,
-    audience: null,
-    words: 0,
-  },
-  {
     id: "m0-hinge-brief",
     module: 0,
     unit: "0.2",
-    title: "A5. Final Essay: Stress-Test Plan A",
+    title: "Essay A: Stress-Test Plan A",
     status: "specified",
     genre: "essay",
     lesson: "intuitions",
-    task: "v-task-intuitions-9",
-    brief: null,
-    audience: null,
-    words: 0,
-  },
-  {
-    id: "m0-b1-tractable-target",
-    module: 0,
-    unit: "0.2",
-    title: "B1. Which Plan Gives Verification the More Tractable Target?",
-    status: "specified",
-    lesson: "intuitions",
-    task: "v-task-intuitions-10",
-    brief: null,
-    audience: null,
-    words: 0,
-  },
-  {
-    id: "m0-b2-stronger-evidence",
-    module: 0,
-    unit: "0.2",
-    title: "B2. Which Plan Could Provide Stronger Evidence of Compliance?",
-    status: "specified",
-    lesson: "intuitions",
-    task: "v-task-intuitions-11",
-    brief: null,
-    audience: null,
-    words: 0,
-  },
-  {
-    id: "m0-b3-monitoring-problem",
-    module: 0,
-    unit: "0.2",
-    title: "B3. Which Plan Creates the Harder Monitoring Problem?",
-    status: "specified",
-    lesson: "intuitions",
-    task: "v-task-intuitions-12",
-    brief: null,
-    audience: null,
-    words: 0,
-  },
-  {
-    id: "m0-b4-cooperation",
-    module: 0,
-    unit: "0.2",
-    title: "B4. Which Regime Could States Actually Cooperate On?",
-    status: "specified",
-    lesson: "intuitions",
-    task: "v-task-intuitions-13",
-    brief: null,
-    audience: null,
-    words: 0,
+    steps: [
+      { task: "v-task-intuitions-5", title: "A1. Identify the Regime's Strongest Mechanism or Recommendation" },
+      { task: "v-task-intuitions-6", title: "A2. Identify the Regime's Weakest Link(s)" },
+      { task: "v-task-intuitions-7", title: "A3. Stress-Test the Timeline" },
+      { task: "v-task-intuitions-8", title: "A4. Assess the Covert-Compute Margin" },
+      { task: "v-task-intuitions-9", title: "A5. Final Essay" },
+    ],
+    brief:
+      "Stress-test the Plan A verification supplement — how robust is Plan A's verification regime, and where is it most likely to fail? Four prompted questions lead into the final essay, which ends on one of three recommendations: adopt largely as written, adopt only with significant amendments, or reject in favor of a different approach (400–600 words).",
+    audience:
+      "Decision-makers asking whether the verification regime is strong enough to rely on as written.",
+    words: 600,
   },
   {
     id: "m0-plan-a-vs-s",
     module: 0,
     unit: "0.2",
-    title: "B5. Final Essay: Plan A vs. Plan S",
+    title: "Essay B: Plan A vs. Plan S",
     status: "specified",
     genre: "essay",
     lesson: "intuitions",
-    task: "v-task-intuitions-14",
-    brief: null,
-    audience: null,
-    words: 0,
+    steps: [
+      { task: "v-task-intuitions-10", title: "B1. Which Plan Gives Verification the More Tractable Target?" },
+      { task: "v-task-intuitions-11", title: "B2. Which Plan Could Provide Stronger Evidence of Compliance?" },
+      { task: "v-task-intuitions-12", title: "B3. Which Plan Creates the Harder Monitoring Problem?" },
+      { task: "v-task-intuitions-13", title: "B4. Which Regime Could States Actually Cooperate On?" },
+      { task: "v-task-intuitions-14", title: "B5. Final Essay" },
+    ],
+    brief:
+      "Compare Plan A (verified slowdown) and Plan S (complete shutdown) — which creates the more robust verification regime? Four prompted questions lead into the final essay, which makes a recommendation (400–500 words).",
+    audience:
+      "Decision-makers asking whether the verification regime is strong enough to rely on as written.",
+    words: 500,
   },
   {
     id: "m0-success-scenario",
@@ -406,7 +332,14 @@ export function memoSlotsForLesson(lesson: string): MemoSlot[] {
 }
 
 export function memoDeskSlotsForLesson(lesson: string): MemoSlot[] {
-  return memoSlotsForLesson(lesson).filter((slot) => !slot.task && !slot.href);
+  return memoSlotsForLesson(lesson).filter(
+    (slot) => !slot.task && !slot.steps && !slot.href,
+  );
+}
+
+export function memoSlotTasks(slot: MemoSlot): MemoStep[] {
+  if (slot.steps) return slot.steps;
+  return slot.task ? [{ task: slot.task, title: slot.title }] : [];
 }
 
 const writingById = new Map<string, WritingExercise>(
@@ -415,6 +348,6 @@ const writingById = new Map<string, WritingExercise>(
     .map((exercise) => [exercise.id, exercise]),
 );
 
-export function memoTaskExercise(slot: MemoSlot): WritingExercise | undefined {
-  return slot.task ? writingById.get(slot.task) : undefined;
+export function memoTaskExercise(task: string): WritingExercise | undefined {
+  return writingById.get(task);
 }

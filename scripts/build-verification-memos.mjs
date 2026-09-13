@@ -94,7 +94,12 @@ function records(text, name) {
       if (value === "null") rec[key] = null;
       else if (value === "true" || value === "false") rec[key] = value === "true";
       else if (/^\d+$/.test(value)) rec[key] = Number(value);
-      else if (value.startsWith("[")) {
+      else if (key === "steps") {
+        rec.steps = [...value.matchAll(/task:\s*"([^"]+)",\s*title:\s*"((?:[^"\\]|\\.)*)"/g)].map(
+          (m) => ({ task: m[1], title: JSON.parse(`"${m[2]}"`) }),
+        );
+        if (!rec.steps.length) fail(`could not read steps in ${rec.id ?? "a record"}`);
+      } else if (value.startsWith("[")) {
         rec[key] = [...value.matchAll(/"((?:[^"\\]|\\.)*)"/g)].map((m) =>
           JSON.parse(`"${m[1]}"`),
         );
@@ -143,14 +148,12 @@ const memoModules = [...block(src, "memoModules", "[", "]").matchAll(/"([^"]+)"/
 );
 if (memoModules.length !== 5) fail(`memoModules parsed ${memoModules.length} names, expected 5`);
 
-const slots = records(src, "memoSlots").map((slot) => {
-  const { lesson, ...rest } = slot;
-  if (!rest.task) return rest;
-
-  const exercise = exerciseById.get(rest.task);
-  if (!exercise) fail(`${rest.id} names task ${rest.task}, which exercises.ts does not declare`);
+/** A lesson task resolved against its exercise: brief, budget, link. */
+function resolveTask(slotId, task, lesson) {
+  const exercise = exerciseById.get(task);
+  if (!exercise) fail(`${slotId} names task ${task}, which exercises.ts does not declare`);
   if (exercise.type !== "writing-prompt") {
-    fail(`${rest.id} names task ${rest.task}, which is a ${exercise.type}, not writing`);
+    fail(`${slotId} names task ${task}, which is a ${exercise.type}, not writing`);
   }
 
   /* The prompt's opening "Optional: …" line is the task's own title line in
@@ -163,13 +166,27 @@ const slots = records(src, "memoSlots").map((slot) => {
   }
 
   return {
-    ...rest,
     ...(exercise.optional || optionalLead ? { optional: true } : {}),
     brief,
     words: exercise.maxWords ?? 0,
     ...(exercise.minWords ? { wordsMin: exercise.minWords } : {}),
-    href: `${lessonHref(lesson)}#${rest.task}`,
+    href: `${lessonHref(lesson)}#${task}`,
   };
+}
+
+const slots = records(src, "memoSlots").map((slot) => {
+  const { lesson, ...rest } = slot;
+  if (rest.steps) {
+    /* A grouped slot: one row on the desk, the lesson's prompted questions
+       inside it. The group keeps its own brief; each step carries its own. */
+    const steps = rest.steps.map((step) => ({
+      ...step,
+      ...resolveTask(rest.id, step.task, lesson),
+    }));
+    return { ...rest, steps, href: steps[0].href };
+  }
+  if (!rest.task) return rest;
+  return { ...rest, ...resolveTask(rest.id, rest.task, lesson) };
 });
 
 for (const slot of slots) {

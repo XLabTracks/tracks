@@ -438,3 +438,21 @@ input::placeholder, textarea::placeholder { color: var(--muted-foreground); opac
   color: var(--brand-ink);
 }
 .task-pane .answer-text { white-space: pre-wrap; font-size: var(--fs-sm); }
+
+/* A grouped slot's steps: the lesson's prompted questions, ruled apart. */
+.task-pane .steps { list-style: none; margin-top: 14px; }
+.task-pane .step + .step { margin-top: 14px; padding-top: 14px; border-top: var(--hairline) solid var(--border); }
+.task-pane .step-title { font-weight: 600; }
+.task-pane .step-brief { margin-top: 6px; font-size: var(--fs-sm); color: var(--muted-foreground); }
+.task-pane .step-brief p + p, .task-pane .step-brief ul { margin-top: 6px; }
+.task-pane .step-brief ul { padding-left: 1.2em; list-style: disc; }
+.task-pane .step-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin-top: 8px;
+  font-family: var(--label);
+  font-size: var(--fs-2xs);
+  color: var(--muted-foreground);
+}
+.task-pane .step-meta a { color: var(--brand-ink); }

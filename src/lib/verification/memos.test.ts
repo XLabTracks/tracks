@@ -6,6 +6,7 @@ import {
   memoGenreLabels,
   memoModules,
   memoSlots,
+  memoSlotTasks,
   memoTaskExercise,
 } from "@/content/verification/memos";
 import { verificationExercises } from "@/content/verification/exercises";
@@ -27,8 +28,10 @@ function body(lesson: string): string {
   return readFileSync(path, "utf8");
 }
 
-const deskSlots = memoSlots.filter((slot) => !slot.task && !slot.href);
-const taskSlots = memoSlots.filter((slot) => slot.task);
+const deskSlots = memoSlots.filter((slot) => !slot.task && !slot.steps && !slot.href);
+const tasks = memoSlots.flatMap((slot) =>
+  memoSlotTasks(slot).map((step) => ({ slot, step })),
+);
 
 describe("verification written outputs", () => {
   it("every slot names a lesson that exists in the track", () => {
@@ -67,17 +70,24 @@ describe("verification written outputs", () => {
   });
 
   it("every lesson task names a writing exercise its lesson embeds exactly once", () => {
-    for (const slot of taskSlots) {
-      const exercise = memoTaskExercise(slot);
-      expect(exercise, `${slot.id} names ${slot.task}, which is not a writing exercise`).toBeDefined();
-      const embeds = body(slot.lesson).split(`<Exercise id="${slot.task}" />`).length - 1;
-      expect(embeds, `${slot.lesson}.mdx must embed ${slot.task} exactly once`).toBe(1);
+    for (const { slot, step } of tasks) {
+      const exercise = memoTaskExercise(step.task);
+      expect(exercise, `${slot.id} names ${step.task}, which is not a writing exercise`).toBeDefined();
+      const embeds = body(slot.lesson).split(`<Exercise id="${step.task}" />`).length - 1;
+      expect(embeds, `${slot.lesson}.mdx must embed ${step.task} exactly once`).toBe(1);
+    }
+  });
+
+  it("a slot is a single task or a group of steps, never both", () => {
+    for (const slot of memoSlots) {
+      expect(!!(slot.task && slot.steps), `${slot.id} has both task and steps`).toBe(false);
+      if (slot.steps) expect(slot.steps.length, `${slot.id} has an empty steps list`).toBeGreaterThan(1);
     }
   });
 
   it("every writing exercise the track declares has exactly one slot", () => {
     const counts = new Map<string, number>();
-    for (const slot of taskSlots) counts.set(slot.task!, (counts.get(slot.task!) ?? 0) + 1);
+    for (const { step } of tasks) counts.set(step.task, (counts.get(step.task) ?? 0) + 1);
     for (const exercise of verificationExercises.filter(isWritingExercise)) {
       expect(
         counts.get(exercise.id) ?? 0,
@@ -99,9 +109,10 @@ describe("verification written outputs", () => {
     }
   });
 
-  it("a task slot is optional exactly when its exercise is", () => {
-    for (const slot of taskSlots) {
-      const exercise = memoTaskExercise(slot)!;
+  it("a single-task slot is optional exactly when its exercise is", () => {
+    for (const slot of memoSlots) {
+      if (!slot.task) continue;
+      const exercise = memoTaskExercise(slot.task)!;
       const optional = !!exercise.optional || /^Optional:/.test(exercise.prompt);
       expect(!!slot.optional, `${slot.id} and ${slot.task} disagree on optional`).toBe(optional);
     }

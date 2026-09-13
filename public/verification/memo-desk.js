@@ -224,7 +224,8 @@ window.VTMemoDesk = (function () {
   });
 
   var STATUS_WORD = { specified: 'brief', named: 'named only', unspecified: 'no brief yet' };
-  var elsewhere = function (s) { return !!(s.task || s.href); };
+  var elsewhere = function (s) { return !!(s.task || s.steps || s.href); };
+  var stepsOf = function (s) { return s.steps || (s.task ? [{ task: s.task, title: s.title, brief: null, words: s.words, wordsMin: s.wordsMin, href: s.href, optional: s.optional }] : []); };
   var byId = {};
   SLOTS.forEach(function (s) { byId[s.id] = s; });
   var current = SLOTS[0];
@@ -279,8 +280,8 @@ window.VTMemoDesk = (function () {
             '<span class="t">' + esc(s.unit) + ' — ' +
             (s.optional ? '<span class="optional-prefix">Optional:</span> ' : '') + esc(s.title) + '</span>' +
             '<span class="m"><span class="status ' + s.status + '">' + STATUS_WORD[s.status] + '</span>' +
-            (s.task ? '<span class="where">· in the lesson</span>' : s.href ? '<span class="where">· its own page</span>' : '') +
-            (s.task ? answerMark(s.task) : hasDraft(s.id) ? '<span class="drafted">· drafted</span>' : '') +
+            (s.task || s.steps ? '<span class="where">· in the lesson</span>' : s.href ? '<span class="where">· its own page</span>' : '') +
+            (s.steps ? stepsMark(s) : s.task ? answerMark(s.task) : hasDraft(s.id) ? '<span class="drafted">· drafted</span>' : '') +
             '</span></button></li>';
         }).join('') +
         '</ul></div>'
@@ -321,6 +322,23 @@ window.VTMemoDesk = (function () {
     if (!a) return '';
     return '<span class="drafted">· ' + (a.status === 'submitted' ? 'handed in' : 'drafted') + '</span>';
   }
+  function stepsMark(s) {
+    if (!answers) return '';
+    var n = s.steps.filter(function (st) { return !!answerFor(st.task); }).length;
+    return n ? '<span class="drafted">· ' + n + '/' + s.steps.length + ' written</span>' : '';
+  }
+
+  function answerHtml(task) {
+    if (!answers) return '<p class="answer-note">Looking for your saved answer…</p>';
+    if (answers.error) return '<p class="answer-note">Your saved answer could not be fetched just now; the lesson has it.</p>';
+    if (!answers.signedIn) return '<p class="answer-note">Sign in to see your saved answer here.</p>';
+    var a = answerFor(task);
+    return a
+      ? '<div class="answer"><p class="bk">Your answer <span class="answer-status">' +
+        (a.status === 'submitted' ? 'handed in' : 'draft') + '</span></p>' +
+        '<div class="answer-text">' + esc(a.text) + '</div></div>'
+      : '<p class="answer-note">Nothing saved for this one yet.</p>';
+  }
 
   function renderTaskPane(s) {
     var pane = el('taskPane');
@@ -330,20 +348,21 @@ window.VTMemoDesk = (function () {
       out += '<p>This one is answered inside the lesson, in the writing box under its prompt. ' +
         'Signed in, the answer saves to your account and shows here.</p>';
       out += '<p><a class="btn" href="' + esc(s.href) + '">Open it in the lesson &rarr;</a></p>';
-      if (!answers) {
-        out += '<p class="answer-note">Looking for your saved answer…</p>';
-      } else if (answers.error) {
-        out += '<p class="answer-note">Your saved answer could not be fetched just now; the lesson has it.</p>';
-      } else if (!answers.signedIn) {
-        out += '<p class="answer-note">Sign in to see your saved answer here.</p>';
-      } else {
-        var a = answerFor(s.task);
-        out += a
-          ? '<div class="answer"><p class="bk">Your answer <span class="answer-status">' +
-            (a.status === 'submitted' ? 'handed in' : 'draft') + '</span></p>' +
-            '<div class="answer-text">' + esc(a.text) + '</div></div>'
-          : '<p class="answer-note">Nothing saved for this one yet.</p>';
-      }
+      out += answerHtml(s.task);
+    } else if (s.steps) {
+      /* A grouped slot: the lesson's prompted questions, each with its own
+         brief, budget, link and saved answer, in the lesson's order. */
+      out += '<p>This essay is built in the lesson, one prompted question at a time, each in its own writing box. ' +
+        'Signed in, the answers save to your account and show here.</p>';
+      out += '<ol class="steps">' + s.steps.map(function (st) {
+        return '<li class="step"><p class="step-title">' +
+          (st.optional ? '<span class="optional-prefix">Optional:</span> ' : '') + esc(st.title) + '</p>' +
+          '<div class="step-brief">' + briefHtml(st.brief) + '</div>' +
+          '<p class="step-meta">' +
+            (st.words ? '<span>' + (st.wordsMin ? st.wordsMin + '–' + st.words : 'about ' + st.words) + ' words</span>' : '') +
+            '<a href="' + esc(st.href) + '">Open in the lesson &rarr;</a></p>' +
+          answerHtml(st.task) + '</li>';
+      }).join('') + '</ol>';
     } else {
       out += '<p>This one is written on its own page, which keeps its draft.</p>';
       out += '<p><a class="btn" href="' + esc(s.href) + '">Open it &rarr;</a></p>';
@@ -439,8 +458,8 @@ window.VTMemoDesk = (function () {
     host.classList.toggle('elsewhere', elsewhere(current));
     applyGenre();
     renderTaskPane(current);
-    if (current.task) loadAnswers(function () {
-      if (current.task) { renderTaskPane(current); renderRail(); }
+    if (current.task || current.steps) loadAnswers(function () {
+      if (current.task || current.steps) { renderTaskPane(current); renderRail(); }
     });
     var d = STORE.read(id) || {};
     Object.keys(F).forEach(function (k) { F[k].value = d[k] || ''; });

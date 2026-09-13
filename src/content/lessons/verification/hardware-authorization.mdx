@@ -73,6 +73,8 @@ The rest of this lesson develops a course-authored design test. It is not a desc
 
 The chain starts before a signing key is used and continues after a device refuses work.
 
+<div className="trio-table">
+
 | Stage | What must happen | Question for the policy designer |
 | --- | --- | --- |
 | Legal permission | An authorized body defines the allowed activity and limits. | Who may grant exceptions, and under which rule? |
@@ -81,6 +83,8 @@ The chain starts before a signing key is used and continues after a device refus
 | Execution and accounting | The component charges relevant work to the correct allowance. | Do all covered operations pass through it, including after restarts? |
 | Restriction | The specified condition causes a defined reduction or suspension. | What stops, how quickly, and what unrelated work is affected? |
 | Review and restoration | A competent authority reviews the decision and authorizes a safe recovery or renewal. | Can a successful appeal actually restore service without restoring a compromised control? |
+
+</div>
 
 The **issuer** signs tokens; it need not be the body legally empowered to authorize a run. A manufacturer could operate the signing service for an independent licensing authority. That division only works if the manufacturer cannot silently grant extra permissions—or if the regime explicitly accepts and audits that power.
 

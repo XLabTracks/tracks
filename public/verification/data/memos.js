@@ -83,16 +83,6 @@ window.VERIFICATION_MEMOS = [
     "gap": "A \"[Optional] Written output:\" marker sits after the supply-chain actor list with nothing under it."
   },
   {
-    "id": "m2-1-hardware-brief",
-    "module": 2,
-    "unit": "2.1",
-    "title": "Hardware assurance brief",
-    "status": "specified",
-    "brief": "A bounded hardware assurance brief. The point is not forecasting the correct future — it is making the assessment conditional on visible facts: coverage, fidelity, time to deployment, and the preferred corroborating layer.",
-    "audience": "A named national delegation or joint drafting session considering a three-month U.S.–China pause.",
-    "words": 1000
-  },
-  {
     "id": "m2-3-intel-overview",
     "module": 2,
     "unit": "2.3",

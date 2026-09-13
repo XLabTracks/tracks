@@ -947,6 +947,55 @@
       "authors": "Regenscheid, Andrew",
       "container": "National Institute of Standards and Technology",
       "date": "May 2018"
+    },
+    "https://arxiv.org/html/2507.15916v1": {
+      "title": "Verifying International Agreements on AI — §4.2.1.1: Prerequisites, Off-Chip Devices",
+      "about": "The full-text render, cited in 2.1.6 for the off-chip prerequisites section: network taps and analog sensors as separate collectors, trusted chips on-site or off-site for analysis, and the two-sided security problem — devices that could carry hidden functions for espionage or sabotage, against a Verifier that needs confidence the same devices have not been altered.",
+      "authors": "Baker, Mauricio, Gabriel Kulp, Oliver Marks, et al.",
+      "container": "arXiv",
+      "date": "2025"
+    },
+    "https://arxiv.org/pdf/2506.03409": {
+      "title": "Flexible Hardware-Enabled Guarantees, Part II: Technical Options",
+      "about": "Petrie and Aarne's flexHEG Part II, commissioned by ARIA. 2.1.6 assigns pp. 23–24, “Interlock-Based FlexHEG Design”: a component on the accelerator's main data path, the only route for data and instructions to enter it, with the higher performance requirement that placement brings and four possible integration points — an IP block on the die, a chiplet beside it, part of the high-bandwidth memory, or a network relay.",
+      "authors": "Petrie, James, and Onni Aarne",
+      "container": "arXiv",
+      "date": "Apr. 2025"
+    },
+    "https://blog.mozilla.org/security/2011/09/02/diginotar-removal-follow-up/": {
+      "title": "DigiNotar Removal Follow Up",
+      "about": "Mozilla's first-party account of removing trust in DigiNotar: failure to notify, a breach whose scope remained unknown, and certificates seen in use. 2.1.6 assigns the “Staat der Nederlanden Certificates” section, where an exemption granted on the Dutch government's assessment that a separate intermediate was uncompromised is withdrawn after that government audits DigiNotar and rescinds it.",
+      "authors": "Nightingale, Johnathan",
+      "container": "Mozilla Security Blog",
+      "date": "2 Sept. 2011"
+    },
+    "https://arxiv.org/pdf/2103.05633v1": {
+      "title": "Proof-of-Learning: Definitions and Practice",
+      "about": "The 2021 paper that introduced proof-of-learning: a trainer reveals intermediate weights so a verifier can re-execute selected updates, motivated by ownership disputes and by distributed training across untrusted workers. 2.1.7 assigns the abstract and §V-A, “Mechanism Overview”, stopping before §V-B.",
+      "authors": "Jia, Hengrui, Mohammad Yaghini, Christopher A. Choquette-Choo, et al.",
+      "container": "arXiv",
+      "date": "Mar. 2021"
+    },
+    "https://arxiv.org/html/2208.03567v2": {
+      "title": "Proof-of-Learning Is Currently More Broken Than You Think",
+      "about": "The attack paper read against Jia et al. in 2.1.7: the original argument that spoofing a proof costs as much as training honestly has been invalidated, and earlier spoofs were either unreproducible or aimed at weakened instantiations. Assigned selections are the abstract and §I, stopping before the contribution list. First posted August 2022; the assigned v2 is dated 17 April 2023.",
+      "authors": "Fang, Congyu, Hengrui Jia, Anvith Thudi, et al.",
+      "container": "arXiv",
+      "date": "Apr. 2023"
+    },
+    "https://arxiv.org/html/2307.00682v1": {
+      "title": "Tools for Verifying Neural Models’ Training Data",
+      "about": "The proof-of-training-data proposal: initialisation and data-order commitments plus statistical tests built on a model’s temporary memorisation of recently seen data. 2.1.7 assigns §7, “Discussion and Limitations”, whose subsections name the experimental limits, the attacks the protocol does not catch, and the confidentiality and verifier-hardware requirements.",
+      "authors": "Choi, Dami, Yonadav Shavit, and David Duvenaud",
+      "container": "arXiv",
+      "date": "Jul. 2023"
+    },
+    "https://arxiv.org/html/2606.05433v2": {
+      "title": "Zero Knowledge Verification for Frontier AI Training Is Possible (v2)",
+      "about": "The revised 2026 proposal: genesis, in-training step and ex-ante attestation proofs over dense pre-training, with a deployable proof of concept estimated at roughly 36 months and thirteen open problems catalogued. 2.1.7 assigns the abstract, caveats 1, 4 and 5 of Appendix B.10, and the first paragraph of G.5, where sparse auditing is described as detection-grade rather than universal.",
+      "authors": "Peigné, Pierre, Ky Nguyen, and Paul Wang",
+      "container": "arXiv",
+      "date": "22 Aug. 2026"
     }
   },
   "pending": [
@@ -987,12 +1036,6 @@
     "https://www.armscontrol.org/act/2009-05/iran-nuclear-briefs/defining-noncompliance-npt-safeguards-agreements",
     "https://www.alignmentforum.org/posts/uqAdqrvxqGqeBHjTP/towards-understanding-based-safety-evaluations",
     "https://www.apolloresearch.ai/science/we-need-a-science-of-evals",
-    "https://images.nvidia.com/aem-dam/en-zz/Solutions/data-center/h100/PB-11133-001_v01.pdf",
-    "https://arxiv.org/abs/2606.10724",
-    "https://arxiv.org/abs/2103.05633",
-    "https://arxiv.org/abs/2108.09454",
-    "https://arxiv.org/abs/2208.03567",
-    "https://arxiv.org/abs/2307.00682",
     "https://thefuturesociety.org/international-ai-verification"
   ],
   "excluded": [

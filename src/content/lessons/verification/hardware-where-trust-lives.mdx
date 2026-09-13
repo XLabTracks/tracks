@@ -1,123 +1,255 @@
+<Objectives scope="this lesson">
+1. Compare on-chip, off-chip digital, off-chip analog, and hybrid verification architectures.
+2. Evaluate their visibility, tamper resistance, retrofit potential, confidentiality, and dependence on manufacturers or verifier-controlled equipment.
+3. Identify common-mode failures: several safeguards depending on the same key, supplier, software, or measurement boundary.
+4. Explain what different actors must trust before an architecture could support international verification.
+</Objectives>
 
-### 2.1.6 Where should trust live?
+Allow 20 minutes for the three required reading cards, 35 minutes for the lesson, and 30 minutes for the exercise and answer review. Each card assigns an excerpt, not a complete paper. No code, hardware access, installation, or cryptographic calculations are required. Other inline links are references, not extra assignments.
 
-Hardware verification can place trust inside the accelerator, in a separate digital monitor, in physical sensors, or across a hybrid design. Moving trust does not remove it.
+### Move the Mechanism, Move the Trust
 
-Use one verification target for the comparison:
+In [2.1.5](/tracks/verification/verification-infrastructure/hardware-authorization), we followed permission from an authority to a device and back through review and recovery. Now ask where the machinery that measures, interprets, and restricts activity should be placed.
 
-<Prompt label="Verification target">Determine whether all covered compute in a declared data center is accounted for by permitted workloads.</Prompt>
+A monitor built into an accelerator may see internal activity that an external observer cannot. A separate monitor may reduce reliance on that accelerator’s manufacturer, but only if its evidence does not simply repeat what the accelerator reports. A physical sensor can observe a different phenomenon, yet may reveal little about the purpose of the computation. Combining them can help—or leave several devices repeating the same mistake.
 
-#### Architecture A: on-chip monitoring
+Keep the pause claim from [2.1.1](/tracks/verification/verification-infrastructure/hardware-claim): no covered, unlicensed training run exceeded the agreed threshold. We are comparing architectures that might support parts of that claim, not assuming any architecture already establishes it. This lesson does not select an entire international regime.
 
-Possible components include device identity, secure or measured boot, signed counters, protected telemetry, workload certificates, trusted execution environments, and hardware-backed authorization.
+### Locate Three Functions, Not One Box
 
-**Potential strengths**
+Every proposal should distinguish:
 
-- Fine-grained access to device state and activity;
-- Low marginal cost across a fleet after deployment;
-- Evidence can travel with the device;
-- Fast or real-time response;
-- Compact, privacy-preserving outputs rather than raw workloads.
+1. **Collection:** where the observation originates, such as a counter, intercepted data, or a current sensor.
+2. **Appraisal:** where observations are interpreted against a rule, reference value, or model of expected behavior.
+3. **Control:** where an instruction can actually constrain computation, if the design includes enforcement.
 
-**Load-bearing concerns**
+These functions can occupy different components. A power sensor is not necessarily a workload classifier. A classifier is not necessarily a switch. An external processor that checks signatures may provide independent appraisal of authenticity without independently measuring the underlying activity.
 
-- Trust in design, manufacturing, firmware, and key provisioning;
-- Vendor control of reference values, updates, revocation, and appraisal services;
-- Physical control by the prover;
-- Common-mode failure when identity, metering, classification, and licensing share one root;
-- Legacy and nonparticipating hardware;
-- Hardware redesign and fleet-turnover time;
-- Political resistance to foreign- or vendor-controlled keys.
+A **measurement boundary** is the set of devices, pathways, and intervals the observation covers. Draw that boundary before discussing confidence. A network observer at the edge of a rack does not automatically see traffic inside it. A meter on one electrical feed does not measure an unmetered feed elsewhere.
 
-Current confidential-computing support on accelerators is a deployed security primitive, not proof of treaty compliance. For example, NVIDIA describes Hopper confidential computing as protecting code and data in use from the host and basic physical attacks under its stated threat model. A treaty adversary may be stronger than that threat model, and a confidential workload may still violate the treaty.
+Likewise, distinguish physical location from dependence. An off-chip appliance can remain dependent on on-chip firmware for every input. An analog sensor normally produces records that digital software stores and analyzes. “Analog” describes the originating measurement, not an absence of software or cryptography.
 
-<Src>NVIDIA, [*NVIDIA H100 Tensor Core GPU Security*](https://images.nvidia.com/aem-dam/en-zz/Solutions/data-center/h100/PB-11133-001_v01.pdf) — the confidential-computing whitepaper and current product documentation.</Src>
+### Four Architectural Choices
 
-<PageBreak title="Off-chip digital monitoring" />
+The following is a course-authored comparison of representative designs, not a universal ranking or vendor specification. A specific implementation may change any entry.
 
-#### Architecture B: off-chip digital monitoring
+<div className="hex-table">
 
-Possible components include network taps, server or rack gateways, input/output loggers, tamper-evident enclosures, and separate secured verification computers.
+| Architecture | What it can directly observe | Tamper-resistance question | Retrofit question | Confidentiality question | Key dependence |
+| --- | --- | --- | --- | --- | --- |
+| **On-chip** | Internal state or activity exposed to its protected measurement logic | Can the relevant owner or state alter, bypass, or mislead that logic? | Do existing chips have the required capabilities, or must hardware be replaced? | Can sensitive information remain local with only agreed results released? | Accelerator design, firmware, credentials, and update authority |
+| **Off-chip digital** | Data crossing the interface it actually observes | Can traffic bypass the observer, or can its records be substituted? | Is the interface accessible without redesigning the board or network? | What can the observer read, retain, or transmit? | Observer hardware/software, routing, installation, and any necessary decryption |
+| **Off-chip analog** | A physical signal such as electrical consumption at a specified point | Can the sensor be moved, bypassed, recalibrated, or fed a misleading signal? | Can it be installed and maintained without opening an unmanageable gap? | What operational information can detailed traces reveal? | Sensor integrity, calibration, coverage, and interpretation model |
+| **Hybrid** | Several signals, potentially with different boundaries | Does one failure compromise several paths at once? | Can the components and their interfaces be integrated and serviced? | Who can combine the separate records, and what does the combination reveal? | All necessary components, plus their shared dependencies |
 
-**Potential strengths**
+</div>
 
-- Clearer separation between prover hardware and verifier hardware;
-- Devices can be jointly designed, inspected, or supplied;
-- Possible retrofit of existing accelerator fleets;
-- Reduced dependence on proprietary accelerator internals.
+The attraction of moving monitoring outside the accelerator is not that external hardware is inherently trustworthy. It is the opportunity to choose a different design, supplier, maintenance process, and measurement path. Whether that opportunity is realized must be demonstrated.
 
-**Load-bearing concerns**
+Baker and colleagues distinguish on-chip verification from external digital loggers and analog sensors, and discuss separate protected analysis. Their proposal also treats verifier equipment as a possible source of espionage or sabotage against the party being monitored. That two-sided problem is central here. [Reference: Baker et al., §4.2.1.1.](https://arxiv.org/html/2507.15916v1)
 
-- Visibility falls as the monitor moves farther from the computation;
-- Encrypted links and large data volumes;
-- Covert, timing, analog, and steganographic channels;
-- Difficulty reconstructing high-level workloads from low-level traffic;
-- Installation, calibration, chain of custody, and maintenance;
-- Risk that verifier-supplied hardware enables espionage or sabotage.
+<ReadingCard
+  id="reading-external-trust"
+  href="https://arxiv.org/html/2507.15916v1"
+  title="Who must trust the external monitor?"
+  author="Baker, Mauricio, et al. | RAND working paper, arXiv:2507.15916v1"
+  year="2025"
+  mins="8 min, including reflection"
+>
 
-Recent work has proposed fingerprinting or committing cluster input and output through external taps and secure gateways. These designs are research proposals. Their value is to make the trust-placement problem concrete, not to show that the engineering and political problems are solved.
+**Required reading 1.** Baker, Mauricio, et al. *Verifying International Agreements on AI: Six Layers of Verification for Rules on Large-Scale AI Development and Deployment*. RAND working paper, 2025; arXiv:2507.15916v1.
 
-<Src>A. Cankaya et al., *Fingerprinting All AI Cluster I/O Without Mutually Trusted Processors* — [arXiv:2606.10724](https://arxiv.org/abs/2606.10724), June 2026. Treat the architecture and implementation schedule as a research proposal.</Src>
+**Read:** §4.2.1.1, “Prerequisites: Off-Chip Devices,” from its heading to immediately before §4.2.1.2. Skip linked appendices and footnotes. Do not read all of §4.2.
 
-#### Architecture C: off-chip analog monitoring
+**Focus:** Identify one measure intended to protect the verifier from false evidence and one intended to protect the monitored party from information theft. Could either interfere with the other?
 
-Possible components include independently installed power meters, thermal sensors, electromagnetic measurements, independent clocks, tamper-evident packaging, and physical inspection of the sensor boundary.
+**Technical boundary:** Treat the separate analysis computer as a place where sensitive records are examined under restrictions. You do not need to design its cryptography or reproduce a workload.
 
-**Potential strengths**
+</ReadingCard>
 
-- A physically independent account of activity;
-- Possible retrofit;
-- Less dependence on proprietary firmware;
-- Evasion may require changing several physical signatures or sacrificing performance.
+### Digital Access Is Not Complete Visibility
 
-**Load-bearing concerns**
+Suppose a tap records every message passing through a particular network port. That establishes coverage of that port, not of all computation on the attached devices. Some work may occur without crossing it. Even observed traffic may be encrypted, and readable messages do not automatically reveal which high-level training procedure produced them.
 
-- Approximate conversion from physical signals to compute;
-- Architecture- and workload-dependent signatures;
-- Calibration, placement, uncertainty, and sensor drift;
-- Deliberate mimicry or masking;
-- Coverage only inside instrumented facilities;
-- Dependence on inspections to preserve the measurement boundary.
+The architecture therefore needs two arguments: why relevant activity produces an observable trace at that boundary, and why the trace supports the particular claim. Neither follows just from the word “tap.” If decryption or workload declarations are required, add their keys and providers to the dependency map.
 
-A rack meter installed under treaty access belongs in this hardware section. A foreign intelligence service estimating the same site’s power use from outside the facility belongs in the intelligence section. The physical phenomenon may be similar, but the access, chain of custody, confidence, and institutional role differ.
+There is also a difference between observing a copy and sitting on a required path. A passive observer reads traffic; an **interlock** is a component placed on a path whose passage it can mediate. A design may aim to make work impossible without passing through that component. That is a stronger requirement than merely placing a recorder nearby.
 
-#### Architecture D: hybrid assurance
+Petrie and Aarne explore an interlock on an accelerator’s data path, supported by a guarantee processor and physical protection. They explicitly discuss the performance burden of this placement and several possible integration points. Their interlock is not necessarily off-chip: placement is a design choice. This is an architecture proposal, not a demonstration that arbitrary existing GPUs can be comprehensively monitored by adding a network box. [Reference: Petrie and Aarne, pp. 23–24.](https://arxiv.org/pdf/2506.03409)
 
-A hybrid system might combine:
+<ReadingCard
+  id="reading-interlock-boundary"
+  href="https://arxiv.org/pdf/2506.03409"
+  title="What must pass through the interlock?"
+  author="Petrie, James, and Onni Aarne | flexHEG report, Part II"
+  year="April 2025"
+  mins="8 min, including reflection"
+>
 
-- On-chip identity and secure boot;
-- Hardware-rooted telemetry;
-- Independently installed rack-level power measurement;
-- Provider allocation and billing records;
-- Periodic physical inspection;
-- Intelligence comparison against declared facility capacity;
-- Protected human reporting channels.
+**Required reading 2.** Petrie, James, and Onni Aarne. *Technical Options for Flexible Hardware-Enabled Guarantees*. 2025, Part II of the flexHEG report series; arXiv:2506.03409.
 
-Count independent failure modes, not mechanism names. A signed meter, a signed classifier, and a licensing system that all depend on one vendor key provide less redundancy than their number suggests.
+**Read:** “Interlock-Based FlexHEG Design,” pp. 23–24. Read the prose beneath Figure 4 and continue until, but not including, “Repurposing the Network Interface Controller.” Printed and PDF-viewer page numbers coincide in the checked report.
 
-#### The confidentiality trade
+**Focus:** Identify the assumption that makes the observed path compulsory. What changes if another path remains available? What deployment cost follows from putting a component on the main path rather than beside it?
 
-Hardware evidence can reduce disclosure by returning a bounded claim rather than raw code, data, weights, or traces. It can also concentrate power in manufacturers, key authorities, and verifiers. A proposal should specify:
+**Technical boundary:** You may skim the last paragraph’s bandwidth figures. A chiplet is a small chip packaged with other chips; a data path is the route information follows. No diagram reconstruction, networking protocol, or hardware implementation is required.
 
-- Exactly what leaves the facility;
-- Who can link evidence across devices, sites, and time;
-- Whether the result reveals commercially sensitive utilization or topology;
-- Whether raw evidence is retained;
-- Who can query the system;
-- How abuse is audited;
-- What happens when parties disagree about the verifier or reference values.
+</ReadingCard>
 
-#### Activity: bilateral pilot review
+### Physical Measurement Changes the Question
 
-Compare an on-chip design with an off-chip design for the working pause rule. For each, record:
+In [2.1.4](/tracks/verification/verification-infrastructure/hardware-measuring-use), we distinguished resource consumption from workload purpose. Here the distinction becomes architectural. A separately installed electrical meter could remain informative when accelerator firmware lies. But it measures electrical consumption at its boundary, not “unlicensed training.”
 
-- What a U.S. delegation would distrust;
-- What a Chinese delegation would distrust;
-- What the operator would regard as commercially sensitive;
-- Whose cooperation is indispensable;
-- The strongest technical assumption;
-- The strongest institutional assumption;
-- The main abuse risk;
-- The smallest pilot that would produce decision-relevant evidence.
+The inference still needs a defensible relationship between declared work and observed consumption, with uncertainty for other loads and operating conditions. A sensor may be independent of the vendor’s reporting path while its interpretation is not: for example, both analyses may depend on the same vendor-supplied efficiency model.
 
-Choose an architecture for a **pilot**, not immediate universal deployment. State the evidence the pilot must produce before the mechanism deserves a larger role.
+Ask who calibrates the sensor, verifies its placement, handles replacement, and checks that all relevant feeds remain covered. A broken seal can indicate a need to investigate. An intact-looking seal is not a logical proof that no intervention occurred. **Tamper resistance** makes interference harder; **tamper evidence** makes some interference detectable. Neither term means invulnerability.
+
+Physical signals may also disclose sensitive operational patterns. “We do not read model weights” is narrower than “we reveal nothing sensitive.” Collection resolution, retention, access, and release rules still matter.
+
+We do not repeat the compute-accounting derivation here. The architectural question is which assumptions the physical observation removes, and which assumptions its interpretation introduces.
+
+### Historical Case — Different Certificate Chains, Shared Control
+
+In September 2011, Mozilla removed trust in the DigiNotar certificate authority after fraudulent certificate issuance. Its account described an uncertain breach scope and failures of notification. Certificates issued through a different DigiNotar-controlled intermediate for the Dutch government were initially exempted; Mozilla removed that exemption after the Dutch government’s assessment changed. [Primary source: Nightingale, “DigiNotar Removal Follow Up.”](https://blog.mozilla.org/security/2011/09/02/diginotar-removal-follow-up/)
+
+A **certificate authority** vouches for the relationship between an identity and a public key. Here, the architecture lesson is that different certificate chains did not settle whether the underlying processes were independently secure. It is not a claim that every certificate was fraudulent, or that cryptography itself failed.
+
+For our purposes, the incident motivates a question: if different monitoring components share an issuing organization or administrative system, what could one compromise invalidate? Count the dependencies, not the certificates.
+
+<ReadingCard
+  id="reading-shared-authority"
+  href="https://blog.mozilla.org/security/2011/09/02/diginotar-removal-follow-up/"
+  title="Where did the apparent separation fail?"
+  author="Johnathan Nightingale | Mozilla Security Blog, a first-party incident account"
+  year="2 September 2011"
+  mins="4 min, including reflection"
+>
+
+**Required reading 3.** Johnathan Nightingale. “DigiNotar Removal Follow Up.” *Mozilla Security Blog*, 2 Sept. 2011.
+
+**Read:** Only the three paragraphs under “Staat der Nederlanden Certificates.” Stop at the author’s signature; skip the comments.
+
+**Focus:** What initially justified treating these certificates separately, and what caused that judgment to change? Translate this into one question you would ask a vendor advertising independent verification components.
+
+</ReadingCard>
+
+### A Hybrid Is Not Automatically Redundant
+
+**Complementary** mechanisms answer different questions. **Redundant** mechanisms provide overlapping assurance about the same question. Either can be useful. Neither is established by the number of boxes.
+
+Consider three supposed checks: a device report, a second report from an external appliance, and an auditor’s dashboard. If the appliance imports the first report and the dashboard summarizes it, there is one originating measurement with several consumers. Independent signatures could protect each handoff while preserving an error in the original evidence.
+
+Other dependencies are less visible:
+
+- Two collectors accept updates from the same compromised signing service.
+- Different sensors use the same incorrect device-to-job mapping.
+- Separate records all omit activity during the same maintenance interval.
+- A second laboratory repeats an analysis using the same flawed reference model.
+
+A **common-mode failure** is one cause undermining several protections together. Independence is relative to a cause: separate power measurement may resist forged GPU telemetry, yet both paths may still depend on one registry to identify the covered fleet. Do not multiply hypothetical error rates as if independence were established.
+
+To test a hybrid, remove one dependency in thought. If the vendor’s firmware reports false values, what evidence remains? If the common update authority is compromised, what survives? If the facility supplies the wrong inventory, which mechanism could notice? State the surviving claim, not just the surviving device.
+
+### The Monitor Is Inside Someone Else’s Security Boundary
+
+The verifier wants accurate, complete observations. The operator wants protection of models, data, and legitimate service. The host state may also reject equipment that a foreign actor could use for surveillance or disruption. A design trusted by one of these actors can be unacceptable to another.
+
+For a candidate architecture, name who supplies the collector, controls its software updates, has physical access, reads raw records, approves outputs, and can restore service. Manufacturer involvement might provide necessary interface knowledge while creating dependence on a party one state distrusts. Verifier-supplied equipment might strengthen confidence in measurement while alarming the operator about hidden capabilities.
+
+Possible accommodations include reviewed designs, controlled installation, jointly approved updates, restricted communications, bounded retention, and supervised maintenance. These are design requirements to test, not assurances supplied by their labels. Open source permits examination of a design; it does not establish that the installed device matches it or that no flaw escaped review.
+
+Confidentiality controls need their own coverage argument. Restricting ordinary network output does not automatically cover maintenance interfaces, removable storage, or personnel. Nor should an operator’s confidentiality veto silently become a power to replace inconvenient measurements. Specify what happens when the parties disagree about a disclosure.
+
+The same applies to enforcement. A passive meter cannot implement the suspension procedure from 2.1.5 by itself. Adding a power-control device changes the architecture’s availability risks and authority structure. Do not smuggle a new control power into a diagram labeled “verification.”
+
+### Exercise — Three Green Reports
+
+**Hypothetical procurement review.** Two states are considering a six-month monitoring pilot at one registered facility. The operator will not release model weights or raw workload contents outside the facility. The inspectorate wants evidence about aggregate counted computation and possible undeclared use. Both states worry about the other’s influence over suppliers. This pilot cannot establish that no other facilities exist.
+
+A supplier describes its proposal as “three independent hardware verification layers.” Its specification says:
+
+<div className="trio-table">
+
+| Component | Input and function | Control and coverage |
+| --- | --- | --- |
+| **A: on-chip reporter** | Vendor firmware produces operation totals and workload labels; the device signs the report. | Vendor V supplies firmware and decides accepted versions. The proposal has not established adversarial classification performance. |
+| **B: external digital appliance** | Checks A’s signature, copies its values, and signs a second report. It does not directly observe accelerator traffic. | Physically separate; accepts software updates signed by V’s update service. |
+| **C: external meter** | Its sensor measures electricity on the rack’s sole electrical feed. Its analysis software uses a model supplied by V to translate the trace into estimated compute. | Independently installed sensor; analysis software accepts updates from the same V service as B. Coverage of that feed is established for this exercise. |
+| **Common records and service** | A facility inventory maps records to covered devices; a local dashboard combines all three reports. | The operator maintains the mapping. Raw records stay local. The inspectorate receives summaries. Maintenance and summary-release procedures remain unspecified. |
+
+</div>
+
+All three reports are green. No compromise has been established.
+
+The supplier concludes: “Agreement among three independently signed reports proves compliance, even if one vendor component is compromised.”
+
+#### Questions
+
+**1. Classify A, B, and C by architectural type and distinguish their originating measurements from their analyses.** What independent evidence does B add about the computation?
+
+**2. Identify two dependencies that could undermine more than one reported assurance.** For each, explain what could go wrong and what evidence, if any, would remain useful. Does agreement among green reports establish the supplier’s conclusion?
+
+**3. Recommend two changes for the pilot, in no more than 180 words.** One must improve evidence independence; the other must make the architecture more acceptable to the monitored party. Name an integration or operating cost and a residual blind spot. Do not assume you may replace every accelerator or publish raw workloads.
+
+**4. Write one question each for the operator, inspectorate, and a state that distrusts V.** Then rewrite the supplier’s conclusion in no more than two sentences. Separate what is established by the packet from what would require successful testing of the proposed changes.
+
+### Answer Keys
+
+<Fold label="Show answer 1">
+
+A is an on-chip reporting path: firmware generates the observations and labels. Their protected origin, coverage, counting semantics, and classification quality still need assessment; a signature alone does not establish those properties.
+
+B is physically off-chip and processes digital evidence, but it is not an independent collector of workload activity. It can add a check of authenticity and a record of what it received. It does not independently confirm A’s values or labels.
+
+C has an off-chip analog-origin measurement followed by digital analysis. The measured electricity is distinct from the compute estimate. Its originating signal does not depend on A’s report, but its interpretation depends on V’s model and its analysis software.
+
+The system is hybrid in components. That does not establish three independent layers of compliance verification.
+
+</Fold>
+
+<Fold label="Show answer 2">
+
+Two strong examples are:
+
+- **Shared update control:** B and C’s analysis software accepts updates from V’s service. A compromise of that authority could undermine both outputs. A’s separate firmware dependence on V creates an additional supplier concern, but the packet does not establish that all three use the same signing key. C’s physical measurement could still be useful if trustworthy raw records survive; that cannot be inferred merely from a green summary.
+- **Shared inventory mapping:** all records are interpreted using the operator’s mapping. A wrong mapping can misattribute observations or omit relevant devices from the declared population. C still measures the stipulated rack feed, but cannot itself identify every device or decide which job consumed the energy.
+
+Another valid example is dependence on V for A’s reporting semantics and C’s compute model. Their failure modes may overlap; this needs examination rather than an assumption of either independence or universal compromise.
+
+The packet proves neither compromise nor compliance. B repeats A’s measurement; C’s interpretation and reporting have unresolved dependencies. Even reliable aggregate compute evidence would not alone establish workload authorization. Maintenance and release procedures could also create observation gaps or suppress inconvenient results.
+
+</Fold>
+
+<Fold label="Show answer 3">
+
+One defensible recommendation is:
+
+“First, preserve authenticated raw meter records in protected local storage and separate C’s analysis updates from V’s update service. Commission independent validation of the compute model against the relevant workload range, retaining uncertainty rather than forcing a binary result. This provides a check less dependent on A, although not a training detector. Second, agree jointly reviewed analysis and output rules with the operator: no raw workload export, a defined summary schema, and a review route for disputed disclosures. Protect the retained records from unilateral deletion or alteration and specify what happens during maintenance. Costs include storage, validation effort, and supervised servicing. Remaining blind spots include activity outside this facility, attribution errors, and cases where different workloads produce similar power traces.”
+
+Other answers may propose direct digital observation at a justified boundary, different suppliers, or improved inventory checks. Credit requires showing which dependence is reduced, not merely adding another signature or vendor. A digital tap must address routing, encryption, confidentiality, and installation; an independent supplier may still share software or credential dependencies.
+
+</Fold>
+
+<Fold label="Show answer 4">
+
+Examples of actor-specific questions:
+
+- **Operator:** Who can inspect or extract raw records during maintenance, and how can we verify that approved software and output restrictions remain in place?
+- **Inspectorate:** Which observations survive a false A report, and what would reveal missing intervals or substituted inventory mappings?
+- **State distrustful of V:** Which claims remain supported if V’s update authority or reference model is untrustworthy, and who can recover the system without V’s cooperation?
+
+A bounded replacement is:
+
+“The proposal combines vendor-generated device reports with a separately originating electrical measurement; the external reporting appliance does not add an independent measurement of computation. Agreement among these outputs does not establish compliance without further validation of their shared dependencies, interpretation, coverage, and authorization checks.”
+
+Do not write that the recommended changes already work: this is a procurement review, not a completed pilot.
+
+</Fold>
+
+### Carry Forward
+
+For any architecture, finish this sentence:
+
+> “If **[one named component or authority]** fails or becomes adversarial, **[specified evidence]** still supports **[bounded claim]**, provided **[remaining assumptions]** hold.”
+
+If the surviving claim is much narrower than the headline promise, record that gap. If nothing survives, record the dependency honestly. The optional [2.1.7](/tracks/verification/verification-infrastructure/hardware-reconstructing-run) examines independent checks of declared training.

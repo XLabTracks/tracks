@@ -3527,3 +3527,112 @@ Flags:
   box, which sharing the slack across every column after the first would
   also do. Not changed here: it would repaint every table in the course,
   which is the owner's call, not a side effect of a content brief.
+
+## 2026-09-13 — 2.1.6 and 2.1.7 rebuilt; 2.1.8 removed; the table rule fixed
+
+Three things in one pass, because the first two depend on the third.
+
+**2.1.6 Where Should Trust Live?** Built from the owner's Part A. The old
+body was four architecture sections with strengths-and-concerns bullet
+lists, a confidentiality checklist and a bilateral pilot activity; the new
+one separates collection, appraisal and control, puts the four families in
+one comparison table, teaches common-mode failure, and ends on a procurement
+review of three green reports. Unit now reads 85 minutes (20 + 35 + 30).
+Three reading cards, four collapsed answer folds, links to 2.1.1, 2.1.4,
+2.1.5 and 2.1.7 by route.
+
+Sources read at the assigned places. Baker §4.2.1.1 is "Prerequisites:
+Off-Chip Devices" and ends where §4.2.1.2 "Verification Mechanisms" begins;
+it separates off-chip I/O loggers from analog sensors, sends analysis to
+trusted chips on-site or off-site, and states the two-sided problem in its
+own words — devices that "could be designed with hidden functionalities for
+espionage or sabotage", against a Verifier that needs its own confidence in
+the same devices. The flexHEG PDF has 59 pages, says Part II and April 2025
+on the cover, and its printed and viewer page numbers coincide: p. 23 opens
+"Interlock-Based FlexHEG Design" under Figure 4, p. 24 carries the
+performance downside and the four integration points (an IP block on the
+die, a chiplet beside it, part of the HBM, or a network relay), and
+"Repurposing the Network Interface Controller" begins on p. 24 where the
+excerpt stops. Mozilla's post is Johnathan Nightingale, 2 September 2011;
+"Staat der Nederlanden Certificates" is exactly three paragraphs ending at
+his signature, and issue 2 of the three named at the top is "The scope of
+the breach remains unknown".
+
+**2.1.7 Independent Verification of Training Claims.** Built from the
+owner's Part A. Three reading cards (12 + 8 + 15), three answer folds, 110
+minutes. Jia's §V-A is "Mechanism Overview" and is followed by "B. PoL
+Creation", so the excerpt boundary holds; Fang v2 is dated 17 April 2023 on
+an August 2022 identifier, its §I is "Introduction" and §IV is "Efficient
+Verification of Valid Proofs". Choi §7 is "Discussion and Limitations" with
+the confidentiality and verifier-hardware paragraphs the card names, ending
+at Acknowledgements. Peigné v2 is dated 22 August 2026, estimates "a
+deployable proof of concept within approximately 36 months", and B.10 items
+1, 4 and 5 are proving throughput, sampling security at f < 1% as
+"defense-in-depth argument, not a hard theorem", and GPU-concurrent Merkle
+hashing; G.5 opens "Sparse auditing is detection-grade, not universal."
+
+The title is "2.1.7 Independent Verification of Training Claims" and the
+lesson keeps `optional: true`, so the page prints "Optional: 2.1.7 …" from
+the shared prefix. The brief's own header said "2.1.7 Optional Technical
+Supplement"; carrying the word in the title as well would print it twice,
+which the 2026-08-20 ruling forbids. The "Why optional" paragraph is intact.
+
+Anchored URLs were normalised to their plain form (`#S1`, `#S7`, `#page=23`
+dropped) so each work is one registry row rather than two; every card and
+reference names its section in the link text, and the brief itself says a
+viewer may ignore the fragment.
+
+**2.1.8 removed**, on the owner's instruction ("we get rid of 2.8 its too
+early for it"; 2.8 is not a unit the course has, and 2.1.8 is the
+policy-judgment studio). Gone: the lesson, its curriculum entry, its place
+in the module's itemIds, its `verificationUnitOfLesson` join, and the memo
+slot it owned. 2.1 now has seven items. What went with it, so it can come
+back in one edit:
+
+- The maturity ladder (deployed primitive → empirical component
+  demonstration → end-to-end prototype → relevant-scale pilot → operating
+  governance regime) and the dated August 2026 assessment of what hardware
+  can, might and cannot do.
+- The hardware mechanism dossier, a 22-field common anatomy for any
+  proposal.
+- Memo slot `m2-1-hardware-brief`, "Hardware assurance brief", status
+  `specified`, 1,000 words, audience "a named national delegation or joint
+  drafting session considering a three-month U.S.–China pause", with its
+  six-dimension weighted rubric. It was 2.1.8's own final written output,
+  so it could not survive the lesson; the removed source is saved outside
+  the repo and the slot is reproduced in this entry's history. Unit 2.1 now
+  owes no written output.
+- The `recall` half of the `hw-opening-puzzle` ClaimLedger. The 2.1 head
+  still runs the ledger; its promise that "2.1.8 returns to them" is gone
+  because nothing returns to them now. The two closing paragraphs on what an
+  attestation token does and does not support went with the lesson.
+
+Flags on the removal: 2.1.7's brief and Part A were written expecting 2.1.8
+to exist and pointed at it three times ("proceed directly from 2.1.6 to
+2.1.8", "Carry forward to 2.1.8", "a direct path to 2.1.8"); those pointers
+are dropped, and the same two pointers are dropped from 2.1.6. The
+`.rubric-table` rule in globals.css now has no user. `outline-taxonomy-spec.md`
+still lists 2.1.8 — it records the author's outline, not the build, so it
+was left alone.
+
+**The table rule.** The flag in the 2.1.5 entry above is answered without a
+course-wide repaint: the platform already had the remedy. `.pair-table`,
+`.trio-table` and `.quad-table` are fixed-layout wrappers with stated column
+widths, added one at a time as tables needed them, and `.trio-table`'s own
+comment describes exactly the defect reported — "the middle column came out
+a word wide while the right-hand one took the page". It simply had no user.
+The three-column tables in 2.1.3 and 2.1.5 are now wrapped in it and measure
+238/376/376 in a 992px box instead of 103/118/770.
+
+2.1.6's architecture comparison has six columns, which none of the family
+covers, so `.hex-table` joins them: 11/20/18/17/17/17, and the one thing the
+others do not need — six columns of sentences cannot wrap into a phone's
+measure, so the table keeps a 720px floor and scrolls inside its own box
+below it. Measured on a 375px viewport: box 739 wide against a 341 client,
+page overflow 0, which is the behaviour CLAUDE.md's table rule describes and
+the shared block treatment cannot deliver without a floor.
+
+Observation, not a regression: `/…/hardware-policy-studio` still answers 200
+with an empty body, but so does any invented slug on that route — the
+dispatching route does not 404 an unknown item in dev. Nothing in the
+sidebar, the course data or the module counts still points at it.

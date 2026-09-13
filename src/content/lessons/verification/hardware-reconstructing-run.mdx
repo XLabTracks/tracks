@@ -1,38 +1,229 @@
+<Objectives scope="this supplement">
+1. Explain how checkpoints, training records, sampled recomputation, and verification clusters can support checks of a declared training run.
+2. Separate declared-run correctness, declared-run completeness, and fleet completeness.
+3. Compare additional verification compute with the assurance gained, confidentiality exposure, and risk of fabricated records.
+4. Distinguish proof-of-learning, training-data verification, and zero-knowledge approaches, including what deployment forecasts still need to demonstrate.
+</Objectives>
 
-### 2.1.7 Reconstructing a declared training run
+Allow 35 minutes of selected reading, 40 minutes for the lesson, and 35 minutes for the exercise and answer review.
 
-This extension asks a different question: can a verifier test whether a declared training process plausibly produced the submitted checkpoints or model?
+**Why optional:** This supplement goes further into how a declared training history might be checked. You can proceed directly from [2.1.6](/tracks/verification/verification-infrastructure/hardware-where-trust-lives) and complete the core policy track. Take this lesson if you expect to assess research proposals, commission verification systems, or need to understand what a “proof of training” actually establishes. “Technical” means examining the mechanism and its assumptions; you will not run code, reproduce experiments, or derive cryptographic proofs. The three reading cards are assigned excerpts for readers taking this supplement, not whole papers.
 
-Possible evidence includes:
+### A Different Route to Evidence
 
-- Training records and code or data commitments;
-- Periodic checkpoints or weight snapshots;
-- Authenticated transcripts;
-- Sampled re-execution;
-- Probabilistic recomputation;
-- Dedicated verification clusters;
-- Proof-of-learning or proof-of-training-data protocols.
+In [2.1.4](/tracks/verification/verification-infrastructure/hardware-measuring-use), we asked how much work occurred and what kind of workload produced the observed signals. In 2.1.6, we asked which measurement paths survive a compromised component. Here we examine another route: ask the developer to supply a training history and check parts of the computation independently.
 
-Yonadav Shavit’s 2023 compute-monitoring proposal decomposed a possible system into on-chip weight snapshots, records intended to support later verification of training, and supply-chain monitoring intended to prevent accumulation of untracked chips. This decomposition remains useful because it separates verification of a declared run from completeness of the fleet.
-
-<Src>Y. Shavit, *What Does It Take to Catch a Chinchilla? Verifying Rules on Large-Scale Neural Network Training via Compute Monitoring* — [arXiv:2303.11341](https://arxiv.org/abs/2303.11341), 2023.</Src>
-
-Proof-of-learning research shows both the promise and fragility of checkpoint-based verification. Jia and colleagues proposed proofs based on logged intermediate states. Subsequent work demonstrated adversarial constructions and serious weaknesses in the original approach. Choi, Shavit, and Duvenaud later proposed a broader toolkit for verifying claims about training data, while explicitly treating its tests as heuristic and noting substantial confidentiality and access assumptions.
-
-<Src>H. Jia et al., *Proof-of-Learning: Definitions and Practice* — [arXiv:2103.05633](https://arxiv.org/abs/2103.05633), 2021. R. Zhang et al., *Adversarial Examples for Proof-of-Learning* — [arXiv:2108.09454](https://arxiv.org/abs/2108.09454), IEEE Symposium on Security and Privacy, 2022. C. Fang et al., *Proof-of-Learning Is Currently More Broken Than You Think* — [arXiv:2208.03567](https://arxiv.org/abs/2208.03567), revised 2023. J. Choi, Y. Shavit, and D. Duvenaud, *Tools for Verifying Neural Models’ Training Data* — [arXiv:2307.00682](https://arxiv.org/abs/2307.00682), 2023.</Src>
+Return to the emergency-pause case. A developer says that a permitted run began from a particular model, used a declared procedure and dataset, and stayed within its authorization. It supplies intermediate model states and says an inspector can reproduce selected intervals. This could make the account much more testable. It also changes the question: a test of a supplied history is not automatically a search for work omitted from that history.
 
 Keep three claims separate:
 
-- **Declared-run correctness:** the submitted model or checkpoint plausibly arose from the declared process.
-- **Declared-run completeness:** the submitted transcript covered all relevant steps associated with that declared run.
-- **Fleet completeness:** no separate prohibited run occurred on other hardware.
+<div className="trio-table">
 
-Training transcripts and recomputation mainly address the first claim, with varying assurance. They do not automatically establish the third.
+| Claim | What needs to be checked | What a successful local replay leaves open |
+| --- | --- | --- |
+| **Declared-run correctness** | The checked updates follow the specified procedure using the specified inputs. | Whether unchecked updates also conform; whether the specification expresses the legal rule. |
+| **Declared-run completeness** | The history includes all stages and inputs relevant to the defined run, including its starting model and any subsequent covered continuation. | Missing stages, substituted starting points, or branches outside the supplied account. |
+| **Fleet completeness** | All covered devices and relevant activity are within the regime’s accounting. | Undeclared devices, sites, and separate runs. |
 
-A June 2026 paper proposes a zero-knowledge architecture for frontier training claims, but it also identifies thirteen open problems and a critical requirement that has not yet been demonstrated at relevant scale: a zero-knowledge proof of backpropagation for a nontrivial model. Treat this as an ambitious research proposal, not evidence that zero-knowledge verification of frontier training is deployment-ready.
+</div>
 
-<Src>*Zero Knowledge Verification for Frontier AI Training Is Possible* — [arXiv:2606.05433](https://arxiv.org/abs/2606.05433), June 2026. The paper presents an architecture and estimates, while documenting open problems and unproven critical components.</Src>
+The second claim depends on how the agreement defines a run. If it covers a development project, a record of one successful training trajectory may omit failed attempts or other experiments that still count. That is the counting-rule problem from 2.1.4, not a defect that replay alone can repair.
 
-#### Activity: buy assurance with a verification budget
+### What Would the Verifier Replay?
 
-You receive a declared transcript and a limited verification-compute budget. Allocate it among full rerunning, random segment sampling, checkpoint checks, code and data commitments, physical compute totals, telemetry-timing comparison, and random chip inspection. For each choice, record cost, confidentiality exposure, spoofing opportunity, expected assurance, and the claim that remains untested.
+A **checkpoint** is a saved state of training. It may contain model weights and additional information needed to resume. A **training transcript** connects checkpoints to the procedure, inputs, and sequence of updates that allegedly produced them.
+
+To replay an interval, the verifier needs more than its starting weights. Depending on the procedure, it may need the optimizer’s accumulated state, the order of training examples, settings controlling updates, random choices, and relevant software and numerical conventions. The **optimizer** is the procedure that changes the weights; its stored state can affect the next update even when the weights themselves are unchanged.
+
+An illustrative check works like this:
+
+1. The developer fixes a record of the claimed starting state, procedure, and inputs.
+2. It preserves intermediate states and records sufficient to reproduce specified intervals.
+3. The verifier chooses intervals under an agreed challenge procedure.
+4. The verifier reruns them and compares the resulting states with those in the record.
+5. The verifier reports the match, mismatch, or inability to complete the check, with the test’s scope and assumptions.
+
+This is a course-authored illustration, not the specification of every protocol below. A **commitment** binds a party to a value so that changing it later can be detected under the scheme’s assumptions. A commitment does not establish that the original value was true. Nor should a bare hash automatically be treated as concealing predictable data.
+
+Fixing the record before the verifier’s unpredictable selection limits the developer’s ability to prepare only the challenged intervals. But it does not establish how the record relates to physical execution. An internally consistent history, contemporaneous evidence of a particular execution, and a complete account of a project’s compute are different objects of verification.
+
+### Research Case: A Proposed Proof Meets Adversarial Testing
+
+Jia et al. introduced proof-of-learning in 2021, motivated partly by model ownership and integrity of outsourced training. Their scheme records intermediate states and checks selected updates by re-execution. The intended assurance includes making a forged history no cheaper to obtain than honest training. [Jia et al.](https://arxiv.org/pdf/2103.05633v1)
+
+Fang et al. subsequently developed attacks on the proposed verification mechanism. Two issues matter here: tolerated numerical differences can conceal invalid updates, and an efficient selection rule can let an adversary influence which updates receive scrutiny. Their work challenges the scheme’s robustness; it does not establish that every possible method of verifying training is impossible. [Fang et al., Introduction](https://arxiv.org/html/2208.03567v2)
+
+For a pause agreement, the threat model also changes. An ownership scheme that deters someone unwilling to spend as much as the original trainer does not necessarily deter a state willing to fund expensive deception. Ask whether the attacker’s budget and objective match the policy problem before borrowing the security claim.
+
+<ReadingCard
+  id="reading-pol-claim-and-attack"
+  href="https://arxiv.org/pdf/2103.05633v1"
+  title="What did the attack overturn?"
+  author="Jia et al. (2021) with Fang et al. | arXiv, two papers read in order"
+  mins="12 min"
+>
+
+**Reading card 1 — a paired reading.** Jia et al., *Proof-of-Learning: Definitions and Practice* (2021, arXiv v1); Fang et al., *Proof-of-Learning Is Currently More Broken Than You Think* (first posted 2022; assigned v2, 2023). Read the original claim first, then the paper that attacks it — the first is not an uncontested result.
+
+**Read:** Jia’s abstract and §V-A, “Mechanism Overview,” stopping before §V-B. Then Fang’s abstract and §I, “Introduction,” stopping before the contribution bullet list. Skip equations, algorithms, footnotes, and linked references. The card’s title link opens Jia; <a href="https://arxiv.org/html/2208.03567v2" target="_blank" rel="noopener" className="underline underline-offset-4">Fang: selected source ↗</a>.
+
+**Read for:** Reconstruct the original assurance about a forged history. Explain which assumptions the later paper challenges and which broader questions it leaves unresolved.
+
+**Technical help:** “Gradient descent” is a procedure for adjusting model weights to reduce prediction error. “Spoofing” here means constructing a history that passes the test without being obtained through the claimed honest training process. You do not need to implement an attack.
+
+</ReadingCard>
+
+### Matching a Checkpoint Is a Test With a Specification
+
+What counts as a match? Repeating floating-point computation on a different stack can yield numerical differences. A replay procedure must either constrain execution sufficiently for exact comparison or justify a tolerance. A permissive tolerance may admit a false account; an excessively strict one may reject an honest one. Fang’s discussion makes this a security question, not merely an engineering inconvenience.
+
+For a procurement review, ask for two kinds of validation: honest runs under the configurations the system will permit, and adversarial attempts to obtain acceptance for false histories. An accuracy figure without the tested deviations and permitted configurations is not enough.
+
+A failed replay is also not automatically a legal finding. Missing replay state, a software discrepancy, and a fabricated checkpoint can each prevent a match. Preserve the evidence and investigate the cause. The response to an unresolved failure belongs in the review and suspension procedures from [2.1.5](/tracks/verification/verification-infrastructure/hardware-authorization).
+
+### Strengthening the Transcript Check Changes Its Requirements
+
+Choi, Shavit, and Duvenaud propose training-data verification that adds initialization and data-order commitments and tests based on temporary memorization of recently seen data. They report empirical defenses, while explicitly acknowledging attacks not covered and limits of generalization. Their protocol also requires the verifier to access sensitive material; an isolated cluster trusted by both sides is discussed as a possible way to reduce leakage. [Choi et al., §§4 and 7](https://arxiv.org/html/2307.00682v1)
+
+This returns us to 2.1.6. A **verification cluster** is computing capacity used to perform the checks. It may create an independent execution path, but independence depends on who controls its software, inputs, administration, and outputs. Keeping it off the internet restricts one route of disclosure; it does not settle maintenance access or what an inspector can export.
+
+The policy decision is therefore partly about access: who may see weights, data, code, and results, and under what controls? “Independent verification” need not mean public disclosure. It does require a credible account of why the party making the original claim cannot also dictate the test result.
+
+<ReadingCard
+  id="reading-training-data-limits"
+  href="https://arxiv.org/html/2307.00682v1"
+  title="Which limitations survive the improved test?"
+  author="Choi, Dami, Yonadav Shavit, and David Duvenaud | arXiv:2307.00682v1"
+  year="2023"
+  mins="8 min"
+>
+
+**Reading card 2.** Choi, Shavit, and Duvenaud, *Tools for Verifying Neural Models’ Training Data* (2023), arXiv v1.
+
+**Read:** §7, “Discussion and Limitations,” in full, stopping before Acknowledgements. This includes its confidentiality and verifier-hardware paragraphs. Do not read the appendices.
+
+**Read for:** Choose one stated limitation that would change an inspectorate’s procurement decision. Explain what additional evidence or access arrangement would be needed to address it.
+
+**Technical help:** Small changes to model weights can matter even if their numerical size is small. “Bit-wise reproducibility” means matching the stored numerical representation exactly.
+
+</ReadingCard>
+
+### Zero Knowledge Changes Disclosure, Not the Scope of the Statement
+
+In a zero-knowledge proof, a prover can establish a specified mathematical statement while concealing its private supporting information, subject to the proof system’s assumptions. The verifier still learns the public statement and its result; the surrounding system may disclose metadata.
+
+For training verification, distinguish three questions:
+
+- **What relation is checked?** For example, do committed inputs and a specified update procedure produce a committed output?
+- **How much is checked?** One update, selected updates, or an entire linked computation?
+- **What connects it to the policy claim?** The identity of the model being deployed, the physical execution being monitored, and the legal definition of counted work.
+
+Proving that an output satisfies a computation does not, by itself, identify where or when that computation happened. Nor does it prove the absence of an additional computation. These connections require evidence and assumptions outside the mathematical relation.
+
+There is a terminology trap. In proof-system literature, **completeness** generally concerns acceptance of valid statements supported by honest proofs. That is different from this course’s question of whether all covered activity has been accounted for. A protocol can have cryptographic completeness while its audit omits an entire facility.
+
+Peigné, Nguyen, and Wang’s 2026 proposal combines commitments, external network observations, and zero-knowledge checks, targeting dense pretraining. Its revised version explicitly limits what sparse auditing establishes. The authors forecast a proof of concept in roughly 36 months; this is their estimate, not an independently established deployment schedule. [Peigné et al., v2](https://arxiv.org/html/2606.05433v2)
+
+The policy task is to evaluate the proposed combination. A valid proof of a sampled statement can coexist with a low probability of selecting a rare violation. Strong cryptography does not turn sparse sampling into exhaustive coverage.
+
+<ReadingCard
+  id="reading-zk-forecast-and-caveats"
+  href="https://arxiv.org/html/2606.05433v2"
+  title="Read a deployment claim against its caveats"
+  author="Peigné, Pierre, Ky Nguyen, and Paul Wang | arXiv:2606.05433v2, a research proposal"
+  year="revised 22 August 2026"
+  mins="15 min, including reflection"
+>
+
+**Reading card 3.** Peigné, Nguyen, and Wang, *Zero Knowledge Verification for Frontier AI Training Is Possible* (2026), **v2, revised 22 August 2026**.
+
+**Read:** The abstract; Appendix B.10, numbered caveats **1, 4, and 5 only**; and the **first paragraph of Appendix G.5**, stopping before the next bold subheading. These are three short selections, not an assignment to read the appendices.
+
+**Read for:** Distinguish a forecast, an assumption awaiting measurement, and a limit on the assurance. Name one result you would require before relying on the proposal in a pilot.
+
+**Technical help:** Proving throughput describes how quickly proof-generating work runs. Merkle hashing binds records into a structure that supports checking selected entries. In the G.5 paragraph, read the sampling ratio as “steps checked divided by total steps.” No algebra is required.
+
+</ReadingCard>
+
+### Who Pays for Checking?
+
+“Verification overhead” needs a denominator and a payer. Ask separately about recording during training, storing the record, producing proofs, checking proofs, and investigating discrepancies. A small proof may be quick to check but costly to generate. Low extra training time does not imply low total operating cost.
+
+Replaying fewer intervals reduces work but may not reduce the minimum machine size needed to reproduce one interval. A verifier could need a substantial cluster briefly, even when its total computation is a small fraction of the original run. Compare peak capacity, total compute, storage, staff time, and delay to a usable decision.
+
+A deployment forecast should be tied to milestones: a working implementation of the specified relation; measurements on the intended workload and hardware; adversarial evaluation; a confidentiality assessment; and an integrated pilot with explicit failure handling. Different milestones answer different questions. A component benchmark cannot stand in for all of them. The appropriate procurement response may be to fund a bounded experiment without yet treating its output as sufficient compliance evidence.
+
+### Exercise — All Sampled Intervals Passed
+
+**Hypothetical evidence review, continuing the pause case.** A developer claims that model M’s entire covered development project complied with its authorization. It submits one transcript of 1,000 equal-cost intervals, beginning from an imported checkpoint. The transcript ends at a checkpoint whose identity matches model M. The agreement counts covered work across the project, including relevant earlier stages and failed branches.
+
+The packet contains:
+
+| Item | Stipulated evidence or assumption |
+| --- | --- |
+| Transcript | Fixed before the audit selection; the developer cannot replace committed entries afterward. |
+| Selection | The verifier chooses 20 distinct intervals uniformly at random, unpredictably to the developer before commitment. |
+| Result | All 20 replay checks pass. For this exercise only, replay detects every invalid selected interval and never rejects a valid one. |
+| Cost | Each interval costs 100 GPU-hours to replay on the necessary configuration. The claimed 1,000-interval run costs 100,000 GPU-hours. These are consistent scheduling units for this exercise, not a legal FLOP conversion. |
+| Access | A jointly administered verification cluster can access the necessary records under agreed confidentiality controls. Initial checkpoint provenance and the completeness of the project history have not been established. |
+| Other evidence | There is no evidence in this packet about other devices, facilities, or omitted branches. No actual violation is stipulated. |
+
+The audit team proposes increasing the sample to 100 distinct intervals. Use these calculated probabilities; you do not need to derive them:
+
+<div className="trio-table">
+
+| Hypothetical number of invalid intervals in the fixed transcript | Chance of detecting at least one with 20 checks | Chance with 100 checks |
+| --- | ---: | ---: |
+| 1 of 1,000 | 2.0% | 10.0% |
+| 10 of 1,000 | 18.4% | 65.3% |
+
+</div>
+
+These probabilities assume the selection and perfect replay test specified above. The number of invalid intervals is unknown in the actual packet. The table does not describe the performance of any cited paper.
+
+#### Questions
+
+**1. Write a three-sentence appraisal:** what the successful checks directly establish; what remains unresolved about the declared run and its starting point; and what remains unresolved about project and fleet completeness.
+
+**2. Compare the two audit budgets.** Calculate replay GPU-hours and their percentage of the claimed run’s compute for 20 and 100 checks. Use the probability table to explain what the larger budget buys, and one reason neither budget supports a numerical probability that the project complied.
+
+**3. Recommend a next step in no more than 180 words.** Address both a weakness inside the submitted history and missing coverage outside it. Identify an implementation or confidentiality cost and rewrite the developer’s conclusion as a bounded claim. You may disagree with increasing the sample; justify the priority you choose.
+
+### Answer Keys
+
+<Fold label="Show answer 1">
+
+One defensible appraisal is:
+
+“The 20 selected intervals reproduce the committed transitions under the agreed test. The unchecked intervals and the provenance of the imported starting checkpoint remain unresolved, so the result does not establish the completeness of the declared training history. This transcript also leaves omitted project stages and activity on other devices or facilities unresolved, and therefore does not establish project-wide compliance or fleet completeness.”
+
+Matching the final checkpoint to M helps bind the submitted transcript to the model under review. It does not retroactively verify the starting checkpoint or establish that this is the only relevant history. Unresolved coverage is not itself evidence that a prohibited run occurred.
+
+</Fold>
+
+<Fold label="Show answer 2">
+
+- **20 checks:** 2,000 GPU-hours, or **2%** of the claimed run’s compute.
+- **100 checks:** 10,000 GPU-hours, or **10%**. This requires 8,000 additional GPU-hours and five times the replay budget.
+
+For one invalid interval, detection rises from 2% to 10%; for ten, it rises from approximately 18.4% to 65.3%. The larger budget strengthens this particular search but leaves a substantial chance of missing the illustrated deviations. It also leaves unsubmitted histories outside the sampling population.
+
+The table gives the probability of detection **if a specified deviation exists**, not the probability of compliance after acceptance. Inverting that conditional requires additional information, including assumptions about the prevalence and kinds of deviation. Actual deployment would also have to justify the stipulated perfect replay test and unpredictable selection.
+
+These percentages cover replay compute only. They exclude recording, storage, administration, proof generation if added, and investigation. No conversion to a legal compute allowance follows from the exercise’s GPU-hours.
+
+</Fold>
+
+<Fold label="Show answer 3">
+
+Example recommendation:
+
+“Before presenting this as project verification, establish the imported checkpoint’s provenance and extend the history to earlier covered stages. Reconcile project records with scheduler, cloud, and hardware-accounting evidence to look for omitted branches and resources. Retain unpredictable sampling, but choose its size against explicit deviation scenarios rather than a generic confidence target. This requires access to additional records, secure retention, and procedures for disputed disclosures; shared operator records may still omit the same activity. A defensible present conclusion is that 20 selected intervals reproduced successfully and the final checkpoint matches M. Project completeness, unchecked transitions, and other covered activity remain unresolved.”
+
+Other priorities can be justified. Credit depends on linking each action to a gap and naming the remaining dependence. More samples address the submitted history; they do not extend its population. A commitment to an earlier checkpoint fixes a value but does not establish its provenance. Substituting a zero-knowledge proof requires specifying its statement, coverage, and connection to the relevant execution; the label alone does not resolve these gaps.
+
+</Fold>
+
+### Carry Forward
+
+For any training-verification proposal, record **the statement checked, the population covered, the attack tested, the information disclosed, and the total cost**. Then identify what independent evidence must cover the remaining activity. This is enough to discuss a bounded policy role without implementing the proof system yourself.

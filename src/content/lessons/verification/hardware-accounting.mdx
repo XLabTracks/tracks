@@ -44,6 +44,8 @@ Fist and Grunewald propose connecting a chip-ownership registry to short-notice 
 
 For this course, a useful registry design would distinguish the following fields. This is an illustrative schema, not a description of an existing government database.
 
+<div className="trio-table">
+
 | Record | Question it answers | Evidence needed beyond the database entry |
 | --- | --- | --- |
 | Covered hardware identifier and credential binding | Which physical accelerator does this record refer to? | Device authentication, provisioning records, and a mapping between chip, board, and server identifiers |
@@ -53,6 +55,8 @@ For this course, a useful registry design would distinguish the following fields
 | Applicable authorization and reporting duty | Which rule applies, and who must respond? | An authorization issued by the competent authority and an identified responsible party |
 | Lifecycle status and event history | Is it installed, stored, in transit, under repair, transferred, or destroyed? | Dated, device-specific records supporting each transition |
 | Last observation and unresolved discrepancy | What has actually been checked, and what remains uncertain? | Retained evidence, timestamps, verification results, and review history |
+
+</div>
 
 A manufacturer credential authenticates a device identity. It does not establish its legal owner or which company is renting its compute. A cloud customer, cloud operator, colocation provider, and equipment owner may be four different entities.
 
@@ -133,11 +137,15 @@ For a regulatory topology claim, ask which devices, links, and interfaces are in
 
 Three populations must remain distinct:
 
+<div className="trio-table">
+
 | Population | What defines it? | What a successful check leaves open |
 | --- | --- | --- |
 | Responding devices | Devices from which valid evidence was received | Which expected devices did not respond? |
 | Registered devices | Devices the regime knows about | Which covered devices were never registered? |
 | All covered devices | The agreement's hardware, geographic, and organizational scope | Whether the evidence reaches that population at all |
+
+</div>
 
 If 900 out of 1,000 registered devices respond, the response rate is 90% of registered devices. It is not a measurement that 90% of all covered devices have been found. Even a 100% response rate cannot establish that the register is complete.
 
@@ -149,6 +157,8 @@ This does not make registries useless. Knowing that a particular expected device
 
 The following is an analytic checklist for a layered regime, not a claim that these sources always exist or are independent.
 
+<div className="trio-table">
+
 | Evidence source | Useful comparison | Remaining limitation |
 | --- | --- | --- |
 | Manufacturing, distribution, and shipping records | Do produced and delivered device identifiers enter the register, or have documented destinations outside its scope? | Incomplete suppliers, intermediaries, forged records, and non-cooperating manufacturers |
@@ -156,6 +166,8 @@ The following is an analytic checklist for a layered regime, not a claim that th
 | Cloud inventory, allocation, and billing records | Do tenant allocations and provider inventories reconcile with declared devices? | Provider-controlled logs and mappings from virtual resources to physical devices |
 | Intelligence and infrastructure observations | Do facilities, procurement, power, or cooling suggest capacity absent from declarations? | Indirect signals and alternative explanations; capacity is not observed use |
 | Human evidence | Can technicians, auditors, or other witnesses identify omitted equipment, sites, or altered records? | Access limits, mistakes, incentives, and the need to corroborate and protect sources |
+
+</div>
 
 Independence matters more than the number of documents. An inventory spreadsheet, dashboard, and audit summary may all copy the same operator-maintained database. Agreement among them then says little about omissions from that database.
 

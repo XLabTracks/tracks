@@ -10,7 +10,7 @@ export const verificationTrack: Track = {
   kind: "governance",
   moduleIds: ["v-why", "v-scoping", "v-infrastructure", "v-covert", "v-capstone"],
   prerequisiteEnforcement: "soft",
-  chunkedReading: false,
+  chunkedReading: true,
 };
 
 export const verificationModules: Module[] = [

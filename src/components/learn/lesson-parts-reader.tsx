@@ -17,6 +17,7 @@ import {
   type FocusSettings,
 } from "@/lib/reading/focus-reading";
 import { MIN_PARTS, planParts } from "@/lib/reading/lesson-parts";
+import { PartsProgress } from "@/components/learn/parts-progress";
 import {
   PagerCard,
   ReadingPager,
@@ -36,10 +37,16 @@ import {
    That pager is unified: Previous/Next move part by part, and at the ends they
    roll into the neighbouring lesson — Next off the last part opens the next
    lesson at its first part, Previous off the first opens the previous lesson
-   at its last (via ?p=last). So there is no separate lesson pager and no
-   "part n / m" counter: the sidebar says where you are, and Next always means
-   "the next thing to read". The page hands this reader the works-cited /
-   complete footer so it renders above the pager, and drops its own LessonNav.
+   at its last (via ?p=last). So there is no separate lesson pager, and Next
+   always means "the next thing to read". The page hands this reader the
+   works-cited / complete footer so it renders above the pager, and drops its
+   own LessonNav.
+
+   Position is the progress bar under the toolbar (PartsProgress, shared with
+   the paper reader): one segment per page, "Part n of m" and how many are
+   left. It came back with the regime on the course owner's ask for a reader
+   that shows the finish line — the sidebar says where you are in the course,
+   the bar says how much of this lesson is behind you.
 
    The two ends render as big bordered cards (the LessonNav look), each
    carrying the title of what it goes to — a neighbouring part's heading, or
@@ -345,7 +352,23 @@ export function LessonPartsReader({
         </div>
       </div>
 
-      <div ref={hostRef} className={focusClassName(focus)}>
+      {paged && (
+        <PartsProgress
+          at={at}
+          labels={parts.map((p) => p.label)}
+          className="mb-6"
+        />
+      )}
+
+      {/* data-reading-surface: the Aa control's text-size editor scopes its
+          scale to this attribute (app-bridge.css), exactly as ReadingSurface
+          does for the unchunked layout — without it a paged lesson would
+          ignore the reader's chosen size. */}
+      <div
+        ref={hostRef}
+        data-reading-surface=""
+        className={focusClassName(focus)}
+      >
         {children}
       </div>
 

@@ -549,11 +549,13 @@ add must reduce the duplication, never widen it.
   complete, so they gate nothing. The outline's instructions to whoever
   finishes a section are kept but visibly marked as author notes, so they can
   never read as learner-facing prose.
-- **Part-by-part reading is OFF — the regime was deleted on the course
-  owner's instruction (2026-08-15, "delete this regime"): every lesson and
-  paper reads as one page.** `curriculum.ts` sets `chunkedReading: false`,
-  and that one flag is the whole switch. The machinery stays in the repo,
-  inert, for any track that ever wants it back, and this is its shape:
+- **Part-by-part reading is ON for Verification, with a progress bar.** It
+  was deleted on the course owner's instruction (2026-08-15, "delete this
+  regime") and brought back on their instruction (2026-09-13: "add the
+  part-by-part section reading back, ADHD-friendly progress bar, to each
+  submodule", Verification only). `curriculum.ts` sets
+  `chunkedReading: true`, and that one flag is the whole switch; the Control
+  track never set it and reads whole. The shape:
   `LessonPartsReader` (client) pages the rendered body at **authored
   `<PageBreak title="…"/>` markers only** — headings are deliberately not
   boundaries (the old adaptive h2/h3/h4 chunker separated prompts from their
@@ -561,7 +563,19 @@ add must reduce the duplication, never widen it.
   `planParts` in `src/lib/reading/lesson-parts.ts` (pure, tested;
   `MIN_PARTS = 2` — a lesson with fewer authored pages reads whole), with
   `?p=` deep links and a whole-lesson toggle persisted under
-  `vt-reading-mode`. Parts are hidden, never unmounted — embedded widgets
+  `vt-reading-mode`. **The progress bar is `PartsProgress`**
+  (`src/components/learn/parts-progress.tsx`), one component for the lesson
+  and paper readers: one segment per page filled up to the current one,
+  "Part n of m · label" and how many are left (`progressText`, tested). It
+  is not interactive — six-pixel segments cannot meet the tap-target floor —
+  and it is a rule with words on it, never a ring around a number. The
+  paged host carries `data-reading-surface` so the Aa text-size editor
+  scopes to it exactly as `ReadingSurface` does on the unchunked layout.
+  Authoring rule for breaks is `docs/verification/reading-pages.md`: one
+  page is one complete learner action, and a lesson too short to have two
+  of them (`cloud-evidence`, `scoping-actors`, `capstone-project`) simply
+  reads whole; `unchunked: true` opts a reference lesson out by hand.
+  Parts are hidden, never unmounted — embedded widgets
   hold live state — and in-page anchors into a hidden part reveal it before
   scrolling. Nothing auto-completes under a parts reader: Mark complete is
   the only completion channel (both the lesson and paper branches of the

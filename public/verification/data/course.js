@@ -16,7 +16,7 @@ window.COURSE = {
       "glyph": "✧",
       "week": "week 1",
       "status": "drafted",
-      "goal": "Why are we teaching this?",
+      "goal": "Why Are We Teaching This?",
       "summary": "The oldest problem in arms control, applied to AI: when you sign a mutual agreement, how do you know the other party will uphold it? Opens with the welcome and the course's own framing, then the case that ASI risk warrants an agreement at all, why successful prevention is invisible, the intuitions a verification regime runs on, and seven decades of arms-control precedent.",
       "units": [
         {
@@ -31,7 +31,7 @@ window.COURSE = {
         },
         {
           "id": "0.1",
-          "title": "How the risk looks like?",
+          "title": "How the Risk Looks Like?",
           "kind": "explainer",
           "mins": "15–20 min",
           "href": "/tracks/verification/why-verification/introduction",
@@ -77,16 +77,16 @@ window.COURSE = {
     {
       "n": 1,
       "slug": "policy-and-actors",
-      "title": "Policy and actors",
+      "title": "Policy and Actors",
       "glyph": "❖",
       "week": "weeks 2–3",
       "status": "drafted",
-      "goal": "Policy scoping & actors",
+      "goal": "Policy Scoping & Actors",
       "summary": "What kind of policy are we trying to verify, and who does a treaty rely upon, apply to, and constrain? Compute versus capability thresholds, the effectiveness/feasibility pair, the anatomy of a pause agreement, and the actor map across the compute supply chain.",
       "units": [
         {
           "id": "1.0",
-          "title": "Introduction: what kind of policy are we trying to verify?",
+          "title": "Introduction: What Kind of Policy Are We Trying to Verify?",
           "kind": "explainer",
           "mins": "15–20 min",
           "href": "/tracks/verification/policy-scoping/scoping-intro",
@@ -98,7 +98,7 @@ window.COURSE = {
         },
         {
           "id": "1.1",
-          "title": "Anatomy of a pause agreement",
+          "title": "Anatomy of a Pause Agreement",
           "kind": "interactive",
           "mins": "20–25 min",
           "href": "/tracks/verification/policy-scoping/scoping-anatomy",
@@ -120,7 +120,7 @@ window.COURSE = {
         },
         {
           "id": "1.3",
-          "title": "Upstream and downstream",
+          "title": "Upstream and Downstream",
           "kind": "explainer",
           "mins": "10–15 min",
           "href": "/tracks/verification/policy-scoping/scoping-upstream-downstream",
@@ -134,16 +134,16 @@ window.COURSE = {
     {
       "n": 2,
       "slug": "evidence-streams",
-      "title": "Evidence streams",
+      "title": "Evidence Streams",
       "glyph": "⚙",
       "week": "weeks 4–8",
       "status": "notes complete",
-      "goal": "Verification infrastructure and evidence streams",
+      "goal": "Verification Infrastructure and Evidence Streams",
       "summary": "The four buckets of mechanism — hardware, cloud, intelligence, and human evidence — each judged by the claims it can test, the evidence it produces, what it costs to implement, and how it fails.",
       "units": [
         {
           "id": "2.0",
-          "title": "Confidentiality vs. verifiability",
+          "title": "Confidentiality vs. Verifiability",
           "kind": "explainer",
           "mins": "15–20 min",
           "href": "/tracks/verification/verification-infrastructure/mechanism-effective",
@@ -219,7 +219,7 @@ window.COURSE = {
     {
       "n": 3,
       "slug": "covert-development",
-      "title": "Covert development",
+      "title": "Covert Development",
       "glyph": "⚠",
       "week": "week 9",
       "status": "taxonomy complete",
@@ -228,7 +228,7 @@ window.COURSE = {
       "units": [
         {
           "id": "3.0",
-          "title": "What is covert development?",
+          "title": "What Is Covert Development?",
           "kind": "explainer",
           "mins": "10–15 min",
           "href": "/tracks/verification/covert-development/low-trust-compute-verification",
@@ -241,16 +241,16 @@ window.COURSE = {
     {
       "n": 4,
       "slug": "capstone",
-      "title": "Trust without trust",
+      "title": "Trust Without Trust",
       "glyph": "✦",
       "week": "week 10",
       "status": "framing complete",
-      "goal": "Capstone: what would be enough for a three-month emergency pause?",
+      "goal": "Capstone: What Would Be Enough for a Three-Month Emergency Pause?",
       "summary": "Putting it all together — then the feasibility judgments the capstone runs on: the four metrics, and how to do the research they ask for, from a practising AI governance researcher. Then the capstone itself: layer the imperfect mechanisms into a regime you can defend, and say where to go from here.",
       "units": [
         {
           "id": "4.0",
-          "title": "Putting it All Together",
+          "title": "Putting It All Together",
           "kind": "explainer",
           "mins": "5–10 min",
           "href": "/tracks/verification/capstone/putting-it-all-together",
@@ -281,7 +281,7 @@ window.COURSE = {
         },
         {
           "id": "4.3",
-          "title": "Where to go from here",
+          "title": "Where to Go From Here",
           "kind": "explainer",
           "mins": "15–20 min",
           "href": "/tracks/verification/capstone/capstone-next-steps",

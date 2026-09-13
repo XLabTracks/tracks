@@ -264,9 +264,9 @@ export const verificationLessons: Lesson[] = [
     slug: "hardware-trusted-statement",
     moduleId: "v-infrastructure",
     sectionItemId: "v-hw-attestation",
-    title: "2.1.2 From a chip to a trusted statement",
+    title: "2.1.2 Hardware Identity and Attestation",
     contentRef: "verification/hardware-trusted-statement",
-    estimatedMinutes: 5,
+    estimatedMinutes: 45,
   },
   {
     id: "v-hw-accounting",

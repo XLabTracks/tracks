@@ -3295,3 +3295,72 @@ threshold land, but a reader who knows the hardware will notice the device.
 Flag, unchanged from yesterday: "distinguish three things" and "Use three
 questions" announce their own item counts, which the 2026-09-08 ruling
 forbids. Kept verbatim.
+
+## 2026-09-13 — 2.1.2 rebuilt as Hardware Identity and Attestation
+
+Owner's content and implementation brief, Part A applied, Part B kept out of
+the page. The lesson replaces "From a chip to a trusted statement": the
+direction-of-trust framing and its institutional inversion, what hardware
+identity establishes, the secure-boot/measured-boot/reference-value table,
+the five-stage chain from Evidence to regulatory response, the control table,
+what current GPU attestation can and cannot show, the Battering RAM
+threat-model boundary, the appraisal exercise, and its four answers. Title
+and estimatedMinutes follow the brief: 45 minutes, with the four card times
+summing to the 20 minutes of assigned excerpts.
+
+Four required readings sit at their points of use as ReadingCards, with the
+ids the brief specifies: reading-rats, reading-h100, reading-blackwell,
+reading-battering-ram. Each card shows the source title as its outbound
+link, the "Required reading N" line with the brief's pedagogical title and
+the document type, the read-and-stop boundaries, the reading focus, and the
+author, year and minutes on its meta line; card 1 carries both verified RFC
+anchors as extra links. The four answers are separate Folds labelled only
+"Show answer 1" to "Show answer 4", collapsed on load and operable from the
+keyboard. The rejected attestation-report simulator was not built, and no
+form, score, submission or backend was added: the questions are prose and
+the answers are disclosures.
+
+Two structural adaptations, both to the site rather than the copy. The
+section headings are Title Case per the standing rule, and they are `###`
+rather than the `####` the other 2.1 lessons use: the in-lesson nav is built
+from `##`/`###` headings plus cards and folds, so at `####` the sidebar
+listed the four sources and the four answers with no sections to hang them
+under. The body's own title heading is dropped rather than repeated, as in
+2.3's lessons; the reader was already discarding it.
+
+Sources checked. RFC 9334's §4.1 is "Roles" and §5 is "Topological Patterns"
+with the passport, background-check and combination subsections, and §6 is
+"Roles and Entities", so "stop before §6" is right. The Blackwell example
+says in its own words that each GPU is attested independently with no
+topology or switch attestation, and it has the Overview and Claims sections
+the card assigns. Battering RAM's page carries both assigned sections, the
+low-cost DDR4 interposer that passes boot checks and remaps later, the
+replayed SEV-SNP launch measurement, and a threat list naming rogue cloud
+employees, technicians, law enforcement and supply-chain tampering; its
+paper is at the 47th IEEE Symposium on Security and Privacy, May 2026. The
+Microsoft page carries Secure Boot, Trusted Boot and Measured Boot as
+separate mechanisms. Eight works were registered and the Blackwell page was
+promoted out of `pending`.
+
+Two registry removals the suite required: the un-anchored RFC 9334 entry,
+whose last link left with the old lesson's source block, and the Hopper
+multi-GPU URL, which was pending and is no longer linked.
+
+Flags for the owner:
+
+- The CACM article could not be re-verified from here: cacm.acm.org answers
+  every request from this network with a Cloudflare 403. The host/hypervisor
+  quotation and the performance-counter sentence are reproduced exactly as
+  the brief supplies them, with their adjacent citations, and neither was
+  checked against the article.
+- The shared ReadingCard component opens links with `rel="noopener"`, not
+  `rel="noopener noreferrer"`, and marks the outbound link with an
+  aria-hidden arrow rather than an "opens in new tab" announcement. That is
+  the convention on every card in the course; the two extra links inside
+  card 1 follow it rather than diverging. Changing it is a course-wide
+  change, not a 2.1.2 change.
+- The card ids are the brief's strings, and the component prefixes its
+  anchors, so the rendered anchors read `#reading-reading-rats`. Harmless
+  but visible in a deep link; say the word and the ids become `rats` and so on.
+- 2.1.2's section headings now render at `h3` while 2.1.1's render at `h4`.
+  Aligning 2.1.1 is a one-line change whenever wanted.

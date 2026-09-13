@@ -1,91 +1,246 @@
+<Objectives scope="this section">
+1. Explain hardware-rooted identity, roots of trust, secure and measured boot, reference values, revocation, and remote attestation.
+2. Trace the chain from device evidence to verifier appraisal, relying-party decision, and regulatory response.
+3. Identify who controls keys, reference values, updates, and revocation, and explain how the relevant adversary changes the strength of the mechanism.
+4. Use current GPU attestation as evidence about device state without treating it as evidence about topology, use, or overall compliance.
+</Objectives>
 
-### 2.1.2 From a chip to a trusted statement
+Allow approximately 20 minutes for the assigned excerpts, 15 minutes for this section, and 10 minutes for the exercise and answer review. Read each excerpt where its card appears; there is no need to read all four before starting.
 
-Remote attestation is often described as a chip proving its state. That description hides several actors and several separate judgments.
+### The Direction of Trust
 
-The IETF’s Remote ATtestation procedureS architecture distinguishes three roles: an **Attester** produces evidence, a **Verifier** appraises that evidence against reference values and policy, and a **Relying Party** decides what to do with the result. This separation matters. The component that checks a signature need not be the institution that decides compliance, and neither automatically has authority to impose a consequence.
+Section 2.1.1 separated authenticity, correctness, and completeness. This section examines a deployed mechanism that helps establish the first and supports selected checks of the second: remote attestation.
 
-<Src>H. Birkholz et al., [“Remote ATtestation procedureS (RATS) Architecture”](https://www.rfc-editor.org/rfc/rfc9334.html) — IETF RFC 9334, January 2023.</Src>
+NVIDIA's H100 engineers state an important assumption explicitly: "Since the host or hypervisor is not trusted in CC mode". They explain that registers capable of compromising the guest's confidentiality or integrity must be protected from that host. [Reference: Dhanuskodi et al., "Creating the First Confidential GPUs," "Starting the GPU in CC Mode."](https://cacm.acm.org/practice/creating-the-first-confidential-gpus/)
 
-#### The minimum vocabulary
+The central inversion for verification is this: **the deployed confidentiality system protects a tenant from the owner or operator of the machine; a verification regime needs evidence that protects an outside authority from false claims by that operator.**
 
-**Hardware-rooted identity.** A device uses a cryptographic key and certificate, or another hardware-bound credential, to authenticate evidence. Some designs derive secrets from physical properties such as a physically unclonable function. Others provision or generate keys during manufacturing. “Hardware-rooted” does not mean literally unforgeable. It means that impersonation should require defeating a defined hardware and key-management boundary.
+This is an institutional inversion, not an entirely new technical adversary: the untrusted host is already part of NVIDIA's model. But the two uses demand different outcomes. A tenant can respond to failed attestation by withholding its model or data. A regulator must also determine whether every covered machine reported, whether the operator concealed devices, and what follows from silence or failure.
 
-**Root of trust.** The component or assumption at the bottom of the chain. Other claims inherit its integrity. A root of trust may protect key use, measure boot state, verify firmware, or isolate code. A flaw at this layer can invalidate many apparently separate controls at once.
+Attestation supplies part of that system. It does not supply the inventory, the duty to answer, or the sanction.
 
-**Secure boot.** A mechanism that restricts low-level code to versions authorized by a signing policy before execution.
+### What Hardware Identity Establishes
 
-**Measured boot.** A mechanism that records cryptographic measurements of code or configuration as it starts. A verifier can later compare those measurements with expected values.
+Imagine a report with these claims:
 
-**Attestation evidence.** Signed claims or measurements about a device and its state. The evidence must normally include a freshness mechanism, such as a nonce or trusted time, so an old compliant statement cannot be replayed.
+> I am device 4471. Secure boot is enabled, debug mode is disabled, my measured firmware has hash H, and this report answers challenge N.
 
-**Reference values and endorsements.** Information used to decide what measurements should be expected and which keys or device properties should be trusted.
+This is an illustrative report, not a reproduction of an NVIDIA token.
 
-**Revocation.** The ability to stop trusting a compromised key, certificate, firmware version, device, reference value, or authority.
+The device signs the report using a key rooted in hardware. A certificate chain connects the signing key to a recognized issuer. A valid signature supports the claim that the report was produced by an entity holding the corresponding private key and that the signed contents have not been altered.
 
-**Appraisal policy.** The rule that turns measured facts into a result such as “acceptable for this workload.” This is a policy judgment, not a property of the signature itself.
+Calling that entity a particular physical device requires further trust: in manufacturing and certification, protection of the private key, and the binding between the key and the device. Believing the reported state additionally requires trust in the measurement and reporting components. A signature authenticates a report; it does not independently establish that its measurements are accurate or complete.
 
-<PageBreak title="A deployed primitive" />
+A **root of trust** is a component or function whose correct operation the system takes as a starting assumption. Different roots may measure the next boot stage, protect keys and measurements, or report evidence. A chain of trust extends that starting point to additional components. "Hardware-rooted" locates an initial trust assumption; it does not eliminate trust.
 
-#### A deployed primitive: current NVIDIA GPU attestation
+### Secure Boot, Measured Boot, and Reference Values
 
-Current NVIDIA documentation describes an operational attestation chain for supported GPUs. Evidence is collected from the GPU, checked against signed Reference Integrity Measurements, evaluated locally or by NVIDIA’s Remote Attestation Service, and checked against certificate-revocation information. This is a useful deployed primitive because it makes the trust chain concrete.
-
-It also shows why implementation details matter. NVIDIA’s Blackwell multi-GPU documentation, updated August 1, 2026, states that each GPU is attested independently and that the process does **not** attest topology or switches. Supported Hopper Protected PCIe configurations can include additional multi-GPU and NVSwitch checks. A general statement such as “GPU attestation proves the cluster configuration” is therefore false. The answer depends on the product, configuration, evidence fields, and appraisal policy.
-
-<Src>NVIDIA, “Architecture Overview,” [*Attestation Quick Start Guide*](https://docs.nvidia.com/attestation/quick-start-guide/latest/architecture.html), current August 1, 2026; [“Blackwell Multi-GPU Attestation Example”](https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/blackwell_multi_gpu.html), updated August 1, 2026; [“Hopper Multi-GPU (PPCIE) Attestation Example”](https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/hopper_multi_gpu.html), current August 2026. First-party implementation documentation, not an independent adversarial evaluation.</Src>
-
-A simplified chain looks like this:
-
-> device and measurement component → device evidence and nonce → signing key and certificate chain → reference values and revocation data → verifier appraisal → relying-party decision → regulator or treaty response
-
-For each link, ask:
-
-- Who controls it?
-- What can that actor falsify, suppress, delay, revoke, or refuse?
-- Is cooperation legally required, technically required, or merely convenient?
-- What independent evidence checks the link?
-- What happens when the link fails?
-
-#### What a signature does and does not do
-
-A valid signature supports a statement such as “the holder of this trusted key signed these claims.” It does not by itself establish that:
-
-- The measurement code observed the right property;
-- The measurement was complete;
-- The reference value was correct;
-- The evidence described the current state rather than a replayed state;
-- The device remained compliant after the measurement;
-- The device occupied the declared location or topology;
-- No other device or workload existed;
-- An institution may lawfully act on the result.
-
-Cryptography can faithfully transmit a false or insufficient measurement. The value of attestation therefore depends on the measurement boundary and the governance of keys, reference values, updates, revocation, and decisions.
-
-#### The adversary changes the assurance
-
-<div className="trio-table">
-
-| Prover profile | What becomes easier for the prover | What remains comparatively stronger |
+| Mechanism | What it does | What it does not establish |
 | --- | --- | --- |
-| **Cloud customer without physical access** | Manipulating user software, workload behavior, labels, accounts, and timing | Provider-controlled hardware, physical security, and manufacturer-backed attestation may be difficult for the customer to alter |
-| **Laboratory controlling its servers** | Physical access, administrative control, optional security modes, peripherals, network routes, updates, and logging | Independent manufacturer services or separately installed sensors may still impose constraints, but must be tested against owner control |
-| **State-backed owner** | Supplier pressure, substitute hardware, expensive physical attacks, coercion of domestic firms, manipulation of inspections, and long preparation | Assurance may require mutually governed keys, externally installed monitoring, supply-chain reconciliation, destructive sampling, and evidence outside the device |
+| Hardware identity | Binds a credential to a device or protected component, under the issuer's provisioning assumptions | That its current state is acceptable or every relevant device has reported |
+| Secure boot | Enforces an authorization policy for components in the checked boot sequence | That authorized software is free of vulnerabilities or approved by a regulator |
+| Measured boot | Records cryptographic measurements of components loaded during boot | Whether those measurements are acceptable |
+| Reference values | Provide expected measurements for comparison with Evidence | That the corresponding release is legally permitted |
+| Freshness mechanism | Uses a challenge, time, or session binding to limit reuse of old Evidence | Continuous compliance before or after the observation |
+| Credential revocation | Indicates that a credential should no longer be accepted under the applicable validation rules | What legal consequence should follow |
 
-</div>
+Secure boot enforces a boot policy. Measured boot records what loaded. A system can use both: reject unauthorized components and record measurements of the components that actually loaded. Remote attestation conveys selected evidence about the system to another party for appraisal. [Reference: Microsoft, "Secure the Windows boot process."](https://learn.microsoft.com/en-us/windows/security/operating-system-security/system-security/secure-the-windows-10-boot-process)
 
-The same product can be strong against a remote tenant and weak against an owner with physical access. “Secure” is not a mechanism property without an adversary.
+Reference values and legal approval are separate. A manufacturer-signed reference integrity manifest can associate a measurement with a recognized software release. The regulator must still decide whether that release is permitted for the regulated activity.
 
-#### Activity: trust-chain autopsy
+### From Device Evidence to Regulatory Response
 
-Take an attestation token or architecture diagram supplied with this section. Record:
+<ReadingCard
+  id="reading-rats"
+  href="https://www.rfc-editor.org/rfc/rfc9334.html#section-4.1"
+  title="Remote ATtestation procedureS (RATS) Architecture"
+  author="IETF"
+  year="2023"
+  mins="8 min"
+>
 
-1. The exact claim;
-2. The root or roots of trust;
-3. The measurement component;
-4. The key and reference-value authorities;
-5. Update and revocation authority;
-6. The verifier and relying party;
-7. The strongest relevant adversary;
-8. One common-mode failure;
-9. One independent corroborating source.
+**Required reading 1 — Who makes which decision?** Informational RFC.
+
+**Read:** §4.1, "Roles," and §5, "Topological Patterns," including its subsections. Stop before §6.
+
+**Reading focus:** Identify who produces Evidence, who appraises it, and who acts on the result. Notice how those roles stay the same when the messages take different routes.
+
+<a href="https://www.rfc-editor.org/rfc/rfc9334.html#section-4.1" target="_blank" rel="noopener" className="underline underline-offset-4">Read §4.1: Roles ↗</a> · <a href="https://www.rfc-editor.org/rfc/rfc9334.html#section-5" target="_blank" rel="noopener" className="underline underline-offset-4">Read §5: Topological Patterns ↗</a>
+
+</ReadingCard>
+
+RFC 9334 separates three roles because a signed report does not interpret itself.
+
+| Stage | Actor or object | Question answered |
+| --- | --- | --- |
+| 1 | **Attester** produces **Evidence** | What does the attesting environment claim about its identity and state? |
+| 2 | **Verifier** appraises Evidence using endorsements, reference values, and an appraisal policy | Does this Evidence satisfy the verifier's checks? |
+| 3 | Verifier produces an **Attestation Result** | What did the appraisal conclude? |
+| 4 | **Relying Party** applies its decision policy | Should access, authorization, or another privilege be granted? |
+| 5 | Regulatory institution applies the legal rule | Does the finding trigger remediation, inspection, suspension, or sanction? |
+
+The fifth stage is an addition made by a regulatory regime, not a separate role defined by the RATS architecture. One institution may perform more than one role, but the decisions remain distinct.
+
+In the **passport model**, the Attester obtains an Attestation Result and presents it to the Relying Party. In the **background-check model**, the Relying Party forwards Evidence to a Verifier and receives the result. Either can support regulation; neither establishes that every covered device supplied Evidence.
+
+### Who Controls the Chain
+
+<ReadingCard
+  id="reading-h100"
+  href="https://cacm.acm.org/practice/creating-the-first-confidential-gpus/"
+  title="Creating the First Confidential GPUs"
+  author="Gobikrishna Dhanuskodi et al. | Communications of the ACM"
+  year="January 2024"
+  mins="6 min"
+>
+
+**Required reading 2 — A deployed chain of trust.** Engineering article by NVIDIA authors.
+
+**Read:** "H100: The First Confidential GPU," "Starting the GPU in CC Mode," and "Attesting the GPU." Stop before "Running the GPU in Confidential Computing Mode."
+
+**Reading focus:** Follow the chain from boot to the signed report. Identify which party is protected, which party is not trusted, and which components must work correctly for the report to be useful.
+
+</ReadingCard>
+
+For a deployment using NVIDIA's attestation infrastructure, control is distributed approximately as follows:
+
+| Object or decision | Typical controller |
+| --- | --- |
+| Device identity provisioning and manufacturer certificate chain | NVIDIA and its manufacturing trust infrastructure |
+| Vendor firmware releases and signing keys | NVIDIA |
+| Installation and update timing | Machine operator or cloud provider, within supported update paths |
+| Signed reference integrity manifests | NVIDIA, distributed through its RIM service |
+| Credential revocation and certificate-status information | Credential issuer and its status service |
+| Evidence appraisal | NVIDIA Remote Attestation Service, or the operator of a local verifier |
+| Regulatory acceptance policy | Regulator, inspectorate, or treaty body |
+| Inventory, reporting duty, and consequence of non-response | Legal regime and implementing institutions |
+
+NVIDIA's SDK collects Evidence; a remote or local verifier appraises it; a RIM service supplies signed reference measurements; and certificate-status services support revocation checks. [References: NVIDIA attestation architecture](https://docs.nvidia.com/attestation/quick-start-guide/latest/architecture.html) and [RIM service](https://docs.nvidia.com/attestation/cloud-services/latest/rim/rim_introduction.html).
+
+The adversary matters. A hostile application, a host administrator, and an owner with physical access have different capabilities. A compromised manufacturer, reference-value signer, or verifier attacks a different link again. An architecture that distrusts the operator may still depend on the manufacturer and the verifier.
+
+An agreement must therefore allocate authority to issue and revoke credentials, publish reference values, approve software, change appraisal policy, and review disputed results. A software update changes the device's state. A new reference manifest describes a recognized state. Revocation changes whether a credential is acceptable. A regulatory decision changes which states are legally permitted. These actions need not occur together.
+
+### What Current GPU Attestation Can Show
+
+<ReadingCard
+  id="reading-blackwell"
+  href="https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/blackwell_multi_gpu.html"
+  title="Blackwell Multi-GPU Attestation"
+  author="NVIDIA"
+  mins="3 min"
+>
+
+**Required reading 3 — What does "multi-GPU" establish?** Attestation documentation; worked example.
+
+**Read:** "Overview" and "Claims." Skip installation instructions, commands, and full token listings.
+
+**Reading focus:** Determine the unit being attested. Distinguish several device results collected together from a claim about the system connecting those devices.
+
+</ReadingCard>
+
+NVIDIA's attestation claims can cover device identity, secure-boot state, debug configuration, firmware or VBIOS measurements, certificate checks, reference-value comparisons, and nonce matching. The claims actually present depend on the device, software, and workflow. [Reference: NVIDIA attestation claims schema.](https://docs.nvidia.com/attestation/nv-attestation-sdk-cpp/latest/sdk-c/claims_schema.html)
+
+The assigned Blackwell example independently attests each GPU detected by the SDK and returns per-GPU entries. That example explicitly supplies no topology or switch attestation. This is a limit of the specific example, not a claim that no NVIDIA workflow can ever attest switches or topology.
+
+A successful result can therefore support a bounded claim:
+
+> In response to this challenge, these eight identified GPUs supplied fresh Evidence whose selected measured states satisfied the verifier's policy.
+
+It does not by itself establish that the eight GPUs were connected in the declared topology, that no additional GPU was concealed, that they performed training rather than inference, that they participated in one job, or that the accepted state persisted throughout the reporting period.
+
+The confidentiality purpose can also constrain observation. NVIDIA's H100 CC-On mode disables performance counters to prevent their use in side-channel attacks. [Reference: Dhanuskodi et al., "Creating the First Confidential GPUs," "Starting the GPU in CC Mode."](https://cacm.acm.org/practice/creating-the-first-confidential-gpus/) This illustrates a potential tension: protecting a tenant's workload from observation can remove signals that a compute-use verifier would want. A verification design that depends on those counters would need an additional measurement mechanism; a valid attestation report cannot substitute for missing telemetry.
+
+### Threat-Model Boundaries: Battering RAM
+
+<ReadingCard
+  id="reading-battering-ram"
+  href="https://batteringram.eu/"
+  title="Battering RAM"
+  author="De Meulemeester et al."
+  year="2026"
+  mins="3 min"
+>
+
+**Required reading 4 — When the measurement misses the attack.** Research project accompanying an IEEE Symposium on Security and Privacy 2026 paper.
+
+**Read:** "Breaking Memory Encryption with Two-Faced DRAM" and "Attack 2/2: Battering Through AMD SEV-SNP Attestation." Skip the remaining technical material.
+
+**Reading focus:** Identify the attacker's access, what the initial measurement observes, and what changes after that measurement.
+
+</ReadingCard>
+
+Battering RAM used a low-cost DDR4 interposer that behaved normally during startup and changed memory-address mappings later. Against AMD SEV-SNP, the researchers demonstrated how a manipulated virtual machine could present an expected launch measurement and attest as genuine.
+
+The project discusses attackers such as a rogue cloud employee, an infrastructure provider with physical access, or someone tampering with the supply chain. These capabilities matter: an attacker who can alter hardware connections is not equivalent to an attacker confined to software interfaces.
+
+The report can remain cryptographically authentic: a genuine attestation component signed it. The failure concerns the connection between the measured state and the execution the relying party intended to trust.
+
+The demonstrated attacks concern CPU confidential-computing systems, including Intel SGX and AMD SEV-SNP, using DDR4. They are not a demonstrated attack on NVIDIA GPUs. The lesson is to examine the measurement assumptions and physical-access threat model before interpreting a valid report.
+
+### Exercise — Appraise the Result
+
+The following is a hypothetical regulation and simplified evidence summary, not an actual NVIDIA token or existing law.
+
+> Every accelerator installed at Site A must be declared. No cluster may contain more than eight GPUs. Each operating GPU must use regulator-approved stack F and run monitoring component M.
+
+At 09:00 on Monday, the operator sends the National Compute Inspectorate an Attestation Result produced by NVIDIA Remote Attestation Service. It contains eight GPU entries with distinct device identifiers. For each entry, certificate and revocation checks pass, the nonce matches, secure boot is enabled, debug mode is disabled, and the measured VBIOS and driver match NVIDIA reference values associated with stack F.
+
+The result contains no switch or topology claim and no claim about component M.
+
+The operator states:
+
+> This proves that Site A contained exactly eight GPUs in the approved topology and complied with the regulation throughout Monday.
+
+Write short answers before opening the answer key.
+
+1. Does the Attestation Result support the operator's conclusion? State the strongest claim it does support.
+2. Identify the Attester, Verifier, Reference Value Provider, Relying Party, and regulatory-response actor.
+3. At noon NVIDIA publishes a signed reference manifest for stack G. Device identity certificates remain valid, and the regulator continues to permit stack F until Friday. Explain what each fact establishes and how the inspectorate should assess a fresh report from a GPU still running F.
+4. Separate power records show consumption above the operator's estimate for the eight declared GPUs. How should this affect the inspectorate's assessment? Propose one follow-up check and explain what it could establish.
+
+### Answer Key
+
+<Fold label="Show answer 1">
+
+**Answer 1 — Scope of the result**
+
+No. Assuming the stated checks and measurement process are sound, the result supports the narrower claim that eight identified GPU attesters supplied fresh Evidence around 09:00 and their selected measured states satisfied the verifier's checks against the stated references.
+
+It does not establish a complete site inventory, cluster topology, the presence or operation of M, the work performed, or continuity throughout Monday. The absence of those claims is not itself proof of a violation. It limits what this result establishes.
+
+</Fold>
+
+<Fold label="Show answer 2">
+
+**Answer 2 — Roles**
+
+- **Attesters:** the protected attestation environments of the eight GPUs.
+- **Verifier:** NVIDIA Remote Attestation Service.
+- **Reference Value Provider:** NVIDIA, supplying the relevant manifests. NVIDIA also provides manufacturer endorsements and device-certification infrastructure, a distinct function.
+- **Relying Party:** the National Compute Inspectorate.
+- **Regulatory-response actor:** whichever institution the regime empowers to order remediation, inspection, suspension, or sanction. The scenario does not specify whether the inspectorate has all these powers.
+
+</Fold>
+
+<Fold label="Show answer 3">
+
+**Answer 3 — Recognition, identity, and permission**
+
+The new manifest provides manufacturer-recognized reference values for G. Valid device certificates allow continued authentication of the relevant device identities, subject to the remaining checks. The regulator's decision keeps F legally permitted until Friday.
+
+Provided the fresh report satisfies the other applicable requirements, continued use of F is not by itself grounds for rejection during that period. Publication of G does not automatically revoke F or amend the regulatory deadline. The verifier and relying party need policies that implement the intended transition rather than silently equating "newest" with "permitted." Nor would an acceptable F measurement alone establish that monitoring component M is running.
+
+</Fold>
+
+<Fold label="Show answer 4">
+
+**Answer 4 — An anomaly and a follow-up**
+
+The power discrepancy warrants investigation, not an immediate finding that a ninth GPU exists. Possible explanations include an inaccurate workload estimate, cooling demand, other equipment, or undeclared compute.
+
+One useful follow-up is a physical inventory reconciled against the device identifiers in the reports. That could establish whether additional accelerators are installed, though a one-time inspection cannot by itself reconstruct all earlier activity. Alternatively, separating accelerator power from cooling and other loads could test whether the discrepancy actually points toward additional compute.
+
+The eight reports may remain authentic and correctly appraised while coverage of the site remains uncertain. A strong answer distinguishes that coverage question from the validity of the received reports and explains both the value and the limits of the proposed follow-up.
+
+</Fold>

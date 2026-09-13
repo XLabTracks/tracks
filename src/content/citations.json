@@ -276,6 +276,13 @@
       "publisher": "Basel Institute on Governance",
       "date": "12 Nov. 2020"
     },
+    "https://batteringram.eu/": {
+      "title": "Battering RAM: Low-Cost Interposer Attacks on Confidential Computing",
+      "about": "A $50 DDR4 interposer that passes boot-time checks and then remaps protected memory, breaking Intel SGX confidentiality and replaying AMD SEV-SNP launch measurements so a tampered VM attests as genuine; the project page for the IEEE Symposium on Security and Privacy 2026 paper.",
+      "authors": "De Meulemeester, Jesse, David Oswald, Ingrid Verbauwhede, and Jo Van Bulck",
+      "date": "2026",
+      "standalone": true
+    },
     "https://blog.peterwildeford.com/p/explainer-how-ai-chips-are-made": {
       "title": "Explainer: How AI Chips Are Made",
       "about": "Grunewald's primer on the three steps, design, fabrication and packaging, and the handful of firms each step passes through, with the 2024 shipment and market-share figures; adapted from an IAPS report.",
@@ -288,6 +295,13 @@
       "about": "A wiki explainer of Fermi estimation — rough order-of-magnitude reasoning with worked examples.",
       "container": "Brilliant Math & Science Wiki",
       "publisher": "Brilliant.org"
+    },
+    "https://cacm.acm.org/practice/creating-the-first-confidential-gpus/": {
+      "title": "Creating the First Confidential GPUs",
+      "about": "NVIDIA engineers on the H100's confidential-computing mode: the boot chain, why the host and hypervisor are untrusted in that mode, how the GPU is attested, and what the mode turns off.",
+      "authors": "Dhanuskodi, Gobikrishna, Sudeshna Guha, Vidhya Krishnan, et al.",
+      "container": "Communications of the ACM",
+      "date": "Jan. 2024"
     },
     "https://carnegieendowment.org/files/GUP_Perkovich_Levite_UnderstandingCyberConflict_Ch1.pdf": {
       "title": "Intelligence in Cyber—and Cyber in Intelligence",
@@ -312,11 +326,29 @@
       "date": "Jan. 2021",
       "standalone": true
     },
+    "https://docs.nvidia.com/attestation/cloud-services/latest/rim/rim_introduction.html": {
+      "title": "Reference Integrity Measurements: Introduction",
+      "about": "NVIDIA's RIM service: the signed reference measurements a verifier compares device evidence against, and how they are distributed.",
+      "org": "NVIDIA Corporation",
+      "container": "NVIDIA Attestation Cloud Services documentation"
+    },
+    "https://docs.nvidia.com/attestation/nv-attestation-sdk-cpp/latest/sdk-c/claims_schema.html": {
+      "title": "Claims and Detached EAT Schema",
+      "about": "The claims an NVIDIA attestation token can carry — identity, secure-boot state, debug configuration, measurement and reference comparisons, nonce matching — and which of them appear depends on device and workflow.",
+      "org": "NVIDIA Corporation",
+      "container": "NVIDIA Attestation CPP SDK documentation"
+    },
     "https://docs.nvidia.com/attestation/quick-start-guide/latest/architecture.html": {
       "title": "Architecture Overview",
       "about": "NVIDIA's documentation of its attestation architecture — how clients, cloud services, and GPU hardware form a verifiable chain of trust.",
       "org": "NVIDIA Corporation",
       "container": "NVIDIA Attestation Suite Documentation"
+    },
+    "https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/blackwell_multi_gpu.html": {
+      "title": "Blackwell Multi-GPU Attestation Example",
+      "about": "NVIDIA's worked example for multi-GPU Blackwell attestation: the SDK detects every GPU and returns one entry per device, each attested independently, with no topology or switch attestation.",
+      "org": "NVIDIA Corporation",
+      "container": "NVIDIA Attestation Quick Start Guide"
     },
     "https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/hopper_single_gpu.html": {
       "title": "Hopper Single GPU Attestation Example",
@@ -469,6 +501,12 @@
       "container": "Basel LEARN",
       "publisher": "Basel Institute on Governance",
       "date": "n.d."
+    },
+    "https://learn.microsoft.com/en-us/windows/security/operating-system-security/system-security/secure-the-windows-10-boot-process": {
+      "title": "Secure the Windows Boot Process",
+      "about": "Microsoft's description of Secure Boot, Trusted Boot and Measured Boot as separate mechanisms, and of the remote attestation that carries the measurements to another party.",
+      "org": "Microsoft",
+      "container": "Microsoft Learn"
     },
     "https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260SB53": {
       "title": "SB-53 Artificial Intelligence Models: Large Developers (2025-2026)",
@@ -790,17 +828,25 @@
       "publisher": "U.S. Government Printing Office",
       "date": "May 1988"
     },
-    "https://www.rfc-editor.org/rfc/rfc9334.html": {
-      "title": "Remote ATtestation ProcedureS (RATS) Architecture",
-      "about": "The IETF architecture for remote attestation — the standard vocabulary of attesters, verifiers, and relying parties the hardware lessons use.",
-      "authors": "Birkholz, Henk, et al.",
-      "container": "RFC 9334",
-      "publisher": "RFC Editor",
-      "date": "Jan. 2023"
-    },
     "https://www.rfc-editor.org/rfc/rfc9334.html#section-10.4": {
       "title": "Remote ATtestation ProcedureS (RATS) Architecture — 10.4, Discussion",
       "about": "The freshness section's closing discussion, which separates when a claim's values were generated from when they were signed, and makes keeping them fresh the signer's responsibility.",
+      "authors": "Birkholz, Henk, Dave Thaler, Michael Richardson, et al.",
+      "container": "RFC 9334",
+      "publisher": "Internet Engineering Task Force",
+      "date": "Jan. 2023"
+    },
+    "https://www.rfc-editor.org/rfc/rfc9334.html#section-4.1": {
+      "title": "Remote ATtestation ProcedureS (RATS) Architecture — 4.1, Roles",
+      "about": "The three roles the architecture separates: an Attester that produces Evidence, a Verifier that appraises it, and a Relying Party that acts on the result.",
+      "authors": "Birkholz, Henk, Dave Thaler, Michael Richardson, et al.",
+      "container": "RFC 9334",
+      "publisher": "Internet Engineering Task Force",
+      "date": "Jan. 2023"
+    },
+    "https://www.rfc-editor.org/rfc/rfc9334.html#section-5": {
+      "title": "Remote ATtestation ProcedureS (RATS) Architecture — 5, Topological Patterns",
+      "about": "The passport and background-check models, and their combinations: the routes Evidence and Attestation Results take between the roles, which leave the roles themselves unchanged.",
       "authors": "Birkholz, Henk, Dave Thaler, Michael Richardson, et al.",
       "container": "RFC 9334",
       "publisher": "Internet Engineering Task Force",
@@ -885,8 +931,6 @@
     "https://www.armscontrol.org/act/2009-05/iran-nuclear-briefs/defining-noncompliance-npt-safeguards-agreements",
     "https://www.alignmentforum.org/posts/uqAdqrvxqGqeBHjTP/towards-understanding-based-safety-evaluations",
     "https://www.apolloresearch.ai/science/we-need-a-science-of-evals",
-    "https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/blackwell_multi_gpu.html",
-    "https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/hopper_multi_gpu.html",
     "https://images.nvidia.com/aem-dam/en-zz/Solutions/data-center/h100/PB-11133-001_v01.pdf",
     "https://arxiv.org/abs/2606.10724",
     "https://arxiv.org/abs/2103.05633",

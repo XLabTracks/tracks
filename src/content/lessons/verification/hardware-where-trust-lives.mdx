@@ -172,9 +172,9 @@ A supplier describes its proposal as “three independent hardware verification 
 
 | Component | Input and function | Control and coverage |
 | --- | --- | --- |
-| **A: on-chip reporter** | Vendor firmware produces operation totals and workload labels; the device signs the report. | Vendor V supplies firmware and decides accepted versions. The proposal has not established adversarial classification performance. |
-| **B: external digital appliance** | Checks A’s signature, copies its values, and signs a second report. It does not directly observe accelerator traffic. | Physically separate; accepts software updates signed by V’s update service. |
-| **C: external meter** | Its sensor measures electricity on the rack’s sole electrical feed. Its analysis software uses a model supplied by V to translate the trace into estimated compute. | Independently installed sensor; analysis software accepts updates from the same V service as B. Coverage of that feed is established for this exercise. |
+| **A** | Runs on the accelerator itself. Vendor firmware produces operation totals and workload labels; the device signs the report. | Vendor V supplies firmware and decides accepted versions. The proposal has not established adversarial classification performance. |
+| **B** | A separate box beside the rack. Its only input is A’s report. It checks A’s signature, copies A’s values into a second report, and signs that report. | Physically separate; accepts software updates signed by V’s update service. |
+| **C** | A separately installed instrument. Its sensor measures electricity on the rack’s sole electrical feed. Its analysis software uses a model supplied by V to translate the trace into estimated compute. | Independently installed sensor; analysis software accepts updates from the same V service as B. Coverage of that feed is established for this exercise. |
 | **Common records and service** | A facility inventory maps records to covered devices; a local dashboard combines all three reports. | The operator maintains the mapping. Raw records stay local. The inspectorate receives summaries. Maintenance and summary-release procedures remain unspecified. |
 
 </div>
@@ -185,9 +185,9 @@ The supplier concludes: “Agreement among three independently signed reports pr
 
 #### Questions
 
-**1. Classify A, B, and C by architectural type and distinguish their originating measurements from their analyses.** What independent evidence does B add about the computation?
+**1. Classify components A–C using the architectural families introduced in the lesson.** Justify each classification by describing where its evidence originates.
 
-**2. Identify two dependencies that could undermine more than one reported assurance.** For each, explain what could go wrong and what evidence, if any, would remain useful. Does agreement among green reports establish the supplier’s conclusion?
+**2. Identify two dependencies that could undermine more than one reported assurance.** For each, explain what could go wrong and what evidence, if any, would remain useful.
 
 **3. Recommend two changes for the pilot, in no more than 180 words.** One must improve evidence independence; the other must make the architecture more acceptable to the monitored party. Name an integration or operating cost and a residual blind spot. Do not assume you may replace every accelerator or publish raw workloads.
 

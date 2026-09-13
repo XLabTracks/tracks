@@ -3636,3 +3636,106 @@ Observation, not a regression: `/…/hardware-policy-studio` still answers 200
 with an empty body, but so does any invented slug on that route — the
 dispatching route does not 404 an unknown item in dev. Nothing in the
 sidebar, the course data or the module counts still points at it.
+
+## 2026-09-13 — 2.1.2 to 2.1.7: the interpretation comes out of the conditions
+
+Course owner's review, against the ВсОШ Moscow sample she uses as the model
+(items 6.4 and 7.3: the student is given data and a proposed conclusion and
+has to find the problematic step himself). Her correction to her own earlier
+note: "does X allow…? justify" is a fine question shape. The defect is not
+the yes/no grammar but whether any reasoning is left to do.
+
+Removed from the evidence packets — the author's reading of the facts, not
+the facts:
+
+- 2.1.2: "The result contains no switch or topology claim and no claim about
+  component M" listed the absent claims before question 1 asked what the
+  result supports. Replaced with "Those entries are the whole of the
+  Attestation Result" — exhaustive, so the task stays determinate, without
+  naming what is missing.
+- 2.1.5: "A translation error gave each device its own allowance of ten
+  units" had already classified the fault. Now the row states only that each
+  of the four devices was issued ten units; the permit above it authorises
+  ten in total, so the discrepancy is there to be found.
+- 2.1.6: the components were labelled "A: on-chip reporter", "B: external
+  digital appliance", "C: external meter" and question 1 then asked for
+  their architectural type. They are now A, B and C, with placement and
+  function moved into the description. B's row gives an exhaustive list of
+  its inputs and actions — "Its only input is A's report. It checks A's
+  signature, copies A's values into a second report, and signs that report"
+  — instead of telling the reader it adds no observation.
+- 2.1.7: the Access and Other-evidence rows enumerated unverified
+  provenance, an incomplete project history, other devices, facilities and
+  branches. They now describe what the packet contains and say it contains
+  nothing else.
+
+Kept, because without them the tasks stop being determinate: unit
+conventions, the no-overlap and maximum-rate stipulations, the sampling
+rule, the stipulated perfect replay test, and the coverage that is expressly
+established.
+
+Questions, using the owner's replacements verbatim where she supplied them:
+
+- 2.1.3 Q1 pre-sorted the devices into the three categories the key builds.
+  Now: "What does the packet establish about the whereabouts of the 80
+  registered devices? Support your answer with the supplied records and
+  calculations." Q3 lost its closing instruction to test the inventory
+  beyond the registry; the pair of checks, the named evidence-holder and the
+  stated limitation stay.
+- 2.1.5 Q1 announced that the quantity differs from the permission. Now:
+  "How much further computation could the installed tokens enable after
+  noon? Compare your answer with the permit and the director's statement."
+  Q3 no longer says to distinguish correcting the decision from recovering
+  the control — that is the centre of the key. Q4's six-part checklist
+  (default, exception, review, restoration, residual risk) became: "Recommend
+  two changes to the licensing arrangement. Explain how each addresses a
+  problem revealed by the case and identify a cost or risk of implementing
+  it. Limit your answer to 180 words."
+- 2.1.6 Q1 singled B out as the suspect component. Now: "Classify components
+  A–C using the architectural families introduced in the lesson. Justify each
+  classification by describing where its evidence originates." Q2 lost the
+  bounding request it duplicated from Q4.
+- 2.1.7 Q1 listed nearly the whole key. Now: "Assess the developer's claim
+  using the audit results. Support your assessment with specific details from
+  the packet." Q2 lost the clause stating the negative conclusion in advance;
+  Q3 lost the sentence naming both categories of gap.
+
+Answer keys 1 and 4 in 2.1.5 were rewritten rather than left standing: her
+rule is that a checklist removed from a question may not survive as a hidden
+requirement in its key. Key 1 now answers what Q1 asks — the 40-unit bound,
+the comparison with the permit and with the director's sentence — and marks
+the allocation design as an optional extension the question does not require.
+Key 4 is now a two-change recommendation with a cost named for each. The
+three levels in 2.1.7's key, and the three evidence categories in 2.1.3's,
+stay in the keys, which is where she wants them.
+
+Heading: 2.1.5's exercise was "What Has Actually Stopped?". "Actually"
+presupposes the finding, which is what she objects to in a heading; the word
+is gone and the question stands.
+
+Still owed, and flagged to her:
+
+- **2.1.4 could not be touched.** Everything she describes there — job J, the
+  80% of equal-duration windows, "operations per window are not supplied",
+  the accuracy/precision/recall calculation, the heading "One job, several
+  incomplete answers" — is in a draft that has never been in this
+  repository. The 2.1.4 in the tree is the older outline transcription:
+  compute accounting, workload classification, the attack table and a
+  four-statement activity, with no exercise and no job J. Her 2.1.5 brief
+  refers to job J as if 2.1.4 already carried it, so the draft exists
+  somewhere else.
+- **The series tells the reader the operator is wrong.** Every packet from
+  2.1.2 to 2.1.7 ends on an overreaching claim, so "proves compliance" is
+  itself the signal to start listing gaps. Fixing it means one case whose
+  claim is defensible, or true under a named assumption, or splits into two
+  competing readings — which claim flips is a curriculum decision, not a
+  mechanical edit. The two plausible candidates: 2.1.2, where the operator's
+  three-part conclusion could be narrowed to something the result does
+  support, and 2.1.3, whose operator conclusion is already evaluated sentence
+  by sentence and could have one sentence that survives.
+- Her closing suggestion is cut off mid-sentence: "Return to your claim from
+  2.1.1. Propose one change to the verification procedure and explain how it
+  would affect your …". Nothing in the repository yet carries a return to a
+  2.1.1 claim, so there is nothing to edit until the rest of the sentence and
+  its home arrive.
+- 2.1.1's current text has never been sent to her for review.

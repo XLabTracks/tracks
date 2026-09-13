@@ -165,8 +165,8 @@ The packet contains:
 | Selection | The verifier chooses 20 distinct intervals uniformly at random, unpredictably to the developer before commitment. |
 | Result | All 20 replay checks pass. For this exercise only, replay detects every invalid selected interval and never rejects a valid one. |
 | Cost | Each interval costs 100 GPU-hours to replay on the necessary configuration. The claimed 1,000-interval run costs 100,000 GPU-hours. These are consistent scheduling units for this exercise, not a legal FLOP conversion. |
-| Access | A jointly administered verification cluster can access the necessary records under agreed confidentiality controls. Initial checkpoint provenance and the completeness of the project history have not been established. |
-| Other evidence | There is no evidence in this packet about other devices, facilities, or omitted branches. No actual violation is stipulated. |
+| Access | A jointly administered verification cluster can access the submitted transcript and checkpoints under agreed confidentiality controls. |
+| Other evidence | The packet consists of the items listed above and nothing else. No violation is stipulated. |
 
 The audit team proposes increasing the sample to 100 distinct intervals. Use these calculated probabilities; you do not need to derive them:
 
@@ -183,11 +183,11 @@ These probabilities assume the selection and perfect replay test specified above
 
 #### Questions
 
-**1. Write a three-sentence appraisal:** what the successful checks directly establish; what remains unresolved about the declared run and its starting point; and what remains unresolved about project and fleet completeness.
+**1. Assess the developer’s claim using the audit results.** Support your assessment with specific details from the packet.
 
-**2. Compare the two audit budgets.** Calculate replay GPU-hours and their percentage of the claimed run’s compute for 20 and 100 checks. Use the probability table to explain what the larger budget buys, and one reason neither budget supports a numerical probability that the project complied.
+**2. Compare the two audit budgets.** Calculate replay GPU-hours and their percentage of the claimed run’s compute for 20 and 100 checks. Use the probability table to explain what the larger budget buys.
 
-**3. Recommend a next step in no more than 180 words.** Address both a weakness inside the submitted history and missing coverage outside it. Identify an implementation or confidentiality cost and rewrite the developer’s conclusion as a bounded claim. You may disagree with increasing the sample; justify the priority you choose.
+**3. Recommend a next step in no more than 180 words.** Identify an implementation or confidentiality cost and rewrite the developer’s conclusion as a bounded claim. You may disagree with increasing the sample; justify the priority you choose.
 
 ### Answer Keys
 

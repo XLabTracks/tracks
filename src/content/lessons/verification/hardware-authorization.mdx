@@ -151,7 +151,7 @@ Older or otherwise uncovered equipment remains the completeness problem from 2.1
 
 Return briefly to the Chip Security Act exercise: a location check could inform a decision to issue or renew a token. It does not itself confer authority to disable a chip, and an unanswered location challenge does not prove smuggling. Treat location verification, the legal consequences of missing evidence, and a proposed control mechanism as distinct choices. This lesson does not claim that the bill requires the control design developed here.
 
-### Exercise — The Authority Has Revoked Permission. What Has Actually Stopped?
+### Exercise — The Authority Has Revoked Permission. What Has Stopped?
 
 **This is a hypothetical extension of the course’s pause case, not an NVIDIA or RAND implementation.** It does not resolve the historical uncertainty about job J in 2.1.4. The authority is now considering a new, separately authorized activity.
 
@@ -163,7 +163,7 @@ At 12:00, the authority lawfully suspends that permission with immediate effect 
 
 | Item | Established fact |
 | --- | --- |
-| Token installation | A translation error gave each device its own allowance of ten units. Each still has ten units remaining at 12:00. |
+| Token installation | Each of the four devices was issued its own allowance of ten units. Each still has ten units remaining at 12:00. |
 | Enforcement | All covered work on A–D is counted correctly. Budgets cannot be replayed, transferred, reset, or bypassed. Devices stop covered computation at zero, with no residual or shutdown compute. |
 | Offline behavior | Installed tokens have no calendar expiry and remain usable without renewal. Devices have received no suspension message. |
 | Scope | There are no spare tokens, emergency allowances, additional devices, or additional authorization paths in this exercise. |
@@ -176,23 +176,25 @@ The program director proposes this announcement:
 
 #### Questions
 
-**1. What does the packet establish about the maximum further computation that the four devices could perform after noon?** Explain the relationship between that quantity and the legal permission. Identify the translation error and propose a way to prevent it without giving every device the full aggregate budget.
+**1. How much further computation could the installed tokens enable after noon?** Compare your answer with the permit and the director’s statement.
 
 **2. What, if anything, does the rate information establish about 17:00?** State the extra conditions needed for a deadline-based stopping claim. Rewrite the first three sentences of the announcement as a bounded, evidence-supported statement.
 
-**3. Suppose review later finds that the suspension was mistaken, but a separate investigation confirms that the issuer’s signing key was stolen.** Explain what changes in the argument about available compute and what must be resolved before restoring ordinary operation. Distinguish correcting the decision from recovering the technical control.
+**3. Suppose review later finds that the suspension was mistaken, but a separate investigation confirms that the issuer’s signing key was stolen.** Assess the director’s proposed remedy in light of these findings. What would be required to resume operation?
 
-**4. Write a short policy recommendation, up to 150 words, for handling the next renewal outage.** Choose and justify a default for covered computation. Include an exception rule, a review-and-restoration path, and one residual risk. You may disagree with automatic suspension, but make the alternative’s exposure explicit.
+**4. Recommend two changes to the licensing arrangement.** Explain how each addresses a problem revealed by the case and identify a cost or risk of implementing it. Limit your answer to 180 words.
 
 ### Answer Keys
 
 <Fold label="Show answer 1">
 
-The installed allowances can enable **up to 40 further units: 4 × 10**. This is a mechanical upper bound under the packet’s assumptions, not an observation that 40 units were performed. The original legal permission allowed only ten aggregate units, and that permission is suspended at noon. Continued technical capability is not continued legal authorization.
+The installed allowances can enable **up to 40 further units: 4 × 10**. This is a mechanical upper bound under the packet’s assumptions, not an observation that 40 units were performed.
 
-The issuer replicated a fleet-level allowance as four independent device allowances. One correction is to divide the total into device-bound portions summing to no more than ten, such as 2.5 units each. A different allocation is equally valid if its sum is bounded. Moving unused allowance between devices requires evidence that it is no longer spendable at the old device; otherwise reassignment can duplicate permission. A coordinated shared budget is another possible design, but it introduces a coordination dependency absent from this packet.
+The permit authorized ten units in total across the four devices. The tokens therefore carry four times the permission that was granted: the aggregate allowance was issued to each device instead of divided among them. The director’s claim that licensing “limits any further work to ten units” describes the permit, not the tokens the devices are holding.
 
-For this suspension, correcting future issuance alone does not erase the 40 units already accepted. Those permissions need to be replaced, invalidated through a delivered instruction, or exhausted under the stated enforcement rules.
+The permission is also suspended at noon, so none of that computation is authorized. Continued technical capability is not continued legal authorization. Correcting future issuance would not by itself erase the 40 units already accepted; those permissions would have to be replaced, invalidated through a delivered instruction, or exhausted under the stated enforcement rules.
+
+An answer may go further into how the aggregate should have been bound—device-bound portions summing to no more than ten, or a coordinated shared budget with its own coordination dependency. The question does not require it.
 
 </Fold>
 
@@ -222,11 +224,11 @@ Finally, restoring service does not necessarily make the operator whole. Lost wo
 
 <Fold label="Show answer 4">
 
-One defensible recommendation is:
+One defensible pair is:
 
-“During a renewal outage, permit only an already issued, finite allowance, then suspend covered computation. Do not replenish that allowance automatically because the service remains unavailable. Permit a separately budgeted emergency exception only for specified essential work whose scope can be enforced or independently supervised. Require a competent reviewer to assess contested restrictions promptly and provide an authenticated route to restore permission and reconcile remaining budgets. Use an independent recovery procedure if signing credentials are compromised. Record decisions and interruptions for later review and remedy. Residual risk remains: prohibited work may consume outstanding allowances before suspension, and permitted work may be interrupted after exhaustion.”
+“First, bind each token to a share of the aggregate permission rather than to the whole of it, and require the issuer to record how much of the total has already been committed across the fleet before signing another. This addresses the four-fold over-issue the case exposes. It costs a fleet-level record that must itself be kept current and protected, and it fails if that record is wrong. Second, give a suspension a delivery path the devices can receive, and pair it with a bounded local allowance that is not replenished while the renewal service is unreachable. This addresses the gap between a lawful suspension at noon and devices that never hear of it. It costs availability: permitted work stops when communications fail, and an operator can be interrupted by an outage nobody caused.”
 
-Other answers can recommend immediate suspension or a bounded time-based grace period. Credit depends on specifying a feasible trigger, treatment of exceptions, accountability, and the harm left exposed—not on selecting the most restrictive policy. Unlimited automatic extension does not supply a finite exposure bound.
+Other pairs can be justified—an enforceable expiry using trustworthy time, a recovery procedure that installs replacement trust material without the compromised key, a review route for a contested restriction. Credit depends on tying each change to something this case actually revealed and naming what it costs, not on choosing the most restrictive arrangement.
 
 </Fold>
 

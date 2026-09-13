@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import { Button } from "@/components/ui/button";
 import {
   PagerCard,
+  PartPager,
   ReadingPager,
   type PagerLink,
 } from "@/components/learn/reading-pager";
@@ -273,23 +274,32 @@ export function PaperPartsReader({
 
       {footer}
 
-      {/* One pager, exactly as the lesson reader has: Previous and Next move
-          section by section, and at the ends they roll into the neighbouring
-          item — so the page does not add a LessonNav under this. Whole-paper
-          mode has no sections to step through, so it is only the neighbours. */}
+      {/* Two tiers, exactly as the lesson reader has: the section steps
+          stay within the paper, the cards under them leave it — so the page
+          does not add a LessonNav under this. Whole-paper mode has no
+          sections to step through, so it is only the neighbours. */}
+      <PartPager
+        unit="section"
+        prev={
+          paged && at > 0
+            ? { title: parts[at - 1].label, onClick: () => goTo(at - 1) }
+            : null
+        }
+        next={
+          paged && at < parts.length - 1
+            ? { title: parts[at + 1].label, onClick: () => goTo(at + 1) }
+            : null
+        }
+      />
       <ReadingPager
         left={
-          paged && at > 0 ? (
-            <PagerCard dir="prev" title={parts[at - 1].label} onClick={() => goTo(at - 1)} />
-          ) : prev ? (
-            <PagerCard dir="prev" title={prev.title} href={`${prev.href}?p=last`} />
+          prev ? (
+            <PagerCard dir="prev" label="Previous lesson" title={prev.title} href={prev.href} />
           ) : null
         }
         right={
-          paged && at < parts.length - 1 ? (
-            <PagerCard dir="next" title={parts[at + 1].label} onClick={() => goTo(at + 1)} />
-          ) : next ? (
-            <PagerCard dir="next" title={next.title} href={next.href} />
+          next ? (
+            <PagerCard dir="next" label="Next lesson" title={next.title} href={next.href} />
           ) : null
         }
       />

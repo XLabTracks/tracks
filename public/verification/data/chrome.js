@@ -12,7 +12,7 @@ window.VT_CHROME = {
       "href": "/tracks/verification"
     },
     {
-      "label": "Skill map",
+      "label": "Skill Map",
       "href": "map"
     },
     {

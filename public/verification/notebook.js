@@ -487,7 +487,7 @@ window.VTNotebook = (function () {
   function paintSkills() {
     pagesEl.innerHTML = '';
     const head = mk('div', 'nb-skills-head');
-    head.appendChild(mk('h3', null, 'Skill map'));
+    head.appendChild(mk('h3', null, 'Skill Map'));
     const a = mk('a', 'btn small outline', 'Open the full map');
     a.href = '/verification/map';
     head.appendChild(a);
@@ -595,6 +595,7 @@ window.VTNotebook = (function () {
             '<button class="btn small outline" type="button" data-add="text">Note</button>' +
             '<button class="btn small outline" type="button" data-add="sketch">Sketch</button>' +
             '<button class="btn small outline" type="button" data-written>Written work</button>' +
+            '<a class="btn small outline" href="/verification/memo-desk">Memo desk</a>' +
           '</div>' +
           '<div class="nb-pager">' +
             '<button class="btn small outline" type="button" data-page="-1" aria-label="Previous page">&larr;</button>' +

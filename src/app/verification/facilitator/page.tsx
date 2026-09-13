@@ -38,7 +38,7 @@ const CURRICULUM: { label: string; href: string; desc: string }[] = [
     desc: "The five modules and their units, in reading order.",
   },
   {
-    label: "Skill map",
+    label: "Skill Map",
     href: "/verification/map",
     desc: "The skill graph the course is organised around — which units feed which skills.",
   },

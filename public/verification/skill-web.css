@@ -397,20 +397,19 @@
 }
 /* The learner goals list — the p-desc voice broken into the owner's own
    bullets; a sub-point steps in under the bullet it belongs to. */
+/* Bullets as the lesson bodies set them — disc, then circle one level in. */
 .sky-panel .p-goals {
   margin-top: 18px;
-  list-style: none;
+  padding-left: 1.2em;
+  list-style: disc;
 }
 .sky-panel .p-goals li {
-  position: relative;
-  padding-left: 16px;
   font-size: var(--fs-sm);
   line-height: 1.6;
   color: var(--muted-foreground);
   margin-bottom: 7px;
 }
-.sky-panel .p-goals li::before { content: '–'; position: absolute; left: 0; }
-.sky-panel .p-goals li.sub { margin-left: 18px; font-size: var(--fs-2xs); }
+.sky-panel .p-goals li.sub { margin-left: 1.2em; font-size: var(--fs-2xs); list-style: circle; }
 /* The ladder is a labelled data column: micro-label on top, then rows ruled
    by hairlines, the unit number hanging in the module's colour. Rhythm comes
    from one padding, not per-row margins. */

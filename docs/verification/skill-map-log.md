@@ -100,3 +100,24 @@ map page and the about page match it.
   the app-side mirror `completion-stats.test.ts` keeps in step with
   `data/skills.js`, instead of a literal that had sat at 27 through the
   v2 rewrite.
+
+## 2026-09-13 — checked against the current curriculum; copy and bullets
+
+The owner asked that the map page carry all 31 skills and dependencies on
+the most recent curriculum. Checked, not changed: `skills.js` rev 4 already
+has 31 skills, 61 edges, 95 rungs, every rung on a unit `course.js` carries
+(the three rung texts that cite a sub-lesson — 0.1.1, 0.1.2, 4.1.1 — name
+lessons `curriculum.ts` has), and `verification:course --check` is clean.
+Units with no rung: 0.0 Welcome and 4.3 Where to Go From Here, by design.
+
+Changed on the owner's instruction:
+
+- The map page's intro is now verbatim: "Here is the skill map with your
+  current progress. Click each skill to read its description, the relevant
+  parts of the curriculum, and its dependencies."
+- "Skill Map" is capitalized everywhere it is a name: the header nav
+  (`chrome.ts`, regenerated), the page title, h1 and breadcrumb, the
+  facilitator guide's link, the notebook's last-page heading.
+- The panel's learner-goals list uses the course's own bullets — disc, then
+  circle one level in — instead of an en-dash pseudo-element. Shared CSS, so
+  the home page's panel reads the same.

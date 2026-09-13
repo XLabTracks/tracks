@@ -1,3 +1,5 @@
+import { verificationExercises } from "@/content/verification/exercises";
+import { isWritingExercise, type WritingExercise } from "@/lib/content/types";
 
 export type MemoStatus = "specified" | "named" | "unspecified";
 
@@ -18,6 +20,8 @@ export interface MemoSlot {
   status: MemoStatus;
   genre?: MemoGenre;
   lesson: string;
+  task?: string;
+  href?: string;
   optional?: boolean;
   brief: string | null;
   audience: string | null;
@@ -36,18 +40,152 @@ export const memoModules = [
 
 export const memoSlots: MemoSlot[] = [
   {
+    id: "m0-welcome-note",
+    module: 0,
+    unit: "0.0",
+    title: "A Short Note to Look Back On After the Course",
+    status: "specified",
+    lesson: "welcome",
+    task: "v-task-welcome-1",
+    optional: true,
+    brief: null,
+    audience: null,
+    words: 0,
+  },
+  {
+    id: "m0-strongest-objection",
+    module: 0,
+    unit: "0.1",
+    title: "The Strongest Objection",
+    status: "specified",
+    lesson: "introduction",
+    task: "v-task-introduction-1",
+    optional: true,
+    brief: null,
+    audience: null,
+    words: 0,
+  },
+  {
+    id: "m0-a1-strongest-mechanism",
+    module: 0,
+    unit: "0.2",
+    title: "A1. Identify the Regime's Strongest Mechanism or Recommendation",
+    status: "specified",
+    lesson: "intuitions",
+    task: "v-task-intuitions-5",
+    brief: null,
+    audience: null,
+    words: 0,
+  },
+  {
+    id: "m0-a2-weakest-link",
+    module: 0,
+    unit: "0.2",
+    title: "A2. Identify the Regime's Weakest Link(s)",
+    status: "specified",
+    lesson: "intuitions",
+    task: "v-task-intuitions-6",
+    brief: null,
+    audience: null,
+    words: 0,
+  },
+  {
+    id: "m0-a3-timeline",
+    module: 0,
+    unit: "0.2",
+    title: "A3. Stress-Test the Timeline",
+    status: "specified",
+    lesson: "intuitions",
+    task: "v-task-intuitions-7",
+    brief: null,
+    audience: null,
+    words: 0,
+  },
+  {
+    id: "m0-a4-covert-compute-margin",
+    module: 0,
+    unit: "0.2",
+    title: "A4. Assess the Covert-Compute Margin",
+    status: "specified",
+    lesson: "intuitions",
+    task: "v-task-intuitions-8",
+    brief: null,
+    audience: null,
+    words: 0,
+  },
+  {
     id: "m0-hinge-brief",
     module: 0,
     unit: "0.2",
-    title: "Final Essay: Stress-Test Plan A, or Plan A vs. Plan S",
+    title: "A5. Final Essay: Stress-Test Plan A",
     status: "specified",
     genre: "essay",
     lesson: "intuitions",
-    brief:
-      "Write one of two open-ended essay prompts, consisting of shorter, prompted questions linking into a more cohesive essay at the end. A: stress-test the Plan A verification supplement — how robust is Plan A's verification regime, and where is it most likely to fail? End on one of three recommendations: adopt largely as written, adopt only with significant amendments, or reject in favor of a different approach (400–600 words). Or B: compare Plan A (verified slowdown) and Plan S (complete shutdown) — which creates the more robust verification regime? Make a recommendation (400–500 words).",
-    audience:
-      "Decision-makers asking whether the verification regime is strong enough to rely on as written.",
-    words: 600,
+    task: "v-task-intuitions-9",
+    brief: null,
+    audience: null,
+    words: 0,
+  },
+  {
+    id: "m0-b1-tractable-target",
+    module: 0,
+    unit: "0.2",
+    title: "B1. Which Plan Gives Verification the More Tractable Target?",
+    status: "specified",
+    lesson: "intuitions",
+    task: "v-task-intuitions-10",
+    brief: null,
+    audience: null,
+    words: 0,
+  },
+  {
+    id: "m0-b2-stronger-evidence",
+    module: 0,
+    unit: "0.2",
+    title: "B2. Which Plan Could Provide Stronger Evidence of Compliance?",
+    status: "specified",
+    lesson: "intuitions",
+    task: "v-task-intuitions-11",
+    brief: null,
+    audience: null,
+    words: 0,
+  },
+  {
+    id: "m0-b3-monitoring-problem",
+    module: 0,
+    unit: "0.2",
+    title: "B3. Which Plan Creates the Harder Monitoring Problem?",
+    status: "specified",
+    lesson: "intuitions",
+    task: "v-task-intuitions-12",
+    brief: null,
+    audience: null,
+    words: 0,
+  },
+  {
+    id: "m0-b4-cooperation",
+    module: 0,
+    unit: "0.2",
+    title: "B4. Which Regime Could States Actually Cooperate On?",
+    status: "specified",
+    lesson: "intuitions",
+    task: "v-task-intuitions-13",
+    brief: null,
+    audience: null,
+    words: 0,
+  },
+  {
+    id: "m0-plan-a-vs-s",
+    module: 0,
+    unit: "0.2",
+    title: "B5. Final Essay: Plan A vs. Plan S",
+    status: "specified",
+    genre: "essay",
+    lesson: "intuitions",
+    task: "v-task-intuitions-14",
+    brief: null,
+    audience: null,
+    words: 0,
   },
   {
     id: "m0-success-scenario",
@@ -57,11 +195,38 @@ export const memoSlots: MemoSlot[] = [
     status: "specified",
     genre: "essay",
     lesson: "intuitions",
+    task: "v-task-intuitions-2",
     optional: true,
-    brief:
-      "Describe your own plausible success scenario for advanced AI governance. Think several steps beyond any single verification mechanism: what does a world that has successfully managed the relevant risks actually look like, and what agreement or institutional arrangement gets us there? Keep this essay. You will return to it at the end of the track and see what, if anything, you would now change.",
+    brief: null,
     audience: null,
-    words: 800,
+    words: 0,
+  },
+  {
+    id: "m0-explore-ai-2027",
+    module: 0,
+    unit: "0.2",
+    title: "Explore AI 2027",
+    status: "specified",
+    lesson: "intuitions",
+    task: "v-task-intuitions-3",
+    optional: true,
+    brief: null,
+    audience: null,
+    words: 0,
+  },
+  {
+    id: "m1-actor-authority-evidence",
+    module: 0,
+    unit: "0.4",
+    title: "Actor–Authority–Evidence Map",
+    status: "specified",
+    genre: "map",
+    lesson: "strategic-foundations",
+    task: "v-task-strategic-foundations-1",
+    optional: true,
+    brief: null,
+    audience: null,
+    words: 0,
   },
   {
     id: "m1-stakeholder-map",
@@ -89,30 +254,16 @@ export const memoSlots: MemoSlot[] = [
     gap: "Named in the module timing table as a 15–20 minute written exercise. No brief, audience or rubric is drafted.",
   },
   {
-    id: "m1-actor-authority-evidence",
-    module: 1,
-    unit: "1.x",
-    title: "Actor–Authority–Evidence Map",
-    status: "named",
-    genre: "map",
-    lesson: "scoping-upstream-downstream",
-    brief: "Actor–authority–evidence map for any element of the supply chain.",
-    audience: null,
-    words: 700,
-    gap: "The artifact is named; length, audience and review criteria are not drafted.",
-  },
-  {
-    id: "m1-optional",
-    module: 1,
-    unit: "1.x",
-    title: "Written Output",
-    status: "unspecified",
-    lesson: "scoping-upstream-downstream",
-    optional: true,
+    id: "m2-1-chip-security-act",
+    module: 2,
+    unit: "2.1",
+    title: "Break Down the Chip Security Act",
+    status: "specified",
+    lesson: "hardware-claim",
+    task: "v-hw-claim-chip-security",
     brief: null,
     audience: null,
-    words: 600,
-    gap: 'A "[Optional] Written output:" marker sits after the supply-chain actor list with nothing under it.',
+    words: 0,
   },
   {
     id: "m2-1-hardware-brief",
@@ -126,6 +277,67 @@ export const memoSlots: MemoSlot[] = [
     audience:
       "A named national delegation or joint drafting session considering a three-month U.S.–China pause.",
     words: 1000,
+  },
+  {
+    id: "m2-3-osint-guess",
+    module: 2,
+    unit: "2.3",
+    title: "What Signs Can We Catch With Open-Source Data?",
+    status: "specified",
+    lesson: "intelligence-osint",
+    task: "v-intel-osint-guess",
+    optional: true,
+    brief: null,
+    audience: null,
+    words: 0,
+  },
+  {
+    id: "m2-3-osint-colossus",
+    module: 2,
+    unit: "2.3",
+    title: "Open-Source Intelligence Exercise",
+    status: "specified",
+    lesson: "intelligence-osint",
+    task: "v-intel-osint-fas",
+    brief: null,
+    audience: null,
+    words: 0,
+  },
+  {
+    id: "m2-3-imagery-al-kibar",
+    module: 2,
+    unit: "2.3",
+    title: "Imagery and Geospatial Intelligence Exercise",
+    status: "specified",
+    lesson: "intelligence-imagery",
+    task: "v-intel-imagery-al-kibar",
+    brief: null,
+    audience: null,
+    words: 0,
+  },
+  {
+    id: "m2-3-finint-smuggling",
+    module: 2,
+    unit: "2.3",
+    title: "Financial and Procurement Intelligence Exercise",
+    status: "specified",
+    lesson: "intelligence-finint",
+    task: "v-intel-finint-smuggling",
+    brief: null,
+    audience: null,
+    words: 0,
+  },
+  {
+    id: "m2-3-cyber-uses",
+    module: 2,
+    unit: "2.3",
+    title: "Signals and Cyber Intelligence Exercise",
+    status: "specified",
+    lesson: "intelligence-cyber",
+    task: "v-intel-cyber-uses",
+    brief: null,
+    audience: null,
+    words: 0,
   },
   {
     id: "m2-3-intel-overview",
@@ -174,8 +386,35 @@ export const memoSlots: MemoSlot[] = [
     words: 900,
     criteria: ["Judged against the rubric"],
   },
+  {
+    id: "m4-capstone",
+    module: 4,
+    unit: "4.2",
+    title: "Capstone Project",
+    status: "specified",
+    lesson: "capstone-project",
+    href: "/verification/capstone",
+    brief:
+      "One piece of work that shows what you have learned, applied to a problem you chose. There is no assigned task: choose a brief from the capstone bank, or suggest your own — it has to be relevant to technical AI governance and aimed at an AI-safety-related theme. Either way, put your name on the sign-up sheet, so your facilitator knows what you are working on and can read your proposal. The workspace holds the track’s own capstone template: design a minimal verification regime for a three-month emergency pause, then break it yourself.",
+    audience: null,
+    words: 0,
+  },
 ];
 
 export function memoSlotsForLesson(lesson: string): MemoSlot[] {
   return memoSlots.filter((slot) => slot.lesson === lesson);
+}
+
+export function memoDeskSlotsForLesson(lesson: string): MemoSlot[] {
+  return memoSlotsForLesson(lesson).filter((slot) => !slot.task && !slot.href);
+}
+
+const writingById = new Map<string, WritingExercise>(
+  verificationExercises
+    .filter(isWritingExercise)
+    .map((exercise) => [exercise.id, exercise]),
+);
+
+export function memoTaskExercise(slot: MemoSlot): WritingExercise | undefined {
+  return slot.task ? writingById.get(slot.task) : undefined;
 }

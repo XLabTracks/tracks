@@ -1,13 +1,13 @@
 import { ArrowUpRight, PenLine } from "lucide-react";
 import { OptionalPrefix } from "@/components/content/optional-tag";
 import {
+  memoDeskSlotsForLesson,
   memoGenreLabels,
-  memoSlotsForLesson,
   type MemoSlot,
 } from "@/content/verification/memos";
 
 export function MemoDesk({ lesson }: { lesson: string }) {
-  const slots = memoSlotsForLesson(lesson);
+  const slots = memoDeskSlotsForLesson(lesson);
   if (!slots.length) {
     return (
       <div className="not-prose border-destructive/40 bg-destructive/5 text-destructive my-6 rounded-xl border p-4 text-sm">

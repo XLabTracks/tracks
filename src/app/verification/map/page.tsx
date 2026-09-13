@@ -10,7 +10,7 @@ import { LegacyScripts } from "@/components/verification/legacy-scripts";
  * same markup, drawn by the same skill-web.js — and map.js adds progress,
  * unit links and the objectives filter on top. */
 
-export const metadata: Metadata = { title: "Skill map" };
+export const metadata: Metadata = { title: "Skill Map" };
 
 const SCRIPTS = [
   "data/course.js",
@@ -29,13 +29,14 @@ export default function Page() {
       <link rel="stylesheet" href="/verification/skill-web.css" precedence="high" />
       <link rel="stylesheet" href="/verification/map.css" precedence="high" />
       <main className="page page-wide">
-        <nav className="crumbs" aria-label="Breadcrumb"><a href="/verification/landing">Home</a> / Skill map</nav>
+        <nav className="crumbs" aria-label="Breadcrumb"><a href="/verification/landing">Home</a> / Skill Map</nav>
 
         <header className="map-head">
           <div>
-            <h1>Skill map</h1>
-            <p className="sub">Thirty-one skills, and the units that advance each one.
-              Every star is visible from day one; only the filling is earned.</p>
+            <h1>Skill Map</h1>
+            <p className="sub">Here is the skill map with your current progress. Click each
+              skill to read its description, the relevant parts of the curriculum, and its
+              dependencies.</p>
           </div>
           <div className="map-controls">
             <div className="progress-row">

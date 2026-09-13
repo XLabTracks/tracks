@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { getCurrentUser } from "@/lib/auth";
 import { getExerciseById } from "@/lib/content";
+import { isWritingExercise } from "@/lib/content/types";
 import { prisma } from "@/lib/db";
 
 /**
@@ -14,12 +15,14 @@ import { prisma } from "@/lib/db";
  * lesson it was in. Storing a second copy in the notebook document would make
  * two things true at once and let them disagree.
  *
- * Scoped to `v-task-*` — the ids `src/content/verification/exercises.ts`
- * issues. A learner's Control-track writing is not part of this course and
- * has no business being listed here.
+ * Scoped to the Verification track's own writing exercises — every `v-*` id
+ * `src/content/verification/exercises.ts` issues that is a writing type,
+ * which is the set the memo desk lists as lesson tasks. A learner's
+ * Control-track writing is not part of this course and has no business being
+ * listed here; nor are the track's knowledge checks.
  */
 
-const PREFIX = "v-task-";
+const PREFIX = "v-";
 
 export async function GET() {
   const user = await getCurrentUser();
@@ -40,6 +43,10 @@ export async function GET() {
 
   const items = rows
     .filter((r) => (r.responseText ?? "").trim().length > 0)
+    .filter((r) => {
+      const exercise = getExerciseById(r.contentId);
+      return !!exercise && isWritingExercise(exercise);
+    })
     .map((r) => {
       const exercise = getExerciseById(r.contentId);
       // The prompt's first line is the task's own title in the outline, which

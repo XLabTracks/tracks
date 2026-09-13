@@ -639,7 +639,7 @@
       "title": "New START at a Glance",
       "about": "The treaty's limits and counting rules: 1,550 accountable deployed strategic warheads, warheads on deployed missiles counted as actual reentry vehicles, and each heavy bomber counted as one warhead whatever it could carry.",
       "org": "Arms Control Association",
-      "date": "2026"
+      "date": "Apr. 2026"
     },
     "https://www.bellingcat.com/resources/2025/08/14/llms-vs-geolocation-gpt-5-performs-worse-than-other-ai-models/": {
       "title": "LLMs vs. Geolocation: GPT-5 Performs Worse Than Other AI Models",
@@ -796,6 +796,14 @@
       "authors": "Birkholz, Henk, et al.",
       "container": "RFC 9334",
       "publisher": "RFC Editor",
+      "date": "Jan. 2023"
+    },
+    "https://www.rfc-editor.org/rfc/rfc9334.html#section-10.4": {
+      "title": "Remote ATtestation ProcedureS (RATS) Architecture — 10.4, Discussion",
+      "about": "The freshness section's closing discussion, which separates when a claim's values were generated from when they were signed, and makes keeping them fresh the signer's responsibility.",
+      "authors": "Birkholz, Henk, Dave Thaler, Michael Richardson, et al.",
+      "container": "RFC 9334",
+      "publisher": "Internet Engineering Task Force",
       "date": "Jan. 2023"
     },
     "https://www.satellitevu.com/news/satvu-releases-first-of-its-kind-thermal-image-revealing-true-operational-activity-inside-major-u-s-data-centre": {

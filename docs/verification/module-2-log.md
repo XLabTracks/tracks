@@ -3245,3 +3245,53 @@ Flag: two lead-ins announce their own item counts — "distinguish three
 things" and "Use three questions to examine that relationship" — which the
 2026-09-08 ruling forbids. Kept verbatim under "use exactly my text"; say
 the word and they go.
+
+## 2026-09-13 — 2.1.1 revised, and the location example becomes its exercise
+
+Owner's second edit document for 2.1.1, applied as written over yesterday's
+version. The objectives are hers, revised (the third is now about what a
+piece of hardware evidence establishes and what needs more). "Why the Claim
+Comes First" replaces "Start with the Claim", with her rewritten opening and
+the confidentiality paragraph. The training example keeps its decomposition
+and gains two paragraphs: the reporting period does not reset a run-level
+limit, and the accounting rules have to say which operations count and which
+activities belong to the same run. The New START paragraph is her revision,
+now citing Articles II-III and naming the combination of actual reentry-
+vehicle counts with a fixed bomber attribution. Authenticity, correctness
+and completeness are restated with the question inside the bold, and
+freshness now cites RFC 9334's own discussion of it.
+
+Gone with the old version: the second worked example on location
+verification, the table comparing the two examples, and the notebook task.
+The location example returns as the section's exercise: her source summary
+(purpose, definition, requirements, each keyed to a section of the bill)
+sits in the body, and her three questions are the prompt of a new free-form
+writing exercise, `v-hw-claim-chip-security`. It carries no sample answer,
+because her document supplies none. The counter in "What Does a Counter
+Establish?" is now 3.1 × 10^24 rather than 10^21, and the two sentences that
+sized it against one accelerator and several hundred devices are gone with
+it, so nothing on the page contradicts the new figure.
+
+Facts checked. RFC 9334's section 10.4 is the Discussion closing its
+Freshness section, and says what her sentence says: "the actual values in
+Claims might have been generated long before the Claims are signed… it is
+the signer's responsibility to ensure that the values are still fresh when
+they are signed." The Arms Control Association factsheet carries Main Treaty
+Limits under Article II and Counting Rules under Article III, and is marked
+Last Reviewed April 2026, so the registry entry's date is now Apr. 2026. The
+bill's sense of Congress (section 2) names diversion, theft and other
+unauthorized use, and export-control compliance; section 3(2) defines a chip
+security mechanism as software-, firmware- or hardware-enabled or physical;
+section 4(a) sets the 180-day requirement and the reporting duty. The
+anchored RFC section is registered as its own entry, as other anchored
+sources are. The appendix lists 4.
+
+Flag: one device recording 3.1 × 10^24 operations over three months implies
+about 3.9 × 10^17 operations per second, some four hundred times a current
+accelerator's dense 16-bit throughput. Nothing on the page claims otherwise
+now, and the figure makes the closing paragraph about counts above a
+threshold land, but a reader who knows the hardware will notice the device.
+
+Flag, unchanged from yesterday: "distinguish three things" and "Use three
+questions" announce their own item counts, which the 2026-09-08 ruling
+forbids. Kept verbatim.

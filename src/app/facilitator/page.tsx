@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { FacilitatorGuide } from "@/components/verification/facilitator-guide";
-import { getCurrentUser } from "@/lib/auth";
+import { requireUser } from "@/lib/auth";
 import { isFacilitator } from "@/lib/classrooms";
 
 export const metadata: Metadata = { title: "Facilitator field guide" };
@@ -24,11 +23,7 @@ export const metadata: Metadata = { title: "Facilitator field guide" };
  * second sign-in.
  */
 export default async function FacilitatorPage() {
-  // getCurrentUser, not requireUser: requireUser refreshes the session inside
-  // the render, and a page render may not write cookies — signed out, that
-  // surfaces as a 500 rather than a sign-in prompt.
-  const user = await getCurrentUser();
-  if (!user) redirect("/login");
+  const user = await requireUser();
 
   const allowed = await isFacilitator(user.id);
 

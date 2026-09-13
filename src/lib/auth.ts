@@ -1,6 +1,9 @@
 import { cache } from "react";
 import { withAuth } from "@workos-inc/authkit-nextjs";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { prisma } from "./db";
+import { loginHref } from "./login-href";
 
 export interface AppUser {
   id: string;
@@ -166,12 +169,24 @@ export const getCurrentUserOrSignedOut =
     }
   });
 
-/** Like getCurrentUser, but redirects to sign-in when not authenticated. */
+/**
+ * Like getCurrentUser, but redirects to sign-in when not authenticated.
+ *
+ * Deliberately NOT `withAuth({ ensureSignedIn: true })`: signed out, that
+ * path writes a PKCE cookie before redirecting, and a page render may not
+ * write cookies — so every page that called it 500'd for a visitor whose
+ * session had lapsed instead of sending them to sign in (/classrooms, the
+ * cohort page). The redirect goes through /login, which is a route handler
+ * and may set the cookie; `x-url` is the request URL the AuthKit middleware
+ * forwards, so the visitor comes back to the page they asked for.
+ */
 export const requireUser = cache(async (): Promise<AppUser> => {
-  const dev = devUser();
-  if (dev) return upsertUser(dev);
-  const { user } = await withAuth({ ensureSignedIn: true });
-  return upsertUser(user);
+  const user = await getCurrentUser();
+  if (user) return user;
+  const url = (await headers()).get("x-url");
+  if (!url) redirect("/login");
+  const { pathname, search } = new URL(url);
+  redirect(loginHref(`${pathname}${search}`));
 });
 
 /**

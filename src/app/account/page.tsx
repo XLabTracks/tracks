@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 
 import { ProfileNameForm } from "./profile-name-form";
-import { redirect } from "next/navigation";
 
 import Link from "next/link";
-import { getCurrentUser } from "@/lib/auth";
-import { loginHref } from "@/lib/login-href";
+import { requireUser } from "@/lib/auth";
 
 export const metadata: Metadata = { title: "Account" };
 
@@ -17,11 +15,7 @@ export const metadata: Metadata = { title: "Account" };
  * this form. The page says so rather than showing a control that cannot work.
  */
 export default async function AccountPage() {
-  // getCurrentUser, not requireUser: requireUser refreshes the session inside
-  // the render, and a page render may not write cookies — signed out, that
-  // surfaces as a 500 rather than a sign-in prompt. Redirect explicitly.
-  const user = await getCurrentUser();
-  if (!user) redirect(loginHref("/account"));
+  const user = await requireUser();
 
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-10 lg:px-6">

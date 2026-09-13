@@ -19,6 +19,7 @@ const SCRIPTS = [
   "data/skills.js",
   "data/chrome.js",
   "platform.js",
+  "skill-web.js",
   "landing.js",
 ];
 
@@ -31,6 +32,11 @@ export default function Page() {
         precedence="high"
       />
       <link rel="stylesheet" href="/verification/page.css" precedence="high" />
+      <link
+        rel="stylesheet"
+        href="/verification/skill-web.css"
+        precedence="high"
+      />
       <link
         rel="stylesheet"
         href="/verification/landing.css"

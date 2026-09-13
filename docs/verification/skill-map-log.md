@@ -68,3 +68,35 @@ Deliberately NOT done here, and owed:
   (nothing teaches them; the skill is optional). If module 3 ever grows the
   facility simulation its objectives promise, evasion and failure-modes
   ladders are the place to extend.
+
+## 2026-09-13 — one figure: /verification/map draws the home page's web
+
+The two surfaces had diverged: the landing page's "The Skill Map" band had
+become the radial skill web (stars numbered by module, arms, beams, the
+journal-card panel and the key), while `/verification/map` — the page that
+band's "Open the skill map" button leads to — still drew the older banded
+grid with bezier edges, and the about page's facts row still said 27
+skills. The owner's instruction: the home page is the current version, the
+map page and the about page match it.
+
+- The renderer moved out of `landing.js` into `skill-web.js`
+  (`VTSkillWeb.mount(opts)`), and its rules out of `landing.css` into
+  `skill-web.css`. Both pages load both; neither draws the graph itself.
+- What only the map page had rides on the renderer's hooks: `state` (each
+  star's halo becomes a progress arc — state on the ring, never the fill;
+  the key row prints the fraction and a ✓, the aria-label says it in
+  words), `rung` (the ladder's ✓/◐/· glyph and a link to the unit that
+  teaches it), `panelExtra` (Builds on / Unlocks / Feeds objectives chips
+  and the summary line), `dim` + `setDim` (the objectives row and the
+  `?unit=` deep link from platform.js's completion toast fade the stars
+  they reject), `pinned` (`?skill=`). `pin(id)` serves the chips.
+- The key marks the optional skill with the standing `Optional:` prefix on
+  both pages; the panel already did.
+- The default panel hint no longer says "Hover … click": the legend's
+  on-hover/on-touch pair was already the device-aware copy.
+- `map.css` is now the page around the figure plus the panel's additions;
+  the banded-grid rules (and the never-used `.tabs`) are gone.
+- The about page counts skills from `src/lib/verification/data/skills.ts`,
+  the app-side mirror `completion-stats.test.ts` keeps in step with
+  `data/skills.js`, instead of a literal that had sat at 27 through the
+  v2 rewrite.

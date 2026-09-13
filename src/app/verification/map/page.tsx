@@ -36,17 +36,10 @@ export default function Page() {
             <h1>Skill Map</h1>
             <p className="sub">Here is the skill map with your current progress. Click each
               skill to read its description, the relevant parts of the curriculum, and its
-              dependencies.</p>
-          </div>
-          <div className="map-controls">
-            <div className="progress-row">
-              <span className="meter"><i data-bar></i></span>
-              <span className="counter" data-count></span>
-            </div>
+              dependencies. The ring around each skill fills as you complete the units
+              that feed it.</p>
           </div>
         </header>
-
-        <div className="lo-row" data-los aria-label="Learning objectives"></div>
 
         <div className="mod-filters" id="modFilters"></div>
 

@@ -1,7 +1,7 @@
 /* Skill map. The figure, its key and its panel are the home page's skill
-   web (skill-web.css); this file is the page around it — the head, the
-   objectives row — and the panel's additions: the ladder's state glyph, the
-   builds-on / unlocks / objectives chips, the summary line. */
+   web (skill-web.css); this file is the page around it — the head — and the
+   panel's additions: the ladder's state glyph, the builds-on / unlocks
+   chips, the summary line. */
 
 /* The web wants the width the landing gives it: the header's container,
    not the reading column. */
@@ -19,11 +19,8 @@
   margin: 18px 0;
 }
 .map-head h1 { font-size: var(--fs-title); margin-bottom: 8px; }
-.map-head .sub { max-width: 52ch; font-size: var(--fs-md); line-height: 1.6; color: var(--muted-foreground); }
-.map-controls { display: flex; flex-direction: column; gap: 10px; min-width: 250px; }
+.map-head .sub { max-width: 60ch; font-size: var(--fs-md); line-height: 1.6; color: var(--muted-foreground); }
 
-.lo-row { display: flex; flex-wrap: wrap; gap: 6px; }
-.lo,
 .sky-panel .p-links button {
   padding: 4px 10px;
   border: var(--hairline) solid var(--border);
@@ -37,9 +34,7 @@
   user-select: none;
   -webkit-user-select: none;
 }
-.lo:hover,
 .sky-panel .p-links button:hover { color: var(--foreground); border-color: var(--muted-foreground); }
-.lo[aria-pressed='true'] { color: var(--foreground); border-color: var(--ring); background: var(--muted); }
 
 /* ---------- the panel's additions ---------- */
 

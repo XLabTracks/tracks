@@ -110,7 +110,7 @@ function Slot({ slot }: { slot: MemoSlot }) {
         href={`/verification/memo-desk#${slot.id}`}
         className="border-border hover:bg-muted mt-4 inline-flex min-h-11 items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-semibold no-underline! transition-colors select-none lg:min-h-0 lg:py-1.5"
       >
-        Draft it on the memo desk
+        Draft it on the Memo Desk
         <ArrowUpRight className="size-3.5" aria-hidden />
       </a>
     </section>

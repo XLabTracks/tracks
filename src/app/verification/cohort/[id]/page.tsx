@@ -211,7 +211,7 @@ export default async function CohortPage({
       {modules.length === 0 && (
         <p className="text-muted-foreground mt-3 text-sm">
           The track sets no written tasks yet — no lesson task is registered on
-          the memo desk.
+          the Memo Desk.
         </p>
       )}
     </main>

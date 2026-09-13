@@ -121,3 +121,13 @@ Changed on the owner's instruction:
 - The panel's learner-goals list uses the course's own bullets — disc, then
   circle one level in — instead of an en-dash pseudo-element. Shared CSS, so
   the home page's panel reads the same.
+
+## 2026-09-13 — the objectives chips and the units bar come off the map page
+
+Owner: "get rid of these" — the six learning-objective filter chips over
+the figure and the "0 / 19 units" meter in the head are gone (with the
+panel's "Feeds objectives" chips and the filter behind them). Per-skill
+progress stays where it was: the ring around each star fills with the
+rungs held, the key prints the fraction, and the intro now says so in one
+added sentence after the owner's verbatim two. "Memo Desk" is capitalized
+wherever it is a name.

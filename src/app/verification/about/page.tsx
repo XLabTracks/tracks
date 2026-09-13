@@ -82,7 +82,7 @@ export default function Page() {
               The course asks for writing throughout: short written tasks inside
               the lessons, and most modules end in one longer written output — a
               memo, brief, map or essay — applied to a concrete verification
-              problem. The <a href="/verification/memo-desk">memo desk</a> lists
+              problem. The <a href="/verification/memo-desk">Memo Desk</a> lists
               every one of them by module: the memos and briefs are drafted there,
               brief beside the page, and each lesson task links back to the
               lesson it is answered in, with your saved answer beside it once you

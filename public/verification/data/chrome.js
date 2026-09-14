@@ -59,7 +59,7 @@ window.VT_CHROME = {
     },
     {
       "label": "Privacy Policy",
-      "href": "https://privacy.uchicago.edu/privacy-policy/"
+      "href": "/privacy"
     },
     {
       "label": "Accessibility",

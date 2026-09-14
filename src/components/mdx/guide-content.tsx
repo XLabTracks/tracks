@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { PROSE_CLASS } from "@/components/mdx/prose-class";
 import type { LessonSection } from "./lesson-content";
 
 async function importGuide(contentRef: string) {
@@ -25,7 +26,7 @@ export async function GuideContent({ contentRef }: { contentRef: string }) {
   const Body = mdxModule.default;
 
   return (
-    <article className="lesson-body guide-body prose prose-neutral dark:prose-invert prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-link prose-a:font-medium prose-a:underline-offset-4 max-w-none">
+    <article className={`lesson-body guide-body ${PROSE_CLASS}`}>
       <Body />
     </article>
   );

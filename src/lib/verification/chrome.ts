@@ -6,7 +6,6 @@ export type ChromeLink = {
 
 export const NAV: ChromeLink[] = [
   { label: "Curriculum", href: "/tracks/verification" },
-  { label: "Skill Map", href: "map" },
   { label: "For facilitators", href: "facilitator" },
   { label: "Team", href: "team" },
   { label: "About", href: "about" },

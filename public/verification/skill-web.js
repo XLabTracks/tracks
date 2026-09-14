@@ -174,7 +174,18 @@
     var keyEl = opts.key || document.getElementById('skyKey');
     if (!S || !sky || !panel) return null;
 
-    var mq = window.matchMedia ? window.matchMedia('(max-width: 700px)') : null;
+    /* Which preset is the host's width to decide, not the viewport's: the
+       figure also mounts inside the notebook panel, a 560px column on a
+       monitor, and it wants the compact web there for the same reason a
+       phone does. Measured through a ResizeObserver, so a panel being
+       dragged wider flips it live; the media query stands in where the
+       observer does not exist. */
+    var COMPACT_BELOW = 700;
+    var mq = window.matchMedia ? window.matchMedia('(max-width: ' + COMPACT_BELOW + 'px)') : null;
+    var compact = function () {
+      var w = sky.clientWidth;
+      return w ? w < COMPACT_BELOW : !!(mq && mq.matches);
+    };
 
     /* ---------- the data's own shape: preset-independent ---------- */
 
@@ -218,10 +229,11 @@
 
     /* ---------- build: everything the preset decides ---------- */
 
-    var placed, svg, nodeEls, edgeEls, arcEls, strandEls, spokeEls, spokeOf;
+    var placed, svg, nodeEls, edgeEls, arcEls, strandEls, spokeEls, spokeOf, built;
 
     function build() {
-      var V = mq && mq.matches ? PRESET.compact : PRESET.full;
+      var V = compact() ? PRESET.compact : PRESET.full;
+      built = V;
 
       var box = { x0: Infinity, y0: Infinity, x1: -Infinity, y1: -Infinity };
       function fit(x0, y0, x1, y1) {
@@ -667,8 +679,18 @@
     drawKey();
     refresh();
 
-    if (mq) {
-      var onFlip = function () { hovered = null; build(); refresh(); };
+    /* Rebuild only when the preset flips — a resize that stays on one side
+       of the line is the svg scaling itself, which costs nothing. */
+    var onFlip = function () {
+      var want = compact() ? PRESET.compact : PRESET.full;
+      if (want === built) return;
+      hovered = null;
+      build();
+      refresh();
+    };
+    if (window.ResizeObserver) {
+      new ResizeObserver(onFlip).observe(sky);
+    } else if (mq) {
       if (mq.addEventListener) mq.addEventListener('change', onFlip);
       else if (mq.addListener) mq.addListener(onFlip);
     }

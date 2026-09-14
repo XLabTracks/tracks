@@ -131,3 +131,30 @@ progress stays where it was: the ring around each star fills with the
 rungs held, the key prints the fraction, and the intro now says so in one
 added sentence after the owner's verbatim two. "Memo Desk" is capitalized
 wherever it is a name.
+
+## 2026-09-13 — the Skill Map moves into the notebook
+
+Owner: the skill tree goes into the notebook and out of the main menu bar,
+and pressing Skill Map or Memo Desk in the notebook stays in the notebook.
+
+- `chrome.ts` loses the Skill Map row (four nav links now; `data/chrome.js`
+  regenerated). `/verification/map` stays as the full-width edition and the
+  deep-link target the completion toast uses (`?unit=`, `?skill=`).
+- The notebook's header buttons are tabs now — Notes, Skill Map, Memo Desk —
+  and the two surfaces are views inside the panel, not links out of it.
+  `map.js` is a library (`VTSkillMap.mount(hosts, {query})`) mounted by the
+  page (`SkillMapHost`, the MemoDeskHost pattern) and by the notebook; the
+  notebook mounts `VTMemoDesk` with `hash: false`, so the desk page keeps
+  the URL. The scripts load on first use through the registry
+  `LegacyScripts` now keeps on `window.__vtScripts`, so neither side runs a
+  file the other has already run.
+- The progress bars are back, under the figure in the Skill Map view — one
+  row per skill by module, the bar in the module hue, the fraction and
+  state word beside it — from `VT.skillProgress`, not a second copy of the
+  arithmetic; a row pins its star.
+- `skill-web.js` picks its preset from the host's width (ResizeObserver),
+  not the viewport's: the compact web serves the notebook column as it
+  serves a phone, and flips live when the panel is dragged wider.
+- The panel resizes from its left edge: drag, or arrow keys on the handle
+  (Home resets, double-click too). The width is a device preference under
+  `vt-notebook-width`, outside the learner-work purge and the account sync.

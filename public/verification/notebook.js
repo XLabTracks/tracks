@@ -12,6 +12,19 @@
    Exposes window.VTNotebook = { open, close, addNote, addQuote, count } so a
    page script can push a selection straight in.
 
+   Three views under one header — Notes, Skill Map, Memo Desk — switched by
+   the tabs beside the title and never by leaving the page: the map and the
+   desk are the two learner surfaces that are not lessons, and the book is
+   where they live. Both are drawn by their own files (map.js over
+   skill-web.js, memo-desk.js), loaded on first use through the same
+   registry LegacyScripts keeps (window.__vtScripts), so a file either side
+   has run never runs twice. The views are built once and hidden, never
+   rebuilt: the desk holds a draft's field state and listeners.
+
+   The panel is resizable from its left edge — a drag, or arrow keys on the
+   handle — and the width is a device preference (vt-notebook-width), not
+   learner work, so it stays out of the account sync and survives sign-out.
+
    Capturing a selection is the selection toolbar's job (SelectionActions),
    which calls addQuote. Anything pressable on this site is user-select:none,
    so a stray drag over chrome yields an empty string rather than a quote —
@@ -30,7 +43,17 @@ window.VTNotebook = (function () {
   let data = load();
   let cur = clamp(data.cur || 0);
   let saveTimer = null;
-  let root = null, pagesEl = null, counterEl = null, badgeEl = null, gotoEl = null;
+  let root = null, panelEl = null, pagesEl = null, counterEl = null, badgeEl = null, gotoEl = null;
+  let footEl = null, tabsEl = null;
+  let view = 'notes';
+  const views = {};
+  let map = null, desk = null;
+
+  const WIDTH_KEY = 'vt-notebook-width';
+  const WIDTH_DEFAULT = 560;
+  const WIDTH_MIN = 360;
+  const WIDTH_EDGE = 48;
+  const WIDTH_NARROW = 600;
 
   /* ---------- store ---------- */
 
@@ -199,11 +222,9 @@ window.VTNotebook = (function () {
       };
       wrap.appendChild(ta);
 
-      const link = mk('a', 'nb-memo-link', 'Open on the Memo Desk &rarr;');
-      // The desk is an app route now, and this link is raised from inside a
-      // panel that opens on every page — a relative one resolved against
-      // whatever page that was, and 404'd from all of them.
-      link.href = '/verification/memo-desk#' + block.slot;
+      const link = mk('button', 'nb-memo-link', 'Open on the Memo Desk &rarr;');
+      link.type = 'button';
+      link.onclick = function () { showView('desk', block.slot); };
       wrap.appendChild(link);
 
       /* The desk writes the same slot. Repaint unless this textarea is the
@@ -435,8 +456,203 @@ window.VTNotebook = (function () {
     });
   }
 
+  /* ---------- views ---------- */
+
+  /* The files a view draws with, in the order they read each other. Loaded
+     through the registry LegacyScripts shares on window, so a page that has
+     already run them (the map page, the desk page) costs the view nothing,
+     and a view loading them first spares that page the same. Scripts and
+     stylesheets alike; a sheet is loaded once by href. */
+  function registry() {
+    const w = window;
+    if (!w.__vtScripts) w.__vtScripts = { loaded: new Set(), loading: new Map() };
+    return w.__vtScripts;
+  }
+
+  function loadScript(url) {
+    const reg = registry();
+    if (reg.loaded.has(url)) return Promise.resolve();
+    if (reg.loading.has(url)) return reg.loading.get(url);
+    const p = new Promise(function (resolve) {
+      const tag = document.createElement('script');
+      tag.src = url;
+      tag.async = false;
+      tag.onload = function () { reg.loaded.add(url); reg.loading.delete(url); resolve(); };
+      tag.onerror = function () { reg.loading.delete(url); resolve(); };
+      document.body.appendChild(tag);
+    });
+    reg.loading.set(url, p);
+    return p;
+  }
+
+  function loadSheet(href) {
+    if (document.querySelector('link[rel="stylesheet"][href="' + href + '"]')) return;
+    const l = document.createElement('link');
+    l.rel = 'stylesheet';
+    l.href = href;
+    document.head.appendChild(l);
+  }
+
+  function loadAll(files, sheets) {
+    (sheets || []).forEach(function (f) { loadSheet('/verification/' + f); });
+    return files.reduce(function (p, f) {
+      return p.then(function () { return loadScript('/verification/' + f); });
+    }, Promise.resolve());
+  }
+
+  const MAP_FILES = ['data/course.js', 'data/skills.js', 'data/chrome.js', 'platform.js', 'skill-web.js', 'map.js'];
+  const MAP_SHEETS = ['skill-web.css', 'map.css'];
+  const DESK_FILES = ['data/course.js', 'data/skills.js', 'data/memos.js', 'data/chrome.js', 'platform.js', 'memo-store.js', 'memo-desk.js'];
+  const DESK_SHEETS = ['memo-desk.css', 'exercise.css'];
+
+  function viewEl(name) {
+    if (views[name]) return views[name];
+    const el = mk('div', 'nb-view nb-view-' + name);
+    el.hidden = true;
+    root.querySelector('.nb-pages').appendChild(el);
+    views[name] = el;
+    return el;
+  }
+
+  /* The bars under the figure: one row per skill, grouped by module, the
+     module hue on the bar and on the module's name, the fraction and the
+     state word beside it — hue never stands alone. Derived from
+     VT.skillProgress, the same arithmetic the rings use, never a second
+     copy of it. A row pins its star. */
+  function paintBars(host) {
+    const el = host.querySelector('.nb-skills');
+    const S = window.SKILLS;
+    if (!el || !S || !window.VT) return;
+    el.innerHTML = '';
+    const prog = S.nodes.map(function (n) { return { node: n, p: VT.skillProgress(n) }; });
+    const full = prog.filter(function (x) { return x.p.frac >= 1; }).length;
+    el.appendChild(mk('h3', 'nb-skills-head', 'Progress by skill'));
+    el.appendChild(mk('p', 'nb-skill-sum', full + ' of ' + prog.length + ' skills complete'));
+    S.moduleNames.forEach(function (name, m) {
+      const rows = prog.filter(function (x) { return x.node.mod === m; });
+      if (!rows.length) return;
+      const sec = mk('section', 'nb-skill-mod');
+      sec.style.setProperty('--mod', 'var(--mod-' + m + ')');
+      sec.style.setProperty('--mod-text', 'var(--mod-' + m + '-text)');
+      sec.appendChild(mk('p', 'nb-skill-modname', '<b>M' + m + '</b>' + esc(name)));
+      rows.forEach(function (x) {
+        const row = mk('button', 'nb-skill');
+        row.type = 'button';
+        row.setAttribute('data-skill', x.node.id);
+        row.appendChild(mk('span', 'nb-skill-name', esc(x.node.label)));
+        const bar = mk('span', 'nb-skill-bar');
+        const fill = mk('i');
+        fill.style.width = Math.round(x.p.frac * 100) + '%';
+        bar.appendChild(fill);
+        row.appendChild(bar);
+        row.appendChild(mk('span', 'nb-skill-frac',
+          VT.fracText(x.p) + ' &middot; ' + x.p.state));
+        sec.appendChild(row);
+      });
+      el.appendChild(sec);
+    });
+  }
+
+  /* The map is drawn once and refreshed on every return: progress moves
+     while the book is closed (Mark complete), and the figure's rings and
+     the bars must say so when it opens. */
+  function mountMap() {
+    const host = viewEl('map');
+    if (map) { map.refresh(); paintBars(host); return; }
+    if (host.dataset.loading) return;
+    host.dataset.loading = '1';
+    host.innerHTML = '<p class="nb-empty">Loading the skill map…</p>';
+    loadAll(MAP_FILES, MAP_SHEETS).then(function () {
+      if (!window.VTSkillMap) {
+        host.innerHTML = '<p class="nb-empty">The skill map did not load. <a href="/verification/map">Open it as a page</a>.</p>';
+        return;
+      }
+      host.innerHTML =
+        '<p class="nb-view-lead">Pin a star, or its row in the key, to read it. The ring around a star ' +
+        'fills as you complete the units that feed it. ' +
+        '<a href="/verification/map">Full-width edition</a>.</p>' +
+        '<div class="mod-filters"></div>' +
+        '<div class="constellation"><div><div class="sky"></div>' +
+        '<div class="sky-legend">' +
+          '<span>number inside a star — find it in the key below</span>' +
+          '<span>ring around a star — how much of it you hold</span>' +
+          '<span>solid beam — fed from inside the module</span>' +
+          '<span>dashed line — fed from another module</span>' +
+          '<span class="on-hover">click a star or a key row to pin it</span>' +
+          '<span class="on-touch">tap a star or a key row to pin it</span>' +
+        '</div>' +
+        '<div class="sky-panel"></div>' +
+        '<ol class="sky-key"></ol></div></div>' +
+        '<div class="nb-skills"></div>';
+      map = window.VTSkillMap.mount({
+        sky: host.querySelector('.sky'),
+        panel: host.querySelector('.sky-panel'),
+        filters: host.querySelector('.mod-filters'),
+        key: host.querySelector('.sky-key')
+      });
+      if (!map) {
+        host.innerHTML = '<p class="nb-empty">The skill map did not load. <a href="/verification/map">Open it as a page</a>.</p>';
+        return;
+      }
+      paintBars(host);
+      if (window.VT && VT.onChange) VT.onChange(function () { paintBars(host); });
+      host.addEventListener('click', function (e) {
+        const row = e.target.closest('[data-skill]');
+        if (!row) return;
+        map.pin(row.getAttribute('data-skill'));
+        const panel = host.querySelector('.sky-panel');
+        if (panel && panel.scrollIntoView) panel.scrollIntoView({ block: 'nearest' });
+      });
+    });
+  }
+
+  /* One desk for the life of the page: memo-desk.js registers its store
+     listeners at mount, and a draft's fields hold state a rebuild would
+     drop. It never owns the location hash from inside the book — the desk
+     page does, and two owners would fight over the URL. */
+  function mountDesk(slot) {
+    const host = viewEl('desk');
+    if (desk) { if (slot) desk.select(slot); return; }
+    if (host.dataset.loading) { if (slot) host.dataset.slot = slot; return; }
+    host.dataset.loading = '1';
+    if (slot) host.dataset.slot = slot;
+    host.innerHTML = '<p class="nb-empty">Loading the memo desk…</p>';
+    loadAll(DESK_FILES, DESK_SHEETS).then(function () {
+      host.innerHTML =
+        '<p class="nb-view-lead">Every written output the track asks for, drafted here and kept ' +
+        'with your account. <a href="/verification/memo-desk">Full-width edition</a>.</p>';
+      const deskHost = mk('div');
+      host.appendChild(deskHost);
+      desk = window.VTMemoDesk ? window.VTMemoDesk.mount(deskHost, { hash: false }) : null;
+      if (!desk) {
+        host.innerHTML = '<p class="nb-empty">The memo desk did not load. <a href="/verification/memo-desk">Open it as a page</a>.</p>';
+        return;
+      }
+      if (host.dataset.slot) desk.select(host.dataset.slot);
+    });
+  }
+
+  function showView(name, slot) {
+    build();
+    view = name;
+    if (name === 'map') mountMap();
+    if (name === 'desk') mountDesk(slot);
+    paintPage();
+  }
+
+  function paintTabs() {
+    tabsEl.querySelectorAll('[data-view]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-view') === view));
+    });
+    Object.keys(views).forEach(function (k) { views[k].hidden = k !== view; });
+    pagesEl.hidden = view !== 'notes';
+    footEl.hidden = view !== 'notes';
+  }
+
   function paintPage() {
     if (!pagesEl) return;
+    paintTabs();
+    if (view !== 'notes') return;
     if (written) { paintWritten(); return; }
     {
       pagesEl.innerHTML = '';
@@ -471,19 +687,22 @@ window.VTNotebook = (function () {
     root.innerHTML =
       '<div class="nb-scrim" data-close></div>' +
       '<aside class="nb-panel" role="dialog" aria-modal="true" aria-label="Notebook">' +
+        '<div class="nb-resize" role="separator" aria-orientation="vertical" tabindex="0" ' +
+          'aria-label="Resize notebook — drag, or use the arrow keys" title="Drag to resize"></div>' +
         '<header class="nb-head">' +
           '<h2>Notebook</h2>' +
           /* The course's two learner surfaces that are not lessons, in the
              book's own chrome: the map of what the reading has filled and
-             the desk that indexes the writing. Links, not views — each is a
-             page with a session behind it. */
-          '<nav class="nb-tools" aria-label="Course tools">' +
-            '<a class="btn small outline" href="/verification/map">Skill Map</a>' +
-            '<a class="btn small outline" href="/verification/memo-desk">Memo Desk</a>' +
+             the desk that indexes the writing. Views inside the book, so
+             opening one never leaves the page being read. */
+          '<nav class="nb-tools" aria-label="Notebook views">' +
+            '<button class="btn small outline" type="button" data-view="notes" aria-pressed="true">Notes</button>' +
+            '<button class="btn small outline" type="button" data-view="map" aria-pressed="false">Skill Map</button>' +
+            '<button class="btn small outline" type="button" data-view="desk" aria-pressed="false">Memo Desk</button>' +
           '</nav>' +
           '<button class="nb-x" type="button" data-close aria-label="Close notebook">&times;</button>' +
         '</header>' +
-        '<div class="nb-pages"></div>' +
+        '<div class="nb-pages"><div class="nb-notes"></div></div>' +
         '<footer class="nb-foot">' +
           '<div class="nb-add">' +
             '<button class="btn small outline" type="button" data-add="text">Note</button>' +
@@ -501,9 +720,19 @@ window.VTNotebook = (function () {
       '</aside>';
     document.body.appendChild(root);
 
-    pagesEl = root.querySelector('.nb-pages');
+    panelEl = root.querySelector('.nb-panel');
+    pagesEl = root.querySelector('.nb-notes');
+    footEl = root.querySelector('.nb-foot');
+    tabsEl = root.querySelector('.nb-tools');
     counterEl = root.querySelector('.nb-count');
     gotoEl = root.querySelector('.nb-goto');
+
+    tabsEl.addEventListener('click', function (e) {
+      const b = e.target.closest('[data-view]');
+      if (b) showView(b.getAttribute('data-view'));
+    });
+
+    mountResize(root.querySelector('.nb-resize'));
 
     gotoEl.addEventListener('focus', function () { gotoEl.select(); });
     gotoEl.addEventListener('blur', commitGoto);
@@ -542,6 +771,92 @@ window.VTNotebook = (function () {
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && !root.hidden) close();
     });
+  }
+
+  /* ---------- resize ---------- */
+
+  /* The panel is docked right, so its left edge is the handle: drag it, or
+     focus it and press the arrows (left widens, right narrows; Home is the
+     default). The width is clamped to leave the page's edge visible, and a
+     phone, where the panel is the screen, has no handle (notebook.css).
+
+     Trap: the drag must capture the pointer. The handle is 12px wide and a
+     fast drag leaves it in one frame; without capture the move events go
+     to the page, and the panel stops following the hand. */
+  function readWidth() {
+    try {
+      const n = parseInt(localStorage.getItem(WIDTH_KEY), 10);
+      return isNaN(n) ? WIDTH_DEFAULT : n;
+    } catch (e) { return WIDTH_DEFAULT; }
+  }
+
+  function clampWidth(w) {
+    const max = Math.max(WIDTH_MIN, window.innerWidth - WIDTH_EDGE);
+    return Math.round(Math.max(WIDTH_MIN, Math.min(w, max)));
+  }
+
+  /* Paints the width the learner wants, clamped to the screen this is —
+     the wanted width itself is never narrowed by a small screen, so a
+     phone shows the stored 900 as the whole screen and the next monitor
+     gets the 900 back. Under the breakpoint that hides the handle the
+     panel is the screen, and the variable comes off. */
+  function applyWidth(w, handle) {
+    const px = clampWidth(w);
+    if (window.innerWidth <= WIDTH_NARROW) panelEl.style.removeProperty('--nb-w');
+    else panelEl.style.setProperty('--nb-w', px + 'px');
+    handle.setAttribute('aria-valuenow', String(px));
+    handle.setAttribute('aria-valuemin', String(WIDTH_MIN));
+    handle.setAttribute('aria-valuemax', String(clampWidth(Infinity)));
+  }
+
+  function mountResize(handle) {
+    let width = readWidth();
+    applyWidth(width, handle);
+
+    function commit(w) {
+      width = clampWidth(w);
+      applyWidth(width, handle);
+      try {
+        if (width === WIDTH_DEFAULT) localStorage.removeItem(WIDTH_KEY);
+        else localStorage.setItem(WIDTH_KEY, String(width));
+      } catch (e) { /* private mode — the width holds for this page */ }
+    }
+
+    handle.addEventListener('pointerdown', function (e) {
+      if (e.button !== 0) return;
+      e.preventDefault();
+      handle.setPointerCapture(e.pointerId);
+      panelEl.classList.add('nb-resizing');
+      const move = function (ev) {
+        width = clampWidth(window.innerWidth - ev.clientX);
+        applyWidth(width, handle);
+      };
+      const up = function () {
+        handle.removeEventListener('pointermove', move);
+        handle.removeEventListener('pointerup', up);
+        handle.removeEventListener('pointercancel', up);
+        panelEl.classList.remove('nb-resizing');
+        commit(width);
+      };
+      handle.addEventListener('pointermove', move);
+      handle.addEventListener('pointerup', up);
+      handle.addEventListener('pointercancel', up);
+    });
+
+    handle.addEventListener('dblclick', function () { commit(WIDTH_DEFAULT); });
+
+    handle.addEventListener('keydown', function (e) {
+      const step = e.shiftKey ? 80 : 24;
+      if (e.key === 'ArrowLeft') commit(width + step);
+      else if (e.key === 'ArrowRight') commit(width - step);
+      else if (e.key === 'Home') commit(WIDTH_DEFAULT);
+      else if (e.key === 'End') commit(Infinity);
+      else return;
+      e.preventDefault();
+      e.stopPropagation();
+    });
+
+    window.addEventListener('resize', function () { applyWidth(width, handle); });
   }
 
   function mountButton() {
@@ -628,7 +943,20 @@ window.VTNotebook = (function () {
   function openMemo(slotId) {
     cur = bindMemo(slotId);
     save();
+    view = 'notes';
     open();
+  }
+
+  /* The desk, inside the book, on one slot — what a lesson's memo card can
+     call instead of leaving the page. */
+  function openDesk(slotId) {
+    open();
+    showView('desk', slotId);
+  }
+
+  function openMap() {
+    open();
+    showView('map');
   }
 
   function addQuote(text, source, href) {
@@ -657,6 +985,8 @@ window.VTNotebook = (function () {
     bindMemo: bindMemo,
     mount: mountButton,
     openMemo: openMemo,
+    openDesk: openDesk,
+    openMap: openMap,
     count: count,
     toMarkdown: toMarkdown
   };

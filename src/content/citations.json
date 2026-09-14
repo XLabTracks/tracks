@@ -1,6 +1,26 @@
 {
   "_comment": "Hand-authored citation registry for the Works cited appendix. entries: MLA fields plus a hand-written 'about' line per work; the appendix assembles itself from each lesson's links (rehype-lesson-citations) and looks them up here. pending: cited URLs whose bibliographic facts are still being verified -- they render nothing until moved into entries; never promote one unchecked. The collector was widened to read every href/url attribute, not just markdown links, literal anchors and SourceQuote, so works a lesson reaches through a ReadingCard or any other component are cited now too -- 24 of them arrived at once and are parked in pending, each awaiting a person to write its fields. excluded: links that are not works (course tools, shared working documents). citations.test.ts holds all three sets honest.",
   "entries": {
+    "https://chipsupplychain.org": {
+      "title": "Chip Supply Chain: Every Stage, and Who Controls It",
+      "about": "A current stage-by-stage reference for the semiconductor supply chain: an eight-minute walk with one paragraph per stage, then a chapter per stage rating concentration and substitutability, each claim carrying its own source link. Offered in 1.2.1 as the route to primaries behind the lesson's older concentration figures, not as a citation itself.",
+      "authors": "Sharma, Yashvardhan, with Claude",
+      "date": "2026"
+    },
+    "https://eprint.iacr.org/2024/162": {
+      "title": "Zero-Knowledge Proofs of Training for Deep Neural Networks",
+      "about": "The scaling datapoint behind 2.1.7's cost argument: proving correct training in zero knowledge works, at about fifteen minutes of prover time per iteration on a ten-million-parameter network, which is why it is nowhere near a frontier run.",
+      "authors": "Abbaszadeh, Kasra, Christodoulos Pappas, Jonathan Katz, and Dimitrios Papadopoulos",
+      "container": "Cryptology ePrint Archive",
+      "date": "2024"
+    },
+    "https://arxiv.org/abs/2506.23706": {
+      "title": "Attestable Audits: Verifiable AI Safety Benchmarks Using Trusted Execution Environments",
+      "about": "Benchmarks run inside a trusted execution environment so a user can verify they interacted with a compliant model, protecting model and benchmark confidentiality when provider and auditor do not trust each other. A prototype against Llama-3.1, and 2.1.7's nearest-to-deployable option.",
+      "authors": "Schnabl, Christoph, Daniel Hugenroth, Bill Marino, and Alastair R. Beresford",
+      "container": "arXiv",
+      "date": "2025"
+    },
     "https://aigi.ox.ac.uk/publications/verification-for-international-ai-governance/": {
       "title": "Verification for International AI Governance",
       "about": "The report 2.1.1 reads for the limits section: why leading-node chips cannot currently be verified non-destructively, and why off-chip measurement is treated as the near-term path.",

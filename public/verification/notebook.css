@@ -218,34 +218,18 @@
 }
 .nb-view-lead a { color: var(--brand-ink); text-underline-offset: 3px; }
 
-/* Both surfaces bring the layouts their pages use, keyed on the viewport;
-   inside a column of the panel's width those are wrong on a monitor, so
-   the panel scope wins: one column, nothing sticky, the chip bar as five
-   equal numerals. */
-.nb-panel .constellation { grid-template-columns: minmax(0, 1fr); gap: 16px; }
-.nb-panel .sky-panel { position: static; max-height: none; display: block; margin-top: 4px; }
-.nb-panel .sky-panel .p-body { display: block; }
-.nb-panel .mod-filters { width: 100%; margin-top: 4px; }
-.nb-panel .mod-filters button { flex: 1 1 0; padding-inline: 0; text-align: center; }
-.nb-panel .mod-filters .mod-name { display: none; }
-/* Dragged wide enough, the chips get their names back — measured against
-   the panel's own column, which is what the names have to fit. */
-.nb-pages { container-type: inline-size; }
-@container (min-width: 700px) {
-  .nb-panel .mod-filters .mod-name { display: inline; }
-}
-.nb-panel .sky-key { grid-template-columns: minmax(0, 1fr); }
+/* The desk brings the layout its page uses, keyed on the viewport; inside
+   a column of the panel's width that is wrong on a monitor, so the panel
+   scope wins: one column, nothing sticky. */
 .nb-panel .desk { grid-template-columns: minmax(0, 1fr); padding-bottom: 0; }
 .nb-panel .slot-rail, .nb-panel .check-rail { position: static; }
 .nb-panel .slot-rail { max-height: 36vh; overflow-y: auto; }
 
-/* Progress by skill, under the figure. Derived view, so nothing here is an
-   input except the row itself, which pins its star. The module hue fills
-   the bar and colours the module's name (its text variant), and the
-   fraction and state word beside each bar are the reading — hue never
-   stands alone. */
-.nb-skills { margin-top: 26px; }
-.nb-skills-head { font-family: var(--display); font-size: var(--fs-lg); font-weight: 500; }
+/* Progress by skill. Derived view: the module hue fills the bar and colours
+   the module's name (its text variant), and the fraction and state word
+   beside each bar are the reading — hue never stands alone. Each row is a
+   native disclosure whose summary is the bar row; open, the description
+   sits under it. The marker is the platform's own, at the row's end. */
 .nb-skill-sum { margin-top: 4px; font-size: var(--fs-sm); color: var(--muted-foreground); }
 .nb-skill-mod { margin-top: 20px; }
 .nb-skill-modname {
@@ -256,23 +240,34 @@
   color: var(--mod-text, var(--muted-foreground));
 }
 .nb-skill-modname b { font-weight: 700; margin-right: .5em; }
-.nb-skill {
+.nb-skill { border-bottom: var(--hairline) solid var(--border); }
+.nb-skill-row {
   display: flex;
   align-items: center;
   gap: 10px;
-  width: 100%;
   min-height: 44px;
   padding: 6px 0;
-  border: 0;
-  border-bottom: var(--hairline) solid var(--border);
-  background: transparent;
-  color: var(--foreground);
-  font: inherit;
   font-size: var(--fs-sm);
-  text-align: left;
   cursor: pointer;
+  list-style: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
-.nb-skill:hover .nb-skill-name { text-decoration: underline; text-underline-offset: 3px; }
+.nb-skill-row::-webkit-details-marker { display: none; }
+.nb-skill-row::after {
+  content: "";
+  flex: none;
+  width: 7px;
+  height: 7px;
+  margin-left: 2px;
+  border-right: 1.5px solid var(--muted-foreground);
+  border-bottom: 1.5px solid var(--muted-foreground);
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform .15s;
+}
+.nb-skill[open] > .nb-skill-row::after { transform: rotate(-135deg) translateY(-2px); }
+.nb-skill-row:hover .nb-skill-name { text-decoration: underline; text-underline-offset: 3px; }
+.nb-skill-row:focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }
 .nb-skill-name { flex: 1 1 auto; min-width: 0; }
 .nb-skill-bar {
   flex: 0 0 84px;
@@ -289,131 +284,32 @@
   color: var(--muted-foreground);
   white-space: nowrap;
 }
-
-.nb-title {
-  width: 100%;
-  padding: 6px 0 12px;
-  border: 0;
-  border-bottom: var(--hairline) solid var(--border);
-  background: transparent;
-  color: var(--foreground);
-  font-family: var(--display);
-  font-size: var(--fs-xl);
-  font-weight: 500;
-}
-.nb-title:focus { outline: none; border-bottom-color: var(--ring); }
-
-.nb-empty {
-  margin-top: 18px;
-  color: var(--muted-foreground);
-  font-size: var(--fs-md);
-  line-height: 1.6;
-}
-
-/* ---------- blocks ---------- */
-
-/* Uniform hairline on all four sides; the kind is a word inside the block,
-   never a painted edge. */
-.nb-block {
-  margin-top: 16px;
-  padding: 12px 14px 14px;
-  border: var(--hairline) solid var(--border);
-  border-radius: var(--radius);
-  background: var(--card);
-}
-.nb-block-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 8px;
-}
-.nb-block-kind {
+.nb-skill-body { padding: 2px 0 16px; font-size: var(--fs-sm); line-height: 1.6; }
+.nb-skill-body .nb-source { margin-top: 0; }
+.nb-skill-goals { margin: 8px 0 0; padding-left: 20px; list-style: disc; }
+.nb-skill-goals li + li { margin-top: 4px; }
+.nb-skill-goals li.sub { list-style: circle; margin-left: 18px; }
+.nb-skill-sec {
+  margin-top: 14px;
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   letter-spacing: .06em;
   text-transform: uppercase;
   color: var(--muted-foreground);
-  user-select: none;
-  -webkit-user-select: none;
 }
-.nb-block-bar .nb-x { width: 26px; height: 26px; font-size: var(--fs-md); }
-
-.nb-text,
-.nb-note-on-quote {
-  display: block;
-  width: 100%;
-  padding: 8px 10px;
-  border: var(--hairline) solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--background);
-  color: var(--foreground);
-  font: inherit;
-  font-size: var(--fs-md);
-  line-height: 1.6;
-  resize: vertical;
+.nb-skill-rungs { margin: 4px 0 0; padding: 0; list-style: none; }
+.nb-skill-rungs li {
+  display: grid;
+  grid-template-columns: 14px 44px 1fr;
+  gap: 8px;
+  padding: 8px 0;
 }
-.nb-text:focus, .nb-note-on-quote:focus { outline: none; border-color: var(--ring); }
-.nb-text { overflow: hidden; }
-
-.nb-note-on-quote { margin-top: 10px; font-size: var(--fs-md); }
-
-/* No rib. A coloured left edge against three hairline ones is the
-   half-painted card the design rules forbid — pick no tint or paint the whole
-   thing. The block already says CAPTURED above it and carries its source
-   below, so the quote needs no second marker; it reads by its indent. */
-.nb-quote {
-  padding-left: 14px;
-  font-size: var(--fs-md);
-  line-height: 1.6;
-  white-space: pre-wrap;
-}
-.nb-source { margin-top: 6px; font-size: var(--fs-sm); color: var(--muted-foreground); }
-.nb-source a { color: var(--brand-ink); text-underline-offset: 3px; }
-
-.nb-sketch { position: relative; }
-.nb-sketch canvas {
-  display: block;
-  width: 100%;
-  border: var(--hairline) solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--background);
-  touch-action: none;
-  cursor: crosshair;
-}
-.nb-clear { position: absolute; right: 8px; bottom: 8px; }
-
-/* ---------- footer ---------- */
-
-.nb-foot {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 20px;
-  border-top: var(--hairline) solid var(--border);
-  background: var(--background);
-}
-.nb-add, .nb-pager { display: flex; align-items: center; gap: 8px; }
-.nb-pager { margin-left: auto; }
-.nb-count { font-size: var(--fs-xs); color: var(--muted-foreground); white-space: nowrap; }
-.nb-foot [data-export] { flex: 0 0 auto; }
-.nb-add button:disabled { opacity: .45; cursor: default; }
-
-/* The page number is the jump control: a box the width of two digits, typed
-   into and committed on Enter or blur. The hairline is what says "editable"
-   where the rest of the counter is print. */
-.nb-goto {
-  width: 2.6ch;
-  padding: 2px 3px;
-  border: var(--hairline) solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--label);
-  font-size: var(--fs-xs);
-  text-align: center;
-}
-.nb-goto:focus { outline: none; border-color: var(--ring); }
+.nb-skill-rungs li + li { border-top: var(--hairline) solid var(--border); }
+.nb-skill-rungs .state { font-family: var(--label); font-size: var(--fs-xs); color: var(--mod-text, var(--brand-ink)); }
+.nb-skill-rungs a.u { color: var(--brand-ink); text-decoration: none; }
+.nb-skill-rungs a.u:hover { text-decoration: underline; text-underline-offset: 3px; }
+.nb-skill-rungs .a { color: var(--muted-foreground); }
+.nb-skill-rungs li.hit .a { color: var(--foreground); }
 
 /* ---------- highlight removal ---------- */
 

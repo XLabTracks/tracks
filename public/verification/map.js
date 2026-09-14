@@ -10,15 +10,40 @@
 
    VTSkillMap.mount(opts) draws into opts.sky / panel / filters / key (the
    page's #sky, #skyPanel, #modFilters, #skyKey when omitted) and returns the
-   web's own handle ({ pin, setDim, refresh }). Two hosts call it: the map
-   page (with opts.query, so the URL's ?skill= / ?unit= apply) and the
-   notebook's Skill Map view (without — a panel that opens on every page
-   must not read the page's query). A library, not a page script: nothing
-   runs on load, so the notebook can carry it on any route. */
+   web's own handle ({ pin, setDim, refresh }), with opts.query applying the
+   URL's ?skill= / ?unit=. The notebook's Skill Map view draws no figure —
+   bars and descriptions only — and takes just unitHref and rung from here,
+   so its ladder is the panel's ladder. A library, not a page script:
+   nothing runs on load, so the notebook can carry it on any route. */
 
 "use strict";
 
 window.VTSkillMap = (function () {
+
+  /* Which unit page teaches a rung. Compound rungs point at 2.1, the first
+     of the evidence buckets. */
+  const unitHref = tag => {
+    const S = window.SKILLS;
+    const C = window.COURSE;
+    const id = tag === S.compoundRung ? S.compoundUnits[0] : tag;
+    for (const m of C.modules) {
+      const u = m.units.find(u => u.id === id);
+      if (u) return u.href || '/tracks/verification';
+    }
+    return '/tracks/verification';
+  };
+
+  /* One ladder row. The rung marker is a glyph, so "filled" is a shape as
+     well as a colour: ✓ full · ◐ partial · · empty. The unit tag links to
+     the lesson that teaches it. Shared with the notebook's progress view,
+     so the two ladders cannot disagree. */
+  const rung = r => {
+    const f = VT.rungFill(r[0]);
+    return '<li class="' + (f >= 1 ? 'hit' : '') + '">' +
+      '<span class="state" aria-hidden="true">' + (f >= 1 ? '✓' : (f > 0 ? '◐' : '·')) + '</span>' +
+      '<a class="u" href="' + unitHref(r[0]) + '">' + VT.esc(r[0]) + '</a>' +
+      '<span class="a">' + VT.fmt(r[1]) + '</span></li>';
+  };
 
   function mount(opts) {
     opts = opts || {};
@@ -30,17 +55,6 @@ window.VTSkillMap = (function () {
 
     const q = opts.query ? new URLSearchParams(location.search) : null;
     let litUnit = q ? q.get('unit') : null;
-
-    /* Which unit page teaches a rung. Compound rungs point at 2.1, the first
-       of the evidence buckets. */
-    const unitHref = tag => {
-      const id = tag === S.compoundRung ? S.compoundUnits[0] : tag;
-      for (const m of C.modules) {
-        const u = m.units.find(u => u.id === id);
-        if (u) return u.href || '/tracks/verification';
-      }
-      return '/tracks/verification';
-    };
 
     const touches = (n, unit) =>
       n.rungs.some(r => r[0] === unit ||
@@ -68,16 +82,7 @@ window.VTSkillMap = (function () {
         '<p class="p-hint">Pin a star, or its row in the key, to see what the skill lets you do, ' +
         'which unit fills each rung, and what it builds on. Every star is visible from day one; ' +
         'the ring around it fills as you complete the units that feed it.</p>',
-      /* The ladder's rung marker is a glyph, so "filled" is a shape as well as
-         a colour: ✓ full · ◐ partial · · empty. The unit tag links to the
-         lesson that teaches it. */
-      rung: r => {
-        const f = VT.rungFill(r[0]);
-        return '<li class="' + (f >= 1 ? 'hit' : '') + '">' +
-          '<span class="state" aria-hidden="true">' + (f >= 1 ? '✓' : (f > 0 ? '◐' : '·')) + '</span>' +
-          '<a class="u" href="' + unitHref(r[0]) + '">' + VT.esc(r[0]) + '</a>' +
-          '<span class="a">' + VT.fmt(r[1]) + '</span></li>';
-      },
+      rung: rung,
       panelExtra: n => {
         const p = VT.skillProgress(n);
         const pre = S.edges.filter(e => e[1] === n.id).map(e => byId[e[0]]).filter(Boolean);
@@ -109,5 +114,5 @@ window.VTSkillMap = (function () {
     return web;
   }
 
-  return { mount: mount };
+  return { mount: mount, unitHref: unitHref, rung: rung };
 })();

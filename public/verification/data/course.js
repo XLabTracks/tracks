@@ -222,8 +222,8 @@ window.COURSE = {
       "units": [
         {
           "id": "3.0",
-          "title": "What Is Covert Development?",
-          "kind": "explainer",
+          "title": "Low-Trust Compute Verification",
+          "kind": "reading + exercise",
           "mins": "10–15 min",
           "href": "/tracks/verification/covert-development/low-trust-compute-verification",
           "lessons": [

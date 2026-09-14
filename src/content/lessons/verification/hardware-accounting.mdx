@@ -101,7 +101,7 @@ The resulting region is a set of possible locations, not a pin on a map. Several
 
 The full IAPS report distinguishes general geolocation from the narrower task of excluding restricted countries and discusses attacks on delay-based inference. A physical speed limit is more conservative than a model fitted to typical internet routes: an adversary may use a faster-than-expected route without violating physics. [Reference: Brass and Aarne, *Location Verification for AI Chips*, "Delay-based methods for The General Geolocation Problem."](https://static1.squarespace.com/static/64edf8e7f2b10d716b5ba0e1/t/6670467ebe2a477eb1554f40/1718634112482/Location%2BVerification%2Bfor%2BAI%2BChips.pdf)
 
-A slow response does not by itself prove that the chip is far away. No response establishes neither location nor destruction. The IAPS brief explicitly recognizes that chips in transit or storage may not report and calls for follow-up when those statuses persist suspiciously. Location verification also does not itself disable a chip; authorization and control are separate mechanisms, examined in 2.1.5.
+A slow response does not by itself prove that the chip is far away. No response establishes neither location nor destruction. The IAPS brief explicitly recognizes that chips in transit or storage may not report and calls for follow-up when those statuses persist suspiciously. Location verification also does not itself disable a chip; authorization and control are separate mechanisms, examined in 2.1.5. The exercise at the end of this page returns to the location claim you wrote in 2.1.1.
 
 ### Topology: Where a Device Is Is Not What It Connects To
 
@@ -192,12 +192,12 @@ Under an agreement, every covered accelerator held by an operator must be regist
 
 The operator concludes:
 
-> Our hardware is fully accounted for, every device is at its declared facility, and none of it can be part of a larger cluster.
+> The 72 responding devices were within the allowed jurisdiction when checked. Every registered device is at its declared facility, and none can be part of a larger cluster.
 
 1. What does the packet establish about the whereabouts of the 80 registered devices? Support your answer with the supplied records and calculations.
 2. Evaluate the operator's conclusion sentence by sentence. Write a replacement finding no broader than the evidence warrants.
 3. Choose two follow-up checks, identify the actor or record-holder from whom each would obtain evidence, and explain what uncertainty each could reduce.
-4. A proposed audit redesign would randomly select 20 identifiers from the registry each month and require those devices to answer an additional challenge. Explain what this redesign could detect and give one way the operator's broad claim could remain false even if every selected device passes.
+4. Return to your location claim from 2.1.1. Propose one change to the verification procedure and explain how it would affect your assessment of that claim.
 
 ### Answer Key
 
@@ -217,11 +217,17 @@ The missing two are not established to be smuggled, destroyed, or operating else
 
 **Answer 2**
 
-"Fully accounted for" overstates the evidence: two registered devices remain unresolved, and the packet does not exclude acquisitions outside the supplied supplier records. "Every device is at its declared facility" also overstates it: the successful location checks establish an allowed jurisdiction, not buildings A or B, and repair devices have different custody evidence. The topology result concerns one specified system; it does not establish that every accelerator is isolated from a larger compute arrangement.
+The first sentence is supported. The 72 devices that answered produced fresh, valid reports whose permitted-location regions lie wholly inside the allowed jurisdiction, so at the moment each was checked, its location is bounded to that jurisdiction. That conclusion rests on assumptions the packet accepts: the responses are authentic, the responding credential is bound to the registered device rather than to some machine answering on its behalf, and the round-trip time was measured by a trusted process. State those with the finding; they are what the conclusion is worth.
+
+Bound it precisely. It covers 72 devices, not 80. It holds at the moments of the checks, not continuously between them. And it is a jurisdiction-level bound: a region wholly inside the allowed area is still a region, not an address.
+
+The second sentence is not established, for both of those reasons. A jurisdiction-level region is coarser than the facility the registry names, so a device could satisfy every check from a building it was never assigned to; and eight registered devices produced no report at all, six of them supported only by a depot receipt and two by nothing but the operator's explanation.
+
+The third sentence is not established either. The topology result concerns one specified 8-GPU/NVSwitch system at A. Nothing in the packet describes the site's other systems or any inter-site connection, and location evidence does not answer a connectivity question in any case.
 
 A defensible finding is:
 
-> The supplied transaction records reconcile to 80 registered devices. Seventy-two provided fresh identity and allowed-jurisdiction evidence. A repair receipt supports custody of six others; two remain unresolved. A specified system passed its topology checks. These records do not establish every device's exact facility, all other connectivity, or the absence of unregistered hardware.
+> At the times checked, 72 registered devices authenticated and bounded their location within the allowed jurisdiction, assuming sound authentication, device-bound credentials, and trusted timing. Eight registered devices did not report: six are supported by a repair receipt and two are unresolved. One specified system passed its topology checks. These records do not establish any device's facility, the connectivity of other systems, or the absence of unregistered hardware.
 
 </Fold>
 
@@ -242,9 +248,11 @@ Other answers are valid if they identify a specific evidence-holder, explain the
 
 **Answer 4**
 
-Random challenges could identify listed devices that fail to answer or fail the requested checks, and make selective presentation harder when the operator cannot choose the sample. They do not directly test devices omitted from the sampling frame.
+Your claim from 2.1.1 was about the location of a covered product over a stated period. Set it beside what this packet actually supports, and name one definite thing that stopped it from being decided.
 
-For example, all 20 selected registered devices could pass while an unregistered server operates at an undisclosed site. Alternatively, listed devices could be elsewhere within the allowed jurisdiction and still pass a jurisdiction-level location check. The redesign needs both a defined sampling population and a precise statement of what a passing challenge establishes. More frequent checking does not make the proposition broader.
+A worked example. **The weakness:** the daily reports bound a responder to a region wholly inside the allowed jurisdiction, which is coarser than the facility the registry names, so a device can satisfy every check from the wrong building. **The change:** challenge each device from a second, independently surveyed landmark and require both round-trip bounds to hold. **The effect on the claim:** the intersection of two regions is smaller than either, so a claim at facility precision becomes testable where one landmark could only support a jurisdiction claim. **What it still does not do:** it says nothing about the intervals between challenges, and both bounds rest on the same credential-to-device binding, so one compromised credential defeats them together.
+
+Other changes can be justified — challenging at unpredictable times instead of daily, obtaining depot R's own records for the eight repair devices, or treating a non-response as unresolved rather than as presence. What matters is that the change is tied to a definite weakness in this evidence and that the conclusion you can then draw is genuinely stronger than the one you started with. Listing every weakness is not required; one, followed through, is.
 
 </Fold>
 

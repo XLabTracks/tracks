@@ -3826,3 +3826,59 @@ item count, which the 2026-09-08 ruling forbids. Kept verbatim, as in 2.1.1
 and 2.1.5, because it is the owner's own heading. Question 4's first half
 still names what each recommendation must identify; that matches the
 structure she said to keep in 2.1.5's Q4, so it was left alone.
+
+## 2026-09-14 — 2.1.3 gets the series' first supportable operator claim
+
+Course owner's decision: the positive result goes here, on the data the
+packet already has. Her replacement for the operator's words:
+
+> The 72 responding devices were within the allowed jurisdiction when
+> checked. Every registered device is at its declared facility, and none can
+> be part of a larger cluster.
+
+The first sentence is supported — this is what the mechanism actually
+delivers, and until now no packet in 2.1.2 to 2.1.7 delivered anything, so
+"proves compliance" had become the reader's signal to start listing gaps.
+The other two are not established. Question 2 still asks for the sentences to
+be evaluated separately, which is the point: the student has to recognise the
+sound conclusion and then bound it exactly.
+
+Answer 2 was rewritten around that. It states the assumptions the first
+sentence rests on — authentic responses, a credential bound to the registered
+device rather than to something answering for it, and timing measured by a
+trusted process — and then bounds the finding three ways: 72 devices and not
+80, at the moments of the checks and not between them, and to a jurisdiction
+and not an address. Sentence two fails on the last two of those; sentence
+three fails because the topology result covers one specified 8-GPU/NVSwitch
+system and nothing in the packet describes any other system or inter-site
+link.
+
+Question 4 is replaced with the owner's sentence: "Return to your location
+claim from 2.1.1. Propose one change to the verification procedure and
+explain how it would affect your assessment of that claim." Its key assesses
+the link between the proposed change and one definite weakness in this
+evidence, and whether the new conclusion is genuinely stronger; it does not
+ask for every weakness. The worked example — a second independently surveyed
+landmark, so the intersection of two bounded regions can support a claim at
+facility precision — uses only what the lesson already taught, and names what
+the change still does not fix: nothing about the intervals between
+challenges, and both bounds resting on the same credential binding.
+
+The lesson's location section now ends with a definite forward pointer, "The
+exercise at the end of this page returns to the location claim you wrote in
+2.1.1", rather than leaving the return to an unnamed later task.
+
+2.1.1's exercise did not need restoring. `v-hw-claim-chip-security` is in the
+repository and its second item already reads "Formulate a verification claim
+about the location of a covered product. Specify what would need to be
+established and the time covered." That is the claim question 4 sends the
+reader back to.
+
+Removed with the old question 4: the monthly random-sample audit redesign and
+its key — what unpredictable selection can and cannot detect, and the point
+that a passing sample says nothing about devices outside the sampling frame.
+That argument survives elsewhere in the section (2.1.7's audit exercise turns
+on exactly it), and the text is in this file's history if it is ever wanted
+back here.
+
+The case is not carried into 2.1.6, per the owner's instruction.

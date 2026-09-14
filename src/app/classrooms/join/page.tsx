@@ -16,7 +16,8 @@ export default async function JoinClassroomPage() {
       />
       <h1 className="text-3xl font-semibold tracking-tight">Join a classroom</h1>
       <p className="text-muted-foreground mt-2">
-        Enter the code your instructor shared with you.
+        Enter the code you were sent. A classroom code joins you as a student;
+        a co-facilitator code joins you as a facilitator.
       </p>
       <Card className="shadow-soft mt-6">
         <CardContent className="pt-6">

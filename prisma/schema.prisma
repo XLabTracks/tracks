@@ -331,6 +331,11 @@ model Classroom {
   id          String   @id @default(cuid())
   name        String
   joinCode    String   @unique
+  // A second code that joins as a co-facilitator rather than a student. Null
+  // means the room has no standing invite out: it is issued on demand from
+  // the classroom page and revoked there, because whoever holds it gets
+  // instructor rights — the roster, the stored key, the delete button.
+  instructorCode String? @unique
   trackId     String?
   createdById String
   createdBy   User     @relation("ClassroomCreatedBy", fields: [createdById], references: [id])

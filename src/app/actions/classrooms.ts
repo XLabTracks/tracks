@@ -44,6 +44,23 @@ function generateJoinCode(length = 10): string {
 // (isUniqueViolation); retry that, but never swallow connection/validation
 // errors.
 
+// A code free in BOTH code columns. joinCode and instructorCode are unique
+// per column, so nothing at the database level stops one room's join code
+// from equalling another's co-facilitator code — and joinClassroom matches on
+// either, so such a pair would make one of the two rooms unreachable. The
+// odds are ~2^-50 per draw; the check is one indexed read, so pay it.
+async function freshCode(): Promise<string> {
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const code = generateJoinCode();
+    const taken = await prisma.classroom.findFirst({
+      where: { OR: [{ joinCode: code }, { instructorCode: code }] },
+      select: { id: true },
+    });
+    if (!taken) return code;
+  }
+  throw new Error("Could not generate an unused code");
+}
+
 // A classroom must always keep at least one instructor — otherwise its
 // roster, join code, and stored key become permanently unreachable (nobody
 // left with instructor rights). The demote and leave paths enforce this with
@@ -77,7 +94,7 @@ export async function createClassroom(
           name,
           trackId,
           createdById: user.id,
-          joinCode: generateJoinCode(),
+          joinCode: await freshCode(),
           memberships: { create: { userId: user.id, role: "instructor" } },
         },
         select: { id: true },
@@ -104,16 +121,28 @@ export async function joinClassroom(
     .toUpperCase();
   if (!code) return { error: "Enter a join code." };
 
-  const classroom = await prisma.classroom.findUnique({
-    where: { joinCode: code },
-    select: { id: true },
+  // One form, two codes: the classroom's own code enrols a student, its
+  // co-facilitator code enrols an instructor. Which one was typed decides the
+  // role — the person entering it never chooses.
+  const classroom = await prisma.classroom.findFirst({
+    where: { OR: [{ joinCode: code }, { instructorCode: code }] },
+    select: { id: true, joinCode: true },
   });
   if (!classroom) return { error: "That join code isn't valid." };
+  const asCoFacilitator = classroom.joinCode !== code;
 
   await prisma.classroomMembership.upsert({
     where: { classroomId_userId: { classroomId: classroom.id, userId: user.id } },
-    create: { classroomId: classroom.id, userId: user.id, role: "student" },
-    update: {},
+    create: {
+      classroomId: classroom.id,
+      userId: user.id,
+      role: asCoFacilitator ? "instructor" : "student",
+    },
+    // A co-facilitator code promotes a member who is already in the room, so
+    // somebody who joined as a student first doesn't have to be promoted by
+    // hand. The student code never demotes: an instructor who types it stays
+    // an instructor.
+    update: asCoFacilitator ? { role: "instructor" } : {},
   });
 
   redirect(`/classrooms/${classroom.id}`);
@@ -141,7 +170,7 @@ export async function regenerateJoinCode(classroomId: string): Promise<void> {
     try {
       await prisma.classroom.update({
         where: { id: classroomId },
-        data: { joinCode: generateJoinCode() },
+        data: { joinCode: await freshCode() },
       });
       break;
     } catch (error) {
@@ -149,6 +178,52 @@ export async function regenerateJoinCode(classroomId: string): Promise<void> {
       if (attempt === 4) throw new Error("Could not regenerate code");
     }
   }
+  revalidatePath(`/classrooms/${classroomId}`);
+}
+
+/**
+ * Issue (or replace) the classroom's co-facilitator code — the invite a
+ * facilitator sends a colleague so they arrive as an instructor instead of a
+ * student.
+ *
+ * It is a standing code, like the classroom's own: valid until it is replaced
+ * or revoked, and usable by whoever ends up holding it. That is the cost of
+ * not having a mailer to address an invite to one person — so the code is
+ * issued on demand rather than existing by default, and Revoke below is one
+ * click away.
+ *
+ * Replacing it is the same call: whoever was sent the old one can no longer
+ * use it.
+ */
+export async function issueInstructorCode(classroomId: string): Promise<void> {
+  const user = await getCurrentUser();
+  if (!user) throw new Error("Not signed in");
+  await requireInstructor(user.id, classroomId);
+  for (let attempt = 0; attempt < 5; attempt++) {
+    try {
+      await prisma.classroom.update({
+        where: { id: classroomId },
+        data: { instructorCode: await freshCode() },
+      });
+      break;
+    } catch (error) {
+      if (!isUniqueViolation(error)) throw error;
+      if (attempt === 4) throw new Error("Could not issue code");
+    }
+  }
+  revalidatePath(`/classrooms/${classroomId}`);
+}
+
+// Withdraw the standing co-facilitator invite. The co-facilitators who
+// already joined keep their role — this only stops the code being used again.
+export async function revokeInstructorCode(classroomId: string): Promise<void> {
+  const user = await getCurrentUser();
+  if (!user) throw new Error("Not signed in");
+  await requireInstructor(user.id, classroomId);
+  await prisma.classroom.update({
+    where: { id: classroomId },
+    data: { instructorCode: null },
+  });
   revalidatePath(`/classrooms/${classroomId}`);
 }
 

@@ -20,6 +20,7 @@ import {
 import { getTrackProgress } from "@/lib/progress";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import {
+  CoFacilitatorCode,
   CopyJoinCode,
   DeleteAssignmentButton,
   DeleteClassroomButton,
@@ -276,18 +277,24 @@ export default async function ClassroomPage({
             </span>
           </div>
         </div>
-        <div className="space-y-2">
-          <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-            Join code
-          </p>
-          <CopyJoinCode code={classroom.joinCode} />
-          <div className="flex items-center gap-1">
-            <RegenerateCodeButton classroomId={classroom.id} />
-            <DeleteClassroomButton
-              classroomId={classroom.id}
-              name={classroom.name}
-            />
+        <div className="space-y-5">
+          <div className="space-y-2">
+            <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+              Join code
+            </p>
+            <CopyJoinCode code={classroom.joinCode} />
+            <div className="flex items-center gap-1">
+              <RegenerateCodeButton classroomId={classroom.id} />
+              <DeleteClassroomButton
+                classroomId={classroom.id}
+                name={classroom.name}
+              />
+            </div>
           </div>
+          <CoFacilitatorCode
+            classroomId={classroom.id}
+            code={classroom.instructorCode}
+          />
         </div>
       </div>
 

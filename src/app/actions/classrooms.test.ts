@@ -17,6 +17,7 @@ const { prisma, getCurrentUser } = vi.hoisted(() => ({
       create: vi.fn(),
       update: vi.fn(),
       findUnique: vi.fn(),
+      findFirst: vi.fn(),
       delete: vi.fn(),
     },
     // Batch form: the actions pass an array of already-created promises.
@@ -43,10 +44,12 @@ vi.mock("next/navigation", () => ({
 import {
   createClassroom,
   deleteClassroom,
+  issueInstructorCode,
   joinClassroom,
   leaveClassroom,
   regenerateJoinCode,
   removeMember,
+  revokeInstructorCode,
   setMemberRole,
 } from "./classrooms";
 
@@ -144,7 +147,7 @@ describe("joinClassroom", () => {
 
   it("rejects an unknown code without creating a membership", async () => {
     getCurrentUser.mockResolvedValue({ id: "u1" });
-    prisma.classroom.findUnique.mockResolvedValue(null);
+    prisma.classroom.findFirst.mockResolvedValue(null);
     const result = await joinClassroom({}, form("zzzzzz"));
     expect(result.error).toBeTruthy();
     expect(prisma.classroomMembership.upsert).not.toHaveBeenCalled();
@@ -154,7 +157,10 @@ describe("joinClassroom", () => {
   // codes issued before the move to 10 chars keep working.
   it("enrolls as a student on a valid code", async () => {
     getCurrentUser.mockResolvedValue({ id: "u1" });
-    prisma.classroom.findUnique.mockResolvedValue({ id: "c9" });
+    prisma.classroom.findFirst.mockResolvedValue({
+      id: "c9",
+      joinCode: "ABC234",
+    });
     prisma.classroomMembership.upsert.mockResolvedValue({});
     await expect(joinClassroom({}, form("ABC234"))).rejects.toThrow(
       "REDIRECT:/classrooms/c9"
@@ -164,6 +170,117 @@ describe("joinClassroom", () => {
         create: { classroomId: "c9", userId: "u1", role: "student" },
       })
     );
+  });
+
+  // The role follows the code that matched, never the joiner's say-so: the
+  // room's own code is the student one, so anything else that matched is its
+  // co-facilitator code.
+  it("enrolls as an instructor on the co-facilitator code", async () => {
+    getCurrentUser.mockResolvedValue({ id: "u1" });
+    prisma.classroom.findFirst.mockResolvedValue({
+      id: "c9",
+      joinCode: "STUDENT123",
+    });
+    prisma.classroomMembership.upsert.mockResolvedValue({});
+    await expect(joinClassroom({}, form("COFAC12345"))).rejects.toThrow(
+      "REDIRECT:/classrooms/c9"
+    );
+    expect(prisma.classroomMembership.upsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        create: { classroomId: "c9", userId: "u1", role: "instructor" },
+        update: { role: "instructor" },
+      })
+    );
+  });
+
+  // Someone already in the room as a student is promoted by the code rather
+  // than having to be promoted by hand afterwards.
+  it("upgrades an existing membership on the co-facilitator code", async () => {
+    getCurrentUser.mockResolvedValue({ id: "u1" });
+    prisma.classroom.findFirst.mockResolvedValue({
+      id: "c9",
+      joinCode: "STUDENT123",
+    });
+    prisma.classroomMembership.upsert.mockResolvedValue({});
+    await expect(joinClassroom({}, form("COFAC12345"))).rejects.toThrow(
+      "REDIRECT:/classrooms/c9"
+    );
+    const call = prisma.classroomMembership.upsert.mock.calls[0][0];
+    expect(call.update).toEqual({ role: "instructor" });
+  });
+
+  // The mirror image: an instructor who types the student code keeps the
+  // role they have. Nothing in the join path demotes.
+  it("never demotes an instructor who enters the student code", async () => {
+    getCurrentUser.mockResolvedValue({ id: "u1" });
+    prisma.classroom.findFirst.mockResolvedValue({
+      id: "c9",
+      joinCode: "STUDENT123",
+    });
+    prisma.classroomMembership.upsert.mockResolvedValue({});
+    await expect(joinClassroom({}, form("STUDENT123"))).rejects.toThrow(
+      "REDIRECT:/classrooms/c9"
+    );
+    expect(prisma.classroomMembership.upsert.mock.calls[0][0].update).toEqual(
+      {}
+    );
+  });
+});
+
+describe("the co-facilitator code", () => {
+  it("is issued only by an instructor", async () => {
+    getCurrentUser.mockResolvedValue({ id: "u1" });
+    prisma.classroomMembership.findUnique.mockResolvedValue({
+      role: "student",
+    });
+    await expect(issueInstructorCode("c1")).rejects.toThrow("Forbidden");
+    expect(prisma.classroom.update).not.toHaveBeenCalled();
+  });
+
+  it("is drawn from the same alphabet and length as a join code", async () => {
+    getCurrentUser.mockResolvedValue({ id: "u1" });
+    prisma.classroomMembership.findUnique.mockResolvedValue({
+      role: "instructor",
+    });
+    prisma.classroom.findFirst.mockResolvedValue(null);
+    prisma.classroom.update.mockResolvedValue({});
+    await issueInstructorCode("c1");
+    const code = prisma.classroom.update.mock.calls[0][0].data
+      .instructorCode as string;
+    expect(code).toMatch(/^[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{10}$/);
+  });
+
+  // Both columns, because joinClassroom matches either: a code that already
+  // exists as some room's join code would make that room unreachable.
+  it("is checked against both code columns before it is stored", async () => {
+    getCurrentUser.mockResolvedValue({ id: "u1" });
+    prisma.classroomMembership.findUnique.mockResolvedValue({
+      role: "instructor",
+    });
+    prisma.classroom.findFirst.mockResolvedValue(null);
+    prisma.classroom.update.mockResolvedValue({});
+    await issueInstructorCode("c1");
+    const where = prisma.classroom.findFirst.mock.calls[0][0].where;
+    expect(Object.keys(where.OR[0])).toEqual(["joinCode"]);
+    expect(Object.keys(where.OR[1])).toEqual(["instructorCode"]);
+  });
+
+  it("is revoked only by an instructor, and revoking nulls it", async () => {
+    getCurrentUser.mockResolvedValue({ id: "u1" });
+    prisma.classroomMembership.findUnique.mockResolvedValue({
+      role: "student",
+    });
+    await expect(revokeInstructorCode("c1")).rejects.toThrow("Forbidden");
+
+    prisma.classroomMembership.findUnique.mockResolvedValue({
+      role: "instructor",
+    });
+    prisma.classroom.update.mockResolvedValue({});
+    await revokeInstructorCode("c1");
+    expect(prisma.classroom.update).toHaveBeenCalledWith({
+      where: { id: "c1" },
+      data: { instructorCode: null },
+    });
   });
 });
 

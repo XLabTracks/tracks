@@ -10,6 +10,7 @@ import {
   ShieldOff,
   Trash2,
   UserMinus,
+  UserPlus,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -25,9 +26,11 @@ import {
 } from "@/components/ui/dialog";
 import {
   deleteClassroom,
+  issueInstructorCode,
   leaveClassroom,
   removeMember,
   regenerateJoinCode,
+  revokeInstructorCode,
   setMemberRole,
 } from "@/app/actions/classrooms";
 import { deleteAssignment } from "@/app/actions/assignments";
@@ -154,6 +157,110 @@ export function RegenerateCodeButton({ classroomId }: { classroomId: string }) {
     >
       <RefreshCw className="size-3.5" aria-hidden /> New code
     </Button>
+  );
+}
+
+/**
+ * The co-facilitator invite: a second code that joins as an instructor rather
+ * than a student.
+ *
+ * A room has none until its facilitator asks for one, and the state is the
+ * whole control — no code yet offers "Invite a co-facilitator", a live one
+ * shows itself with Replace and Revoke. What the code does is said next to
+ * it, every time, because it hands over the roster and the delete button to
+ * whoever it reaches.
+ */
+export function CoFacilitatorCode({
+  classroomId,
+  code,
+}: {
+  classroomId: string;
+  code: string | null;
+}) {
+  const [pending, startTransition] = useTransition();
+  const run = (
+    action: () => Promise<void>,
+    success: string,
+    failure: string,
+  ) =>
+    startTransition(async () => {
+      try {
+        await action();
+        toast.success(success);
+      } catch {
+        toast.error(failure);
+      }
+    });
+
+  if (!code) {
+    return (
+      <div className="space-y-2">
+        <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+          Co-facilitators
+        </p>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={pending}
+          className="gap-1"
+          onClick={() =>
+            run(
+              () => issueInstructorCode(classroomId),
+              "Co-facilitator code created",
+              "Couldn't create the code",
+            )
+          }
+        >
+          <UserPlus className="size-3.5" aria-hidden /> Invite a co-facilitator
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-2">
+      <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+        Co-facilitator code
+      </p>
+      <CopyJoinCode code={code} />
+      <p className="text-muted-foreground max-w-xs text-xs">
+        Whoever enters this code joins as a facilitator — the roster, the
+        classroom key and the session guides. It stays valid until you replace
+        or revoke it.
+      </p>
+      <div className="flex items-center gap-1">
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={pending}
+          className="gap-1"
+          onClick={() =>
+            run(
+              () => issueInstructorCode(classroomId),
+              "New co-facilitator code generated",
+              "Couldn't replace the code",
+            )
+          }
+        >
+          <RefreshCw className="size-3.5" aria-hidden /> Replace
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          disabled={pending}
+          className="gap-1"
+          onClick={() =>
+            run(
+              () => revokeInstructorCode(classroomId),
+              "Co-facilitator code revoked",
+              "Couldn't revoke the code",
+            )
+          }
+        >
+          <ShieldOff className="size-3.5" aria-hidden /> Revoke
+        </Button>
+      </div>
+    </div>
   );
 }
 

@@ -14,7 +14,7 @@ import { MemoDeskHost } from "@/components/verification/memo-desk-host";
  * the desk's markup with nothing mounting it, which is the same page with the
  * desk switched off. */
 
-export const metadata: Metadata = { title: "Memo desk" };
+export const metadata: Metadata = { title: "Memo Desk" };
 
 export default function Page() {
   return (
@@ -26,11 +26,12 @@ export default function Page() {
       <main id="main">
         <div className="wrap">
           <div className="desk-head">
-            <h1>Memo desk</h1>
+            <h1>Memo Desk</h1>
             <p>
-              Every written output the track asks for, in one place. Where the
-              assignment has a brief, it is quoted below in full; where it does not
-              have one yet, this page says so rather than inventing one.
+              Every written output the track asks for, in one place — it opens
+              from your notebook on any course page. Where the assignment has a
+              brief, it is quoted below in full; where it does not have one yet,
+              this page says so rather than inventing one.
             </p>
           </div>
 

@@ -116,7 +116,6 @@
   background: var(--primary);
   transition: width .28s ease;
 }
-:root[data-theme='contrast'] .meter { border: var(--hairline) solid var(--border); }
 
 /* Segmented: one cell per unit, so a short bar can be counted and not only
    read as a hue. The gaps are masked out of the whole bar — track and fill

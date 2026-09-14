@@ -4,6 +4,7 @@ import {
   Fragment,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useReducer,
   useRef,
@@ -124,6 +125,18 @@ function zoomVB(
   });
 }
 
+function useCanHover(): boolean {
+  const [canHover, setCanHover] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const read = () => setCanHover(mq.matches);
+    read();
+    mq.addEventListener("change", read);
+    return () => mq.removeEventListener("change", read);
+  }, []);
+  return canHover;
+}
+
 export function InteractiveMap(_props: VerificationWidgetProps) {
   void _props;
   const [s, dispatch] = useReducer(reducer, INITIAL);
@@ -136,8 +149,14 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
     rh: number;
   } | null>(null);
 
+  const canHover = useCanHover();
+
+  const tipRef = useRef<HTMLDivElement | null>(null);
+  const [tipSize, setTipSize] = useState({ w: 256, h: 160 });
+
   const svgRef = useRef<SVGSVGElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
+  const downIdRef = useRef<string | null>(null);
   const dragRef = useRef<{
     x: number;
     y: number;
@@ -198,6 +217,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
 
   const onPointerDown = (e: React.PointerEvent<SVGSVGElement>) => {
     if (e.button !== 0) return;
+    downIdRef.current = (e.target as Element).getAttribute?.("data-id") ?? null;
     panMovedRef.current = false;
     dragRef.current = {
       x: e.clientX,
@@ -258,6 +278,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
   };
 
   const onSvgMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+    if (!canHover) return;
     const target = e.target as Element;
     const st = stageRef.current;
     if (!st) return;
@@ -277,6 +298,14 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
   const hubStroke = Math.max(0.3, 0.8 / zoom);
 
   const tipCountry = tip ? CMAP[tip.id] : null;
+
+  useLayoutEffect(() => {
+    const el = tipRef.current;
+    if (!el) return;
+    const w = el.offsetWidth;
+    const h = el.offsetHeight;
+    setTipSize((prev) => (prev.w === w && prev.h === h ? prev : { w, h }));
+  }, [tip?.id]);
 
   return (
     <div
@@ -305,7 +334,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
             >
               {hintOpen && (
                 <div className="text-muted-foreground border-border bg-card absolute top-3 left-3 z-10 flex max-w-[calc(100%-5rem)] items-start gap-2 rounded-md border px-3 py-2 text-xs">
-                  <span>{C.hint}</span>
+                  <span>{canHover ? C.hint : C.hintTouch}</span>
                   <button
                     type="button"
                     aria-label="Dismiss hint"
@@ -357,7 +386,9 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                 onMouseMove={onSvgMouseMove}
                 onMouseLeave={() => setTip(null)}
                 onClick={(e) => {
-                  const id = (e.target as Element).getAttribute?.("data-id");
+                  const id =
+                    (e.target as Element).getAttribute?.("data-id") ??
+                    downIdRef.current;
                   onCountryClick(id ?? null);
                 }}
               >
@@ -472,9 +503,10 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
 
               {tip && tipCountry && (
                 <div
+                  ref={tipRef}
                   role="tooltip"
                   className="border-border bg-card shadow-soft pointer-events-none absolute z-20 w-64 rounded-lg border p-3"
-                  style={tipPos(tip)}
+                  style={tipPos(tip, tipSize)}
                 >
                   <p className="text-sm font-semibold">{tipCountry.name}</p>
                   <div className="mt-1.5 mb-1.5 flex flex-wrap gap-1">
@@ -496,7 +528,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
               <div className="mb-2 flex items-baseline justify-between">
                 <span className="text-[13px] font-semibold">{C.flowTitle}</span>
                 <span className="text-muted-foreground text-3xs">
-                  {C.flowNote}
+                  {canHover ? C.flowNote : C.flowNoteTouch}
                 </span>
               </div>
               <div className="flex flex-wrap items-stretch gap-1">
@@ -518,7 +550,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                         onMouseEnter={() => setPreview(st.bucket)}
                         onMouseLeave={() => setPreview(null)}
                         className={cn(
-                          "min-w-[104px] flex-1 rounded-md border px-2.5 py-2 text-left transition-colors",
+                          "flex-[1_1_104px] rounded-md border px-2.5 py-2 text-left transition-colors",
                           active
                             ? "bg-primary border-primary"
                             : "border-border bg-muted/40 hover:bg-muted"
@@ -576,7 +608,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
               <div className="mb-2 flex items-baseline justify-between gap-2">
                 <span className="text-[13px] font-semibold">{C.keyLabel}</span>
                 <span className="text-muted-foreground text-3xs">
-                  {C.keyAction}
+                  {canHover ? C.keyAction : C.keyActionTouch}
                 </span>
               </div>
               <div className="flex flex-wrap gap-1.5">
@@ -621,7 +653,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                 })}
               </div>
               <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
-                {C.keyNote}
+                {canHover ? C.keyNote : C.keyNoteTouch}
               </p>
             </div>
 
@@ -661,21 +693,22 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
   );
 }
 
-function tipPos(tip: {
-  x: number;
-  y: number;
-  rw: number;
-  rh: number;
-}): React.CSSProperties {
-  const rw = tip.rw;
-  const rh = tip.rh;
-  const tw = 256;
-  const th = 120;
+function tipPos(
+  tip: { x: number; y: number; rw: number; rh: number },
+  size: { w: number; h: number }
+): React.CSSProperties {
+  const pad = 8;
+  const { rw, rh } = tip;
+
   let lx = tip.x + 16;
+  if (rw && lx + size.w > rw - pad) lx = tip.x - size.w - 16;
+  if (rw) lx = Math.min(Math.max(pad, lx), Math.max(pad, rw - size.w - pad));
+
   let ly = tip.y + 14;
-  if (rw && lx + tw > rw - 8) lx = tip.x - tw - 16;
-  if (rh && ly + th > rh - 8) ly = tip.y - th - 12;
-  return { left: Math.max(6, lx), top: Math.max(6, ly) };
+  if (rh && ly + size.h > rh - pad) ly = tip.y - size.h - 12;
+  if (rh) ly = Math.min(Math.max(pad, ly), Math.max(pad, rh - size.h - pad));
+
+  return { left: Math.max(pad, lx), top: Math.max(pad, ly) };
 }
 
 function BucketChip({ bk }: { bk: BucketKey }) {
@@ -700,6 +733,7 @@ function DetailCard({
   dispatch: React.Dispatch<Action>;
 }) {
   const s = state;
+  const canHover = useCanHover();
 
   if (s.filter) {
     const b = BUCKETS[s.filter];
@@ -811,7 +845,7 @@ function DetailCard({
         {C.startBodyA}
       </p>
       <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
-        {C.startBodyB}
+        {canHover ? C.startBodyB : C.startBodyBTouch}
       </p>
     </div>
   );

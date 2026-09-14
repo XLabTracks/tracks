@@ -7,7 +7,11 @@ import { DELIVERABLE_FORMAT_LABELS } from "@/lib/content/types";
 import { isAccessLocked } from "@/lib/content/prerequisites";
 import { getCurrentUserOrSignedOut } from "@/lib/auth";
 import { loginHref } from "@/lib/login-href";
-import { getPrerequisiteStatus, getSubmission } from "@/lib/progress";
+import {
+  getPrerequisiteStatus,
+  getSubmission,
+  type PrerequisiteStatus,
+} from "@/lib/progress";
 import {
   reopenWriting,
   saveWritingDraft,
@@ -51,7 +55,10 @@ export default async function AssessmentPage({
   // to signed-in learners too (mirrors the item and module pages). Signed-out
   // visitors may preview.
   if (user && track.prerequisiteEnforcement === "hard") {
-    const prereqStatuses = await getPrerequisiteStatus(user.id, module.id);
+    const prereqStatuses = await getPrerequisiteStatus(
+      user.id,
+      module.id,
+    ).catch((): PrerequisiteStatus[] => []);
     if (
       isAccessLocked(
         track.prerequisiteEnforcement,
@@ -62,8 +69,10 @@ export default async function AssessmentPage({
     }
   }
 
+  // Like the item page: a failed read costs the saved draft, not the page —
+  // the prompt itself is static content.
   const submission = user
-    ? await getSubmission(user.id, assessment.id, "assessment")
+    ? await getSubmission(user.id, assessment.id, "assessment").catch(() => null)
     : null;
 
   return (
@@ -124,7 +133,10 @@ export default async function AssessmentPage({
                 <TransparencyFeedback
                   contentId={assessment.id}
                   kind="assessment"
-                  keyView={(await getGraderKeyView(user.id)) ?? undefined}
+                  keyView={
+                    (await getGraderKeyView(user.id).catch(() => null)) ??
+                    undefined
+                  }
                   initialScore={
                     submission.score != null && submission.feedback
                       ? submission.score

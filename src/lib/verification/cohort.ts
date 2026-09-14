@@ -1,7 +1,10 @@
-import { verificationExercises } from "@/content/verification/exercises";
-import { isWritingExercise } from "@/lib/content/types";
 import {
-  getExerciseById,
+  memoSlots,
+  memoSlotTasks,
+  type MemoSlot,
+  type MemoStep,
+} from "@/content/verification/memos";
+import {
   getItemsForModule,
   getModulesForTrack,
   itemIdOf,
@@ -9,24 +12,16 @@ import {
   itemTitleOf,
 } from "@/lib/content";
 
-export const TASK_PREFIX = "v-task-";
+const taskSlots: { slot: MemoSlot; step: MemoStep }[] = memoSlots.flatMap((slot) =>
+  memoSlotTasks(slot).map((step) => ({ slot, step })),
+);
 
-export const verificationTaskIds: string[] = verificationExercises
-  .filter(
-    (exercise) =>
-      exercise.id.startsWith(TASK_PREFIX) && isWritingExercise(exercise),
-  )
-  .map((exercise) => exercise.id);
-
-export function lessonStemOfTask(taskId: string): string {
-  return taskId.slice(TASK_PREFIX.length).replace(/-\d+$/, "");
-}
+export const verificationTaskIds: string[] = taskSlots.map(({ step }) => step.task);
 
 export function taskTitle(taskId: string): string {
-  const prompt = getExerciseById(taskId)?.prompt ?? "";
-  const first = prompt.split("\n").find((l) => l.trim())?.trim();
-  if (!first) return taskId;
-  return first.replace(/^#+\s*/, "");
+  const hit = taskSlots.find(({ step }) => step.task === taskId);
+  if (!hit) return taskId;
+  return hit.slot.steps ? `${hit.slot.title} — ${hit.step.title}` : hit.step.title;
 }
 
 export interface CohortTask {
@@ -51,14 +46,14 @@ export function verificationTasksByModule(): CohortModuleTasks[] {
       if (item.kind !== "lesson") continue;
       const id = itemIdOf(item);
       const stem = item.lesson.contentRef.replace(/^verification\//, "");
-      for (const taskId of verificationTaskIds) {
-        if (lessonStemOfTask(taskId) !== stem) continue;
+      for (const { slot, step } of taskSlots) {
+        if (slot.lesson !== stem) continue;
         tasks.push({
-          id: taskId,
-          title: taskTitle(taskId),
+          id: step.task,
+          title: taskTitle(step.task),
           lessonId: id,
           lessonTitle: itemTitleOf(item),
-          lessonHref: `/tracks/verification/${mod.slug}/${itemSlugOf(item)}`,
+          lessonHref: `/tracks/verification/${mod.slug}/${itemSlugOf(item)}#${step.task}`,
         });
       }
     }

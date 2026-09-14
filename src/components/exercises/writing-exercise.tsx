@@ -27,7 +27,10 @@ export function WritingExerciseCard({
     { id: "response", label: "Your response", placeholder: "Write your answer…" },
   ];
   return (
-    <aside className="not-prose border-border bg-card shadow-soft my-6 rounded-xl border p-5">
+    <aside
+      id={exercise.id}
+      className="not-prose border-border bg-card shadow-soft my-6 scroll-mt-24 rounded-xl border p-5"
+    >
       <p className="text-muted-foreground mb-1.5 text-xs font-medium tracking-wide uppercase">
         {DELIVERABLE_FORMAT_LABELS[exercise.format]}
       </p>

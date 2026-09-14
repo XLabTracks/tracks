@@ -81,10 +81,29 @@ function MdxOl({ children, ...rest }: ComponentPropsWithoutRef<"ol">) {
   );
 }
 
+/* A markdown table sits in its own scroll box (`.table-scroll` in
+ * globals.css) so it can be a real `display: table` filling the measure —
+ * auto layout then shares the width between columns in proportion to their
+ * text, which is what keeps a short label column from being squeezed to one
+ * word per line. The table itself used to be the scroll box (`display:
+ * block`), and a block-level table lays its rows out in an anonymous table
+ * that shrinks to content; the only way to make that fill the box was to
+ * hand one column everything, which is the squeeze. The wrappers that
+ * already carry their own chrome (`pair-table`, `elements-grid`) neutralize
+ * this one with `display: contents`. */
+function MdxTable(props: ComponentPropsWithoutRef<"table">) {
+  return (
+    <div className="table-scroll">
+      <table {...props} />
+    </div>
+  );
+}
+
 export const mdxComponents: MDXComponents = {
   a: MdxLink,
   ul: MdxUl,
   ol: MdxOl,
+  table: MdxTable,
   Video,
   ArxivPaper,
   ArxivSection,

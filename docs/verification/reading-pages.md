@@ -105,3 +105,11 @@ finer boundary only when the source itself supplies a meaningful subsection.
   continuous.
 - The long Scher treaty paper uses authored source-section boundaries. Complete
   articles stay intact even when they exceed the ordinary prose target.
+
+## 2026-09-13 revision
+
+Part-by-part reading is on again for the Verification track (see
+`module-0-log.md`). The module 2 decision above is superseded: the hardware
+and intelligence lessons now page too, at changes from explanation to
+exercise and between source packets, so every submodule with more than one
+learner action reads part by part. The one-action lessons remain continuous.

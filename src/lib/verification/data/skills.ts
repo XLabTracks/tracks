@@ -1,5 +1,5 @@
 
-export const SKILLS_REV = 2;
+export const SKILLS_REV = 4;
 
 export const COMPOUND_RUNG = "2.1–2.4";
 

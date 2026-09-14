@@ -12,7 +12,7 @@ deliverable_type: spec
 mentor: recommended
 audience: The regulator or oversight body that wants insider evidence and currently receives none.
 skills: [institutional design, incentive analysis, evidence standards, protective-regime drafting]
-prerequisites: [Verification 1 — actors, Verification 2.4 — the human layer]
+prerequisites: [Verification 1 — actors, Verification 2.4 — human evidence]
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 20: AI and whistleblowing](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
 updated: 2026-08-04
@@ -51,7 +51,7 @@ Design one channel, properly.
 
 ## Why it exists
 
-The human layer is where the track's realism lives. The other three layers can
+The human layer is where the track's realism lives. The other evidence streams can
 be improved with engineering; this one runs on whether a specific person, with
 a mortgage and a non-disparagement clause, decides to speak. Designing for that
 is a different discipline from designing a telemetry rule, and learners who can

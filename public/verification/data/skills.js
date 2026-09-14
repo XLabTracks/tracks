@@ -24,15 +24,15 @@
    Edit both together, and bump rev when the graph changes shape. */
 
 window.SKILLS = {
-  rev: 2,
+  rev: 4,
   /* The graph's own module taxonomy — the owner's band names, which are the
      static site's module chrome. The app track names its modules differently
      (curriculum.ts); verificationUnitOfLesson is the join. */
   moduleNames: [
     "Foundations",
-    "Policy and actors",
-    "Evidence streams",
-    "Covert development",
+    "Policy and Actors",
+    "Evidence Streams",
+    "Covert Development",
     "Capstone",
   ],
   compoundRung: "2.1–2.4",
@@ -81,7 +81,7 @@ window.SKILLS = {
         ["0.1", "Nuclear: averted nuclear war, and the decades it took to build the verification apparatus."],
         ["0.3", "IAEA safeguards; what it takes to catch a Chinchilla; Iraq and undeclared infrastructure."],
         ["1.2", "The empty institutional shelf: is there a WHO for AI, an IAEA? — what the nuclear institutions hold that AI's don't."],
-        ["2.3", "Empirical anchor: what national intelligence found that routine safeguards missed."]
+        ["2.3", "What national intelligence found that routine safeguards missed."]
       ] },
     { id: "failure", label: "Identifying failure modes", mod: 0, unit: "0.2", r: 1, lo: [3, 5], bloom: [2, 5],
       goals: [
@@ -138,7 +138,7 @@ window.SKILLS = {
         ["2.3", "Base rates: what an alarm rate does across the ~500-site haystack."]
       ] },
 
-    /* ---- Module 1 · Policy and actors ---- */
+    /* ---- Module 1 · Policy and Actors ---- */
     { id: "components", label: "Policy components", mod: 1, unit: "1.0", r: 0, lo: [1], bloom: [2, 4],
       goals: [
         [0, "Decompose any written policy or treaty into its actors, objects, activities, conditions"],
@@ -251,7 +251,7 @@ window.SKILLS = {
         ["4.2", "The governance artifact in a working format: treaty text, policy memo, research proposal."]
       ] },
 
-    /* ---- Module 2 · Evidence streams ---- */
+    /* ---- Module 2 · Evidence Streams ---- */
     { id: "taxonomies", label: "Mechanism taxonomies", mod: 2, unit: "2.0", r: 0, lo: [3, 4], bloom: [3, 3],
       goals: [
         [0, "Understand five categories of mechanism sorting and when each is most appropriate: layer, access, policy goal, lifecycle, adversary robustness"],
@@ -306,7 +306,7 @@ window.SKILLS = {
         ["2.4", "Insider access, declarations, interviews, routine audits vs. challenge inspections, protections."]
       ] },
 
-    /* ---- Module 3 · Covert development ---- */
+    /* ---- Module 3 · Covert Development ---- */
     { id: "evasion", label: "Evasion scenarios", mod: 3, unit: "3.0", r: 0, lo: [5], bloom: [4, 5],
       goals: [
         [0, "Understand the catalog of routes around the regime ordered by feasibility, the signature each route leaves, and its best-placed detector"],

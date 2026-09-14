@@ -1,15 +1,14 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { Contrast, Moon, Sun } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
- * The header's theme switch — three states side by side: light, dark, high
- * contrast. It writes the classes THEME_BOOT (layout.tsx) reads before first
- * paint and remembers the choice under the same storage key — keep the two
- * in step: same key, same values, and contrast always means BOTH `dark` and
- * `contrast` on <html> (contrast is dark-plus; see globals.css).
+ * The header's theme switch — two states side by side: light and dark. It
+ * writes the class THEME_BOOT (layout.tsx) reads before first paint and
+ * remembers the choice under the same storage key — keep the two in step:
+ * same key, same values.
  *
  * The server can't know the theme (it lives in localStorage), so the server
  * snapshot marks no option checked; after hydration the store snapshot reads
@@ -20,25 +19,18 @@ import { cn } from "@/lib/utils";
  * source of truth: clicks only mutate it, and a MutationObserver feeds the
  * change back into React.
  *
- * Until a visitor touches it, THEME_BOOT follows the system preference
- * (light/dark only — contrast is always an explicit choice); the first click
- * stores a choice, which outranks the OS from then on.
+ * Until a visitor touches it, THEME_BOOT follows the system preference; the
+ * first click stores a choice, which outranks the OS from then on.
  */
-type Theme = "light" | "dark" | "contrast";
+type Theme = "light" | "dark";
 
 const OPTIONS: { key: Theme; label: string; Icon: typeof Sun }[] = [
   { key: "light", label: "Light theme", Icon: Sun },
   { key: "dark", label: "Dark theme", Icon: Moon },
-  {
-    key: "contrast",
-    label: "High contrast and larger text",
-    Icon: Contrast,
-  },
 ];
 
 function currentTheme(): Theme {
   const c = document.documentElement.classList;
-  if (c.contains("contrast")) return "contrast";
   return c.contains("dark") ? "dark" : "light";
 }
 
@@ -58,7 +50,6 @@ export function ThemeToggle() {
   const apply = (t: Theme) => {
     const c = document.documentElement.classList;
     c.toggle("dark", t !== "light");
-    c.toggle("contrast", t === "contrast");
     try {
       localStorage.setItem("tracks-theme", t);
     } catch {

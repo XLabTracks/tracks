@@ -71,7 +71,7 @@ window.VT = (function () {
   /* ---------- skills ---------- */
 
   /* Fraction of a rung the learner holds, 0..1. Only the compound
-     2.1–2.4 rung is ever partial: it fills a quarter per evidence bucket. */
+     2.1–2.3 rung is ever partial: it fills a third per evidence bucket. */
   function rungFill(unitTag) {
     const S = window.SKILLS;
     if (S && unitTag === S.compoundRung) {

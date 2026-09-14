@@ -24,8 +24,7 @@ import {
  * theme.css/app-bridge.css re-solves the type tokens only inside
  * `[data-reading-surface]`, which is the div this component wraps the lesson
  * in. The h1, breadcrumbs, sidebar, buttons and footer sit outside and keep
- * their size. Contrast's global 200% low-vision preset is a different
- * selector and stays whole-page.
+ * their size.
  *
  * Focus reading rides along unchanged: the body is marked once on mount
  * (markFocusWords — the text content never changes), and the setting is a
@@ -65,7 +64,7 @@ export function ReadingSurface({ children }: { children: ReactNode }) {
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-end">
+      <div className="relative mb-4 flex items-center justify-end">
         <FocusReadingControl settings={focus} onChange={applyFocus} />
       </div>
       <div ref={hostRef} data-reading-surface="" className={focusClassName(focus)}>

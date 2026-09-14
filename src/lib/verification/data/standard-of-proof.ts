@@ -3,15 +3,15 @@ export const PROOF_ALLEGATION =
   "Meridian Compute ran a training run above the agreement’s compute ceiling at its Delta campus in the third quarter.";
 
 export const PROOF_INTRO =
-  "One allegation. Four dockets — the evidence in front of an institution, and the institution holding it.";
+  "One allegation, received four times. Each case below pairs the evidence an institution has in front of it with the institution that has to act on it.";
 export const PROOF_TASK_LEAD =
-  "For each docket, choose the institution’s next move. Then defend it:";
+  "For each case, choose the institution’s next step from the four options. Then justify the choice in three parts:";
 export const PROOF_TASKS = [
-  "what the docket establishes, and what kind of evidence does that work;",
+  "what the evidence establishes, and which kind of evidence does that work;",
   "what it does not establish;",
-  "whether this institution can defend the move you chose.",
+  "whether this institution can defend the step you chose.",
 ];
-export const PROOF_LIMIT = "Use about 60–90 words per docket.";
+export const PROOF_LIMIT = "Use about 60–90 words per case.";
 
 export const PROOF_MOVES = [
   { id: "collect", label: "Record and keep collecting" },
@@ -21,7 +21,7 @@ export const PROOF_MOVES = [
 ] as const;
 export type ProofMoveId = (typeof PROOF_MOVES)[number]["id"];
 
-export interface ProofDocket {
+export interface ProofCase {
   id: string;
   letter: string;
   title: string;
@@ -29,13 +29,13 @@ export interface ProofDocket {
   evidence: string[];
 }
 
-export const PROOF_DOCKETS: ProofDocket[] = [
+export const PROOF_CASES: ProofCase[] = [
   {
     id: "lone-report",
     letter: "A",
     title: "The lone report",
     institution:
-      "The treaty’s verification directorate holds the docket. Its access rights, funding and staffing are not in question.",
+      "The treaty’s verification directorate holds the case. Its access rights, funding and staffing are not in question.",
     evidence: [
       "A former Meridian scheduling engineer reports that Delta’s main cluster ran one uninterrupted job for six weeks of the third quarter.",
       "The report came through the treaty’s protected channel and is internally consistent.",
@@ -45,11 +45,11 @@ export const PROOF_DOCKETS: ProofDocket[] = [
   {
     id: "converging",
     letter: "B",
-    title: "The converging docket",
+    title: "Converging evidence",
     institution:
       "The same directorate, on the same footing.",
     evidence: [
-      "The engineer’s report from docket A.",
+      "The engineer’s report from case A.",
       "Customs records show Meridian imported accelerators well above its declared inventory in the second quarter.",
       "Grid-operator telemetry puts Delta’s power draw far above the level its declaration supports, for the same six weeks.",
       "Meridian declined the quarter’s scheduled managed-access visit and offered no alternative means.",
@@ -58,7 +58,7 @@ export const PROOF_DOCKETS: ProofDocket[] = [
   {
     id: "channelled",
     letter: "C",
-    title: "The channelled docket",
+    title: "A single channel",
     institution:
       "The directorate has no access rights at Delta. Everything it knows arrives through one channel: an audit Meridian commissioned itself, delivered as a summary with the underlying records withheld.",
     evidence: [
@@ -81,18 +81,18 @@ export const PROOF_DOCKETS: ProofDocket[] = [
 ];
 
 export const PROOF_SELF_CHECK_LEAD =
-  "For each docket, compare your answer against two questions:";
+  "For each case, check your answer against two questions:";
 export const PROOF_SELF_CHECK = [
-  "Did the move you chose match what that docket’s evidence currently supports?",
-  "Where the institution was the weak part, did your move repair the institution rather than reweigh the evidence?",
+  "Did the step you chose match what that case’s evidence currently supports?",
+  "Where the institution was the weak part, did your step repair the institution rather than reweigh the evidence?",
 ];
 
 export const PROOF_REVEAL_GRID =
-  "The four dockets were a 2×2 you were never shown: evidence weight on one axis, institutional soundness on the other. A and B varied the evidence under a sound institution; C and D varied the institution.";
+  "The four cases form a 2×2 grid that was not shown to you: strength of evidence on one axis, soundness of the institution on the other. Cases A and B vary the evidence while the institution is sound; cases C and D vary the institution.";
 
 export const PROOF_FINAL =
-  "In no more than 50 words, state the decision standard you actually applied: what separated the dockets you would investigate from any docket you would judge or refer?";
+  "In no more than 50 words, state the decision rule you applied: what separated the cases you would investigate from the cases you would judge or refer?";
 export const PROOF_FINAL_MAX_WORDS = 50;
 
 export const PROOF_TRANSFER =
-  "Take the docket whose institution you trusted least. Name one structural change that would make its judgment defensible, and say which property it repairs: independence, competence, accountability, authority, or access.";
+  "Take the case whose institution you trusted least. Name one structural change that would make its judgment defensible, and state which property the change repairs: independence, competence, accountability, authority, or access.";

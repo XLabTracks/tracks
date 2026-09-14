@@ -1,9 +1,8 @@
 /**
  * A reader-controlled text scale for the Verification course.
  *
- * Palette and type size are deliberately separate preferences. High contrast
- * remains a one-click low-vision preset when no size has been chosen, while an
- * explicit Aa choice always wins and follows the learner between lessons.
+ * Palette and type size are separate preferences. An explicit Aa choice
+ * follows the learner between lessons.
  */
 
 export const TEXT_SCALE_STORAGE_KEY = "xlab-verification-text-scale";
@@ -13,7 +12,6 @@ export const TEXT_SCALE_OPTIONS = [100, 125, 150, 175, 200] as const;
 export type TextScale = (typeof TEXT_SCALE_OPTIONS)[number];
 
 export const DEFAULT_TEXT_SCALE: TextScale = 100;
-export const CONTRAST_TEXT_SCALE: TextScale = 200;
 
 export function parseTextScale(value: unknown): TextScale | null {
   const number = typeof value === "number" ? value : Number(value);
@@ -36,12 +34,7 @@ export function readStoredTextScale(): TextScale | null {
 
 export function effectiveTextScale(): TextScale {
   const root = document.documentElement;
-  const explicit = parseTextScale(root.dataset.textScale);
-  if (explicit) return explicit;
-  return root.dataset.theme === "contrast" ||
-    root.classList.contains("contrast")
-    ? CONTRAST_TEXT_SCALE
-    : DEFAULT_TEXT_SCALE;
+  return parseTextScale(root.dataset.textScale) ?? DEFAULT_TEXT_SCALE;
 }
 
 export function applyTextScale(
@@ -77,7 +70,7 @@ export function subscribeTextScale(onChange: () => void): () => void {
   const observer = new MutationObserver(onChange);
   observer.observe(document.documentElement, {
     attributes: true,
-    attributeFilter: ["data-text-scale", "data-theme", "class"],
+    attributeFilter: ["data-text-scale", "class"],
   });
   return () => observer.disconnect();
 }

@@ -41,7 +41,7 @@ export function WhatDoTheySay() {
                 <p className="text-foreground truncate text-sm font-semibold">
                   {f.name}
                 </p>
-                <p className="text-muted-foreground truncate text-xs">
+                <p className="text-muted-foreground text-2xs">
                   {f.role}
                 </p>
               </div>
@@ -71,10 +71,10 @@ export function WhatDoTheySay() {
                 <div className="flex items-center gap-4">
                   <Avatar figure={active} className="size-16 text-lg" />
                   <div className="min-w-0">
-                    <DialogTitle className="text-lg">
+                    <DialogTitle className="text-sm">
                       {active.name}
                     </DialogTitle>
-                    <p className="text-muted-foreground text-sm">
+                    <p className="text-muted-foreground text-xs">
                       {active.role}
                     </p>
                   </div>

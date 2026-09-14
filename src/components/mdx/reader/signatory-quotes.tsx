@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
@@ -8,35 +7,27 @@ import { cn } from "@/lib/utils";
  * `SourceQuote` puts the work first and the speaker last, which is right when
  * each passage comes from a different place. It reads badly for a signed open
  * letter: the same title and link repeat above every card, and the person who
- * actually said the words arrives last. Here the speaker is the card header —
- * face, name, role, then their words — and the work is named once, at the foot
- * of the block. Attribution still precedes the words, which is the invariant
- * that matters; only the source citation moved.
+ * actually said the words arrives last. Here the speaker is the card header
+ * (face, name, role, then their words); the work itself is named and linked in
+ * the lesson prose that introduces the block, which also puts it in the Works
+ * cited appendix. The block's own footer carries only the portrait credit
+ * (owner, 2026-08-20: no source line under the cards), at the small credit
+ * size a citation takes.
  *
- * Use it only when every quote really is from one source. Two sources means
- * two blocks, or `SourceQuote` — never one footer standing in for both.
- *
- * Reproduce only what a source's terms allow, and record the terms in a
- * comment above the lesson's use of this.
+ * Use it only when every quote really is from one source, and make sure the
+ * surrounding prose names that source. Reproduce only what a source's terms
+ * allow, and record the terms in a comment above the lesson's use of this.
  *
  * Trap: this renders inside `not-prose`, so a quotation's own paragraph breaks
- * have no margin of their own — the sibling rule below is what keeps a
+ * have no margin of their own; the sibling rule below is what keeps a
  * two-paragraph comment from running together.
  */
 export function SignatoryQuotes({
-  t,
-  url,
-  what,
   credit,
   creditHref,
   creditNote,
   children,
 }: {
-  /** The work every quote comes from. */
-  t: string;
-  url?: string;
-  /** What these are within it — "signatory comments". */
-  what?: string;
   /**
    * Portrait credit, when a card carries a photo somebody else owns. It is a
    * prop rather than an `<a>` written into the lesson because a literal anchor
@@ -52,39 +43,23 @@ export function SignatoryQuotes({
   return (
     <figure className="not-prose my-6">
       <div className="grid gap-3 sm:grid-cols-2">{children}</div>
-      <figcaption className="text-muted-foreground mt-3 text-xs">
-        {url ? (
-          <a
-            href={url}
-            target="_blank"
-            rel="noopener"
-            className="text-brand-ink inline-flex items-center gap-1 font-medium underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:outline-none"
-          >
-            {t}
-            <ArrowRight className="size-3 select-none" aria-hidden />
-          </a>
-        ) : (
-          <span className="text-foreground font-medium">{t}</span>
-        )}
-        {what ? <span> — {what}</span> : null}
-        {credit ? (
-          <span className="mt-1 block">
-            {creditHref ? (
-              <a
-                href={creditHref}
-                target="_blank"
-                rel="noopener"
-                className="underline underline-offset-2 hover:no-underline"
-              >
-                {credit}
-              </a>
-            ) : (
-              credit
-            )}
-            {creditNote ? <span>. {creditNote}</span> : null}
-          </span>
-        ) : null}
-      </figcaption>
+      {credit ? (
+        <figcaption className="text-muted-foreground mt-3 text-3xs">
+          {creditHref ? (
+            <a
+              href={creditHref}
+              target="_blank"
+              rel="noopener"
+              className="underline underline-offset-2 hover:no-underline"
+            >
+              {credit}
+            </a>
+          ) : (
+            credit
+          )}
+          {creditNote ? <span>. {creditNote}</span> : null}
+        </figcaption>
+      ) : null}
     </figure>
   );
 }

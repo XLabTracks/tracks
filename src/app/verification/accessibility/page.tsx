@@ -14,7 +14,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Accessibility",
   description:
-    "How the Verification course handles themes, contrast, colour, motion, keyboard use and reading length — and what is still missing.",
+    "How the Verification course handles themes, colour, motion, keyboard use and reading length — and what is still missing.",
 };
 
 const CONTACT = "mailto:xlab-info@uchicago.edu";
@@ -43,23 +43,16 @@ export default function Page() {
           <div className="prose">
             <h2>Theme and text size</h2>
             <p>
-              Day, night, and high contrast with larger text. The switch sits in
-              the header on every page and the choice is remembered on your
-              device, so you set it once.
+              Day and night. The switch sits in the header on every page and
+              the choice is remembered on your device, so you set it once.
             </p>
             <p>
               The Aa menu offers text at 100%, 125%, 150%, 175%, or 200% and
-              remembers that choice too. High contrast opens at 200% until you
-              choose another size in Aa; after that, your explicit text-size
-              choice takes priority.
+              remembers that choice too.
             </p>
             <p>
-              High contrast is never inferred from your system settings — a
-              system set to dark mode gets the night theme, not the
-              high-contrast one, because those are different needs and guessing
-              between them is how people end up with a display mode they did not
-              ask for. Your choices are read and applied before the page paints,
-              so it never flashes the wrong ground or text size at you first.
+              Your choices are read and applied before the page paints, so it
+              never flashes the wrong ground or text size at you first.
             </p>
             <p>
               All three themes are one set of colour names solved three times
@@ -77,7 +70,7 @@ export default function Page() {
             </p>
             <p>
               Text is set to clear a 4.5:1 contrast ratio against the surface it
-              sits on, in each of the three themes.
+              sits on, in both themes.
             </p>
 
             <h2>Motion</h2>
@@ -92,9 +85,8 @@ export default function Page() {
             <p>
               A skip link is the first thing on every page, so a keyboard or
               screen-reader user can jump past the header to the content. Focus
-              is always visible, with a heavier outline on the high-contrast
-              theme, because a focus ring that exists but cannot be found is not
-              a focus ring.
+              is always visible, because a focus ring that exists but cannot be
+              found is not a focus ring.
             </p>
             <p>
               The interactive exercises drag things into places, and every one

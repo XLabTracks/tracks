@@ -12,7 +12,7 @@ deliverable_type: spec
 mentor: recommended
 audience: The regulator writing a security condition, and the lab that has to pass an audit against it.
 skills: [security requirement design, threat tiering, auditability analysis, cost-of-compliance analysis]
-prerequisites: [Verification 2.4 — the human layer, Verification 3 — covert development, Verification 4.1 — feasibility and layering]
+prerequisites: [Verification 2.4 — human evidence, Verification 3 — covert development, Verification 4.1 — feasibility and layering]
 sources:
   - "[Open Problems in Technical AI Governance — Reuel et al. (2025), security questions: what infrastructure-level cybersecurity measures protect model weights from theft; how can models be protected from inference attacks reproducing weights](https://arxiv.org/abs/2407.14981)"
 updated: 2026-08-04

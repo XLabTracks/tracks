@@ -1,8 +1,73 @@
 "use client";
 
-import { Component, type ReactNode, useState } from "react";
+import {
+  Component,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
+/**
+ * A demo's drawing is a fixed canvas, so on a narrow screen it scrolls rather
+ * than shrinks.
+ *
+ * House idiom is an inline SVG with `w-full h-auto` over a viewBox of 560-720
+ * units. That is right on a monitor and wrong on a phone: the SVG scales to
+ * whatever column it is given, and every label scales with it. In a 324px
+ * lesson column the scale is 0.45-0.58, which put `cross-episode-collusion`'s
+ * labels on screen at 4.1px and its largest type at 5.4px. Nothing in the
+ * demo is misconfigured — the canvas is simply being asked to be smaller than
+ * its own type can survive.
+ *
+ * So the canvas keeps its natural width and the box scrolls, which is what
+ * this repo already does for a wide table and for the actor board. Sizing is
+ * read off each SVG's own viewBox: no demo has to declare anything, and on a
+ * wide screen the min-width is below the available width and changes nothing.
+ * Icons are left alone (a lucide glyph is a 24-unit viewBox), and a demo that
+ * has already made itself scrollable is not wrapped twice.
+ */
+const CANVAS_MIN_VIEWBOX = 360;
+const CANVAS_MAX_WIDTH = 760;
+/* Mild shrink is fine and scrolling for it would be worse than the shrink:
+   a 720-unit canvas in a 718px column is scale 0.997, and forcing a scrollbar
+   there would be a regression, not a fix. Only step in once the canvas is
+   being squeezed past this fraction of its natural width. */
+const CANVAS_SHRINK_FLOOR = 0.9;
+
+function useScrollableCanvas() {
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  const fit = useCallback(() => {
+    const host = ref.current;
+    if (!host || !host.clientWidth) return;
+    for (const node of host.querySelectorAll("svg[viewBox]")) {
+      const svg = node as SVGSVGElement;
+      const width = svg.viewBox?.baseVal?.width ?? 0;
+      if (width < CANVAS_MIN_VIEWBOX) continue;
+      if (svg.closest("[data-scrolls]") !== host) continue;
+      const natural = Math.min(width, CANVAS_MAX_WIDTH);
+      svg.style.minWidth =
+        host.clientWidth < natural * CANVAS_SHRINK_FLOOR ? `${natural}px` : "";
+    }
+  }, []);
+
+  // After every render, so a demo remounted by Reset is sized too.
+  useEffect(fit);
+  // And again when the column itself changes width (rotation, resize).
+  useEffect(() => {
+    const host = ref.current;
+    if (!host || typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(fit);
+    observer.observe(host);
+    return () => observer.disconnect();
+  }, [fit]);
+
+  return ref;
+}
 
 class DemoErrorBoundary extends Component<
   { children: ReactNode },
@@ -40,6 +105,7 @@ export function ChromelessDemo({
   children: ReactNode;
 }) {
   const [resetKey, setResetKey] = useState(0);
+  const canvas = useScrollableCanvas();
   return (
     <div className="not-prose my-6">
       {showReset && (
@@ -54,7 +120,9 @@ export function ChromelessDemo({
           </Button>
         </div>
       )}
-      <DemoErrorBoundary key={resetKey}>{children}</DemoErrorBoundary>
+      <div ref={canvas} data-scrolls className="overflow-x-auto">
+        <DemoErrorBoundary key={resetKey}>{children}</DemoErrorBoundary>
+      </div>
     </div>
   );
 }
@@ -74,6 +142,7 @@ export function DemoFrame({
   children,
 }: DemoFrameProps) {
   const [resetKey, setResetKey] = useState(0);
+  const canvas = useScrollableCanvas();
   return (
     <div className="not-prose border-border bg-card shadow-soft my-6 overflow-hidden rounded-xl border">
       <div className="border-border bg-muted/30 flex items-start justify-between gap-3 border-b px-4 py-3">
@@ -94,7 +163,7 @@ export function DemoFrame({
           </Button>
         )}
       </div>
-      <div className="p-4">
+      <div ref={canvas} data-scrolls className="overflow-x-auto p-4">
         <DemoErrorBoundary key={resetKey}>{children}</DemoErrorBoundary>
       </div>
     </div>

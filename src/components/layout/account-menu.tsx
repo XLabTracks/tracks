@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LogOut } from "lucide-react";
 import { useAuth } from "@workos-inc/authkit-nextjs/components";
+import { flushAccountSync, forgetDevice } from "@/lib/verification/device-storage";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -91,7 +92,17 @@ export function AccountMenu() {
           <Link href="/classrooms">My classrooms</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => signOut()}>
+        {/* Sign-out order matters: push what this tab still holds, then
+            take every piece of learner work off the device, then end the
+            session — so the next person at this keyboard sees nothing of
+            this account, and nothing of theirs is later pushed into it. */}
+        <DropdownMenuItem
+          onClick={async () => {
+            await flushAccountSync();
+            forgetDevice();
+            await signOut();
+          }}
+        >
           <LogOut className="mr-2 size-4" aria-hidden /> Sign out
         </DropdownMenuItem>
       </DropdownMenuContent>

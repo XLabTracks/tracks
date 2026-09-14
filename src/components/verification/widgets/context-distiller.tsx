@@ -40,6 +40,7 @@ import {
   type DistillerRun,
 } from "@/lib/verification/engines/context-distiller";
 import type { VerificationWidgetProps } from "../kit/types";
+import { readStored, removeStored, writeStored } from "@/components/verification/kit/stored";
 
 const CURRENT_KEY = "distiller-v2-current";
 const runKey = (reportId: string) => `distiller-v2-${reportId}`;
@@ -61,7 +62,7 @@ export function ContextDistiller({ onComplete }: VerificationWidgetProps) {
   useEffect(() => {
     let saved: string | null = null;
     try {
-      saved = localStorage.getItem(CURRENT_KEY);
+      saved = JSON.parse(readStored(CURRENT_KEY) ?? "null");
     } catch {
     }
     queueMicrotask(() => {
@@ -78,7 +79,7 @@ export function ContextDistiller({ onComplete }: VerificationWidgetProps) {
     const seed = (Date.now() % 100000) | 0;
     let loaded: DistillerRun | null = null;
     try {
-      const raw = localStorage.getItem(runKey(report.id));
+      const raw = readStored(runKey(report.id));
       if (raw) loaded = sanitizeRun(JSON.parse(raw), index, seed);
     } catch {
     }
@@ -92,7 +93,7 @@ export function ContextDistiller({ onComplete }: VerificationWidgetProps) {
     (next: DistillerRun) => {
       if (!report) return;
       try {
-        localStorage.setItem(runKey(report.id), JSON.stringify(next));
+        writeStored(runKey(report.id), JSON.stringify(next));
       } catch {
       }
     },
@@ -115,7 +116,7 @@ export function ContextDistiller({ onComplete }: VerificationWidgetProps) {
   const pickReport = useCallback((id: string) => {
     setReportId(id);
     try {
-      localStorage.setItem(CURRENT_KEY, id);
+      writeStored(CURRENT_KEY, JSON.stringify(id));
     } catch {
     }
   }, []);
@@ -123,7 +124,7 @@ export function ContextDistiller({ onComplete }: VerificationWidgetProps) {
   const leaveReport = useCallback(() => {
     setReportId(null);
     try {
-      localStorage.removeItem(CURRENT_KEY);
+      removeStored(CURRENT_KEY);
     } catch {
     }
   }, []);

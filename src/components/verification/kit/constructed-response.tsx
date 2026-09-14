@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { SteelmanDeck } from "./steelman-deck";
 import { writingArea, writingCardFocus } from "./writing-surface";
 import { cn } from "@/lib/utils";
+import { readStored, writeStored } from "@/components/verification/kit/stored";
 
 export interface ConstructedField {
   id: string;
@@ -61,7 +62,7 @@ export function ConstructedResponse({
   useEffect(() => {
     let restored = EMPTY;
     try {
-      const raw = localStorage.getItem(storageKey);
+      const raw = readStored(storageKey);
       if (raw) {
         const box = JSON.parse(raw) as Partial<Saved>;
         const values: Record<string, string> = {};
@@ -83,7 +84,7 @@ export function ConstructedResponse({
     (next: Saved) => {
       setSaved(next);
       try {
-        localStorage.setItem(storageKey, JSON.stringify(next));
+        writeStored(storageKey, JSON.stringify(next));
       } catch {
       }
     },

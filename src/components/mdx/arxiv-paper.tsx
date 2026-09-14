@@ -173,7 +173,61 @@ async function ArxivSectionLoader({
   );
 }
 
-function extractSection(
+/**
+ * Where a boundary section starts, by id and then by landmark class.
+ *
+ * The id is the normal answer and nine of the ten committed artifacts have
+ * one for every landmark. The tenth does not, and the reason is upstream:
+ * `stampLandmarkIds` walks only the ROOT'S top-level children — deliberately,
+ * because split-paper slices at these offsets and that is only safe for
+ * elements nobody has nested — and in arXiv:2403.08501 the whole
+ * bibliography sits inside a passthrough wrapper for an unrecognised LaTeX
+ * environment (`<div class="environment CJK*">`). One level down, so it is
+ * never stamped, never in the toc, and `sectionEnd="ax-references"` — correct
+ * authoring, working on every other paper — resolved to nothing and printed
+ * "Section not found in the pinned paper." to the reader on main.
+ *
+ * The section is in the document either way; only its id is missing. So the
+ * class is the fallback, and it is a fallback rather than the rule because an
+ * id is unique and a class is not: the id wins wherever the converter
+ * assigned one, and this only reaches papers where it did not.
+ *
+ * This does NOT fix the converter, and it is not meant to. Doing that means
+ * bumping CONVERTER_VERSION and rebuilding every artifact in the same commit,
+ * which renumbers anchors and sentence indices and would put every `snippet`
+ * tripwire in the course in play — see docs/verification/module-1-log.md for
+ * where that is recorded as an open decision.
+ */
+function boundaryOffset(html: string, id: string): number {
+  const byId = sectionStartOffset(html, id);
+  if (byId !== -1) return byId;
+  if (!id.startsWith("ax-")) return -1;
+  const byClass = new RegExp(
+    `<section[^>]*\\sclass="[^"]*\\b${id}\\b[^"]*"`,
+  ).exec(html);
+  if (!byClass) return -1;
+
+  // CUT BEFORE THE WRAPPER, NOT INSIDE IT. The only reason this path runs is
+  // that the landmark is nested, so slicing at the <section> itself keeps the
+  // wrapper's opening tag — for 2403.08501 that is
+  // `<div class="environment CJK*">UTF8gbsn<br>`, which ends the reading slot
+  // on an unclosed div and a stray "UTF8gbsn" that is really a LaTeX argument
+  // the converter passed through as text.
+  //
+  // The last CLOSING tag before the landmark is where the enclosing content
+  // actually ended, so everything between it and the landmark is wrapper. It
+  // costs nothing when there is no wrapper: then the closing tag is the
+  // previous sibling's, which is exactly where the slice would have ended
+  // anyway.
+  const lastClose = html.lastIndexOf("</", byClass.index);
+  if (lastClose === -1) return byClass.index;
+  const closeEnd = html.indexOf(">", lastClose);
+  return closeEnd === -1 || closeEnd > byClass.index
+    ? byClass.index
+    : closeEnd + 1;
+}
+
+export function extractSection(
   paper: ConvertedPaper,
   section: string,
   sectionEnd?: string,
@@ -184,7 +238,7 @@ function extractSection(
   if (start === -1) return null;
 
   if (sectionEnd) {
-    const explicitEnd = sectionStartOffset(paper.html, sectionEnd);
+    const explicitEnd = boundaryOffset(paper.html, sectionEnd);
     if (explicitEnd === -1 || explicitEnd <= start) return null;
     return paper.html.slice(start, explicitEnd);
   }

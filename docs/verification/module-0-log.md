@@ -899,3 +899,166 @@ borders the new structure actually draws; the primary rule keeps its own
 width there, where it carries the structure. Driven on day and night
 themes at 2x; an ordinary markdown table checked beside it to confirm the
 shared treatment is untouched.
+
+## 2026-09-01 — three module-0 fixes ported from the shared verification branch
+
+All three were built on the shared branch on 2026-08-20 (its "Module 0 edits
+from the owner, and two new house rules" entry) and never crossed to main,
+which kept serving the older designs.
+
+- **Signatory cards lose the source line at the foot** (owner, 2026-08-20: no
+  source line under the cards). The block's footer now carries only the
+  portrait credit, at the small credit size; the work is named and linked in
+  the lesson prose that introduces the block, which is also what keeps it in
+  the Works cited appendix. `introduction.mdx` drops the tag's `t`/`url`/
+  `what` props accordingly — the prose two paragraphs up already links
+  Pacing the Frontier.
+- **what-do-they-say typography comes down to the sizes the owner asked for**
+  (2026-08-20): the card's role line moves to the 2xs micro-label step and
+  wraps instead of truncating, and the dialog's name/role pair drops a step
+  (title text-sm, role text-xs).
+- **prevention.mdx loses its last four em dashes**, per the standing
+  no-em-dash rule; the sweep had happened on the branch only.
+
+## 2026-09-01 — the em-dash removal is reversed, on the owner's ruling
+
+The last bullet of the entry above is cancelled. Course owner, same day:
+*"i want everything to be grammatically correct changing em dashes should be
+stylistic choice not feature."* Em dashes are correct grammar; taking one out
+is a per-sentence stylistic choice made while editing that sentence, never a
+rule to sweep a file with. The 2026-08-20 no-em-dash rule (a shared-branch
+CLAUDE.md rule; it was never in main's) is void.
+
+`prevention.mdx` gets its two sentences back as first written — "public
+perception—or lack thereof—" and "exponentially increasing—and we are
+notoriously terrible". The wider sweep this bullet was the main-side edge of
+had happened on the 2.3 preview branch, and is reversed there in the same
+ruling (its module-2 log carries that entry).
+
+## 2026-09-01 — the reading-settings panel could open off screen, locking the text size
+
+Owner, with a screenshot at 200% text: the panel showed only its Focus
+reading tail below the header, and the text-size slider was unreachable — a
+reader who had enlarged the text had no way back. The focus panel positions
+`sm:absolute sm:top-9` against the nearest positioned ancestor; the parts
+reader's control row is `relative` and its comment says that is the anchor,
+but `ReadingSurface`'s row (the live, unchunked reader) was not, so the
+panel resolved against the page column: measured 281px above its own button
+at rest, and fully above the viewport once the reader had scrolled — which
+at 200% they have. One class (`relative` on the row) makes the row the
+anchor, as in the parts reader. Verified with Playwright at 200%: slider on
+screen under the button, arrow keys walk the scale back down.
+
+## 2026-09-03 — learner work lives in the account; the device is wiped on sign-out
+
+Course owner: save all of it through the account, not the device, so that
+signing out never leaves a device showing somebody's long text. Two halves,
+platform-wide:
+
+1. Every app widget that kept its state in `localStorage` (the `v-*` keys,
+   the drill decks, the workspaces, the marking keys, the context distiller,
+   the reader marks) now reads and writes through one shim,
+   `src/components/verification/kit/stored.ts`, which stamps the key and
+   announces the write; `sync.js` composes those keys into a sixth store,
+   `widgets`, in the account document and merges it key by key on both
+   ends (`state-document.ts`; nine new tests). Nothing changed in any
+   widget's own parsing or shape — the change is the storage call — so no
+   stored value needed migrating. Notebook, memo drafts, highlights,
+   progress and the Field Map were already synced by `sync.js`.
+2. `src/lib/verification/device-storage.ts` keys the device to one account
+   (`tracks:account`) and purges every learner-work key when the account
+   changes or is gone; `AccountStorageGuard` runs it on every page from
+   `AppHeader`, and Sign out flushes the sync, purges, then ends the session.
+   `sync.js` waits for the guard so the old account's local copies can never
+   be adopted into, or pushed from, the new one — which was a live
+   cross-account leak before, not only a display problem: with A's newer
+   local memo on the device, B's sign-in would have pushed A's draft into
+   B's account. Preferences stay on the device; the list of what counts as
+   learner work is `isLearnerWorkKey`.
+
+Not done, and named: the Control track's threat bench (`bench:*`) and the
+papers' gate responses (`xlab-sec-*`) are purged on sign-out but are not yet
+carried to the account; they are outside the Verification document and
+would need the same shim plus a store of their own. The signed-in
+end-to-end path (write, sign out, sign in on another device) was not
+exercised in the build sandbox, which has no database; the merge logic is
+unit-tested and the device half is unit-tested against a fake storage.
+
+Addendum, same day: when the guard purges on page load (a session that
+expired, or an account that changed without the Sign out button), it reloads
+the page once. The legacy scripts read their stores into memory as they
+load, and notebook.js loads before the guard's effect runs, so without the
+reload the panel could show the purged text until the next navigation. The
+reload cannot loop: a purge only happens on a marker mismatch, and the
+marker is reconciled before the reload.
+
+## 2026-09-03 — peer review removed from the course's written outputs
+
+Owner: stop adding "goes through peer review" to tasks; the course is
+self-paced. Removed everywhere, not only from the 2.3 memo where it had
+been added: the `peerReviewed` field is gone from `memos.ts` and the
+generated `memos.js`; the memo card no longer prints "Goes through peer
+review" and its criteria eyebrow reads "Judged on"; the desk's rail says
+"Judge the draft on the outline's criteria for this slot" and its
+no-checks note names the slot's criteria; the About page no longer says
+outputs are put through peer review; the module 3 gap text and the 4.1
+criteria line lose the phrase. Criteria stay: they are what the writer
+judges their own draft on.
+
+## 0.1 — the verification-problem widget cut to the owner's four answers (2026-09-08)
+
+The owner's instruction: a simple open-each interactive carrying nothing
+beyond her own text. The widget is now four disclosures on the platform's
+Accordion, each headed by her question (Trust? / Punish violations? /
+Mutual transparency? / Neutral, privacy-preserving verification
+mechanisms?) and opening to her paragraph verbatim. Gone: the eyebrow,
+title, lede and prompt card, the "Option 01" labels and one-line summaries,
+the "It collapses"-style outcomes with their Failure mode / The answer
+that holds framing, the Inspected marks, and the "Test this answer" links.
+The data file keeps only id, question and detail.
+Then, on the owner's next instruction, the verdict marks return without
+words: once a row has been opened, 1–3 carry a red X and their question is
+struck through, and 4 carries a green checked box; the marks persist after
+the row is closed. `holds` is back in the data for that one distinction.
+
+## 2026-09-12 — 0.1: The Future Society card before the field map
+
+Owner's instruction: a card for the organization's international AI
+verification page, in the paragraph before the landscape map, at the end of
+"What has AI verification looked like so far?".
+
+The card carries the link, the title as the page's own URL names it, and the
+organization. It carries no description of the page's contents, because the
+page could not be read from here: thefuturesociety.org answers every
+datacenter request with a CAPTCHA redirect (direct, through a text relay,
+and through a real headless browser alike), the Wayback Machine has no
+snapshot, and no search index would return one. The URL therefore went into
+the citations registry's `pending` list rather than getting an invented
+entry, so the lesson's appendix counts it as awaiting verification instead
+of printing facts nobody checked. Owner: send the page's real title and a
+line on what it is, and both the card and the registry entry can be
+finished.
+
+### Part-by-part reading restored, with a progress bar (2026-09-13)
+
+The owner: "add the part-by-part section reading back, ADHD-friendly
+progress bar, to each submodule in the modules of Verification only".
+`chunkedReading` is on again for the track; the Control track is untouched.
+What came back with it is exactly what left on 2026-08-15: the whole-lesson
+toggle, `?p=` deep links, the reader-toolbar estimate line, and the Scher
+treaty paper reading by its authored sections. What is new is the bar —
+`PartsProgress`, one segment per page filled up to the one on screen, with
+"Part n of m · label" and the count still to go, shared by the lesson and
+paper readers. The paged host now carries `data-reading-surface`, so the Aa
+text-size editor keeps scoping to the reading as it does on the plain layout.
+
+Breaks were authored, per `reading-pages.md`, in the lessons that had none
+and had more than one learner action in them — 29 markers across 19 lessons,
+each placed before a heading that opens a new question, a source packet, or
+an exercise after its explanation. Lessons with a single action (`cloud-
+evidence`, `scoping-actors`, `capstone-project`, `human-intro`, `mechanism-
+privacy`, `prevention`, `capstone-together`, `cloud-customer-identification`
+whose opener is thirty words) read whole; 0.0, 0.4 and 4.1.1 keep their
+`unchunked` opt-out. The empty-page problem that ended the first regime is
+guarded by the same rule: a break goes before content, never before an
+optional fold on its own.

@@ -1,53 +1,42 @@
 import type { Metadata } from "next";
-import { LegacyScripts } from "@/components/verification/legacy-scripts";
+import { SkillMapHost } from "@/components/verification/skill-map-host";
 
 /* Skill map — one of the course's own pages.
  *
  * It was a hand-written .html file under public/verification/ until the two
  * halves were folded together: a page served outside the app has no session,
  * so it could only ask an API whether somebody was signed in and never show
- * them their own account. The markup is unchanged; the behaviour is still
- * map's scripts, loaded in order by LegacyScripts. */
+ * them their own account. The figure is the home page's skill web — the
+ * same markup, drawn by the same skill-web.js — and map.js adds progress,
+ * unit links and the panel's chips on top. The notebook carries the same
+ * map in its Skill Map view, which is where the header used to send people;
+ * this page stays as the full-width edition and the deep-link target
+ * (?skill=, ?unit= from the completion toast). */
 
-export const metadata: Metadata = { title: "Skill map" };
-
-const SCRIPTS = ["data/course.js", "data/skills.js", "data/chrome.js", "platform.js", "map.js"];
+export const metadata: Metadata = { title: "Skill Map" };
 
 export default function Page() {
   return (
     <>
       <link rel="stylesheet" href="/verification/platform.css" precedence="high" />
       <link rel="stylesheet" href="/verification/page.css" precedence="high" />
+      <link rel="stylesheet" href="/verification/skill-web.css" precedence="high" />
       <link rel="stylesheet" href="/verification/map.css" precedence="high" />
       <main className="page page-wide">
-        <nav className="crumbs" aria-label="Breadcrumb"><a href="/verification/landing">Home</a> / Skill map</nav>
+        <nav className="crumbs" aria-label="Breadcrumb"><a href="/verification/landing">Home</a> / Skill Map</nav>
 
         <header className="map-head">
           <div>
-            <h1>Skill map</h1>
-            <p className="sub">Thirty-one skills, and the units that advance each one.
-              Every node is visible from day one; only the filling is earned.</p>
-          </div>
-          <div className="map-controls">
-            <div className="progress-row">
-              <span className="meter"><i data-bar></i></span>
-              <span className="counter" data-count></span>
-            </div>
+            <h1>Skill Map</h1>
+            <p className="sub">Here is the skill map with your current progress. Click each
+              skill to read its description, the relevant parts of the curriculum, and its
+              dependencies. The ring around each skill fills as you complete the units
+              that feed it.</p>
           </div>
         </header>
 
-        <div className="lo-row" data-los aria-label="Learning objectives"></div>
-
-        <div className="map-body">
-          <div className="map-canvas" data-canvas>
-            <svg data-edges aria-hidden="true"></svg>
-            <div data-bands></div>
-          </div>
-          <aside className="node-card" data-card aria-live="polite"></aside>
-        </div>
-
+        <SkillMapHost />
       </main>
-      <LegacyScripts src={SCRIPTS} />
     </>
   );
 }

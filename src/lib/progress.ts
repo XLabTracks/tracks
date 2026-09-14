@@ -1,6 +1,7 @@
 import { cache } from "react";
 import type { SubmissionKind } from "@prisma/client";
 import { prisma } from "@/lib/db";
+import { getCurrentUserOrSignedOut, type AppUser } from "@/lib/auth";
 import {
   getModuleProgressContentIds,
   getModulesForTrack,
@@ -178,3 +179,35 @@ export const getExerciseSubmissionMap = cache(async (userId: string) => {
   });
   return new Map(rows.map((r) => [r.contentId, r]));
 });
+
+export type ExerciseSubmissionMap = Awaited<
+  ReturnType<typeof getExerciseSubmissionMap>
+>;
+
+/**
+ * The reader's own exercise state for a page: the signed-in user (or null) and
+ * their submission map, with a failed read degrading to the signed-out view
+ * instead of throwing.
+ *
+ * Reading a lesson never needs the database — the body is static content, and
+ * the track pages guard every progress read for exactly that reason (see
+ * getCurrentUserOrSignedOut). The stateful `<Exercise/>`s inside the body were
+ * the hole in that design: they called the raw getCurrentUser(), whose
+ * cache()d rejection then rethrew at each of them, so one failed SELECT
+ * replaced a whole lesson with the error boundary for signed-in readers while
+ * signed-out ones read it fine. Degrading costs the saved answer and the
+ * ability to save a new one, not the lesson.
+ */
+export const getViewerSubmissions = cache(
+  async (): Promise<{
+    user: AppUser | null;
+    submissions: ExerciseSubmissionMap;
+  }> => {
+    const user = await getCurrentUserOrSignedOut();
+    if (!user) return { user: null, submissions: new Map() };
+    const submissions = await getExerciseSubmissionMap(user.id).catch(
+      (): ExerciseSubmissionMap => new Map(),
+    );
+    return { user, submissions };
+  },
+);

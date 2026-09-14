@@ -48,6 +48,25 @@ describe("the account sync", () => {
     expect(SYNC).toContain("vt-field-map-change");
   });
 
+  it("carries app widget state as a sixth store, merged key by key", () => {
+    expect(SYNC).toContain("name: 'widgets'");
+    expect(SYNC).toContain("vt-widget-stamps.v1");
+    expect(SYNC).toMatch(/addEventListener\('vt-widget-change'/);
+    expect(SYNC).toMatch(/adoptNewerWidgets/);
+    expect(read("src/components/verification/kit/stored.ts")).toContain("vt-widget-change");
+  });
+
+  it("waits for the account guard before adopting or pushing", () => {
+    expect(SYNC).toMatch(/whenAccountSettled\(\)[\s\S]*fetch\(URL_STATE/);
+    expect(SYNC).toContain("tracks-account-settled");
+    expect(read("src/components/layout/app-chrome.tsx")).toContain("AccountStorageGuard");
+    const menu = read("src/components/layout/account-menu.tsx");
+    const forget = menu.indexOf("forgetDevice()");
+    const out = menu.indexOf("signOut()");
+    expect(forget).toBeGreaterThan(-1);
+    expect(out).toBeGreaterThan(forget);
+  });
+
   it("compares and adopts every browser store independently", () => {
     expect(SYNC).toContain("version: 2");
     expect(SYNC).toContain("stamps");

@@ -52,7 +52,7 @@
      lesson it belongs to.
 
      These values must point at Verification's scale rather than restating it
-     in rem. High contrast re-solves every --fs-* step at 200%; fixed rem
+     in rem. The 200% text size re-solves every --fs-* step; fixed rem
      values left the entire React half of the course at its ordinary size
      while the static chrome doubled around it. Mapping the complete Tailwind
      scale here gives prose, widgets and page chrome one source of truth. */
@@ -151,7 +151,6 @@
   --text-3xs: 0.6875rem;
   --text-2xs: 0.75rem;
 }
-:root[data-theme="contrast"]:not([data-text-scale]),
 :root[data-text-scale="200"] [data-reading-surface] {
   --lv-13: 1.625rem;
   --lv-13_5: 1.6875rem;
@@ -200,44 +199,25 @@
 :root[data-theme] [class~="text-[17px]"] {
   font-size: var(--lv-17);
 }
-:root:is([data-theme="contrast"], .reader-enlarged) [class~="text-[0.95rem]"] {
+:root.reader-enlarged [class~="text-[0.95rem]"] {
   font-size: var(--fs-md);
 }
-:root:is([data-theme="contrast"], .reader-enlarged) [class~="text-[0.8rem]"] {
+:root.reader-enlarged [class~="text-[0.8rem]"] {
   font-size: var(--fs-sm);
-}
-
-/* A second channel for the one chart with six series, because in low-vision
-   mode there is no first channel: every module hue is white there, on purpose
-   — the palette collapses so that nothing is left encoded by colour. That is
-   right for a chip beside its own label and not enough for six lines crossing
-   each other, so the lines take dash patterns instead.
-
-   Day and night leave these unset, so the fallback `none` applies and the
-   hues do the work undashed. The patterns are ordered by how far apart they
-   read at a glance rather than by length, and the first series stays solid so
-   the busiest reading is five dashed lines and not six. */
-:root[data-theme="contrast"] {
-  --sh-dash-0: none;
-  --sh-dash-1: 12 6;
-  --sh-dash-2: 2 5;
-  --sh-dash-3: 18 5 2 5;
-  --sh-dash-4: 6 4;
-  --sh-dash-5: 1 4 10 4;
 }
 
 /* The same escape, in the app's own stylesheet: these rules predate the token
    scale and size in rem, so they held still while the page doubled around
    them. Sidenotes are the reading apparatus of a paper and the facilitator
    guide's small print carries its session timings — neither is decoration. */
-:root:is([data-theme="contrast"], .reader-enlarged)
+:root.reader-enlarged
   :is(.sidenote, .sidenote-inline, .fg-html small) {
   font-size: var(--fs-xs);
 }
-:root:is([data-theme="contrast"], .reader-enlarged) .fg-html .mt {
+:root.reader-enlarged .fg-html .mt {
   font-size: var(--fs-2xs);
 }
-:root:is([data-theme="contrast"], .reader-enlarged) .lesson-body pre {
+:root.reader-enlarged .lesson-body pre {
   font-size: var(--fs-xs);
 }
 :root[data-theme] .prose {
@@ -423,20 +403,20 @@
    and night; in low-vision mode the box follows its content and the few labels
    that cannot fit are allowed to make a clean second line instead of clipping
    or widening the page. */
-:root:is([data-theme="contrast"], .reader-large) [class~="group/button"] {
+:root.reader-large [class~="group/button"] {
   flex-shrink: 1;
   height: auto;
   max-width: 100%;
   min-height: 44px;
   white-space: normal;
 }
-:root:is([data-theme="contrast"], .reader-large)
+:root.reader-large
   [data-widget]
   :where(button, summary, [role="button"], [role="tab"], [role="radio"]) {
   height: auto;
   max-width: 100%;
 }
-:root:is([data-theme="contrast"], .reader-large)
+:root.reader-large
   :where(input:not([type="range"]), select, textarea) {
   height: auto;
 }
@@ -447,12 +427,12 @@
    chance to act. Focus reading also wraps each word in spans; applying the
    break to the reading subtree keeps those wrappers from restoring the same
    min-content floor inside lists and cards. */
-:root:is([data-theme="contrast"], .reader-large)
+:root.reader-large
   :where(.lesson-reader, .lesson-reader .lesson-body, main h1) {
   overflow-wrap: anywhere;
   word-break: break-word;
 }
-:root:is([data-theme="contrast"], .reader-large) main h1 {
+:root.reader-large main h1 {
   min-width: 0;
   max-width: 100%;
 }
@@ -460,12 +440,12 @@
 /* Truncation is a density choice for the ordinary interface, never a
    low-vision fallback. At 200% it was hiding names and descriptions in cards
    whose boxes otherwise had room to grow. */
-:root:is([data-theme="contrast"], .reader-large) [class~="truncate"] {
+:root.reader-large [class~="truncate"] {
   overflow: visible;
   text-overflow: clip;
   white-space: normal;
 }
-:root:is([data-theme="contrast"], .reader-large) [class~="line-clamp-2"] {
+:root.reader-large [class~="line-clamp-2"] {
   display: block;
   overflow: visible;
   -webkit-box-orient: initial;
@@ -566,13 +546,13 @@
    square cells are sized for 11px labels, however; keeping that geometry at
    24px clips the organisation names. Widen the grid and let each cell grow
    vertically while preserving the axes and the local scroll container. */
-:root:is([data-theme="contrast"], .reader-large)
+:root.reader-large
   .verification-landscape
   [role="grid"] {
   min-width: 1100px;
   grid-template-columns: minmax(220px, 1.15fr) repeat(4, minmax(200px, 1fr)) !important;
 }
-:root:is([data-theme="contrast"], .reader-large)
+:root.reader-large
   .verification-landscape
   [role="grid"]
   [class~="aspect-square"] {
@@ -587,7 +567,7 @@
    reading's word wrappers must not re-enable emergency word-breaking here;
    the local horizontal scroll is precisely what preserves the row/column
    relationship. */
-:root:is([data-theme="contrast"], .reader-large)
+:root.reader-large
   .lesson-body
   table
   :is(th, td) {
@@ -597,50 +577,13 @@
 }
 
 /* Converted arXiv tables can carry literal light zebra fills from the source.
-   They are harmless on the day ground and become white-on-near-white in the
-   two dark grounds. Rebuild the stripes from theme tokens; high contrast uses
-   rules rather than a second surface because its muted surface is black by
-   design. */
+   They are harmless on the day ground and become white-on-near-white on the
+   night ground. Rebuild the stripes from theme tokens. */
 :root[data-theme="dark"] .arxiv-paper tr:nth-child(odd) {
   background-color: var(--muted) !important;
 }
-:root[data-theme="dark"] .arxiv-paper tr:nth-child(even),
-:root[data-theme="contrast"] .arxiv-paper tr {
+:root[data-theme="dark"] .arxiv-paper tr:nth-child(even) {
   background-color: var(--background) !important;
-}
-
-/* The static side already draws its low-vision hairlines at 3px through
-   --hairline. The app's generic lesson-table rules predate that token and use
-   literal one-pixel rules, so lift the same structure here. */
-:root[data-theme="contrast"] .lesson-body table {
-  border-width: var(--hairline);
-}
-:root[data-theme="contrast"] .lesson-body thead th {
-  border-bottom-width: var(--hairline);
-}
-:root[data-theme="contrast"] .lesson-body tbody td {
-  border-top-width: var(--hairline);
-}
-/* The elements grid is a wrapper variant now (chrome on the div, the table
-   inside — same family as pair/trio/rubric), so the low-vision lift follows
-   the borders it actually draws: the wrapper's box, the interior verticals,
-   and the hairline row rules. The 2px --primary header rule stays its own
-   width — in this theme it carries the structure. */
-:root[data-theme="contrast"] .lesson-body .elements-grid {
-  border-width: var(--hairline);
-}
-:root[data-theme="contrast"] .lesson-body .elements-grid :is(th, td) + :is(th, td) {
-  border-left-width: var(--hairline);
-}
-:root[data-theme="contrast"] .lesson-body .elements-grid thead tr:first-child th,
-:root[data-theme="contrast"] .lesson-body .elements-grid tbody tr:not(:last-child) td {
-  border-bottom-width: var(--hairline);
-}
-:root[data-theme="contrast"] .arxiv-paper tr.ax-rule-top > :is(td, th) {
-  border-top-width: var(--hairline);
-}
-:root[data-theme="contrast"] .arxiv-paper tr.ax-rule-bottom > :is(td, th) {
-  border-bottom-width: var(--hairline);
 }
 
 /* In-lesson heading hierarchy, per the author (2026-08-12): an h3 subheading
@@ -1067,8 +1010,7 @@
    exercises, never the chrome. The blocks above re-solve --fs-* inside
    [data-reading-surface]; this rule hands the prose column the scaled base
    size (prose is otherwise a fixed 1rem at its root, immune to the tokens).
-   At 100% this is a no-op. Contrast's global 200% preset is untouched — that
-   one is a low-vision mode and scales the whole page on purpose. */
+   At 100% this is a no-op. */
 :root[data-theme] [data-reading-surface] .lesson-body {
   font-size: var(--fs-md);
 }

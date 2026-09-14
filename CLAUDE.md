@@ -474,6 +474,10 @@ add must reduce the duplication, never widen it.
   the course again. `status` is load-bearing: `specified` quotes the outline,
   `named` and `unspecified` must carry a `gap` saying what is missing, and
   filling one in yourself is a content decision that is not yours to make.
+  **No peer review anywhere in the course** (owner, 2026-09-03: it is
+  self-paced): no slot, card, desk rail or page says a draft goes through
+  peer review, and there is no `peerReviewed` field — criteria are what the
+  writer judges their own draft on.
 - **`verificationUnitOfLesson` in curriculum.ts is the join.** The static
   site and `data/skills.js` key on outline numbers (`0.1`, `2.3`); the graph
   keys on `v-<name>`. Several lessons may share one unit — module 0's seven
@@ -495,12 +499,32 @@ add must reduce the duplication, never widen it.
   are authored content, so they were kept rather than deleted. Either port
   them to React widgets under `src/components/verification/widgets/` or
   retire them deliberately — do not leave them drifting a third time.
-- **Learner state belongs to the account.** `VerificationState`
-  (`/api/verification/state`) holds completed unit ids and the notebook as one
-  JSON document per user; `localStorage` is the signed-out fallback and the
+- **Learner state belongs to the account, and the device is wiped on the
+  way out.** `VerificationState` (`/api/verification/state`) holds one JSON
+  document per user with six stores — progress, notebook, highlights, memo
+  drafts, the Field Map, and `widgets`, a map of every app widget's storage
+  key to `{ value, updatedAt }`, merged key by key
+  (`state-document.ts`). `localStorage` is the signed-out fallback and the
   offline cache, never the source of truth. Signed out returns 401 and the
   pages carry on — that is a supported mode, not an error, and must never be
-  reported as one. **The table needs
+  reported as one. Course owner, 2026-09-03: **no learner work may be
+  device-only**. A widget never calls `localStorage` for learner work; it
+  reads and writes through `src/components/verification/kit/stored.ts`
+  (`readStored`/`writeStored`/`removeStored`), which stamps the key in
+  `vt-widget-stamps.v1` and announces `vt-widget-change`, and `sync.js`
+  carries the stamped keys to the account as the `widgets` store (adopting
+  newer account copies with its one-per-tab reload). Preferences — theme,
+  text scale, reading mode, sidebar width, the `tracks:*` toggles — stay on
+  the device. `src/lib/verification/device-storage.ts` is the other half:
+  `AccountStorageGuard` (mounted in `AppHeader`, so on every page) keys the
+  device to one account under `tracks:account` and purges every learner-work
+  key when the account changes or the session is gone, and the account menu's
+  Sign out flushes the sync, purges, then ends the session — so the next
+  person at the keyboard sees nothing of the last one, and nothing of theirs
+  is pushed into the wrong account. `isLearnerWorkKey` is the list; a new
+  storage key for learner work is added there or it survives sign-out.
+  `sync.js` waits for the guard (`tracks-account-settled`) before it adopts
+  or pushes. **The table needs
   `db/migrations/20260805120000_verification_state.sql` applied with the admin
   role before any of this works.**
 - **A body may repeat its own title; the reader drops it.** The item page owns
@@ -516,17 +540,22 @@ add must reduce the duplication, never widen it.
   sources regressed on every new batch. A surviving `h1` renders as `h2` —
   the page owns the document's only h1. The breadcrumb stops at the module
   for the same reason.
+- **No Kaspersky sources in the Verification course** (course owner,
+  2026-09-03: "we will not touch Russian Kaspersky"). Do not cite, link, or
+  propose Kaspersky reports or blog posts, whatever the topic.
 - **Never invent curriculum.** Modules 0-2's prose is transcribed from the
   author's WIP outline, verbatim. Modules 3-4 are declared with real titles
   and no items until their prose is drafted — an empty module counts as
   complete, so they gate nothing. The outline's instructions to whoever
   finishes a section are kept but visibly marked as author notes, so they can
   never read as learner-facing prose.
-- **Part-by-part reading is OFF — the regime was deleted on the course
-  owner's instruction (2026-08-15, "delete this regime"): every lesson and
-  paper reads as one page.** `curriculum.ts` sets `chunkedReading: false`,
-  and that one flag is the whole switch. The machinery stays in the repo,
-  inert, for any track that ever wants it back, and this is its shape:
+- **Part-by-part reading is ON for Verification, with a progress bar.** It
+  was deleted on the course owner's instruction (2026-08-15, "delete this
+  regime") and brought back on their instruction (2026-09-13: "add the
+  part-by-part section reading back, ADHD-friendly progress bar, to each
+  submodule", Verification only). `curriculum.ts` sets
+  `chunkedReading: true`, and that one flag is the whole switch; the Control
+  track never set it and reads whole. The shape:
   `LessonPartsReader` (client) pages the rendered body at **authored
   `<PageBreak title="…"/>` markers only** — headings are deliberately not
   boundaries (the old adaptive h2/h3/h4 chunker separated prompts from their
@@ -534,7 +563,19 @@ add must reduce the duplication, never widen it.
   `planParts` in `src/lib/reading/lesson-parts.ts` (pure, tested;
   `MIN_PARTS = 2` — a lesson with fewer authored pages reads whole), with
   `?p=` deep links and a whole-lesson toggle persisted under
-  `vt-reading-mode`. Parts are hidden, never unmounted — embedded widgets
+  `vt-reading-mode`. **The progress bar is `PartsProgress`**
+  (`src/components/learn/parts-progress.tsx`), one component for the lesson
+  and paper readers: one segment per page filled up to the current one,
+  "Part n of m · label" and how many are left (`progressText`, tested). It
+  is not interactive — six-pixel segments cannot meet the tap-target floor —
+  and it is a rule with words on it, never a ring around a number. The
+  paged host carries `data-reading-surface` so the Aa text-size editor
+  scopes to it exactly as `ReadingSurface` does on the unchunked layout.
+  Authoring rule for breaks is `docs/verification/reading-pages.md`: one
+  page is one complete learner action, and a lesson too short to have two
+  of them (`cloud-evidence`, `scoping-actors`, `capstone-project`) simply
+  reads whole; `unchunked: true` opts a reference lesson out by hand.
+  Parts are hidden, never unmounted — embedded widgets
   hold live state — and in-page anchors into a hidden part reveal it before
   scrolling. Nothing auto-completes under a parts reader: Mark complete is
   the only completion channel (both the lesson and paper branches of the
@@ -542,10 +583,15 @@ add must reduce the duplication, never widen it.
   flag: long lessons carry real headings, not bold lines pretending (the
   scoping-actors/covert-\* repairs), and a wide table scrolls in its own box
   (`.lesson-body table` in globals.css), never the page.
-  **One pager, and it is shared** — `src/components/learn/reading-pager.tsx`.
-  Previous/Next roll into the neighbouring item at the ends, so the page
-  hands the reader its footer and drops `LessonNav`; one component serves
-  the lesson and paper readers so they cannot drift apart.
+  **Two pager tiers, and they are shared** —
+  `src/components/learn/reading-pager.tsx`. Course owner (2026-09-13): the
+  buttons that move within a submodule and the buttons that move between
+  submodules sit on different levels, never the same row. `PartPager` is
+  the light button row that steps through the item's pages and stops at
+  its ends; `ReadingPager`'s cards under it, labelled "Previous lesson" /
+  "Next lesson", only ever leave the item. The page hands the reader its
+  footer and drops `LessonNav`; one pair of components serves the lesson
+  and paper readers so they cannot drift apart.
   **Papers, when the flag is on, read the same way** — `PaperPartsReader`
   (`src/components/papers/`) chunks at the paper's OWN toc headings
   (`ax-sec-`/`sb-sec-`/`lw-sec-` ids), so an Article of a treaty is a page and
@@ -588,6 +634,25 @@ add must reduce the duplication, never widen it.
   798 it had been given. Guard on `[data-widget]` and NOT on `.not-prose`: a
   fold or a callout holding authored sentences is still reading, and exempting
   it widens that prose past the measure.
+- **The tap-target floor beats a utility `min-w-*`, so never size a widget
+  control with one.** `app-bridge.css` gives every control inside
+  `[data-widget]` `min-inline-size: 44px` under `(max-width: 720px), (pointer:
+  coarse)`. It is a logical property at higher specificity than a Tailwind
+  utility, so `min-w-[104px]` on a flex item computes to **44px** on a phone —
+  a floor silently acting as a ceiling. The pipeline chips in
+  `interactive-map` were laid out `min-w-[104px] flex-1`, so on a 390px phone
+  they resolved to 47px boxes holding words that need 65px, and every label
+  painted out over its neighbour. Size such a control with its **flex basis**
+  (`flex-[1_1_104px]`), which the floor does not touch and which makes the row
+  wrap instead of crushing: the tap-target rule is right and the layout has to
+  work with it.
+- **A control's instructions must not assume a mouse.** Copy that says
+  "Hover", "Click to pin", "Click a stage" is wrong on a phone, and a hover
+  card is worse than wrong there — a tap fires one synthetic mousemove, so it
+  raises a card the reader cannot scroll, dismiss, or fit on screen. Gate
+  hover affordances on `(hover: hover) and (pointer: fine)`, give the copy a
+  `…Touch` twin in the widget's data file, and make the tap do the thing the
+  click does. `interactive-map` is the reference for both halves.
 - **Optional material is marked one way: `Optional:` in front of the
   header.** Course owner, 2026-08-20 ("I like Optional: in header more than
   chip"). Muted weight, at the FRONT of the title, never a chip beside it,
@@ -632,6 +697,14 @@ rose`, or Okabe–Ito). Those read as stock AI slop against the maroon, which is
   lesson, bring its headings and its PageBreak titles (the part-strip labels)
   up to this rather than matching whatever mixed case sits nearby. Module 2.4
   is conformed; sweep others as they are edited.
+- **Never frame a section by its item count.** Course owner (2026-09-08, the
+  2.3.1 edit document): headings and lead-ins like "Four Things Open Sources
+  Do", "Three limits recur", "Four rules from the literature" are forbidden —
+  how many items an arbitrary categorization yields carries no information,
+  and the count goes stale the moment the list is edited. Name the thing
+  itself ("Open Source Contributions to Verifiability") and let the list be
+  as long as it is. Ordered-list markers are fine; prose or headings that
+  announce the number are not. Sweep these out of a lesson as it is edited.
 
 Traps that cost time already, so they are written down:
 
@@ -641,7 +714,7 @@ Traps that cost time already, so they are written down:
 - `public/verification/` is outside `tsconfig`'s include and outside vitest's
   (`src/**/*.test.ts`). Nothing there is typechecked or tested, and a green
   suite says nothing about it. Drive it in a browser.
-- `theme.css` is the only file that knows a colour; three themes over one set
+- `theme.css` is the only file that knows a colour; two themes over one set
   of variable names. `--primary` fills and `--brand-ink` writes. The two
   wordmark files are chosen by CSS, and those rules must stay **after**
   `.brand-mark` — it sets `display:block` at equal specificity, so ordering is
@@ -696,8 +769,8 @@ Traps that cost time already, so they are written down:
 
 The course pages' own mechanics, for as long as they are scripts:
 
-- **`theme.css` is the only file that knows a colour.** Three themes — day,
-  night, high contrast — over one set of variable names, so a rule reading
+- **`theme.css` is the only file that knows a colour.** Two themes — day and
+  night — over one set of variable names, so a rule reading
   `--border` or `--primary` follows the switch untouched. `--primary` fills
   and `--brand-ink` writes (maroon is a fine surface on dark and unreadable
   as text on it); `--mod-0…4` run **Chinese Red · Satsuma · Lunar Yellow ·
@@ -708,12 +781,12 @@ The course pages' own mechanics, for as long as they are scripts:
   for its own ground, so day is those five darkened to carry as text, not five
   other colours; every value clears 4.5:1 where it is set. They stay
   decorative — warm neighbours converge for a protanope — so they and
-  `--ok`/`--no` (Wong) are always accompanied by a word, glyph or fraction. High
-  contrast is picked, never inferred. The read step runs inline in
+  `--ok`/`--no` (Wong) are always accompanied by a word, glyph or fraction. The
+  read step runs inline in
   `src/app/layout.tsx` (`THEME_BOOT`) before the body does, so the ground is
   right at first paint — `theme.js` runs after hydration, and on its own it
   paints the day ground and then repaints. Keep the two in step: same
-  storage key, same attribute, same three values. `fonts.css` carries Space Grotesk
+  storage key, same attribute, same two values. `fonts.css` carries Space Grotesk
   as a data URI.
 - **`platform.js` owns the shared runtime**; `platform.css` the components on
   top of `theme.css`. Its `VT.mountChrome()` / `VT.mountFoot()` are dead on
@@ -830,8 +903,9 @@ verification:capstones` (`-- --check` covers both; never hand-edit either).
   **above** the words — reproduce only what a source's terms allow, and say so
   in a comment above the lesson), `<Src>` (a citation riding with its
   passage). They came from the retired static player; `<Check>`/`<GapFill>`
-  are learner work that feeds no meter, kept in `localStorage` under
-  `vt-marks.v1` and read through `useSyncExternalStore` so the server snapshot
+  are learner work that feeds no meter, kept under `vt-marks.v1` through the
+  `stored.ts` shim (so it reaches the account and leaves the device on
+  sign-out) and read through `useSyncExternalStore` so the server snapshot
   is the empty state. A block's `id` is its storage key and is permanent.
 - **Enrolling is an app route, not a static page**, because it needs a session
   and a row: `/verification/enroll` (apply, edit, withdraw) and

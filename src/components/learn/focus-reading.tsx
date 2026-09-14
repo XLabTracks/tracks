@@ -241,9 +241,9 @@ export function FocusReadingControl({
                 onClick={() => update({ mode: m.value })}
                 className={cn(
                   "min-h-11 rounded-full border px-3 py-1 text-xs font-semibold transition-colors select-none sm:min-h-0",
-                  // The selected chip inverts rather than tinting. On the
-                  // high-contrast theme --border and --foreground are both
-                  // white and --muted is the ground, so a bordered-and-tinted
+                  // The selected chip inverts rather than tinting. On a theme
+                  // where --border and --foreground coincide and --muted is
+                  // the ground, a bordered-and-tinted
                   // chip is pixel-identical to an unselected one and the
                   // choice becomes invisible. Ground/ink swapped survives all
                   // three themes because it is the one pair every theme sets.

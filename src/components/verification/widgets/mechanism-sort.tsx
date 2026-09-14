@@ -18,6 +18,7 @@ import {
   type MetricKey,
 } from "@/lib/verification/data/mechanism-sort";
 import type { VerificationWidgetProps } from "../kit/types";
+import { readStored, writeStored } from "@/components/verification/kit/stored";
 
 interface SortStore {
   values: Record<string, Partial<Record<MetricKey, number>>>;
@@ -35,7 +36,7 @@ const emptyStore = (): SortStore => ({
 
 const load = (): SortStore => {
   try {
-    const raw = JSON.parse(localStorage.getItem(MECHANISM_SORT_KEY) || "null");
+    const raw = JSON.parse(readStored(MECHANISM_SORT_KEY) || "null");
     if (raw && raw.values && Array.isArray(raw.queue)) {
       return {
         values: raw.values,
@@ -51,7 +52,7 @@ const load = (): SortStore => {
 
 const save = (s: SortStore) => {
   try {
-    localStorage.setItem(MECHANISM_SORT_KEY, JSON.stringify(s));
+    writeStored(MECHANISM_SORT_KEY, JSON.stringify(s));
   } catch {
   }
 };

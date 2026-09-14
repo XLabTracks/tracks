@@ -13,6 +13,7 @@ import {
 } from "@/lib/content";
 import { PREREQUISITES_ENFORCED } from "@/lib/content/prerequisites";
 import { loginHref } from "@/lib/login-href";
+import { cn } from "@/lib/utils";
 import { OptionalPrefix } from "@/components/content/optional-tag";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { Badge } from "@/components/ui/badge";
@@ -131,8 +132,22 @@ export function GenericTrackOverview({
                       const done = getItemProgressContentIds(item).every((id) =>
                         completedSet.has(id),
                       );
+                      // The outline's own indentation: a submodule sits one
+                      // step in from the module title, its sections one
+                      // step further, so the list reads as the tree it is.
+                      const nested = Boolean(
+                        item.kind === "lesson"
+                          ? item.lesson.sectionItemId
+                          : item.paper.sectionItemId,
+                      );
                       return (
-                        <li key={itemIdOf(item)} className="flex items-center gap-2">
+                        <li
+                          key={itemIdOf(item)}
+                          className={cn(
+                            "flex items-center gap-2",
+                            nested ? "pl-12" : "pl-6",
+                          )}
+                        >
                           {done ? (
                             <CheckCircle2
                               className="text-foreground size-3.5 shrink-0"

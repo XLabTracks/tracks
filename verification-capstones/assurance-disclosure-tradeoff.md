@@ -12,7 +12,7 @@ deliverable_type: analysis
 mentor: recommended
 audience: The operator and verifier negotiating what must be shown for what assurance.
 skills: [mechanism comparison, privacy analysis, trade-off mapping]
-prerequisites: [Verification 2.0 — confidentiality vs verifiability, Verification 2.x — the four layers]
+prerequisites: [Verification 2.0 — confidentiality vs verifiability, Verification 2.x — the evidence layers]
 updated: 2026-08-06
 ---
 

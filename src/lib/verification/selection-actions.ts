@@ -3,7 +3,8 @@ export type SelectionActionId =
   | "highlight"
   | "unhighlight"
   | "define"
-  | "notebook";
+  | "notebook"
+  | "report";
 
 export const MIN_CHARS = 3;
 
@@ -14,6 +15,7 @@ export interface SelectionFacts {
   inReading: boolean;
   highlightSupported: boolean;
   overlapsHighlight?: boolean;
+  reportSupported?: boolean;
 }
 
 export function wordCount(text: string): number {
@@ -32,6 +34,7 @@ export function actionsFor(facts: SelectionFacts): SelectionActionId[] {
   }
   if (wordCount(text) <= SHORT_WORDS) out.push("define");
   out.push("notebook");
+  if (facts.reportSupported) out.push("report");
   return out;
 }
 
@@ -40,4 +43,5 @@ export const ACTION_LABELS: Record<SelectionActionId, string> = {
   unhighlight: "Remove highlight",
   define: "Define",
   notebook: "Add to notebook",
+  report: "Report a bug",
 };

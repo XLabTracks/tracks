@@ -2,14 +2,14 @@
  * Re-encode the XLab wordmark to the size the header actually draws it at.
  *
  * The supplied artwork is 3300x1050. The header draws it 24px tall at most
- * (20px in high contrast, 22px on a phone), so the browser was downscaling by
+ * (22px on a phone), so the browser was downscaling by
  * about 48x on every page — 84KB across the two files, for a mark that
  * occupies roughly 69x22 CSS pixels, and letterforms that moire into stripes
  * at that ratio because no mip level is anywhere near it.
  *
  * Both files ship because CSS picks the ground: theme.css shows the maroon-and
- * -black artwork on the day ground and the white-lettered one on night and high
- * contrast. Both are in the markup, so both are fetched whatever the theme —
+ * -black artwork on the day ground and the white-lettered one on night. Both
+ * are in the markup, so both are fetched whatever the theme —
  * `display:none` does not stop an <img> downloading.
  *
  * Output height is 4x the largest drawn size, so a 3x phone still has headroom

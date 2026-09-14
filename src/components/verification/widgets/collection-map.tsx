@@ -46,6 +46,13 @@ function Glyph({ id }: { id: string }) {
           <path d="M12 13.5v2" />
         </g>
       )}
+      {id === "finint" && (
+        <g {...common}>
+          <rect x="3.5" y="7" width="17" height="10" rx="1.6" />
+          <circle cx="12" cy="12" r="2.2" />
+          <path d="M6.5 12h.01M17.5 12h.01" />
+        </g>
+      )}
       {id === "imint" && (
         <g {...common}>
           <path d="M3 12s3.4-5.4 9-5.4S21 12 21 12s-3.4 5.4-9 5.4S3 12 3 12z" />
@@ -108,7 +115,12 @@ export function CollectionMap(_: VerificationWidgetProps) {
       <p className="text-muted-foreground text-3xs tracking-wide uppercase">
         {label}
       </p>
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+      <div
+        className={cn(
+          "grid grid-cols-2 gap-2",
+          kind === "literal" ? "sm:grid-cols-5" : "sm:grid-cols-3",
+        )}
+      >
         {DISCIPLINES.filter((d) => d.kind === kind).map((d) => (
           <Tile
             key={d.id}

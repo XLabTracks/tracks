@@ -103,8 +103,8 @@ async function getInitialAuth() {
  * The theme read step, inline and before first paint.
  *
  * The platform and Verification keep separate stored preferences, but both
- * paint through the same `dark` / `contrast` classes so Tailwind chrome and
- * native widgets cannot disagree. Verification additionally gets data-theme,
+ * paint through the same `dark` class so Tailwind chrome and native widgets
+ * cannot disagree. Verification additionally gets data-theme,
  * which its static stylesheet uses.
  *
  * The chrome-less /embed iframes are the exception: they render inside other
@@ -112,7 +112,7 @@ async function getInitialAuth() {
  * visitor's OS there hands the host a mismatched card it cannot control
  * (cross-origin storage partitioning means our stored choice never reaches
  * the iframe either). Embeds therefore stay light unless the host pins
- * ?theme=dark or ?theme=contrast, restoring the pre-dark-mode contract.
+ * ?theme=dark, restoring the pre-dark-mode contract.
  *
  * The storage read gets its own try: browsers that block third-party storage
  * throw on the localStorage *accessor*, and one shared try would take the
@@ -125,18 +125,18 @@ async function getInitialAuth() {
 const THEME_BOOT = `(function(){try{var v=null;\
 var p=location.pathname;var x=p==='/tracks/verification'||p.indexOf('/tracks/verification/')===0||p.indexOf('/verification/')===0;\
 if(x){try{v=localStorage.getItem('xlab-verification-theme');}catch(e){}\
-if(v!=='light'&&v!=='dark'&&v!=='contrast'){v=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}\
+if(v!=='light'&&v!=='dark'){v=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}\
 document.documentElement.setAttribute('data-theme',v);\
 }else if(p.slice(-6)==='/embed'){\
 var q=new URLSearchParams(location.search).get('theme');\
-v=q==='dark'||q==='contrast'?q:'light';\
+v=q==='dark'?'dark':'light';\
 }else{\
 try{v=localStorage.getItem('tracks-theme');}catch(e){}\
-if(v!=='light'&&v!=='dark'&&v!=='contrast'){\
+if(v!=='light'&&v!=='dark'){\
 v=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}\
 }\
 var c=document.documentElement.classList;\
-c.toggle('dark',v!=='light');c.toggle('contrast',v==='contrast');\
+c.toggle('dark',v!=='light');\
 if(x){var s=null;try{s=localStorage.getItem('xlab-verification-text-scale');}catch(e){}\
 if(s==='100'||s==='125'||s==='150'||s==='175'||s==='200'){\
 document.documentElement.setAttribute('data-text-scale',s);c.toggle('reader-enlarged',Number(s)>100);c.toggle('reader-large',Number(s)>=150);}}}catch(e){}})();`;

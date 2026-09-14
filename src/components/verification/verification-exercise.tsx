@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUserOrSignedOut } from "@/lib/auth";
 import { isLessonCompleted } from "@/lib/progress";
 import {
   getVerificationExercise,
@@ -19,10 +19,12 @@ export async function VerificationExercise({ id }: VerificationExerciseProps) {
       </div>
     );
   }
-  const user = await getCurrentUser();
+  const user = await getCurrentUserOrSignedOut();
   const contentId = verificationLessonId(id);
   const completed =
-    user && exercise.bridged ? await isLessonCompleted(user.id, contentId) : false;
+    user && exercise.bridged
+      ? await isLessonCompleted(user.id, contentId).catch(() => false)
+      : false;
   return (
     <VerificationWidgetHost
       pageId={exercise.id}

@@ -98,7 +98,7 @@ describe("registry ↔ widget ↔ content graph ↔ MDX", () => {
 describe("widget completion reads", () => {
   it("only checks server completion for widgets that can report it", () => {
     expect(EXERCISE_COMPONENT_SOURCE).toMatch(
-      /user && exercise\.bridged \? await isLessonCompleted/,
+      /user && exercise\.bridged\s*\?\s*await isLessonCompleted/,
     );
   });
 });

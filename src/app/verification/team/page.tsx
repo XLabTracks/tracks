@@ -21,10 +21,6 @@ export default function Page() {
 
           <div className="page-head">
             <h1>Team</h1>
-            <p className="lede">
-              Who writes the curriculum, builds the interactives, and facilitates
-              the cohorts.
-            </p>
           </div>
 
           <div className="prose">
@@ -48,14 +44,6 @@ export default function Page() {
                 <p className="rl">Role not supplied yet</p>
               </li>
             </ul>
-
-            <h2>Elsewhere</h2>
-            <p>
-              The work is the other introduction. The{" "}
-              <a href="/verification/about">about page</a> says what the course covers and how
-              it is put together, and the <a href="/verification/memo-desk">memo desk</a> shows
-              what it asks people to produce.
-            </p>
 
           </div>
         </div>

@@ -69,8 +69,8 @@ export function WorksCited({ urls }: { urls: string[] }) {
           summary already announces expanded/collapsed and a spoken "plus"
           would only be a worse second copy of that.
 
-          Fold needs `justify-between!` because the high contrast theme sets
-          justify-content:center on `button` at a specificity no utility
+          Fold needs `justify-between!` because the Verification stylesheet
+          sets justify-content:center on `button` at a specificity no utility
           beats. That rule's selector list is buttons and chips — no
           `summary` — so this row does not, and does not want the important
           flag it would have to carry forever. */}

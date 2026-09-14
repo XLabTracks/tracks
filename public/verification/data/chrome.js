@@ -12,10 +12,6 @@ window.VT_CHROME = {
       "href": "/tracks/verification"
     },
     {
-      "label": "Skill map",
-      "href": "map"
-    },
-    {
       "label": "For facilitators",
       "href": "facilitator"
     },

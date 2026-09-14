@@ -22,6 +22,7 @@ import {
   getPrerequisiteStatus,
   getTrackCompletionSet,
   isLessonCompleted,
+  type ExerciseSubmissionMap,
   type PrerequisiteStatus,
 } from "@/lib/progress";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
@@ -156,10 +157,14 @@ async function LessonItemPage({
   let completionState: CompletionState = { units: null, writing: null };
   let completionStats: CompletionStatsData | null = null;
   if (lesson.completion && userId) {
+    // Guarded like every other progress read on this page: the closing page
+    // is still a page, and a failed read should cost its counters, not it.
     const [completedSet, writingIds, submissions] = await Promise.all([
-      getTrackCompletionSet(userId, track.id),
+      getTrackCompletionSet(userId, track.id).catch(() => new Set<string>()),
       getTrackRequiredWritingIds(track.id),
-      getExerciseSubmissionMap(userId),
+      getExerciseSubmissionMap(userId).catch(
+        (): ExerciseSubmissionMap => new Map(),
+      ),
     ]);
     const units = getTrackProgressContentIds(track.id).filter(
       (id) => id !== lesson.id

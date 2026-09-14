@@ -11,7 +11,9 @@ Allow approximately 20 minutes for the assigned excerpts, 15 minutes for this se
 
 Section 2.1.1 separated authenticity, correctness, and completeness. This section examines a deployed mechanism that helps establish the first and supports selected checks of the second: remote attestation.
 
-NVIDIA's H100 engineers state an important assumption explicitly: "Since the host or hypervisor is not trusted in CC mode". They explain that registers capable of compromising the guest's confidentiality or integrity must be protected from that host. [Reference: Dhanuskodi et al., "Creating the First Confidential GPUs," "Starting the GPU in CC Mode."](https://cacm.acm.org/practice/creating-the-first-confidential-gpus/)
+NVIDIA's H100 engineers state an important assumption explicitly: "Since the host or hypervisor is not trusted in CC mode". They explain that registers capable of compromising the guest's confidentiality or integrity must be protected from that host.
+
+<Src>Dhanuskodi et al., "Creating the First Confidential GPUs," "Starting the GPU in CC Mode." [Communications of the ACM](https://cacm.acm.org/practice/creating-the-first-confidential-gpus/)</Src>
 
 The central inversion for verification is this: **the deployed confidentiality system protects a tenant from the owner or operator of the machine; a verification regime needs evidence that protects an outside authority from false claims by that operator.**
 
@@ -44,7 +46,9 @@ A **root of trust** is a component or function whose correct operation the syste
 | Freshness mechanism | Uses a challenge, time, or session binding to limit reuse of old Evidence | Continuous compliance before or after the observation |
 | Credential revocation | Indicates that a credential should no longer be accepted under the applicable validation rules | What legal consequence should follow |
 
-Secure boot enforces a boot policy. Measured boot records what loaded. A system can use both: reject unauthorized components and record measurements of the components that actually loaded. Remote attestation conveys selected evidence about the system to another party for appraisal. [Reference: Microsoft, "Secure the Windows boot process."](https://learn.microsoft.com/en-us/windows/security/operating-system-security/system-security/secure-the-windows-10-boot-process)
+Secure boot enforces a boot policy. Measured boot records what loaded. A system can use both: reject unauthorized components and record measurements of the components that actually loaded. Remote attestation conveys selected evidence about the system to another party for appraisal.
+
+<Src>Microsoft, "Secure the Windows boot process." [Microsoft Learn](https://learn.microsoft.com/en-us/windows/security/operating-system-security/system-security/secure-the-windows-10-boot-process)</Src>
 
 Reference values and legal approval are separate. A manufacturer-signed reference integrity manifest can associate a measurement with a recognized software release. The regulator must still decide whether that release is permitted for the regulated activity.
 
@@ -117,7 +121,9 @@ For a deployment using NVIDIA's attestation infrastructure, control is distribut
 | Regulatory acceptance policy | Regulator, inspectorate, or treaty body |
 | Inventory, reporting duty, and consequence of non-response | Legal regime and implementing institutions |
 
-NVIDIA's SDK collects Evidence; a remote or local verifier appraises it; a RIM service supplies signed reference measurements; and certificate-status services support revocation checks. [References: NVIDIA attestation architecture](https://docs.nvidia.com/attestation/quick-start-guide/latest/architecture.html) and [RIM service](https://docs.nvidia.com/attestation/cloud-services/latest/rim/rim_introduction.html).
+NVIDIA's SDK collects Evidence; a remote or local verifier appraises it; a RIM service supplies signed reference measurements; and certificate-status services support revocation checks. and [RIM service](https://docs.nvidia.com/attestation/cloud-services/latest/rim/rim_introduction.html).
+
+<Src>NVIDIA’s attestation [architecture](https://docs.nvidia.com/attestation/quick-start-guide/latest/architecture.html)</Src>
 
 The adversary matters. A hostile application, a host administrator, and an owner with physical access have different capabilities. A compromised manufacturer, reference-value signer, or verifier attacks a different link again. An architecture that distrusts the operator may still depend on the manufacturer and the verifier.
 
@@ -141,7 +147,9 @@ An agreement must therefore allocate authority to issue and revoke credentials, 
 
 </ReadingCard>
 
-NVIDIA's attestation claims can cover device identity, secure-boot state, debug configuration, firmware or VBIOS measurements, certificate checks, reference-value comparisons, and nonce matching. The claims actually present depend on the device, software, and workflow. [Reference: NVIDIA attestation claims schema.](https://docs.nvidia.com/attestation/nv-attestation-sdk-cpp/latest/sdk-c/claims_schema.html)
+NVIDIA's attestation claims can cover device identity, secure-boot state, debug configuration, firmware or VBIOS measurements, certificate checks, reference-value comparisons, and nonce matching. The claims actually present depend on the device, software, and workflow.
+
+<Src>NVIDIA’s attestation [claims schema](https://docs.nvidia.com/attestation/nv-attestation-sdk-cpp/latest/sdk-c/claims_schema.html)</Src>
 
 The assigned Blackwell example independently attests each GPU detected by the SDK and returns per-GPU entries. That example explicitly supplies no topology or switch attestation. This is a limit of the specific example, not a claim that no NVIDIA workflow can ever attest switches or topology.
 
@@ -151,7 +159,9 @@ A successful result can therefore support a bounded claim:
 
 It does not by itself establish that the eight GPUs were connected in the declared topology, that no additional GPU was concealed, that they performed training rather than inference, that they participated in one job, or that the accepted state persisted throughout the reporting period.
 
-The confidentiality purpose can also constrain observation. NVIDIA's H100 CC-On mode disables performance counters to prevent their use in side-channel attacks. [Reference: Dhanuskodi et al., "Creating the First Confidential GPUs," "Starting the GPU in CC Mode."](https://cacm.acm.org/practice/creating-the-first-confidential-gpus/) This illustrates a potential tension: protecting a tenant's workload from observation can remove signals that a compute-use verifier would want. A verification design that depends on those counters would need an additional measurement mechanism; a valid attestation report cannot substitute for missing telemetry.
+The confidentiality purpose can also constrain observation. NVIDIA's H100 CC-On mode disables performance counters to prevent their use in side-channel attacks. This illustrates a potential tension: protecting a tenant's workload from observation can remove signals that a compute-use verifier would want. A verification design that depends on those counters would need an additional measurement mechanism; a valid attestation report cannot substitute for missing telemetry.
+
+<Src>Dhanuskodi et al., "Creating the First Confidential GPUs," "Starting the GPU in CC Mode." [Communications of the ACM](https://cacm.acm.org/practice/creating-the-first-confidential-gpus/)</Src>
 
 ### Threat-Model Boundaries: Battering RAM
 

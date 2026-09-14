@@ -44,8 +44,6 @@ Fist and Grunewald propose connecting a chip-ownership registry to short-notice 
 
 For this course, a useful registry design would distinguish the following fields. This is an illustrative schema, not a description of an existing government database.
 
-<div className="trio-table">
-
 | Record | Question it answers | Evidence needed beyond the database entry |
 | --- | --- | --- |
 | Covered hardware identifier and credential binding | Which physical accelerator does this record refer to? | Device authentication, provisioning records, and a mapping between chip, board, and server identifiers |
@@ -55,8 +53,6 @@ For this course, a useful registry design would distinguish the following fields
 | Applicable authorization and reporting duty | Which rule applies, and who must respond? | An authorization issued by the competent authority and an identified responsible party |
 | Lifecycle status and event history | Is it installed, stored, in transit, under repair, transferred, or destroyed? | Dated, device-specific records supporting each transition |
 | Last observation and unresolved discrepancy | What has actually been checked, and what remains uncertain? | Retained evidence, timestamps, verification results, and review history |
-
-</div>
 
 A manufacturer credential authenticates a device identity. It does not establish its legal owner or which company is renting its compute. A cloud customer, cloud operator, colocation provider, and equipment owner may be four different entities.
 
@@ -89,7 +85,9 @@ For one defined population and period, a basic reconciliation is:
 
 </ReadingCard>
 
-The IAPS proposal combines authenticated device responses with timing measured from trusted servers at known locations, called landmarks. The brief reports an H100 prototype; that demonstration is not evidence of a comprehensive regulatory deployment. [Reference: IAPS issue brief.](https://www.iaps.ai/research/location-verification-for-ai-chips)
+The IAPS proposal combines authenticated device responses with timing measured from trusted servers at known locations, called landmarks. The brief reports an H100 prototype; that demonstration is not evidence of a comprehensive regulatory deployment.
+
+<Src>The IAPS [issue brief](https://www.iaps.ai/research/location-verification-for-ai-chips)</Src>
 
 The essential sequence is to send an unpredictable challenge, authenticate the response as coming from the relevant device, and measure elapsed time using a trusted timing process. Timing an ordinary response from an operator's nearby server would locate that server, not necessarily the accelerator.
 
@@ -101,7 +99,9 @@ For a 2 millisecond response, this gives an upper bound of approximately 300 km.
 
 The resulting region is a set of possible locations, not a pin on a map. Several trustworthy landmarks can narrow that set. If the whole set lies within an allowed jurisdiction, it can support a jurisdiction-level claim. If the set crosses a border, the result does not resolve which side the device occupies. Even a successful country-level check need not establish the declared building.
 
-The full IAPS report distinguishes general geolocation from the narrower task of excluding restricted countries and discusses attacks on delay-based inference. A physical speed limit is more conservative than a model fitted to typical internet routes: an adversary may use a faster-than-expected route without violating physics. [Reference: Brass and Aarne, *Location Verification for AI Chips*, "Delay-based methods for The General Geolocation Problem."](https://static1.squarespace.com/static/64edf8e7f2b10d716b5ba0e1/t/6670467ebe2a477eb1554f40/1718634112482/Location%2BVerification%2Bfor%2BAI%2BChips.pdf)
+The full IAPS report distinguishes general geolocation from the narrower task of excluding restricted countries and discusses attacks on delay-based inference. A physical speed limit is more conservative than a model fitted to typical internet routes: an adversary may use a faster-than-expected route without violating physics.
+
+<Src>Brass and Aarne, *Location Verification for AI Chips*, "Delay-based methods for The General Geolocation Problem." [IAPS full report](https://static1.squarespace.com/static/64edf8e7f2b10d716b5ba0e1/t/6670467ebe2a477eb1554f40/1718634112482/Location%2BVerification%2Bfor%2BAI%2BChips.pdf)</Src>
 
 A slow response does not by itself prove that the chip is far away. No response establishes neither location nor destruction. The IAPS brief explicitly recognizes that chips in transit or storage may not report and calls for follow-up when those statuses persist suspiciously. Location verification also does not itself disable a chip; authorization and control are separate mechanisms, examined in 2.1.5. The exercise at the end of this page returns to the location claim you wrote in 2.1.1.
 
@@ -131,7 +131,9 @@ These pages sit under NVIDIA's deprecated Python SDK examples. They are assigned
 
 The Hopper PPCIE example covers GPU and NVSwitch integrity and checks the system's topology against an expected configuration. Its output distinguishes GPU attestation, switch attestation, and topology checks. In contrast, the assigned Blackwell example independently attests GPUs without topology or switch attestation.
 
-The relevant distinction is therefore between workflows and their measurement boundaries, not simply between chips with or without "attestation." [References: NVIDIA's Hopper](https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/hopper_ppcie.html) and [Blackwell](https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/blackwell_multi_gpu.html) examples.
+The relevant distinction is therefore between workflows and their measurement boundaries, not simply between chips with or without "attestation."
+
+<Src>NVIDIA's [Hopper PPCIE](https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/hopper_ppcie.html) and [Blackwell multi-GPU](https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/blackwell_multi_gpu.html) attestation examples.</Src>
 
 For a regulatory topology claim, ask which devices, links, and interfaces are included; how they are bound to authenticated identities; who performs the checks; and when the configuration was observed. A statement about a checked GPU–switch system cannot establish the absence of another server in the building or every connection outside that system. Nor does it establish how a job used the system over a reporting period.
 
@@ -141,15 +143,11 @@ For a regulatory topology claim, ask which devices, links, and interfaces are in
 
 Three populations must remain distinct:
 
-<div className="trio-table">
-
 | Population | What defines it? | What a successful check leaves open |
 | --- | --- | --- |
 | Responding devices | Devices from which valid evidence was received | Which expected devices did not respond? |
 | Registered devices | Devices the regime knows about | Which covered devices were never registered? |
 | All covered devices | The agreement's hardware, geographic, and organizational scope | Whether the evidence reaches that population at all |
-
-</div>
 
 If 900 out of 1,000 registered devices respond, the response rate is 90% of registered devices. It is not a measurement that 90% of all covered devices have been found. Even a 100% response rate cannot establish that the register is complete.
 
@@ -161,8 +159,6 @@ This does not make registries useless. Knowing that a particular expected device
 
 The following is an analytic checklist for a layered regime, not a claim that these sources always exist or are independent.
 
-<div className="trio-table">
-
 | Evidence source | Useful comparison | Remaining limitation |
 | --- | --- | --- |
 | Manufacturing, distribution, and shipping records | Do produced and delivered device identifiers enter the register, or have documented destinations outside its scope? | Incomplete suppliers, intermediaries, forged records, and non-cooperating manufacturers |
@@ -170,8 +166,6 @@ The following is an analytic checklist for a layered regime, not a claim that th
 | Cloud inventory, allocation, and billing records | Do tenant allocations and provider inventories reconcile with declared devices? | Provider-controlled logs and mappings from virtual resources to physical devices |
 | Intelligence and infrastructure observations | Do facilities, procurement, power, or cooling suggest capacity absent from declarations? | Indirect signals and alternative explanations; capacity is not observed use |
 | Human evidence | Can technicians, auditors, or other witnesses identify omitted equipment, sites, or altered records? | Access limits, mistakes, incentives, and the need to corroborate and protect sources |
-
-</div>
 
 Independence matters more than the number of documents. An inventory spreadsheet, dashboard, and audit summary may all copy the same operator-maintained database. Agreement among them then says little about omissions from that database.
 

@@ -19,7 +19,9 @@ The policy task is to establish both that the token accurately translates the pe
 
 ### A Deployed Example: Permission Can Expire Without a Misconduct Finding
 
-NVIDIA documents software-enforced licensing for its AI Enterprise vGPU for Compute virtual machines. In the release-8 documentation, a VM without a license initially receives a 20-minute grace period; an already licensed VM disconnected from the cloud license service has a default seven-day grace period. Performance degrades if licensing is not restored, and full capability returns when a valid license is acquired. These are different situations, not two descriptions of the same timer. [Reference: NVIDIA, “Licensing,” *NVIDIA AI Enterprise*, release 8.](https://docs.nvidia.com/ai-enterprise/release-8/latest/infra-software/vgpu/licensing.html)
+NVIDIA documents software-enforced licensing for its AI Enterprise vGPU for Compute virtual machines. In the release-8 documentation, a VM without a license initially receives a 20-minute grace period; an already licensed VM disconnected from the cloud license service has a default seven-day grace period. Performance degrades if licensing is not restored, and full capability returns when a valid license is acquired. These are different situations, not two descriptions of the same timer.
+
+<Src>NVIDIA, “Licensing,” *NVIDIA AI Enterprise*, release 8. [NVIDIA AI Enterprise documentation](https://docs.nvidia.com/ai-enterprise/release-8/latest/infra-software/vgpu/licensing.html)</Src>
 
 This is a real product behavior, not a reported enforcement incident. It illustrates a control that can restrict useful computation because permission is unavailable—not because anyone established prohibited use. The same distinction matters in a treaty system when a renewal server fails or a network route is interrupted.
 
@@ -48,7 +50,9 @@ It also illustrates the limit of the analogy. The documentation explicitly calls
 
 ### From Commercial Licensing to Hardware-Backed Control
 
-Kulp and colleagues’ 2024 RAND working paper proposes offline licensing: a device authenticates an allowance, meters its consumption, and restricts selected functionality when the allowance is exhausted. Tokens need not arrive through a live internet connection. The proposal separates this control from verifying what the permitted compute actually did. It is a design proposal, not evidence of an operating international regime. [Reference: Kulp et al., ch. 6.](https://www.rand.org/pubs/working_papers/WRA3056-1.html)
+Kulp and colleagues’ 2024 RAND working paper proposes offline licensing: a device authenticates an allowance, meters its consumption, and restricts selected functionality when the allowance is exhausted. Tokens need not arrive through a live internet connection. The proposal separates this control from verifying what the permitted compute actually did. It is a design proposal, not evidence of an operating international regime.
+
+<Src>Kulp et al., ch. 6. [RAND WR-A3056-1](https://www.rand.org/pubs/working_papers/WRA3056-1.html)</Src>
 
 <ReadingCard
   id="reading-offline-control"
@@ -75,8 +79,6 @@ The rest of this lesson develops a course-authored design test. It is not a desc
 
 The chain starts before a signing key is used and continues after a device refuses work.
 
-<div className="trio-table">
-
 | Stage | What must happen | Question for the policy designer |
 | --- | --- | --- |
 | Legal permission | An authorized body defines the allowed activity and limits. | Who may grant exceptions, and under which rule? |
@@ -85,8 +87,6 @@ The chain starts before a signing key is used and continues after a device refus
 | Execution and accounting | The component charges relevant work to the correct allowance. | Do all covered operations pass through it, including after restarts? |
 | Restriction | The specified condition causes a defined reduction or suspension. | What stops, how quickly, and what unrelated work is affected? |
 | Review and restoration | A competent authority reviews the decision and authorizes a safe recovery or renewal. | Can a successful appeal actually restore service without restoring a compromised control? |
-
-</div>
 
 The **issuer** signs tokens; it need not be the body legally empowered to authorize a run. A manufacturer could operate the signing service for an independent licensing authority. That division only works if the manufacturer cannot silently grant extra permissions—or if the regime explicitly accepts and audits that power.
 
@@ -139,13 +139,17 @@ For each function, identify both the legal decision-maker and the actor technica
 
 One possible safeguard is requiring two independently controlled approvals for a particularly broad action. But two signatures from services administered by the same organization may add little independence. Requiring agreement from everyone can create a different failure: one participant can block urgent action. The design needs explicit choices about ordinary issuance, emergency restrictions, review, and recovery—not the same voting rule applied indiscriminately.
 
-Procedural safeguards are part of compute-governance design, not an afterthought. Sastry and colleagues explicitly discuss limits on the scope of controls and information demands, alongside oversight and review. The following requirements apply that concern to our hypothetical licensing system; they are recommendations for this course scenario, not a statement of existing legal entitlements. [Reference: Sastry et al., §5.B.](https://arxiv.org/html/2402.08797v1)
+Procedural safeguards are part of compute-governance design, not an afterthought. Sastry and colleagues explicitly discuss limits on the scope of controls and information demands, alongside oversight and review. The following requirements apply that concern to our hypothetical licensing system; they are recommendations for this course scenario, not a statement of existing legal entitlements.
+
+<Src>Sastry et al., §5.B. [arXiv:2402.08797](https://arxiv.org/html/2402.08797v1)</Src>
 
 A suspension procedure should specify the evidentiary threshold, authorized decision-maker, scope, reasons recorded, review deadline, and route to restoration. A provisional restriction is not a final finding of violation. If sensitive evidence cannot be disclosed publicly, the procedure still needs a credible reviewer who can examine it.
 
 Restoration must also be operational. Who can issue replacement permission? What if the original signing key was stolen? A successful appeal cannot safely mean “start trusting the stolen key again.” The system needs a way to install a replacement trust configuration, invalidate obsolete permissions where necessary, and reconcile the remaining budget without granting it twice.
 
-NIST’s firmware-resiliency guidance treats protection, detection, and recovery as complementary functions. It supports asking for a recovery design; it does not certify a particular licensing system or settle who should control recovery. [Reference: Regenscheid, *Platform Firmware Resiliency Guidelines*, abstract.](https://csrc.nist.gov/pubs/sp/800/193/final)
+NIST’s firmware-resiliency guidance treats protection, detection, and recovery as complementary functions. It supports asking for a recovery design; it does not certify a particular licensing system or settle who should control recovery.
+
+<Src>Regenscheid, *Platform Firmware Resiliency Guidelines*, abstract. [NIST SP 800-193](https://csrc.nist.gov/pubs/sp/800/193/final)</Src>
 
 ### Exceptions and Equipment Outside the Control Boundary
 

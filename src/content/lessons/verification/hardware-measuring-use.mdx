@@ -11,15 +11,11 @@ Allow approximately 10 minutes for required external reading, 25 minutes for the
 
 Return to the pause example from [2.1.1](/tracks/verification/verification-infrastructure/hardware-claim): a covered party must not conduct an unlicensed training run above threshold T. In [2.1.3](/tracks/verification/verification-infrastructure/hardware-accounting), we asked which devices the regime could account for. Suppose, for this lesson, that the relevant devices are known. What would establish whether their use broke the rule?
 
-<div className="trio-table">
-
 | Question | Relevant evidence | Tempting but invalid shortcut |
 | --- | --- | --- |
 | **How much compute occurred?** | Defined operation counts or bounded estimates, with device and time coverage | A busy GPU must have performed its advertised maximum FLOP rate |
 | **What kind of workload was it?** | Workload measurements, classification, and corroborating execution records | A large workload must be training |
 | **Was that use authorized?** | The applicable rule, an authentic authorization, and evidence tying its scope to the actual work | An operator called the job “safety evaluation,” so it was permitted |
-
-</div>
 
 An answer to one question does not answer the others. A large inference workload may be permitted. A genuine safety evaluation may include a specifically approved training procedure. A smaller training run may fall below a licensing threshold. “Training” is a technical classification; “prohibited” is a conclusion under a rule.
 
@@ -53,7 +49,9 @@ Here, **DCGM** is NVIDIA’s Data Center GPU Manager. An **SM** is a processing 
 
 </ReadingCard>
 
-NVIDIA defines these activity metrics in terms of time or cycles, not a direct total of floating-point operations. Its SM Activity definition includes work waiting for memory. Tensor Activity is an interval average and can correspond to different distributions of activity across the chip and time. [Reference: NVIDIA DCGM metric definitions.](https://docs.nvidia.com/datacenter/dcgm/latest/user-guide/feature-overview.html#metrics)
+NVIDIA defines these activity metrics in terms of time or cycles, not a direct total of floating-point operations. Its SM Activity definition includes work waiting for memory. Tensor Activity is an interval average and can correspond to different distributions of activity across the chip and time.
+
+<Src>NVIDIA’s DCGM [metric definitions](https://docs.nvidia.com/datacenter/dcgm/latest/user-guide/feature-overview.html#metrics)</Src>
 
 Thus “80% utilization” is not sufficient evidence that the GPU performed 80% of its peak advertised operations. The conversion would require a validated model of the specific metric, hardware, instructions, and workload. Power consumption is also a signal, not a universal FLOP meter.
 
@@ -89,7 +87,9 @@ This is an analytic comparison, not a claim that every approach is already avail
 
 </ReadingCard>
 
-Baker and colleagues propose comparing observed compute activity with verified declared uses. Their discussion distinguishes operations required by a model from extra operations actually executed, including recomputation. They also identify the difficulty of deriving an operation rate from physical measurements. This is an accounting proposal with implementation challenges, not a demonstrated universal sensor-to-FLOP conversion. [Reference: Baker et al., Appendix A.6.](https://arxiv.org/html/2507.15916v1)
+Baker and colleagues propose comparing observed compute activity with verified declared uses. Their discussion distinguishes operations required by a model from extra operations actually executed, including recomputation. They also identify the difficulty of deriving an operation rate from physical measurements. This is an accounting proposal with implementation challenges, not a demonstrated universal sensor-to-FLOP conversion.
+
+<Src>Baker et al., Appendix A.6. [arXiv:2507.15916](https://arxiv.org/html/2507.15916v1)</Src>
 
 Consider an operator who explains every observed hour of GPU activity as permitted inference. The explanation is useful only if the declared inference really occurred and its claimed compute cost is credible. Inflating the declared cost could make unreported work appear accounted for. Conversely, a mismatch may reflect a poor cost model or equipment inefficiency rather than prohibited work.
 
@@ -109,7 +109,9 @@ For a period with uninterrupted evidence, compute can be summed over disjoint in
 
 Evidence linking jobs may include authenticated scheduler records, checkpoint lineage, and transfer records. A **checkpoint** is a saved model state from which work can continue. Such evidence needs its own trust and confidentiality protections. Merely asserting that two jobs are unrelated should not determine whether their compute is aggregated; neither should the verifier aggregate unrelated jobs solely because they shared a building.
 
-Distribution does not make compute disappear. It makes the relationship between records harder to establish. Work on distributed-training governance examines why large-cluster assumptions can miss activity spread across smaller installations; it is a reason to define the accounting boundary carefully, not evidence that every distributed evasion is feasible. [Reference: Rahman, *Does Distributed Training Undermine Compute Governance?*](https://arxiv.org/abs/2605.29359)
+Distribution does not make compute disappear. It makes the relationship between records harder to establish. Work on distributed-training governance examines why large-cluster assumptions can miss activity spread across smaller installations; it is a reason to define the accounting boundary carefully, not evidence that every distributed evasion is feasible.
+
+<Src>Rahman, *Does Distributed Training Undermine Compute Governance?*. [arXiv:2605.29359](https://arxiv.org/abs/2605.29359)</Src>
 
 <PageBreak title="Recognizing a Workload From Telemetry" />
 
@@ -133,7 +135,9 @@ For policy purposes, the useful question is not whether a classifier’s headlin
 
 This is the direct connection to [2.1.2](/tracks/verification/verification-infrastructure/hardware-trusted-statement): attesting the classifier’s code does not establish that its input is genuine. It is also the connection to 2.1.3: a complete trace from one registered machine does not reveal activity on an unregistered one.
 
-The confidentiality trade-off remains. H100 CC-On’s disabled performance counters, discussed in 2.1.2, are a warning to verify the actual measurement path. Do not assume that all low-rate management telemetry and all profiling counters are interchangeable, or that every metric is available in every protected mode. A deployment needs a metric-by-metric compatibility and integrity check. [Reference for the CC-On restriction: NVIDIA Technical Blog, “Confidential Computing on NVIDIA H100 GPUs for Secure and Trustworthy AI.”](https://developer.nvidia.com/blog/confidential-computing-on-h100-gpus-for-secure-and-trustworthy-ai/)
+The confidentiality trade-off remains. H100 CC-On’s disabled performance counters, discussed in 2.1.2, are a warning to verify the actual measurement path. Do not assume that all low-rate management telemetry and all profiling counters are interchangeable, or that every metric is available in every protected mode. A deployment needs a metric-by-metric compatibility and integrity check.
+
+<Src>NVIDIA, [“Confidential Computing on NVIDIA H100 GPUs for Secure and Trustworthy AI”](https://developer.nvidia.com/blog/confidential-computing-on-h100-gpus-for-secure-and-trustworthy-ai/)</Src>
 
 ### Authorization Is Not Another Classifier Label
 
@@ -174,14 +178,10 @@ The operator says:
 
 **3.** A separate classifier evaluation produces the following results. Calculate overall accuracy, precision, recall, and the fraction of training windows that were missed. What conclusions about job J, if any, can be drawn from these evaluation results? Justify your answer.
 
-<div className="trio-table">
-
 | Actual workload | Labeled training | Labeled non-training |
 | --- | ---: | ---: |
 | Training | 90 | 10 |
 | Non-training | 45 | 855 |
-
-</div>
 
 **4.** The team proposes signing classifier outputs and increasing the frequency of classification. Recommend two further changes that would most improve the basis for a compliance decision in this case. For each, identify the uncertainty addressed and the evidence or system property needed. Then rewrite the pause verification claim from 2.1.1 so that its unit and aggregation boundary are explicit, and state separately what your procedure does with a run whose evidence cannot resolve it.
 
@@ -280,7 +280,9 @@ Vocabulary: “hardened” means revised after exposure to attacks; “unseen”
 
 There is no required positive or negative verdict. Assess whether your account preserves the evaluation conditions, distinguishes evidence from assumptions, and names a follow-up that tests the gap you identify.
 
-The paper reports 98.2% overall binary accuracy and 43–87% detection on unseen white-box strategies after hardening; these are not interchangeable evaluation settings. Its experiments are single-node, up to eight GPUs. The hardware-operator case depends on protected telemetry collection and delivery beyond a classifier alone. [Reference: Rahman and Tajdari, abstract, §2.2, §5.2, §6.5, and Appendix F.](https://arxiv.org/html/2606.19262v1)
+The paper reports 98.2% overall binary accuracy and 43–87% detection on unseen white-box strategies after hardening; these are not interchangeable evaluation settings. Its experiments are single-node, up to eight GPUs. The hardware-operator case depends on protected telemetry collection and delivery beyond a classifier alone.
+
+<Src>Rahman and Tajdari, abstract, §2.2, §5.2, §6.5, and Appendix F. [arXiv:2606.19262](https://arxiv.org/html/2606.19262v1)</Src>
 
 A good briefing can recognize a useful empirical contribution without inferring reliable enforcement across a fleet. Further evidence could test generalization to independently selected workloads and multi-node systems, or validate the entire input path against a hostile operator. Specify what would count as a failure, not merely that more testing is desirable.
 

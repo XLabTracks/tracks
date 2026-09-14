@@ -35,8 +35,6 @@ Likewise, distinguish physical location from dependence. An off-chip appliance c
 
 The following is a course-authored comparison of representative designs, not a universal ranking or vendor specification. A specific implementation may change any entry.
 
-<div className="hex-table">
-
 | Architecture | What it can directly observe | Tamper-resistance question | Retrofit question | Confidentiality question | Key dependence |
 | --- | --- | --- | --- | --- | --- |
 | **On-chip** | Internal state or activity exposed to its protected measurement logic | Can the relevant owner or state alter, bypass, or mislead that logic? | Do existing chips have the required capabilities, or must hardware be replaced? | Can sensitive information remain local with only agreed results released? | Accelerator design, firmware, credentials, and update authority |
@@ -44,11 +42,11 @@ The following is a course-authored comparison of representative designs, not a u
 | **Off-chip analog** | A physical signal such as electrical consumption at a specified point | Can the sensor be moved, bypassed, recalibrated, or fed a misleading signal? | Can it be installed and maintained without opening an unmanageable gap? | What operational information can detailed traces reveal? | Sensor integrity, calibration, coverage, and interpretation model |
 | **Hybrid** | Several signals, potentially with different boundaries | Does one failure compromise several paths at once? | Can the components and their interfaces be integrated and serviced? | Who can combine the separate records, and what does the combination reveal? | All necessary components, plus their shared dependencies |
 
-</div>
-
 The attraction of moving monitoring outside the accelerator is not that external hardware is inherently trustworthy. It is the opportunity to choose a different design, supplier, maintenance process, and measurement path. Whether that opportunity is realized must be demonstrated.
 
-Baker and colleagues distinguish on-chip verification from external digital loggers and analog sensors, and discuss separate protected analysis. Their proposal also treats verifier equipment as a possible source of espionage or sabotage against the party being monitored. That two-sided problem is central here. [Reference: Baker et al., §4.2.1.1.](https://arxiv.org/html/2507.15916v1)
+Baker and colleagues distinguish on-chip verification from external digital loggers and analog sensors, and discuss separate protected analysis. Their proposal also treats verifier equipment as a possible source of espionage or sabotage against the party being monitored. That two-sided problem is central here.
+
+<Src>Baker et al., §4.2.1.1. [arXiv:2507.15916](https://arxiv.org/html/2507.15916v1)</Src>
 
 <ReadingCard
   id="reading-external-trust"
@@ -79,7 +77,9 @@ The architecture therefore needs two arguments: why relevant activity produces a
 
 There is also a difference between observing a copy and sitting on a required path. A passive observer reads traffic; an **interlock** is a component placed on a path whose passage it can mediate. A design may aim to make work impossible without passing through that component. That is a stronger requirement than merely placing a recorder nearby.
 
-Petrie and Aarne explore an interlock on an accelerator’s data path, supported by a guarantee processor and physical protection. They explicitly discuss the performance burden of this placement and several possible integration points. Their interlock is not necessarily off-chip: placement is a design choice. This is an architecture proposal, not a demonstration that arbitrary existing GPUs can be comprehensively monitored by adding a network box. [Reference: Petrie and Aarne, pp. 23–24.](https://arxiv.org/pdf/2506.03409)
+Petrie and Aarne explore an interlock on an accelerator’s data path, supported by a guarantee processor and physical protection. They explicitly discuss the performance burden of this placement and several possible integration points. Their interlock is not necessarily off-chip: placement is a design choice. This is an architecture proposal, not a demonstration that arbitrary existing GPUs can be comprehensively monitored by adding a network box.
+
+<Src>Petrie and Aarne, pp. 23–24. [arXiv:2506.03409](https://arxiv.org/pdf/2506.03409)</Src>
 
 <ReadingCard
   id="reading-interlock-boundary"
@@ -116,7 +116,9 @@ We do not repeat the compute-accounting derivation here. The architectural quest
 
 ### Historical Case — Different Certificate Chains, Shared Control
 
-In September 2011, Mozilla removed trust in the DigiNotar certificate authority after fraudulent certificate issuance. Its account described an uncertain breach scope and failures of notification. Certificates issued through a different DigiNotar-controlled intermediate for the Dutch government were initially exempted; Mozilla removed that exemption after the Dutch government’s assessment changed. [Primary source: Nightingale, “DigiNotar Removal Follow Up.”](https://blog.mozilla.org/security/2011/09/02/diginotar-removal-follow-up/)
+In September 2011, Mozilla removed trust in the DigiNotar certificate authority after fraudulent certificate issuance. Its account described an uncertain breach scope and failures of notification. Certificates issued through a different DigiNotar-controlled intermediate for the Dutch government were initially exempted; Mozilla removed that exemption after the Dutch government’s assessment changed.
+
+<Src>Nightingale, “DigiNotar Removal Follow Up.” [Mozilla Security Blog](https://blog.mozilla.org/security/2011/09/02/diginotar-removal-follow-up/)</Src>
 
 A **certificate authority** vouches for the relationship between an identity and a public key. Here, the architecture lesson is that different certificate chains did not settle whether the underlying processes were independently secure. It is not a claim that every certificate was fraudulent, or that cryptography itself failed.
 
@@ -178,16 +180,12 @@ The same applies to enforcement. A passive meter cannot implement the suspension
 
 A supplier describes its proposal as “three independent hardware verification layers.” Its specification says:
 
-<div className="trio-table">
-
 | Component | Input and function | Control and coverage |
 | --- | --- | --- |
 | **A** | Runs on the accelerator itself. Vendor firmware produces operation totals and workload labels; the device signs the report. | Vendor V supplies firmware and decides accepted versions. The proposal has not established adversarial classification performance. |
 | **B** | A separate box beside the rack. Its only input is A’s report. It checks A’s signature, copies A’s values into a second report, and signs that report. | Physically separate; accepts software updates signed by V’s update service. |
 | **C** | A separately installed instrument. Its sensor measures electricity on the rack’s sole electrical feed. Its analysis software uses a model supplied by V to translate the trace into estimated compute. | Independently installed sensor; analysis software accepts updates from the same V service as B. Coverage of that feed is established for this exercise. |
 | **Common records and service** | A facility inventory maps records to covered devices; a local dashboard combines all three reports. | The operator maintains the mapping. Raw records stay local. The inspectorate receives summaries. Maintenance and summary-release procedures remain unspecified. |
-
-</div>
 
 All three reports are green. No compromise has been established.
 

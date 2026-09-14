@@ -1,4 +1,5 @@
 import { BookOpen, CheckCircle2, Clock } from "lucide-react";
+import { PROSE_CLASS } from "@/components/mdx/prose-class";
 import { getLessonById } from "@/lib/content";
 import { importLesson } from "@/components/mdx/lesson-content";
 import { LessonTracker } from "@/components/learn/lesson-tracker";
@@ -56,7 +57,7 @@ export async function EmbeddedLesson({
         )}
       </div>
       <div className="px-5 py-4">
-        <article className="lesson-body prose prose-neutral dark:prose-invert prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-link prose-a:font-medium prose-a:underline-offset-4 max-w-none">
+        <article className={`lesson-body ${PROSE_CLASS}`}>
           <Body />
         </article>
         {signedIn && (

@@ -47,6 +47,8 @@ This is a course-authored illustration, not the specification of every protocol 
 
 Fixing the record before the verifier’s unpredictable selection limits the developer’s ability to prepare only the challenged intervals. But it does not establish how the record relates to physical execution. An internally consistent history, contemporaneous evidence of a particular execution, and a complete account of a project’s compute are different objects of verification.
 
+<PageBreak title="Research Case: Proof-of-Learning" />
+
 ### Research Case: A Proposed Proof Meets Adversarial Testing
 
 Jia et al. introduced proof-of-learning in 2021, motivated partly by model ownership and integrity of outsourced training. Their scheme records intermediate states and checks selected updates by re-execution. The intended assurance includes making a forged history no cheaper to obtain than honest training. [Jia et al.](https://arxiv.org/pdf/2103.05633v1)
@@ -81,6 +83,8 @@ For a procurement review, ask for two kinds of validation: honest runs under the
 
 A failed replay is also not automatically a legal finding. Missing replay state, a software discrepancy, and a fabricated checkpoint can each prevent a match. Preserve the evidence and investigate the cause. The response to an unresolved failure belongs in the review and suspension procedures from [2.1.5](/tracks/verification/verification-infrastructure/hardware-authorization).
 
+<PageBreak title="Strengthening the Transcript Check" />
+
 ### Strengthening the Transcript Check Changes Its Requirements
 
 Choi, Shavit, and Duvenaud propose training-data verification that adds initialization and data-order commitments and tests based on temporary memorization of recently seen data. They report empirical defenses, while explicitly acknowledging attacks not covered and limits of generalization. Their protocol also requires the verifier to access sensitive material; an isolated cluster trusted by both sides is discussed as a possible way to reduce leakage. [Choi et al., §§4 and 7](https://arxiv.org/html/2307.00682v1)
@@ -107,6 +111,8 @@ The policy decision is therefore partly about access: who may see weights, data,
 **Technical help:** Small changes to model weights can matter even if their numerical size is small. “Bit-wise reproducibility” means matching the stored numerical representation exactly.
 
 </ReadingCard>
+
+<PageBreak title="Zero Knowledge and the Statement" />
 
 ### Zero Knowledge Changes Disclosure, Not the Scope of the Statement
 
@@ -152,6 +158,8 @@ The policy task is to evaluate the proposed combination. A valid proof of a samp
 Replaying fewer intervals reduces work but may not reduce the minimum machine size needed to reproduce one interval. A verifier could need a substantial cluster briefly, even when its total computation is a small fraction of the original run. Compare peak capacity, total compute, storage, staff time, and delay to a usable decision.
 
 A deployment forecast should be tied to milestones: a working implementation of the specified relation; measurements on the intended workload and hardware; adversarial evaluation; a confidentiality assessment; and an integrated pilot with explicit failure handling. Different milestones answer different questions. A component benchmark cannot stand in for all of them. The appropriate procurement response may be to fund a bounded experiment without yet treating its output as sufficient compliance evidence.
+
+<PageBreak title="Exercise: All Sampled Intervals Passed" />
 
 ### Exercise — All Sampled Intervals Passed
 

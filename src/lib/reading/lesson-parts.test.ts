@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { planParts, type PartSource } from "./lesson-parts";
+import { planParts, progressText, type PartSource } from "./lesson-parts";
 
 const block = (tag: string, text: string): PartSource => ({ tag, text });
 const br = (label: string): PartSource => ({
@@ -77,5 +77,29 @@ describe("planParts", () => {
         block("P", "B"),
       ]).map((part) => part.label)
     ).toEqual(["Start", "Actual label"]);
+  });
+});
+
+describe("progressText", () => {
+  it("counts from one and says how many pages remain", () => {
+    expect(progressText(0, 5)).toEqual({
+      position: "Part 1 of 5",
+      remaining: "4 parts left",
+    });
+    expect(progressText(3, 5)).toEqual({
+      position: "Part 4 of 5",
+      remaining: "1 part left",
+    });
+  });
+
+  it("names the last page instead of counting zero", () => {
+    expect(progressText(4, 5).remaining).toBe("Last part");
+  });
+
+  it("takes the paper reader's unit", () => {
+    expect(progressText(1, 3, "Section")).toEqual({
+      position: "Section 2 of 3",
+      remaining: "1 section left",
+    });
   });
 });

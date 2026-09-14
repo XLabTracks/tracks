@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CourseOverview } from "@/components/verification/course-overview";
 import { LegacyScripts } from "@/components/verification/legacy-scripts";
-import { NotebookLink } from "@/components/verification/notebook-link";
 
 /* Verification — one of the course's own pages.
  *
@@ -19,6 +18,7 @@ const SCRIPTS = [
   "data/skills.js",
   "data/chrome.js",
   "platform.js",
+  "skill-web.js",
   "landing.js",
 ];
 
@@ -31,6 +31,11 @@ export default function Page() {
         precedence="high"
       />
       <link rel="stylesheet" href="/verification/page.css" precedence="high" />
+      <link
+        rel="stylesheet"
+        href="/verification/skill-web.css"
+        precedence="high"
+      />
       <link
         rel="stylesheet"
         href="/verification/landing.css"
@@ -101,11 +106,8 @@ export default function Page() {
               From securitization to feasibility judgments, this course builds
               on interconnected skills, not an arbitrary linear progression.
               Each module cumulatively builds on the skills learned previously.
-              Your skill map is always accessible as{" "}
-              <NotebookLink page="skills">
-                the last page in your notebook
-              </NotebookLink>
-              .
+              Your skill map is always accessible from your notebook, and in
+              full at <a href="/verification/map">the Skill Map</a>.
             </p>
 
             <div className="mod-filters" id="modFilters"></div>

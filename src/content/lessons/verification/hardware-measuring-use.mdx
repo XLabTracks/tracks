@@ -25,6 +25,8 @@ An answer to one question does not answer the others. A large inference workload
 
 The Chip Security Act claim from the preceding sections remains separate: evidence that hardware is in an allowed jurisdiction does not establish allowed use. Here we develop the pause agreement’s use claim. Keep both claims in your notebook rather than letting one stand in for the other.
 
+<PageBreak title="What Does a Compute Number Count?" />
+
 ### What Does a Compute Number Count?
 
 A **FLOP** is a floating-point operation. **FLOP/s** measures a rate; a total over a run is measured in FLOP. A **GPU-hour** measures time allocated to or used by a GPU, depending on the accounting convention. None of these terms alone specifies the legal counting rule.
@@ -65,6 +67,8 @@ There are several ways to produce a compute estimate, each with a different depe
 | Estimate work from activity or physical measurements | A validated relationship with operations and an uncertainty range for the relevant operating conditions |
 
 This is an analytic comparison, not a claim that every approach is already available as a tamper-resistant regulatory product.
+
+<PageBreak title="Reconciling Observations With Uses" />
 
 ### Accounting Means Reconciling Observations With Uses
 
@@ -107,6 +111,8 @@ Evidence linking jobs may include authenticated scheduler records, checkpoint li
 
 Distribution does not make compute disappear. It makes the relationship between records harder to establish. Work on distributed-training governance examines why large-cluster assumptions can miss activity spread across smaller installations; it is a reason to define the accounting boundary carefully, not evidence that every distributed evasion is feasible. [Reference: Rahman, *Does Distributed Training Undermine Compute Governance?*](https://arxiv.org/abs/2605.29359)
 
+<PageBreak title="Recognizing a Workload From Telemetry" />
+
 ### Recognizing a Workload From Telemetry
 
 **Telemetry** is a sequence of measurements such as power draw, memory use, utilization, and data movement. A **classifier** uses patterns in those measurements to assign a label, such as training or non-training.
@@ -138,6 +144,8 @@ Likewise, an inference classification is not a safety certificate. Whether infer
 For the pause claim, the verifier needs evidence for all relevant elements: the activity falls within the covered training category; its counted compute exceeds the applicable threshold when aggregated correctly; and no applicable authorization permits it. Uncertainty in one element cannot be erased by a confident answer to another.
 
 The appropriate response to an unresolved case might be obtaining additional evidence, applying a separately defined reporting rule, or referring the case for review. Whether suspension is permitted, who can order it, and how it is reversed belong to the authorization framework examined in [2.1.5](/tracks/verification/verification-infrastructure/hardware-authorization).
+
+<PageBreak title="Exercise: Assessing Job J" />
 
 ### Exercise — Assessing Job J
 
@@ -236,6 +244,8 @@ Keep the two apart, and let the procedure report a run in that condition as unre
 ### Carry Forward
 
 At this point, a hardware regime has three separate outputs: an inventory with coverage limits, a compute account with continuity and uncertainty, and an appraisal of workload evidence against the rule. None is yet a decision about who may stop a machine. Section 2.1.5 examines that authority and the safeguards around it.
+
+<PageBreak title="Optional: What Does This Paper Establish?" />
 
 ### Optional: What Does This Paper Actually Establish?
 

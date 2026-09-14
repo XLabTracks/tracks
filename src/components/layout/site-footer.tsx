@@ -101,7 +101,12 @@ export function SiteFooter() {
           ))}
         </div>
 
-        <p className="text-muted-foreground mt-10 text-xs">© 2026 XLab.</p>
+        <div className="text-muted-foreground mt-10 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-xs">
+          <p>© 2026 XLab.</p>
+          <Link className="underline-offset-4 hover:underline" href="/privacy">
+            Privacy policy
+          </Link>
+        </div>
       </div>
     </footer>
   );

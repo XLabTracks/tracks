@@ -44,6 +44,8 @@ It also illustrates the limit of the analogy. The documentation explicitly calls
 
 </ReadingCard>
 
+<PageBreak title="From Commercial Licensing to Control" />
+
 ### From Commercial Licensing to Hardware-Backed Control
 
 Kulp and colleagues’ 2024 RAND working paper proposes offline licensing: a device authenticates an allowance, meters its consumption, and restricts selected functionality when the allowance is exhausted. Tokens need not arrive through a live internet connection. The proposal separates this control from verifying what the permitted compute actually did. It is a design proposal, not evidence of an operating international regime. [Reference: Kulp et al., ch. 6.](https://www.rand.org/pubs/working_papers/WRA3056-1.html)
@@ -94,6 +96,8 @@ Consider three translation errors. A ten-unit allowance for an entire run become
 
 That is the connection to the previous lessons: identity from [2.1.2](/tracks/verification/verification-infrastructure/hardware-trusted-statement), fleet coverage from [2.1.3](/tracks/verification/verification-infrastructure/hardware-accounting), and counting conventions and job aggregation from 2.1.4 become dependencies of control—not problems that licensing solves on its own.
 
+<PageBreak title="Define What Stop Means" />
+
 ### Define What “Stop” Means
 
 **Throttling** reduces a rate or capability. **Suspension** stops specified activity pending a condition or decision. **Revocation** withdraws an authorization or trust in a credential. These can interact, but they are not interchangeable.
@@ -123,6 +127,8 @@ Shorter renewal intervals can reduce some exposure, but also make availability m
 
 One design allows bounded continued operation during a communications failure. Another refuses further covered work when permission cannot be refreshed. Neither is “safe” without specifying the harm being prevented: unauthorized computation, disruption of permitted services, or both. The exercise below makes that choice concrete.
 
+<PageBreak title="Who Controls the Controller?" />
+
 ### Who Controls the Controller?
 
 An attacker need not bypass a meter if they can obtain tokens the meter accepts. A dishonest official need not compromise a key if their office already controls issuance. Technical security and lawful use of authority are different requirements.
@@ -150,6 +156,8 @@ Exceptions also affect the quantitative promise. If a nominal ten-unit cap has a
 Older or otherwise uncovered equipment remains the completeness problem from 2.1.3. Installing a license service does not give a chip a protected enforcement path it never had. An external control may be possible, but requires its own bypass analysis. A transition plan should state which hardware is covered, what restrictions or alternative evidence apply elsewhere, and how migration is verified.
 
 Return briefly to the Chip Security Act exercise: a location check could inform a decision to issue or renew a token. It does not itself confer authority to disable a chip, and an unanswered location challenge does not prove smuggling. Treat location verification, the legal consequences of missing evidence, and a proposed control mechanism as distinct choices. This lesson does not claim that the bill requires the control design developed here.
+
+<PageBreak title="Exercise: After the Suspension" />
 
 ### Exercise — The Authority Has Revoked Permission. What Has Stopped?
 

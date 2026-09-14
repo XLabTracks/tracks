@@ -29,6 +29,8 @@ A **measurement boundary** is the set of devices, pathways, and intervals the ob
 
 Likewise, distinguish physical location from dependence. An off-chip appliance can remain dependent on on-chip firmware for every input. An analog sensor normally produces records that digital software stores and analyzes. “Analog” describes the originating measurement, not an absence of software or cryptography.
 
+<PageBreak title="Four Architectural Choices" />
+
 ### Four Architectural Choices
 
 The following is a course-authored comparison of representative designs, not a universal ranking or vendor specification. A specific implementation may change any entry.
@@ -67,6 +69,8 @@ Baker and colleagues distinguish on-chip verification from external digital logg
 
 </ReadingCard>
 
+<PageBreak title="Digital Access and Visibility" />
+
 ### Digital Access Is Not Complete Visibility
 
 Suppose a tap records every message passing through a particular network port. That establishes coverage of that port, not of all computation on the attached devices. Some work may occur without crossing it. Even observed traffic may be encrypted, and readable messages do not automatically reveal which high-level training procedure produced them.
@@ -95,6 +99,8 @@ Petrie and Aarne explore an interlock on an accelerator’s data path, supported
 **Technical boundary:** You may skim the last paragraph’s bandwidth figures. A chiplet is a small chip packaged with other chips; a data path is the route information follows. No diagram reconstruction, networking protocol, or hardware implementation is required.
 
 </ReadingCard>
+
+<PageBreak title="Physical Measurement" />
 
 ### Physical Measurement Changes the Question
 
@@ -133,6 +139,8 @@ For our purposes, the incident motivates a question: if different monitoring com
 
 </ReadingCard>
 
+<PageBreak title="A Hybrid Is Not Automatically Redundant" />
+
 ### A Hybrid Is Not Automatically Redundant
 
 **Complementary** mechanisms answer different questions. **Redundant** mechanisms provide overlapping assurance about the same question. Either can be useful. Neither is established by the number of boxes.
@@ -161,6 +169,8 @@ Possible accommodations include reviewed designs, controlled installation, joint
 Confidentiality controls need their own coverage argument. Restricting ordinary network output does not automatically cover maintenance interfaces, removable storage, or personnel. Nor should an operator’s confidentiality veto silently become a power to replace inconvenient measurements. Specify what happens when the parties disagree about a disclosure.
 
 The same applies to enforcement. A passive meter cannot implement the suspension procedure from 2.1.5 by itself. Adding a power-control device changes the architecture’s availability risks and authority structure. Do not smuggle a new control power into a diagram labeled “verification.”
+
+<PageBreak title="Exercise: Three Green Reports" />
 
 ### Exercise — Three Green Reports
 

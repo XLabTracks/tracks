@@ -38,7 +38,7 @@ const CURRICULUM: { label: string; href: string; desc: string }[] = [
     desc: "The five modules and their units, in reading order.",
   },
   {
-    label: "Skill map",
+    label: "Skill Map",
     href: "/verification/map",
     desc: "The skill graph the course is organised around — which units feed which skills.",
   },
@@ -48,7 +48,7 @@ const CURRICULUM: { label: string; href: string; desc: string }[] = [
     desc: "Every term the track defines, and a review prompt for each distinction worth keeping.",
   },
   {
-    label: "Memo desk",
+    label: "Memo Desk",
     href: "/verification/memo-desk",
     desc: "The written outputs — a memo, brief, critique or design note per module — drafted beside the page.",
   },

@@ -12,10 +12,6 @@ window.VT_CHROME = {
       "href": "/tracks/verification"
     },
     {
-      "label": "Skill map",
-      "href": "map"
-    },
-    {
       "label": "For facilitators",
       "href": "facilitator"
     },
@@ -59,7 +55,7 @@ window.VT_CHROME = {
     },
     {
       "label": "Privacy Policy",
-      "href": "https://privacy.uchicago.edu/privacy-policy/"
+      "href": "/privacy"
     },
     {
       "label": "Accessibility",

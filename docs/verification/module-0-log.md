@@ -1038,3 +1038,27 @@ entry, so the lesson's appendix counts it as awaiting verification instead
 of printing facts nobody checked. Owner: send the page's real title and a
 line on what it is, and both the card and the registry entry can be
 finished.
+
+### Part-by-part reading restored, with a progress bar (2026-09-13)
+
+The owner: "add the part-by-part section reading back, ADHD-friendly
+progress bar, to each submodule in the modules of Verification only".
+`chunkedReading` is on again for the track; the Control track is untouched.
+What came back with it is exactly what left on 2026-08-15: the whole-lesson
+toggle, `?p=` deep links, the reader-toolbar estimate line, and the Scher
+treaty paper reading by its authored sections. What is new is the bar —
+`PartsProgress`, one segment per page filled up to the one on screen, with
+"Part n of m · label" and the count still to go, shared by the lesson and
+paper readers. The paged host now carries `data-reading-surface`, so the Aa
+text-size editor keeps scoping to the reading as it does on the plain layout.
+
+Breaks were authored, per `reading-pages.md`, in the lessons that had none
+and had more than one learner action in them — 29 markers across 19 lessons,
+each placed before a heading that opens a new question, a source packet, or
+an exercise after its explanation. Lessons with a single action (`cloud-
+evidence`, `scoping-actors`, `capstone-project`, `human-intro`, `mechanism-
+privacy`, `prevention`, `capstone-together`, `cloud-customer-identification`
+whose opener is thirty words) read whole; 0.0, 0.4 and 4.1.1 keep their
+`unchunked` opt-out. The empty-page problem that ended the first regime is
+guarded by the same rule: a break goes before content, never before an
+optional fold on its own.

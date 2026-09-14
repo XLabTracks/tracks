@@ -6,7 +6,6 @@ export type ChromeLink = {
 
 export const NAV: ChromeLink[] = [
   { label: "Curriculum", href: "/tracks/verification" },
-  { label: "Skill map", href: "map" },
   { label: "For facilitators", href: "facilitator" },
   { label: "Team", href: "team" },
   { label: "About", href: "about" },
@@ -20,7 +19,7 @@ export const FOOT: ChromeLink[] = [
   { label: "Team", href: "team" },
   { label: "Contact", href: "mailto:xlab-info@uchicago.edu" },
   { label: "Report a bug", href: "https://github.com/XLabTracks/tracks/issues" },
-  { label: "Privacy Policy", href: "https://privacy.uchicago.edu/privacy-policy/" },
+  { label: "Privacy Policy", href: "/privacy" },
   { label: "Accessibility", href: "accessibility" },
 ];
 

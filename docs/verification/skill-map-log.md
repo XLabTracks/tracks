@@ -68,3 +68,93 @@ Deliberately NOT done here, and owed:
   (nothing teaches them; the skill is optional). If module 3 ever grows the
   facility simulation its objectives promise, evasion and failure-modes
   ladders are the place to extend.
+
+## 2026-09-13 — one figure: /verification/map draws the home page's web
+
+The two surfaces had diverged: the landing page's "The Skill Map" band had
+become the radial skill web (stars numbered by module, arms, beams, the
+journal-card panel and the key), while `/verification/map` — the page that
+band's "Open the skill map" button leads to — still drew the older banded
+grid with bezier edges, and the about page's facts row still said 27
+skills. The owner's instruction: the home page is the current version, the
+map page and the about page match it.
+
+- The renderer moved out of `landing.js` into `skill-web.js`
+  (`VTSkillWeb.mount(opts)`), and its rules out of `landing.css` into
+  `skill-web.css`. Both pages load both; neither draws the graph itself.
+- What only the map page had rides on the renderer's hooks: `state` (each
+  star's halo becomes a progress arc — state on the ring, never the fill;
+  the key row prints the fraction and a ✓, the aria-label says it in
+  words), `rung` (the ladder's ✓/◐/· glyph and a link to the unit that
+  teaches it), `panelExtra` (Builds on / Unlocks / Feeds objectives chips
+  and the summary line), `dim` + `setDim` (the objectives row and the
+  `?unit=` deep link from platform.js's completion toast fade the stars
+  they reject), `pinned` (`?skill=`). `pin(id)` serves the chips.
+- The key marks the optional skill with the standing `Optional:` prefix on
+  both pages; the panel already did.
+- The default panel hint no longer says "Hover … click": the legend's
+  on-hover/on-touch pair was already the device-aware copy.
+- `map.css` is now the page around the figure plus the panel's additions;
+  the banded-grid rules (and the never-used `.tabs`) are gone.
+- The about page counts skills from `src/lib/verification/data/skills.ts`,
+  the app-side mirror `completion-stats.test.ts` keeps in step with
+  `data/skills.js`, instead of a literal that had sat at 27 through the
+  v2 rewrite.
+
+## 2026-09-13 — checked against the current curriculum; copy and bullets
+
+The owner asked that the map page carry all 31 skills and dependencies on
+the most recent curriculum. Checked, not changed: `skills.js` rev 4 already
+has 31 skills, 61 edges, 95 rungs, every rung on a unit `course.js` carries
+(the three rung texts that cite a sub-lesson — 0.1.1, 0.1.2, 4.1.1 — name
+lessons `curriculum.ts` has), and `verification:course --check` is clean.
+Units with no rung: 0.0 Welcome and 4.3 Where to Go From Here, by design.
+
+Changed on the owner's instruction:
+
+- The map page's intro is now verbatim: "Here is the skill map with your
+  current progress. Click each skill to read its description, the relevant
+  parts of the curriculum, and its dependencies."
+- "Skill Map" is capitalized everywhere it is a name: the header nav
+  (`chrome.ts`, regenerated), the page title, h1 and breadcrumb, the
+  facilitator guide's link, the notebook's last-page heading.
+- The panel's learner-goals list uses the course's own bullets — disc, then
+  circle one level in — instead of an en-dash pseudo-element. Shared CSS, so
+  the home page's panel reads the same.
+
+## 2026-09-13 — the objectives chips and the units bar come off the map page
+
+Owner: "get rid of these" — the six learning-objective filter chips over
+the figure and the "0 / 19 units" meter in the head are gone (with the
+panel's "Feeds objectives" chips and the filter behind them). Per-skill
+progress stays where it was: the ring around each star fills with the
+rungs held, the key prints the fraction, and the intro now says so in one
+added sentence after the owner's verbatim two. "Memo Desk" is capitalized
+wherever it is a name.
+
+## 2026-09-13 — the Skill Map moves into the notebook
+
+Owner: the skill tree goes into the notebook and out of the main menu bar,
+and pressing Skill Map or Memo Desk in the notebook stays in the notebook.
+
+- `chrome.ts` loses the Skill Map row (four nav links now; `data/chrome.js`
+  regenerated). `/verification/map` stays as the full-width edition and the
+  deep-link target the completion toast uses (`?unit=`, `?skill=`).
+- The notebook's header buttons are tabs now — Notes, Skill Map, Memo Desk —
+  and the two surfaces are views inside the panel, not links out of it.
+  `map.js` is a library (`VTSkillMap.mount(hosts, {query})`) mounted by the
+  page (`SkillMapHost`, the MemoDeskHost pattern) and by the notebook; the
+  notebook mounts `VTMemoDesk` with `hash: false`, so the desk page keeps
+  the URL. The scripts load on first use through the registry
+  `LegacyScripts` now keeps on `window.__vtScripts`, so neither side runs a
+  file the other has already run.
+- The progress bars are back, under the figure in the Skill Map view — one
+  row per skill by module, the bar in the module hue, the fraction and
+  state word beside it — from `VT.skillProgress`, not a second copy of the
+  arithmetic; a row pins its star.
+- `skill-web.js` picks its preset from the host's width (ResizeObserver),
+  not the viewport's: the compact web serves the notebook column as it
+  serves a phone, and flips live when the panel is dragged wider.
+- The panel resizes from its left edge: drag, or arrow keys on the handle
+  (Home resets, double-click too). The width is a device preference under
+  `vt-notebook-width`, outside the learner-work purge and the account sync.

@@ -85,3 +85,24 @@ export function planParts(
 
   return pages;
 }
+
+/**
+ * The words beside the progress bar: where the reader is and how much is
+ * left. Kept out of the component so the phrasing is tested once and shared
+ * by the lesson and paper readers, which must describe position identically.
+ */
+export function progressText(
+  at: number,
+  total: number,
+  unit = "Part"
+): { position: string; remaining: string } {
+  const plural = `${unit.toLowerCase()}s`;
+  const left = total - at - 1;
+  const remaining =
+    left <= 0
+      ? `Last ${unit.toLowerCase()}`
+      : left === 1
+        ? `1 ${unit.toLowerCase()} left`
+        : `${left} ${plural} left`;
+  return { position: `${unit} ${at + 1} of ${total}`, remaining };
+}

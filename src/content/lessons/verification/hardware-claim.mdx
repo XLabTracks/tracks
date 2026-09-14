@@ -1,4 +1,4 @@
-### 2.1.1 Break down the claim
+### 2.1.1 Break Down the Claim
 
 <Objectives scope="this section">
 1. Separate a policy goal, a legal rule, and a verification claim.
@@ -29,12 +29,14 @@ A useful verification claim specifies what is being checked and its scope: the r
 MIRI's draft international agreement proposes restrictions on training compute alongside restrictions on dangerous research. It distinguishes a **Strict Threshold**, above which training is prohibited, from a lower **Monitored Threshold**, above which training requires approval and monitoring. Here we focus on the upper limit. [Scher et al., sec. 4](https://arxiv.org/html/2511.10783v1).
 
 - **Policy goal:** prevent the premature development of artificial superintelligence.
-- **Proposed legal rule, simplified:** parties must prohibit training runs above the Strict Threshold.
+- **Proposed legal rule:** parties must prohibit training runs above the Strict Threshold.
 - **Verification claim:** no training run subject to this prohibition exceeded the Strict Threshold, counting the operations attributable to that run across devices, sites, and reporting periods under the agreement's accounting rules.
 
 The unit of compliance is a **training run**. Evidence about an individual device must therefore be connected to the run and combined with other relevant records. A reporting period does not reset a limit that applies to the whole run.
 
 The phrase "under the agreement's accounting rules" also matters. Those rules must determine which operations count and which activities belong to the same run. Without these definitions, even an accurate measurement may not settle whether the limit was exceeded.
+
+<PageBreak title="What a Counting Rule Captures" />
 
 #### What a Counting Rule Captures, and Leaves Out
 
@@ -87,6 +89,8 @@ To assess compliance with a training limit, however, the verifier needs several 
 An accurate count can therefore be useful without being sufficient for a compliance finding.
 
 The direction of the inference also matters. An incomplete count below a threshold cannot establish that the full run stayed below it. A reliably attributed count already above the threshold could establish an exceedance even if additional computation remained unobserved.
+
+<PageBreak title="Exercise: The Chip Security Act" />
 
 #### Exercise: Break Down the Chip Security Act
 

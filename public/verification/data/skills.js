@@ -30,9 +30,9 @@ window.SKILLS = {
      (curriculum.ts); verificationUnitOfLesson is the join. */
   moduleNames: [
     "Foundations",
-    "Policy and actors",
-    "Evidence streams",
-    "Covert development",
+    "Policy and Actors",
+    "Evidence Streams",
+    "Covert Development",
     "Capstone",
   ],
   compoundRung: "2.1–2.4",
@@ -138,7 +138,7 @@ window.SKILLS = {
         ["2.3", "Base rates: what an alarm rate does across the ~500-site haystack."]
       ] },
 
-    /* ---- Module 1 · Policy and actors ---- */
+    /* ---- Module 1 · Policy and Actors ---- */
     { id: "components", label: "Policy components", mod: 1, unit: "1.0", r: 0, lo: [1], bloom: [2, 4],
       goals: [
         [0, "Decompose any written policy or treaty into its actors, objects, activities, conditions"],
@@ -251,7 +251,7 @@ window.SKILLS = {
         ["4.2", "The governance artifact in a working format: treaty text, policy memo, research proposal."]
       ] },
 
-    /* ---- Module 2 · Evidence streams ---- */
+    /* ---- Module 2 · Evidence Streams ---- */
     { id: "taxonomies", label: "Mechanism taxonomies", mod: 2, unit: "2.0", r: 0, lo: [3, 4], bloom: [3, 3],
       goals: [
         [0, "Understand five categories of mechanism sorting and when each is most appropriate: layer, access, policy goal, lifecycle, adversary robustness"],
@@ -306,7 +306,7 @@ window.SKILLS = {
         ["2.4", "Insider access, declarations, interviews, routine audits vs. challenge inspections, protections."]
       ] },
 
-    /* ---- Module 3 · Covert development ---- */
+    /* ---- Module 3 · Covert Development ---- */
     { id: "evasion", label: "Evasion scenarios", mod: 3, unit: "3.0", r: 0, lo: [5], bloom: [4, 5],
       goals: [
         [0, "Understand the catalog of routes around the regime ordered by feasibility, the signature each route leaves, and its best-placed detector"],

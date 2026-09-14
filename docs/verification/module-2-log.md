@@ -3882,3 +3882,46 @@ on exactly it), and the text is in this file's history if it is ever wanted
 back here.
 
 The case is not carried into 2.1.6, per the owner's instruction.
+
+## 2026-09-14 — main merged into the 2.1 branch
+
+Nine commits came over, including three that touch this work directly.
+
+**Part-by-part reading is on again** (`chunkedReading: true`, PR #68), which
+is the substantive consequence for 2.1. The rebuilt lessons carried no
+`<PageBreak>` markers, so on the merged tree they would have been the only
+lessons in the course reading as one page. Breaks were placed per
+`docs/verification/reading-pages.md` — at a change from explanation to
+exercise, and between source packets a learner reads independently — giving
+2.1 head 3 pages, 2.1.1 3, 2.1.2 3, 2.1.3 4, 2.1.4 6, 2.1.5 5, 2.1.6 6,
+2.1.7 5. Pages run roughly 400 to 1,400 words, inside the doc's own 700–1,400
+flag except where a short page carries one complete action. 2.3.3 regained
+the two breaks it lost when the FLOP fold moved out.
+
+**Title-casing** (PR #67) had renamed the old 2.1 lessons. Those titles lost
+to the owner's current ones — "2.1.2 Hardware Identity and Attestation" over
+"From a Chip to a Trusted Statement", "2.1.3 Accounting for Hardware" over
+the longer subtitle form, "2.1.7 Independent Verification of Training Claims"
+over "Reconstructing a Declared Training Run" — and 2.1.8 stayed deleted
+rather than returning as "Policy Judgment: What Role Should Hardware Play?".
+2.1.1's title took main's casing, "Break Down the Claim", since this branch
+had not changed it.
+
+**The memo desk now indexes every written component** (PR #71/#72/#73). All
+five new module-2 slots were kept; only `m2-1-hardware-brief` was dropped,
+because the lesson that owned it is gone. The desk therefore holds 19 slots
+rather than 20.
+
+Conflicts resolved: eight lesson bodies to this branch's rebuilt versions,
+`hardware-policy-studio.mdx` left deleted, `curriculum.ts` to this branch's
+titles and minutes with main's `chunkedReading`, `memos.ts` to main's slot
+list minus the deleted one, and both generated data files rebuilt rather than
+hand-merged.
+
+Two copy edits from the owner in the same pass: the 2.1 head's section
+heading is now "Why Compute" — the lead sentence beneath it already says "in
+the field's own words" — and 2.1.1's worked example reads "Proposed legal
+rule:" without ", simplified".
+
+After the merge: 1,238 tests pass, typecheck clean, lint 0 errors, both
+generators up to date, and every 2.1 lesson paginates in the browser.

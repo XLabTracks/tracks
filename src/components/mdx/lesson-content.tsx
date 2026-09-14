@@ -1,6 +1,7 @@
 import { isValidElement, type ReactNode } from "react";
 import type { MDXComponents } from "mdx/types";
 import { notFound } from "next/navigation";
+import { PROSE_CLASS } from "@/components/mdx/prose-class";
 import { isLessonTitleHeading } from "@/lib/content/lesson-heading";
 import {
   getExerciseById,
@@ -169,7 +170,7 @@ export async function LessonContent({
 
   return (
     <article
-      className={`lesson-body ${plainLists ? "vt-plain-lists " : ""}prose prose-neutral dark:prose-invert prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-link prose-a:font-medium prose-a:underline-offset-4 max-w-none`}
+      className={`lesson-body ${plainLists ? "vt-plain-lists " : ""}${PROSE_CLASS}`}
     >
       {/* Per-render overrides win over the global map: the compiled body
           spreads `props.components` last (see src/mdx-components.tsx). */}

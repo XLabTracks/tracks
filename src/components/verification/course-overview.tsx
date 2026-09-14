@@ -36,7 +36,8 @@ export function CourseOverview() {
                     {p.slot === "notebook" && (
                       <NotebookLink>the notebook</NotebookLink>
                     )}
-                    {p.slot === "notebook" && " to try it out!"}
+                    {p.slot === "notebook" &&
+                      " to try it out! Your Skill Map and the Memo Desk open from its header."}
                     {p.slot === "facilitator" && (
                       <a
                         href="/verification/facilitator"

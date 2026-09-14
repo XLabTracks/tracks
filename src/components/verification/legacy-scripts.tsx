@@ -2,10 +2,16 @@
 
 import { useEffect, useRef } from "react";
 
-const loaded = new Set<string>();
-const loading = new Map<string, Promise<void>>();
+type Registry = { loaded: Set<string>; loading: Map<string, Promise<void>> };
+
+function registry(): Registry {
+  const w = window as unknown as { __vtScripts?: Registry };
+  w.__vtScripts ??= { loaded: new Set(), loading: new Map() };
+  return w.__vtScripts;
+}
 
 function loadOnce(url: string): Promise<void> {
+  const { loaded, loading } = registry();
   if (loaded.has(url)) return Promise.resolve();
   const existing = loading.get(url);
   if (existing) return existing;
@@ -47,6 +53,7 @@ export function LegacyScripts({
     const files = key ? key.split("|") : [];
 
     const run = async () => {
+      const { loaded } = registry();
       if (
         !ready.current &&
         files.length > 0 &&

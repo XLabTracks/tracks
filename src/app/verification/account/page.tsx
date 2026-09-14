@@ -194,7 +194,7 @@ export default async function VerificationAccountPage() {
               className="underline underline-offset-4"
               href="/verification/memo-desk"
             >
-              Memo desk
+              Memo Desk
             </Link>{" "}
             <span className="text-muted-foreground">
               — the written outputs, drafted beside their briefs.

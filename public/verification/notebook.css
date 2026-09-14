@@ -311,6 +311,131 @@
 .nb-skill-rungs .a { color: var(--muted-foreground); }
 .nb-skill-rungs li.hit .a { color: var(--foreground); }
 
+.nb-title {
+  width: 100%;
+  padding: 6px 0 12px;
+  border: 0;
+  border-bottom: var(--hairline) solid var(--border);
+  background: transparent;
+  color: var(--foreground);
+  font-family: var(--display);
+  font-size: var(--fs-xl);
+  font-weight: 500;
+}
+.nb-title:focus { outline: none; border-bottom-color: var(--ring); }
+
+.nb-empty {
+  margin-top: 18px;
+  color: var(--muted-foreground);
+  font-size: var(--fs-md);
+  line-height: 1.6;
+}
+
+/* ---------- blocks ---------- */
+
+/* Uniform hairline on all four sides; the kind is a word inside the block,
+   never a painted edge. */
+.nb-block {
+  margin-top: 16px;
+  padding: 12px 14px 14px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+.nb-block-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.nb-block-kind {
+  font-size: var(--fs-2xs);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  user-select: none;
+  -webkit-user-select: none;
+}
+.nb-block-bar .nb-x { width: 26px; height: 26px; font-size: var(--fs-md); }
+
+.nb-text,
+.nb-note-on-quote {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--background);
+  color: var(--foreground);
+  font: inherit;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  resize: vertical;
+}
+.nb-text:focus, .nb-note-on-quote:focus { outline: none; border-color: var(--ring); }
+.nb-text { overflow: hidden; }
+
+.nb-note-on-quote { margin-top: 10px; font-size: var(--fs-md); }
+
+/* No rib. A coloured left edge against three hairline ones is the
+   half-painted card the design rules forbid — pick no tint or paint the whole
+   thing. The block already says CAPTURED above it and carries its source
+   below, so the quote needs no second marker; it reads by its indent. */
+.nb-quote {
+  padding-left: 14px;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+.nb-source { margin-top: 6px; font-size: var(--fs-sm); color: var(--muted-foreground); }
+.nb-source a { color: var(--brand-ink); text-underline-offset: 3px; }
+
+.nb-sketch { position: relative; }
+.nb-sketch canvas {
+  display: block;
+  width: 100%;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--background);
+  touch-action: none;
+  cursor: crosshair;
+}
+.nb-clear { position: absolute; right: 8px; bottom: 8px; }
+
+/* ---------- footer ---------- */
+
+.nb-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-top: var(--hairline) solid var(--border);
+  background: var(--background);
+}
+.nb-add, .nb-pager { display: flex; align-items: center; gap: 8px; }
+.nb-pager { margin-left: auto; }
+.nb-count { font-size: var(--fs-xs); color: var(--muted-foreground); white-space: nowrap; }
+.nb-foot [data-export] { flex: 0 0 auto; }
+.nb-add button:disabled { opacity: .45; cursor: default; }
+
+/* The page number is the jump control: a box the width of two digits, typed
+   into and committed on Enter or blur. The hairline is what says "editable"
+   where the rest of the counter is print. */
+.nb-goto {
+  width: 2.6ch;
+  padding: 2px 3px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--label);
+  font-size: var(--fs-xs);
+  text-align: center;
+}
+.nb-goto:focus { outline: none; border-color: var(--ring); }
+
 /* ---------- highlight removal ---------- */
 
 /* What is left of the highlighter here is removal: a strip beside a painted

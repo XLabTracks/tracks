@@ -169,3 +169,16 @@ description — its learner goals and the ladder of units that fill it. The
 ladder row is `VTSkillMap.rung`, the same renderer the map page's panel
 uses, so the two cannot disagree. The web itself stays on
 `/verification/map`, which the view links to.
+
+## 2026-09-14 — notebook footer rules restored; sidebar titles no longer clamp
+
+The bars-only edit replaced a range of `notebook.css` that ran past the
+progress block and took the page-title, block, sketch and footer rules
+with it, so the footer's buttons rendered inline and touching. Restored
+verbatim from the previous commit. Owner, same day: "get rid of
+unnecessary/arbitrary weird ellipses" — the track sidebar clamped lesson
+titles to two lines and module titles to three, and an active row's bolder
+weight pushed a title that just fit into a third line and a "…". The clamps
+are gone (both tracks' sidebar, one component); titles wrap in full. Two
+widget labels that truncated a name (`what-do-they-say`, `mechanism-sort`)
+wrap now too.

@@ -15,13 +15,13 @@ Training thresholds are usually expressed in total operations, commonly total tr
 
 A treaty-grade accounting rule must define:
 
-- Which operations count;
-- Whether low-precision, sparse, skipped, duplicated, or recomputed operations count differently;
-- Where counting occurs in the hardware or software stack;
-- How per-device records aggregate across a run, customer, cluster, facility, site, and time window;
-- How interrupted, resumed, sequential, or distributed runs are joined;
-- How counter resets, rollbacks, overflow, missing records, and clock changes are handled;
-- How the verifier detects padding or deliberately inefficient work intended to distort the count.
+- Which operations count
+- Whether low-precision, sparse, skipped, duplicated, or recomputed operations count differently
+- Where counting occurs in the hardware or software stack
+- How per-device records aggregate across a run, customer, cluster, facility, site, and time window
+- How interrupted, resumed, sequential, or distributed runs are joined
+- How counter resets, rollbacks, overflow, missing records, and clock changes are handled
+- How the verifier detects padding or deliberately inefficient work intended to distort the count
 
 Existing performance counters and management telemetry can measure useful quantities, but ordinary counters are not automatically suitable for adversarial verification. Hardware-mechanism surveys note that users can reset or control some existing counters. A stronger design needs a protected measurement path, secure state, authenticated reporting, freshness, and aggregation rules that the operator cannot silently rewrite.
 
@@ -43,12 +43,12 @@ A June 2026 preprint by Rahman and Tajdari tested whether temporal GPU telemetry
 
 The limitations are equally important:
 
-- Difficult previously unseen adversarial workloads produced materially lower performance, reported in the study as 43–87 percent for the hardest cases;
-- Experiments were limited to single-node systems of up to eight GPUs;
-- The study did not test frontier-scale multi-node clusters;
-- The study did not exhaustively cover custom low-level kernels;
-- The experiments used NVIDIA hardware;
-- Treaty relevance depends on a tamper-resistant telemetry source, an authenticated channel, and protected monitoring software;
+- Difficult previously unseen adversarial workloads produced materially lower performance, reported in the study as 43–87 percent for the hardest cases.
+- Experiments were limited to single-node systems of up to eight GPUs.
+- The study did not test frontier-scale multi-node clusters.
+- The study did not exhaustively cover custom low-level kernels.
+- The experiments used NVIDIA hardware.
+- Treaty relevance depends on a tamper-resistant telemetry source, an authenticated channel, and protected monitoring software.
 - Simple static heuristics are inadequate, because some inference configurations occupy the same basic utilization or arithmetic-intensity range as training.
 
 This is an **empirical component demonstration**, not an end-to-end verification regime.

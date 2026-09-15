@@ -17,28 +17,34 @@ Do not infer stage five from evidence at stages one or two.
 
 The evidence supports a bounded judgment.
 
-**Hardware can already contribute to:**
+<Fold label="Hardware can already contribute to">
 
-- Authenticating supported devices and selected state or configuration claims;
-- Protecting some measurement and confidential-computing functions under stated threat models;
-- Anchoring logs, credentials, and evidence from cloud or inspection systems;
-- Making some forms of software-only impersonation or tampering more difficult.
+- Authenticating supported devices and selected state or configuration claims
+- Protecting some measurement and confidential-computing functions under stated threat models
+- Anchoring logs, credentials, and evidence from cloud or inspection systems
+- Making some forms of software-only impersonation or tampering more difficult
 
-**Hardware research provides promising but incomplete evidence for:**
+</Fold>
 
-- Protected compute accounting;
-- Training-versus-inference classification;
-- Location and cluster-configuration verification;
-- Offline licensing, throttling, and revocation;
-- Off-chip digital and analog monitoring;
-- Sampled reconstruction of declared training runs.
+<Fold label="Hardware research provides promising but incomplete evidence for">
 
-**No public evidence establishes:**
+- Protected compute accounting
+- Training-versus-inference classification
+- Location and cluster-configuration verification
+- Offline licensing, throttling, and revocation
+- Off-chip digital and analog monitoring
+- Sampled reconstruction of declared training runs
 
-- A deployed, treaty-grade, end-to-end hardware system that meters and classifies frontier training across heterogeneous multi-node fleets against a state-level owner;
-- Universal coverage of legacy, custom, smuggled, or nonparticipating hardware;
-- Reliable detection of all undeclared compute;
-- A politically accepted international authority for keys, reference values, suspension, appeal, and enforcement.
+</Fold>
+
+<Fold label="No public evidence establishes">
+
+- A deployed, treaty-grade, end-to-end hardware system that meters and classifies frontier training across heterogeneous multi-node fleets against a state-level owner
+- Universal coverage of legacy, custom, smuggled, or nonparticipating hardware
+- Reliable detection of all undeclared compute
+- A politically accepted international authority for keys, reference values, suspension, appeal, and enforcement
+
+</Fold>
 
 A useful hardware recommendation therefore gives hardware a bounded job inside a layered regime. It names the corroborating evidence for the blind spot and the condition under which the recommendation expires.
 
@@ -46,30 +52,7 @@ A useful hardware recommendation therefore gives hardware a bounded job inside a
 
 ## Hardware Mechanism Dossier
 
-Use the following common anatomy for any proposal.
-
-- Policy goal
-- Legal rule
-- Exact verification claim
-- Function: identify, attest, locate, measure, classify, restrict, reconstruct
-- Architecture: on-chip, off-chip digital, off-chip analog, hybrid
-- Prover
-- Verifier
-- Evidence producer
-- Decision authority
-- Enforcement authority
-- Evidence produced and freshness
-- Trust chain
-- Current maturity
-- Technical dependencies
-- Political and confidentiality dependencies
-- Cooperation required
-- Strongest plausible bypass
-- Collapsing weakness
-- Residual blind spot
-- Independent corroborating layer
-- Update condition and as-of date
-- Confidence and source notes
+Use the same anatomy for any proposal. Start with the policy goal, the legal rule, and the exact verification claim. Then state the mechanism's function (identify, attest, locate, measure, classify, restrict, or reconstruct) and its architecture (on-chip, off-chip digital, off-chip analog, or hybrid). Name the actors: the prover, the verifier, the evidence producer, the decision authority, and the enforcement authority. Describe the evidence produced and its freshness, and the trust chain that carries it. Record the current maturity, the technical dependencies, the political and confidentiality dependencies, and the cooperation required. Then model the adversary: the strongest plausible bypass, the collapsing weakness, the residual blind spot, and the independent corroborating layer that covers it. Close with the update condition and as-of date, and your confidence and source notes.
 
 ## Final Written Output: Hardware Assurance Brief
 

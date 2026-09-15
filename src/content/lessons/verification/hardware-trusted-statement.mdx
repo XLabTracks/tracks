@@ -41,24 +41,24 @@ A simplified chain looks like this:
 
 For each link, ask:
 
-- Who controls it?
-- What can that actor falsify, suppress, delay, revoke, or refuse?
-- Is cooperation legally required, technically required, or merely convenient?
-- What independent evidence checks the link?
-- What happens when the link fails?
+1. Who controls it?
+2. What can that actor falsify, suppress, delay, revoke, or refuse?
+3. Is cooperation legally required, technically required, or merely convenient?
+4. What independent evidence checks the link?
+5. What happens when the link fails?
 
 ## What a Signature Does and Does Not Do
 
 A valid signature supports a statement such as “the holder of this trusted key signed these claims.” It does not by itself establish that:
 
-- The measurement code observed the right property;
-- The measurement was complete;
-- The reference value was correct;
-- The evidence described the current state rather than a replayed state;
-- The device remained compliant after the measurement;
-- The device occupied the declared location or topology;
-- No other device or workload existed;
-- An institution may lawfully act on the result.
+- The measurement code observed the right property
+- The measurement was complete
+- The reference value was correct
+- The evidence described the current state rather than a replayed state
+- The device remained compliant after the measurement
+- The device occupied the declared location or topology
+- No other device or workload existed
+- An institution may lawfully act on the result
 
 Cryptography can faithfully transmit a false or insufficient measurement. The value of attestation therefore depends on the measurement boundary and the governance of keys, reference values, updates, revocation, and decisions.
 
@@ -80,12 +80,12 @@ The same product can be strong against a remote tenant and weak against an owner
 
 Take an attestation token or architecture diagram supplied with this section. Record:
 
-1. The exact claim;
-2. The root or roots of trust;
-3. The measurement component;
-4. The key and reference-value authorities;
-5. Update and revocation authority;
-6. The verifier and relying party;
-7. The strongest relevant adversary;
-8. One common-mode failure;
-9. One independent corroborating source.
+1. The exact claim
+2. The root or roots of trust
+3. The measurement component
+4. The key and reference-value authorities
+5. Update and revocation authority
+6. The verifier and relying party
+7. The strongest relevant adversary
+8. One common-mode failure
+9. One independent corroborating source

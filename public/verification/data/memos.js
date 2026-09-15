@@ -226,16 +226,6 @@ window.VERIFICATION_MEMOS = [
     "href": "/tracks/verification/verification-infrastructure/hardware-claim#v-hw-claim-chip-security"
   },
   {
-    "id": "m2-1-hardware-brief",
-    "module": 2,
-    "unit": "2.1",
-    "title": "Hardware Assurance Brief",
-    "status": "specified",
-    "brief": "A bounded hardware assurance brief. The point is not forecasting the correct future — it is making the assessment conditional on visible facts: coverage, fidelity, time to deployment, and the preferred corroborating layer.",
-    "audience": "A named national delegation or joint drafting session considering a three-month U.S.–China pause.",
-    "words": 1000
-  },
-  {
     "id": "m2-3-osint-guess",
     "module": 2,
     "unit": "2.3",
@@ -348,5 +338,90 @@ window.VERIFICATION_MEMOS = [
     "brief": "One piece of work that shows what you have learned, applied to a problem you chose. There is no assigned task: choose a brief from the capstone bank, or suggest your own — it has to be relevant to technical AI governance and aimed at an AI-safety-related theme. Either way, put your name on the sign-up sheet, so your facilitator knows what you are working on and can read your proposal. The workspace holds the track’s own capstone template: design a minimal verification regime for a three-month emergency pause, then break it yourself.",
     "audience": null,
     "words": 0
+  },
+  {
+    "id": "m2-1-attestation",
+    "module": 2,
+    "unit": "2.1",
+    "title": "Hardware Attestation Exercise",
+    "status": "specified",
+    "task": "v-hw-trusted-statement-appraise",
+    "brief": "1. Does the Attestation Result support the operator's conclusion? State the strongest claim it does support.\n2. Identify the Attester, Verifier, Reference Value Provider, Relying Party, and regulatory-response actor.\n3. At noon NVIDIA publishes a signed reference manifest for stack G. Device identity certificates remain valid, and the regulator continues to permit stack F until Friday. Explain what each fact establishes and how the inspectorate should assess a fresh report from a GPU still running F.\n4. Separate power records show consumption above the operator's estimate for the eight declared GPUs. How should this affect the inspectorate's assessment? Propose one follow-up check and explain what it could establish.",
+    "audience": null,
+    "words": 0,
+    "href": "/tracks/verification/verification-infrastructure/hardware-trusted-statement#v-hw-trusted-statement-appraise"
+  },
+  {
+    "id": "m2-1-accounting",
+    "module": 2,
+    "unit": "2.1",
+    "title": "Fleet Reconciliation Exercise",
+    "status": "specified",
+    "task": "v-hw-accounting-reconcile",
+    "brief": "1. What does the packet establish about the whereabouts of the 80 registered devices? Support your answer with the supplied records and calculations.\n2. Evaluate the operator's conclusion sentence by sentence. Write a replacement finding no broader than the evidence warrants.\n3. Choose two follow-up checks, identify the actor or record-holder from whom each would obtain evidence, and explain what uncertainty each could reduce.\n4. Return to your location claim from 2.1.1. Propose one change to the verification procedure and explain how it would affect your assessment of that claim.",
+    "audience": null,
+    "words": 0,
+    "href": "/tracks/verification/verification-infrastructure/hardware-accounting#v-hw-accounting-reconcile"
+  },
+  {
+    "id": "m2-1-measuring",
+    "module": 2,
+    "unit": "2.1",
+    "title": "Compute and Classification Exercise",
+    "status": "specified",
+    "task": "v-hw-measuring-job-j",
+    "brief": "**1.** Calculate the range of job J’s total compute supported by the packet. Explain what that range establishes about the threshold, assuming J is a covered training run.\n\n**2.** Evaluate the operator’s use of the classifier and authorization. Identify what additional evidence would be needed to decide whether the authorization covers the actual work.\n\n**3.** A separate classifier evaluation produces the results in the table above. Calculate overall accuracy, precision, recall, and the fraction of training windows that were missed. What conclusions about job J, if any, can be drawn from these evaluation results? Justify your answer.\n\n**4.** The team proposes signing classifier outputs and increasing the frequency of classification. Recommend two further changes that would most improve the basis for a compliance decision in this case. For each, identify the uncertainty addressed and the evidence or system property needed. Then rewrite the pause verification claim from 2.1.1 so that its unit and aggregation boundary are explicit, and state separately what your procedure does with a run whose evidence cannot resolve it.",
+    "audience": null,
+    "words": 0,
+    "href": "/tracks/verification/verification-infrastructure/hardware-measuring-use#v-hw-measuring-job-j"
+  },
+  {
+    "id": "m2-1-authorization",
+    "module": 2,
+    "unit": "2.1",
+    "title": "Licensing and Suspension Exercise",
+    "status": "specified",
+    "task": "v-hw-authorization-suspension",
+    "brief": "**1. How much further computation could the installed tokens enable after noon?** Compare your answer with the permit and the director’s statement.\n\n**2. What, if anything, does the rate information establish about 17:00?** State the extra conditions needed for a deadline-based stopping claim. Rewrite the first three sentences of the announcement as a bounded, evidence-supported statement.\n\n**3. Suppose review later finds that the suspension was mistaken, but a separate investigation confirms that the issuer’s signing key was stolen.** Assess the director’s proposed remedy in light of these findings. What would be required to resume operation?\n\n**4. Recommend two changes to the licensing arrangement.** Explain how each addresses a problem revealed by the case and identify a cost or risk of implementing it. Limit your answer to 180 words.",
+    "audience": null,
+    "words": 0,
+    "href": "/tracks/verification/verification-infrastructure/hardware-authorization#v-hw-authorization-suspension"
+  },
+  {
+    "id": "m2-1-architecture",
+    "module": 2,
+    "unit": "2.1",
+    "title": "Verification Architecture Exercise",
+    "status": "specified",
+    "task": "v-hw-trust-three-reports",
+    "brief": "**1. Classify components A–C using the architectural families introduced in the lesson.** Justify each classification by describing where its evidence originates.\n\n**2. Identify two dependencies that could undermine more than one reported assurance.** For each, explain what could go wrong and what evidence, if any, would remain useful.\n\n**3. Recommend two changes for the pilot, in no more than 180 words.** One must improve evidence independence; the other must make the architecture more acceptable to the monitored party. Name an integration or operating cost and a residual blind spot. Do not assume you may replace every accelerator or publish raw workloads.\n\n**4. Write one question each for the operator, inspectorate, and a state that distrusts V.** Then rewrite the supplier’s conclusion in no more than two sentences. Separate what is established by the packet from what would require successful testing of the proposed changes.",
+    "audience": null,
+    "words": 0,
+    "href": "/tracks/verification/verification-infrastructure/hardware-where-trust-lives#v-hw-trust-three-reports"
+  },
+  {
+    "id": "m2-1-training-claims",
+    "module": 2,
+    "unit": "2.1",
+    "title": "Training-Claim Audit Exercise",
+    "status": "specified",
+    "task": "v-hw-training-claims-audit",
+    "brief": "**1. Assess the developer’s claim using the audit results.** Support your assessment with specific details from the packet.\n\n**2. Compare the two audit budgets.** Calculate replay GPU-hours and their percentage of the claimed run’s compute for 20 and 100 checks. Use the probability table to explain what the larger budget buys.\n\n**3. Recommend a next step in no more than 180 words.** Identify an implementation or confidentiality cost and rewrite the developer’s conclusion as a bounded claim. You may disagree with increasing the sample; justify the priority you choose.",
+    "audience": null,
+    "words": 0,
+    "href": "/tracks/verification/verification-infrastructure/hardware-reconstructing-run#v-hw-training-claims-audit"
+  },
+  {
+    "id": "m2-1-measuring-critique",
+    "module": 2,
+    "unit": "2.1",
+    "title": "Optional: Reading a Research Claim",
+    "status": "specified",
+    "task": "v-hw-measuring-paper-critique",
+    "optional": true,
+    "brief": "**1.** State the paper’s central empirical claim in one sentence. Identify the observations, evaluation unit, hardware coverage, and conditions to which it applies. Distinguish anything you cannot establish from the selected excerpts.\n\n**2.** Choose two results that could lead a policymaker to different assessments. Explain what differs between their evaluation settings and which would be more relevant to an operator adapting to monitoring.\n\n**3.** For an operator who controls the host, separate protections demonstrated by the experiment from protections assumed or proposed. Explain how that distinction changes a deployment recommendation.\n\n**4.** Write a three-sentence briefing: what the paper contributes, what it does not yet establish, and what further test or evidence you would request before relying on it. Explain what “zero-overhead” would need to cover to support a claim about total monitoring-system cost.",
+    "audience": null,
+    "words": 0,
+    "href": "/tracks/verification/verification-infrastructure/hardware-measuring-use#v-hw-measuring-paper-critique"
   }
 ];

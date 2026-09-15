@@ -54,12 +54,9 @@
 @media (min-width: 640px) { .facts { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 
 
-/* Team cards. Uniform hairline on all four sides — the initials monogram is
-   the only thing carrying colour, and it sits inside the card.
+/* Team cards. Uniform hairline on all four sides; the portrait fills the
+   card's width at the photo's own 2:3 and sits inside the card. */
 
-   Trap: the monogram is a placeholder for a portrait, so it must reserve the
-   portrait's box. Sizing it to the initials instead would make every card
-   jump the day real photographs land. */
 /* Trap: the roster is a `ul` inside `.prose`, and `.prose ul` sets a
    padding-left for bullet lists at a higher specificity than a lone class.
    Without the `.prose` here the cards sit indented from every heading and
@@ -107,18 +104,12 @@
   }
 }
 .mug {
-  display: grid;
-  place-items: center;
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  overflow: hidden;
+  display: block;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  border-radius: var(--radius-sm);
   background: var(--muted);
-  color: var(--brand-ink);
-  font-family: var(--display);
-  font-size: var(--fs-2xl);
-  font-weight: 500;
-  letter-spacing: .02em;
+  overflow: hidden;
   user-select: none;
   -webkit-user-select: none;
 }
@@ -127,7 +118,7 @@
   height: 100%;
   object-fit: cover;
 }
-.person .nm { font-family: var(--display); font-size: var(--fs-lg); font-weight: 500; }
+.person .nm { margin-top: 18px; font-family: var(--display); font-size: var(--fs-lg); font-weight: 500; }
 .person .links {
   display: flex;
   gap: 6px;

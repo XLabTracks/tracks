@@ -73,7 +73,11 @@ Reference values and legal approval are separate. A manufacturer-signed referenc
 
 </ReadingCard>
 
-RFC 9334 separates three roles because a signed report does not interpret itself.
+The device signs a report containing its identifier, boot state, and software measurements. Two separate judgments follow. First, the Verifier checks the evidence’s authenticity and freshness and evaluates the reported state against reference values and an appraisal policy. Second, the Relying Party uses that assessment to decide whether to release a key, permit an operation, or take another action. The measurements alone determine neither what counts as an acceptable state nor what should happen next. RFC 9334 distinguishes these roles from the Attester, which produces the evidence, even when one organization performs several roles.
+
+<Src>[RFC 9334](https://www.rfc-editor.org/rfc/rfc9334.html#section-6), §§4.1 and 6.</Src>
+
+For a verification regime, this distinction also helps locate failures: the device may report an incorrect measurement, the verifier may apply an unsuitable policy, or the decision-maker may draw an unsupported conclusion from a valid assessment.
 
 | Stage | Actor or object | Question answered |
 | --- | --- | --- |
@@ -83,7 +87,7 @@ RFC 9334 separates three roles because a signed report does not interpret itself
 | 4 | **Relying Party** applies its decision policy | Should access, authorization, or another privilege be granted? |
 | 5 | Regulatory institution applies the legal rule | Does the finding trigger remediation, inspection, suspension, or sanction? |
 
-The fifth stage is an addition made by a regulatory regime, not a separate role defined by the RATS architecture. One institution may perform more than one role, but the decisions remain distinct.
+The fifth stage shown here—regulatory review and response—is an addition made by the verification regime, not a separate role defined in RATS. An attestation result informs that process; it does not automatically establish a legal violation. Making that determination requires the applicable legal rule, sufficient evidence, and the authority to decide.
 
 In the **passport model**, the Attester obtains an Attestation Result and presents it to the Relying Party. In the **background-check model**, the Relying Party forwards Evidence to a Verifier and receives the result. Either can support regulation; neither establishes that every covered device supplied Evidence.
 

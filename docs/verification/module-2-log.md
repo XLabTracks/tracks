@@ -4013,3 +4013,35 @@ eight places were not:
 
 URLs are untouched, so the citation registry and the works-cited appendices
 are unchanged.
+
+## 2026-09-15 — the owner rewrites 2.1.2's roles section; 2.1.3 drops its time line
+
+"From Device Evidence to Regulatory Response" now carries the owner's text.
+It replaces two passages: the one-line lead-in that had introduced the table
+("RFC 9334 separates three roles because a signed report does not interpret
+itself"), and the paragraph under it about the fifth stage.
+
+Her version names the two judgements before the table — the Verifier's
+appraisal against reference values and policy, then the Relying Party's
+decision about a key or an operation — and adds a sentence the section did
+not have: the same split locates a failure, which may be a wrong measurement,
+an unsuitable policy, or an unsupported conclusion drawn from a sound
+assessment. The closing paragraph now says that an attestation result informs
+regulatory review rather than establishing a violation, and that a
+determination needs the legal rule, sufficient evidence and the authority to
+decide.
+
+Two things were kept that her text does not mention. The table stays, because
+her closing paragraph refers to "the fifth stage shown here". The
+passport/background-check paragraph stays because the card above assigns §5,
+"Topological Patterns", and nothing else in the lesson uses it.
+
+Her citation reads "RFC 9334, §§4.1 and 6"; the card assigns §4.1 and §5 and
+stops before §6. The citation is set as written, as a `<Src>` opening from
+the RFC's name at §6, which is registered. Worth a ruling: either the card
+should carry §6 as well, or the citation should point at the sections the
+card assigns.
+
+2.1.3 loses its time-allocation line on the owner's instruction. The same
+line still opens 2.1.2, 2.1.4, 2.1.5, 2.1.6 and 2.1.7 — say the word and
+they go too.

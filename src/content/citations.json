@@ -1010,6 +1010,13 @@
       "authors": "Rahman, Robi, and Sabiha Tajdari",
       "container": "arXiv",
       "date": "17 Jun. 2026"
+    },
+    "https://www.rfc-editor.org/rfc/rfc9334.html#section-6": {
+      "title": "RFC 9334 §6: Roles and Entities",
+      "about": "The RATS architecture on how its roles map onto real organisations: one entity may hold several roles at once, which is why a Verifier's appraisal and a Relying Party's decision stay distinct judgements even inside one company. Cited in 2.1.2 alongside §4.1.",
+      "authors": "Birkholz, Henk, Dave Thaler, Michael Richardson, et al.",
+      "container": "IETF",
+      "date": "Jan. 2023"
     }
   },
   "pending": [

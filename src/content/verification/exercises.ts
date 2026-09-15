@@ -272,8 +272,6 @@ export const verificationExercises: Exercise[] = [
       },
     ],
   },
-    ],
-  },
   {
     id: "v-hw-buy-assurance",
     type: "writing-prompt",

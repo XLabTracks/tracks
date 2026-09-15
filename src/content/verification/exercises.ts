@@ -290,4 +290,19 @@ export const verificationExercises: Exercise[] = [
       { id: "inspection", label: "Random chip inspection" },
     ],
   },
+  {
+    id: "v-intel-debates",
+    type: "writing-prompt",
+    format: "free-form",
+    optional: true,
+    prompt:
+      "Pick one of the five controversies. State the strongest case for each side, a short paragraph each, written to satisfy that side's strongest advocate. Then commit to a position and name the evidence that would change it.",
+    sections: [
+      { id: "which", label: "Which controversy", placeholder: "Name the debate, 1 to 5." },
+      { id: "side-a", label: "The strongest case for the first side" },
+      { id: "side-b", label: "The strongest case for the other side" },
+      { id: "position", label: "Your position, in a sentence or two" },
+      { id: "falsifier", label: "The evidence that would change it" },
+    ],
+  },
 ];

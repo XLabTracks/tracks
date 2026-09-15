@@ -96,7 +96,6 @@ This returns us to 2.1.6. A **verification cluster** is computing capacity used 
 The policy decision is therefore partly about access: who may see weights, data, code, and results, and under what controls? “Independent verification” need not mean public disclosure. It does require a credible account of why the party making the original claim cannot also dictate the test result.
 
 <ReadingCard
-<ReadingCard
   id="reading-training-data-limits"
   href="https://arxiv.org/html/2307.00682v1"
   title="Tools for Verifying Neural Models’ Training Data"
@@ -113,7 +112,9 @@ The policy decision is therefore partly about access: who may see weights, data,
 
 **Technical help:** Small changes to model weights can matter even if their numerical size is small. “Bit-wise reproducibility” means matching the stored numerical representation exactly.
 
-</ReadingCard>title="Zero Knowledge and the Statement" />
+</ReadingCard>
+
+<PageBreak title="Zero Knowledge and the Statement" />
 
 ### Zero Knowledge Changes Disclosure, Not the Scope of the Statement
 
@@ -136,7 +137,6 @@ Peigné, Nguyen, and Wang’s 2026 proposal combines commitments, external netwo
 The policy task is to evaluate the proposed combination. A valid proof of a sampled statement can coexist with a low probability of selecting a rare violation. Strong cryptography does not turn sparse sampling into exhaustive coverage.
 
 <ReadingCard
-  id="reading-zk-forecast-<ReadingCard
   id="reading-zk-forecast-and-caveats"
   href="https://arxiv.org/html/2606.05433v2"
   title="Zero Knowledge Verification for Frontier AI Training Is Possible"
@@ -153,7 +153,11 @@ The policy task is to evaluate the proposed combination. A valid proof of a samp
 
 **Technical help:** Proving throughput describes how quickly proof-generating work runs. Merkle hashing binds records into a structure that supports checking selected entries. In the G.5 paragraph, read the sampling ratio as “steps checked divided by total steps.” No algebra is required.
 
-</ReadingCard>tion overhead” needs a denominator and a payer. Ask separately about recording during training, storing the record, producing proofs, checking proofs, and investigating discrepancies. A small proof may be quick to check but costly to generate. Low extra training time does not imply low total operating cost.
+</ReadingCard>
+
+### Who Pays for Checking?
+
+“Verification overhead” needs a denominator and a payer. Ask separately about recording during training, storing the record, producing proofs, checking proofs, and investigating discrepancies. A small proof may be quick to check but costly to generate. Low extra training time does not imply low total operating cost.
 
 Replaying fewer intervals reduces work but may not reduce the minimum machine size needed to reproduce one interval. A verifier could need a substantial cluster briefly, even when its total computation is a small fraction of the original run. Compare peak capacity, total compute, storage, staff time, and delay to a usable decision.
 

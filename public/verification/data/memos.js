@@ -410,5 +410,18 @@ window.VERIFICATION_MEMOS = [
     "audience": null,
     "words": 0,
     "href": "/tracks/verification/verification-infrastructure/hardware-reconstructing-run#v-hw-training-claims-audit"
+  },
+  {
+    "id": "m2-1-measuring-critique",
+    "module": 2,
+    "unit": "2.1",
+    "title": "Optional: Reading a Research Claim",
+    "status": "specified",
+    "task": "v-hw-measuring-paper-critique",
+    "optional": true,
+    "brief": "**1.** State the paper’s central empirical claim in one sentence. Identify the observations, evaluation unit, hardware coverage, and conditions to which it applies. Distinguish anything you cannot establish from the selected excerpts.\n\n**2.** Choose two results that could lead a policymaker to different assessments. Explain what differs between their evaluation settings and which would be more relevant to an operator adapting to monitoring.\n\n**3.** For an operator who controls the host, separate protections demonstrated by the experiment from protections assumed or proposed. Explain how that distinction changes a deployment recommendation.\n\n**4.** Write a three-sentence briefing: what the paper contributes, what it does not yet establish, and what further test or evidence you would request before relying on it. Explain what “zero-overhead” would need to cover to support a claim about total monitoring-system cost.",
+    "audience": null,
+    "words": 0,
+    "href": "/tracks/verification/verification-infrastructure/hardware-measuring-use#v-hw-measuring-paper-critique"
   }
 ];

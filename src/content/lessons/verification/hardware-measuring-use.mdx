@@ -70,7 +70,7 @@ This is an analytic comparison, not a claim that every approach is already avail
 
 ### Accounting Means Reconciling Observations With Uses
 
-<Read<ReadingCard
+<ReadingCard
   id="reading-accounting"
   href="https://arxiv.org/html/2507.15916v1"
   title="Verifying International Agreements on AI"
@@ -85,7 +85,9 @@ This is an analytic comparison, not a claim that every approach is already avail
 
 **Reading focus:** Why do the authors compare sources of compute with declared uses, rather than simply seek one total?
 
-</ReadingCard>er and colleagues propose comparing observed compute activity with verified declared uses. Their discussion distinguishes operations required by a model from extra operations actually executed, including recomputation. They also identify the difficulty of deriving an operation rate from physical measurements. This is an accounting proposal with implementation challenges, not a demonstrated universal sensor-to-FLOP conversion.
+</ReadingCard>
+
+Baker and colleagues propose comparing observed compute activity with verified declared uses. Their discussion distinguishes operations required by a model from extra operations actually executed, including recomputation. They also identify the difficulty of deriving an operation rate from physical measurements. This is an accounting proposal with implementation challenges, not a demonstrated universal sensor-to-FLOP conversion.
 
 <Src>Baker et al., [*Verifying International Agreements on AI*](https://arxiv.org/html/2507.15916v1), Appendix A.6.</Src>
 
@@ -192,9 +194,6 @@ At this point, a hardware regime has three separate outputs: an inventory with c
 <ReadingCard
   id="reading-classifier"
   href="https://arxiv.org/html/2606.19262v1"
-  title="Detecting Hidden ML Training With Zero-Overh<ReadingCard
-  id="reading-classifier"
-  href="https://arxiv.org/html/2606.19262v1"
   title="Detecting Hidden ML Training With Zero-Overhead Telemetry"
   author="Robi Rahman and Sabiha Tajdari | arXiv:2606.19262v1"
   year="2026"
@@ -205,26 +204,8 @@ At this point, a hardware regime has three separate outputs: an inventory with c
 
 **Purpose:** Assess a recent contribution using the lesson’s framework. Inclusion is not an endorsement of its strongest claims or evidence of field-wide consensus.
 
-</ReadingCard>ox” means the attacker can inspect the classifier. A classification window is an interval of observations treated as one input.
+</ReadingCard>
 
-**1.** State the paper’s central empirical claim in one sentence. Identify the observations, evaluation unit, hardware coverage, and conditions to which it applies. Distinguish anything you cannot establish from the selected excerpts.
+Vocabulary: “hardened” means revised after exposure to attacks; “unseen” means withheld from the relevant classifier training; “white-box” means the attacker can inspect the classifier. A classification window is an interval of observations treated as one input.
 
-**2.** Choose two results that could lead a policymaker to different assessments. Explain what differs between their evaluation settings and which would be more relevant to an operator adapting to monitoring.
-
-**3.** For an operator who controls the host, separate protections demonstrated by the experiment from protections assumed or proposed. Explain how that distinction changes a deployment recommendation.
-
-**4.** Write a three-sentence briefing: what the paper contributes, what it does not yet establish, and what further test or evidence you would request before relying on it. Explain what “zero-overhead” would need to cover to support a claim about total monitoring-system cost.
-
-<Fold label="Open review guide">
-
-There is no required positive or negative verdict. Assess whether your account preserves the evaluation conditions, distinguishes evidence from assumptions, and names a follow-up that tests the gap you identify.
-
-The paper reports 98.2% overall binary accuracy and 43–87% detection on unseen white-box strategies after hardening; these are not interchangeable evaluation settings. Its experiments are single-node, up to eight GPUs. The hardware-operator case depends on protected telemetry collection and delivery beyond a classifier alone.
-
-<Src>Rahman and Tajdari, [*Detecting Hidden ML Training With Zero-Overhead Telemetry*](https://arxiv.org/html/2606.19262v1): abstract, §2.2, §5.2, §6.5, and Appendix F.</Src>
-
-A good briefing can recognize a useful empirical contribution without inferring reliable enforcement across a fleet. Further evidence could test generalization to independently selected workloads and multi-node systems, or validate the entire input path against a hostile operator. Specify what would count as a failure, not merely that more testing is desirable.
-
-Distinguish low measured workload overhead from the costs of collection, authentication, transmission, storage, analysis, incident review, and maintaining security. A title is not an estimate of all those costs. If the excerpts do not identify an evaluation detail precisely enough, mark it unknown and identify which methods or data you would inspect; do not infer it from a headline percentage.
-
-</Fold>
+<Exercise id="v-hw-measuring-paper-critique" />

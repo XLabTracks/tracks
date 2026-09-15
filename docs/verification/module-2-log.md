@@ -4079,3 +4079,42 @@ and 2.1.3 used.
 2.1.3's IAPS citation had been left as the fragment "The IAPS issue brief"
 with no period; it is now a citation like the rest — `Brass, [*Location
 Verification for AI Chips*](…), IAPS issue brief.`
+
+## 2026-09-15 — a broken commit repaired, and 2.1/2.3 audited
+
+**The card rewrite in c14c1e46 shipped broken MDX.** Its script collected
+every `<ReadingCard>` match against the original string and then spliced
+replacements in document order, so after the first splice in a file every
+later offset was wrong. In the four files with more than one card —
+2.1.4, 2.1.5, 2.1.6, 2.1.7 — that inserted a second `<ReadingCard` opening
+inside the previous card and cut a paragraph in half. 2.1.4 lost the first
+half of its vocabulary line, which reappeared as "ox" means the attacker can
+inspect the classifier" after a `</ReadingCard>`.
+
+The suite stayed green throughout: MDX still compiled, so 1,238 tests said
+nothing about it. The check that catches this is counting opening against
+closing tags, which is now part of the audit below. Reverted to e0ab1388 and
+redone splicing from the end of the file backwards, so earlier offsets hold.
+
+**2.1.4's optional activity is an exercise now.** Its four questions were
+loose numbered markdown and its review guide sat behind a full-width red
+`Open review guide` fold — the shape the rest of 2.1 stopped using two
+commits ago. It is `v-hw-measuring-paper-critique`, `optional: true`, with
+the guide as its `sampleAnswer` and a memo slot to match; the desk holds 26.
+The `<Src>` inside the guide became an ordinary markdown citation, because a
+`sampleAnswer` is a string rendered as markdown, not MDX. Its URL is still
+cited by the card above it, so nothing orphaned.
+
+**Audit of 2.1 and 2.3, sixteen lessons.** Tag balance, undeclared exercise
+ids, orphan writing exercises, raw MDX leaking into the rendered text,
+`undefined`/`NaN`, empty sections (a heading followed straight by another
+heading), phone overflow, and whether every task offers somewhere to answer.
+
+All sixteen render 200 and clean: no raw tags, no empty sections, no phone
+overflow, every `<Exercise>` id declared, every writing exercise holding
+exactly one memo slot.
+
+Five lessons have no textarea, and all five are correct: the 2.1 head's task
+is the `ClaimLedger` with its three-way buttons, 2.3.0, 2.3.3 and 2.3.6 run
+widgets, and 2.3.7's written output is a `MemoDesk` card into the desk. No
+task in either section is left without an answer surface.

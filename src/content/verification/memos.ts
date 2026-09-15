@@ -384,6 +384,19 @@ export const memoSlots: MemoSlot[] = [
     audience: null,
     words: 0,
   },
+  {
+    id: "m2-1-measuring-critique",
+    module: 2,
+    unit: "2.1",
+    title: "Optional: Reading a Research Claim",
+    status: "specified",
+    lesson: "hardware-measuring-use",
+    task: "v-hw-measuring-paper-critique",
+    optional: true,
+    brief: null,
+    audience: null,
+    words: 0,
+  },
 ];
 
 export function memoSlotsForLesson(lesson: string): MemoSlot[] {

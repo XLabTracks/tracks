@@ -83,9 +83,9 @@
   background: var(--card);
 }
 
-/* Side by side, the three rows — monogram, name, role — sit in tracks the
+/* Side by side, the three rows — portrait, name, links — sit in tracks the
    roster owns, so a name that wraps to two lines lifts every card's name row
-   instead of pushing its own role line out of step with its neighbours.
+   instead of pushing its own link row out of step with its neighbours.
    Each card spans the three tracks and reads them back with `subgrid`.
 
    Trap: the row gap inside a card is now the roster's row-gap, because a
@@ -101,7 +101,7 @@
     column-gap: 16px;
   }
   .person {
-    grid-row: span 4;
+    grid-row: span 3;
     grid-template-rows: subgrid;
     gap: 0;
   }
@@ -126,14 +126,12 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 35%;
 }
 .person .nm { font-family: var(--display); font-size: var(--fs-lg); font-weight: 500; }
-.person .rl { font-size: var(--fs-sm); color: var(--muted-foreground); }
 .person .links {
   display: flex;
   gap: 6px;
-  margin-top: 12px;
+  margin-top: 10px;
   align-self: end;
 }
 .person .links a {

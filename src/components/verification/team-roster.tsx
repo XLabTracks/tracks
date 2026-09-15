@@ -12,7 +12,6 @@ export function TeamRoster() {
             <img src={person.photo} alt="" loading="lazy" />
           </span>
           <p className="nm">{person.name}</p>
-          <p className="rl">{person.role}</p>
           <p className="links">
             <a href={`mailto:${person.email}`} aria-label={`Email ${person.name}`} title={person.email}>
               <Mail aria-hidden="true" />

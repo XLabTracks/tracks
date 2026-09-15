@@ -11,6 +11,8 @@ Use one verification target for the comparison:
 
 Possible components include device identity, secure or measured boot, signed counters, protected telemetry, workload certificates, trusted execution environments, and hardware-backed authorization.
 
+<div className="pair-table">
+
 | Strengths | Concerns |
 | --- | --- |
 | Fine-grained access to device state and activity | Trust in design, manufacturing, firmware, and key provisioning |
@@ -20,6 +22,8 @@ Possible components include device identity, secure or measured boot, signed cou
 | Compact, privacy-preserving outputs rather than raw workloads | Legacy and nonparticipating hardware |
 |  | Hardware redesign and fleet-turnover time |
 |  | Political resistance to foreign- or vendor-controlled keys |
+
+</div>
 
 Current confidential-computing support on accelerators is a deployed security primitive, not proof of treaty compliance. For example, NVIDIA describes Hopper confidential computing as protecting code and data in use from the host and basic physical attacks under its stated threat model. A treaty adversary may be stronger than that threat model, and a confidential workload may still violate the treaty.
 
@@ -31,6 +35,8 @@ Current confidential-computing support on accelerators is a deployed security pr
 
 Possible components include network taps, server or rack gateways, input/output loggers, tamper-evident enclosures, and separate secured verification computers.
 
+<div className="pair-table">
+
 | Strengths | Concerns |
 | --- | --- |
 | Clearer separation between prover hardware and verifier hardware | Visibility falls as the monitor moves farther from the computation |
@@ -40,6 +46,8 @@ Possible components include network taps, server or rack gateways, input/output 
 |  | Installation, calibration, chain of custody, and maintenance |
 |  | Risk that verifier-supplied hardware enables espionage or sabotage |
 
+</div>
+
 Recent work has proposed fingerprinting or committing cluster input and output through external taps and secure gateways. These designs are research proposals. Their value is to make the trust-placement problem concrete, not to show that the engineering and political problems are solved.
 
 <Src>A. Cankaya et al., *Fingerprinting All AI Cluster I/O Without Mutually Trusted Processors* — [arXiv:2606.10724](https://arxiv.org/abs/2606.10724), June 2026. Treat the architecture and implementation schedule as a research proposal.</Src>
@@ -47,6 +55,8 @@ Recent work has proposed fingerprinting or committing cluster input and output t
 ## Architecture C: Off-Chip Analog Monitoring
 
 Possible components include independently installed power meters, thermal sensors, electromagnetic measurements, independent clocks, tamper-evident packaging, and physical inspection of the sensor boundary.
+
+<div className="pair-table">
 
 | Strengths | Concerns |
 | --- | --- |
@@ -56,6 +66,8 @@ Possible components include independently installed power meters, thermal sensor
 | Evasion may require changing several physical signatures or sacrificing performance | Deliberate mimicry or masking |
 |  | Coverage only inside instrumented facilities |
 |  | Dependence on inspections to preserve the measurement boundary |
+
+</div>
 
 A rack meter installed under treaty access belongs in this hardware section. A foreign intelligence service estimating the same site’s power use from outside the facility belongs in the intelligence section. The physical phenomenon may be similar, but the access, chain of custody, confidence, and institutional role differ.
 

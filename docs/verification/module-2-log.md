@@ -3925,3 +3925,62 @@ rule:" without ", simplified".
 
 After the merge: 1,238 tests pass, typecheck clean, lint 0 errors, both
 generators up to date, and every 2.1 lesson paginates in the browser.
+
+## 2026-09-15 — 2.1 stops inventing its own exercise and citation shapes
+
+Course owner's review caught two places where these lessons had grown their
+own pattern beside one the repository already had.
+
+**Citations.** The rebuilt bodies carried their sources as inline
+"[Reference: …](url)" links, so a two-line citation rendered underlined in
+the middle of running prose. `<Src>` exists for exactly this — "a citation
+riding with the passage it belongs to, rather than a bibliography nobody
+opens" — and main's versions of these same five lessons carried eleven of
+them. All 24 references are now `<Src>` blocks with the link on a short
+identifier, the shape the old bodies used.
+
+**Exercises.** The questions were a numbered markdown list and the keys four
+`<Fold label="Show answer N">` disclosures. That was a third pattern: the
+course already had `<VerificationExercise>` (32 uses, all of 2.4) and
+`<Exercise>` (21 uses, including 2.1.1), and `WritingExercise.sampleAnswer`
+is documented as "a model answer revealed once the learner has submitted —
+the write-then-compare shape of an understanding check, but persisted like
+every other piece of writing". The owner asked why that was not simply
+copied, and there is no good answer: each brief said "four native answer
+disclosures" and that was implemented literally.
+
+Six lessons now carry one `writing-prompt` exercise each, prompt as authored
+and the four keys joined into its `sampleAnswer`:
+`v-hw-trusted-statement-appraise`, `v-hw-accounting-reconcile`,
+`v-hw-measuring-job-j`, `v-hw-authorization-suspension`,
+`v-hw-trust-three-reports`, `v-hw-training-claims-audit`. The learner writes
+in the account-backed editor and the key reveals on submit; no grader card is
+offered, because the exercise is a check against its own answer.
+
+Each needed a memo-desk slot — main's PR #71 made the desk index every
+written component, and `memos.test.ts` fails a writing exercise without one.
+Six `task` slots added under unit 2.1; the desk holds 25 slots.
+
+Two consequences worth naming. The in-lesson nav had been listing four "Show
+answer" rows per lesson and now lists the exercise once. And 2.1.4's
+confusion matrix stayed in the lesson body, because writing prompts render
+markdown without GFM tables; its question 3 now says "the results in the
+table above" rather than "the following results".
+
+Also in this pass, on the owner's instruction: 2.1.1's heading is "Scope and
+Limitations" with its page label to match, and the 2.1 head drops the lead-in
+sentence under "Why Compute" — the SourceQuote beneath it already carries the
+attribution.
+
+Tables: main replaced the block-scroll treatment with a `.table-scroll`
+wrapper and an auto-layout table filling it, which is the fix this log
+reported on 13 September and better. The `.hex-table` rule and the ten
+trio/hex wrappers added here are gone; 2.1.6's six-column comparison measures
+115/245/261/276/275/298 at 1920 on its own.
+
+Open: the owner reports a wide empty margin to the right of lesson text. Not
+reproduced — at 1536, 1920, 2000 and 2560, in both themes, the reading column
+fills to a 32px gutter (2112px paragraphs at 2560). Two other surfaces do cap
+and were measured: `/tracks/verification` at `max-w-5xl` leaves 544px empty
+at 1920, and the memo desk's `.desk-head p` at 70ch leaves 792px. Neither is
+a lesson.

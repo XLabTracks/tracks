@@ -193,66 +193,7 @@ The supplier concludes: “Agreement among three independently signed reports pr
 
 #### Questions
 
-**1. Classify components A–C using the architectural families introduced in the lesson.** Justify each classification by describing where its evidence originates.
-
-**2. Identify two dependencies that could undermine more than one reported assurance.** For each, explain what could go wrong and what evidence, if any, would remain useful.
-
-**3. Recommend two changes for the pilot, in no more than 180 words.** One must improve evidence independence; the other must make the architecture more acceptable to the monitored party. Name an integration or operating cost and a residual blind spot. Do not assume you may replace every accelerator or publish raw workloads.
-
-**4. Write one question each for the operator, inspectorate, and a state that distrusts V.** Then rewrite the supplier’s conclusion in no more than two sentences. Separate what is established by the packet from what would require successful testing of the proposed changes.
-
-### Answer Keys
-
-<Fold label="Show answer 1">
-
-A is an on-chip reporting path: firmware generates the observations and labels. Their protected origin, coverage, counting semantics, and classification quality still need assessment; a signature alone does not establish those properties.
-
-B is physically off-chip and processes digital evidence, but it is not an independent collector of workload activity. It can add a check of authenticity and a record of what it received. It does not independently confirm A’s values or labels.
-
-C has an off-chip analog-origin measurement followed by digital analysis. The measured electricity is distinct from the compute estimate. Its originating signal does not depend on A’s report, but its interpretation depends on V’s model and its analysis software.
-
-The system is hybrid in components. That does not establish three independent layers of compliance verification.
-
-</Fold>
-
-<Fold label="Show answer 2">
-
-Two strong examples are:
-
-- **Shared update control:** B and C’s analysis software accepts updates from V’s service. A compromise of that authority could undermine both outputs. A’s separate firmware dependence on V creates an additional supplier concern, but the packet does not establish that all three use the same signing key. C’s physical measurement could still be useful if trustworthy raw records survive; that cannot be inferred merely from a green summary.
-- **Shared inventory mapping:** all records are interpreted using the operator’s mapping. A wrong mapping can misattribute observations or omit relevant devices from the declared population. C still measures the stipulated rack feed, but cannot itself identify every device or decide which job consumed the energy.
-
-Another valid example is dependence on V for A’s reporting semantics and C’s compute model. Their failure modes may overlap; this needs examination rather than an assumption of either independence or universal compromise.
-
-The packet proves neither compromise nor compliance. B repeats A’s measurement; C’s interpretation and reporting have unresolved dependencies. Even reliable aggregate compute evidence would not alone establish workload authorization. Maintenance and release procedures could also create observation gaps or suppress inconvenient results.
-
-</Fold>
-
-<Fold label="Show answer 3">
-
-One defensible recommendation is:
-
-“First, preserve authenticated raw meter records in protected local storage and separate C’s analysis updates from V’s update service. Commission independent validation of the compute model against the relevant workload range, retaining uncertainty rather than forcing a binary result. This provides a check less dependent on A, although not a training detector. Second, agree jointly reviewed analysis and output rules with the operator: no raw workload export, a defined summary schema, and a review route for disputed disclosures. Protect the retained records from unilateral deletion or alteration and specify what happens during maintenance. Costs include storage, validation effort, and supervised servicing. Remaining blind spots include activity outside this facility, attribution errors, and cases where different workloads produce similar power traces.”
-
-Other answers may propose direct digital observation at a justified boundary, different suppliers, or improved inventory checks. Credit requires showing which dependence is reduced, not merely adding another signature or vendor. A digital tap must address routing, encryption, confidentiality, and installation; an independent supplier may still share software or credential dependencies.
-
-</Fold>
-
-<Fold label="Show answer 4">
-
-Examples of actor-specific questions:
-
-- **Operator:** Who can inspect or extract raw records during maintenance, and how can we verify that approved software and output restrictions remain in place?
-- **Inspectorate:** Which observations survive a false A report, and what would reveal missing intervals or substituted inventory mappings?
-- **State distrustful of V:** Which claims remain supported if V’s update authority or reference model is untrustworthy, and who can recover the system without V’s cooperation?
-
-A bounded replacement is:
-
-“The proposal combines vendor-generated device reports with a separately originating electrical measurement; the external reporting appliance does not add an independent measurement of computation. Agreement among these outputs does not establish compliance without further validation of their shared dependencies, interpretation, coverage, and authorization checks.”
-
-Do not write that the recommended changes already work: this is a procurement review, not a completed pilot.
-
-</Fold>
+<Exercise id="v-hw-trust-three-reports" />
 
 ### Carry Forward
 

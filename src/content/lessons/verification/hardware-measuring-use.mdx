@@ -172,74 +172,14 @@ The operator says:
 
 > Our latest counters total only 49 units. Even if you count earlier activity, the classifier proves that only 80% was training. The genuine safety-evaluation authorization settles the rest.
 
-**1.** Calculate the range of job J’s total compute supported by the packet. Explain what that range establishes about the threshold, assuming J is a covered training run.
-
-**2.** Evaluate the operator’s use of the classifier and authorization. Identify what additional evidence would be needed to decide whether the authorization covers the actual work.
-
-**3.** A separate classifier evaluation produces the following results. Calculate overall accuracy, precision, recall, and the fraction of training windows that were missed. What conclusions about job J, if any, can be drawn from these evaluation results? Justify your answer.
+The classifier evaluation used in question 3:
 
 | Actual workload | Labeled training | Labeled non-training |
 | --- | ---: | ---: |
 | Training | 90 | 10 |
 | Non-training | 45 | 855 |
 
-**4.** The team proposes signing classifier outputs and increasing the frequency of classification. Recommend two further changes that would most improve the basis for a compliance decision in this case. For each, identify the uncertainty addressed and the evidence or system property needed. Then rewrite the pause verification claim from 2.1.1 so that its unit and aggregation boundary are explicit, and state separately what your procedure does with a run whose evidence cannot resolve it.
-
-### Answer Key
-
-<Fold label="Show answer 1">
-
-Known compute is 32 + 21 + 28 = **81 units**. Including the bounded gap yields **81–93 units**, or 8.1 × 10²⁵ to 9.3 × 10²⁵ counted operations. The operator’s 49 omits the preserved pre-restart work.
-
-If J is a covered training run, the interval straddles the 90-unit threshold. The packet establishes neither that J stayed at or below it nor that J exceeded it. The upper bound is possible work, not proof that 12 units occurred. The lower bound is known work, not the final total.
-
-</Fold>
-
-<Fold label="Show answer 2">
-
-Eighty percent of windows is not eighty percent of operations, and classifier labels are fallible. Multiplying total compute by 0.8 is unsupported. Under the hypothetical rule, once J qualifies as a covered training run, its counted operations are determined by convention C and the rule’s scope, not by selecting classifier-positive windows.
-
-The authorization’s authenticity establishes the issuer’s document, not conformity of J with its conditions. Evidence about whether J updated parameters is central to this authorization. A suitably protected audit of execution records, code and model-state changes could reduce that uncertainty, subject to coverage and confidentiality safeguards. A training alert justifies investigating the issue; it does not independently establish parameter updates or their absence throughout the run.
-
-Even if updates were established and the evaluation authorization did not cover them, threshold exceedance would remain unresolved. A separate contractual or reporting breach should not be confused with the specific above-threshold training violation being tested.
-
-</Fold>
-
-<Fold label="Show answer 3">
-
-There are 1,000 examples.
-
-- **Overall accuracy:** correct classifications are 90 + 855 = 945, so 945 / 1,000 = **94.5%**.
-- **Precision:** there are 135 training alerts, of which 90 are correct, so 90 / 135 = two-thirds, approximately **66.7%**.
-- **Recall:** there are 100 actual training examples, of which 90 were labeled training, so **90%**.
-- **Missed training windows:** the remaining 10 of 100, or **10%**. Recall and the missed fraction are the same measurement stated from either end.
-
-Each answers a different question. Accuracy asks how often any label is right across this example mix. Precision asks how often a training alert is right. Recall asks how much of the training present was found. A different prevalence of training, different workloads, or an adaptive operator can change all of them in deployment.
-
-About job J, these results support nothing directly. They describe one classifier’s behavior on a separate labeled set; J is not in it. What they do is tell you how much weight the packet’s “80% of windows labeled training” can carry: a label of that kind comes with a substantial false-alarm rate and a real miss rate, so it is a reason to investigate rather than a measurement of J’s workload. The evaluation also concerns workload labels only. It says nothing about J’s counted compute or its authorization, and it therefore supplies no probability that J violated the agreement.
-
-</Fold>
-
-<Fold label="Show answer 4">
-
-One defensible pair is:
-
-- **Close or tighten the accounting gap.** Seek independent preserved interval evidence; for future runs, protect continuity across resets with authenticated epoch transitions and explicit gap records. This addresses whether total compute crossed 90, not whether the work was authorized. A missing interval cannot be reconstructed merely by signing later readings.
-- **Verify the activity against the authorization’s condition.** Use a protected, appropriately scoped audit to establish whether parameters were updated and bind the findings to J’s execution. This addresses the fixed-model condition, not the unknown amount of work during the gap.
-
-Other answers may prioritize measurement-path protection, adversarial testing, or workload attribution, provided they explain the gap addressed and respect the scenario’s accepted assumptions. Signing output proves who issued that output; it does not validate a substituted input trace. More frequent labels do not automatically produce independent evidence or operation counts.
-
-The claim from 2.1.1 can be written so that its unit and aggregation boundary are explicit:
-
-> No covered training run during the reporting period exceeded 90 units of compute, counted under convention C and aggregated across all participating devices, sites, and restart epochs, without an applicable authorization.
-
-That is the proposition the regime sets out to test, and it stays fixed whatever the evidence turns out to be. The finding about J is a separate statement:
-
-> On the supplied evidence, J’s counted compute lies between 81 and 93 units, its workload category is still under investigation, and whether the authorization covers the work performed is unresolved. J’s status under the claim cannot be decided on this packet.
-
-Keep the two apart, and let the procedure report a run in that condition as unresolved rather than certifying it compliant. Rewriting the claim itself as something like “no run is established to exceed 90 units” would collapse the distinction: it converts the proposition under test into a statement about how much evidence was gathered, which a regime could satisfy by gathering less. What the evidence supports is a finding about J; what the regime must test is the rule.
-
-</Fold>
+<Exercise id="v-hw-measuring-job-j" />
 
 ### Carry Forward
 

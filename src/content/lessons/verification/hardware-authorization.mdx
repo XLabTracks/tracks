@@ -188,61 +188,7 @@ The program director proposes this announcement:
 
 #### Questions
 
-**1. How much further computation could the installed tokens enable after noon?** Compare your answer with the permit and the director’s statement.
-
-**2. What, if anything, does the rate information establish about 17:00?** State the extra conditions needed for a deadline-based stopping claim. Rewrite the first three sentences of the announcement as a bounded, evidence-supported statement.
-
-**3. Suppose review later finds that the suspension was mistaken, but a separate investigation confirms that the issuer’s signing key was stolen.** Assess the director’s proposed remedy in light of these findings. What would be required to resume operation?
-
-**4. Recommend two changes to the licensing arrangement.** Explain how each addresses a problem revealed by the case and identify a cost or risk of implementing it. Limit your answer to 180 words.
-
-### Answer Keys
-
-<Fold label="Show answer 1">
-
-The installed allowances can enable **up to 40 further units: 4 × 10**. This is a mechanical upper bound under the packet’s assumptions, not an observation that 40 units were performed.
-
-The permit authorized ten units in total across the four devices. The tokens therefore carry four times the permission that was granted: the aggregate allowance was issued to each device instead of divided among them. The director’s claim that licensing “limits any further work to ten units” describes the permit, not the tokens the devices are holding.
-
-The permission is also suspended at noon, so none of that computation is authorized. Continued technical capability is not continued legal authorization. Correcting future issuance would not by itself erase the 40 units already accepted; those permissions would have to be replaced, invalidated through a delivered instruction, or exhausted under the stated enforcement rules.
-
-An answer may go further into how the aggregate should have been bound—device-bound portions summing to no more than ten, or a coordinated shared budget with its own coordination dependency. The question does not require it.
-
-</Fold>
-
-<Fold label="Show answer 2">
-
-At maximum simultaneous use, each device exhausts ten units in **five hours: 10 ÷ 2**. But a maximum rate does not establish a minimum rate. Devices may slow down or idle. Therefore 17:00 is the earliest time by which all four could have consumed their entire balances at the stated maximum rates—not a guaranteed expiry or latest stopping time. Individual devices may simply stop working earlier while retaining unused allowance.
-
-A calendar stopping claim would require, for example, an enforceable expiry using trustworthy time, or a restriction message whose delivery and enforcement are established by the deadline. Any shutdown allowance must be included. None is present in the packet.
-
-A supported replacement is:
-
-“The authority suspended legal permission at noon. We have not established that computation stopped then. Under the stated enforcement and coverage assumptions, the four installed allowances could still enable up to 40 further units; the packet provides no guaranteed calendar deadline for their expiry.”
-
-This statement is about available capacity after suspension, not proof that the operator used it or committed a violation.
-
-</Fold>
-
-<Fold label="Show answer 3">
-
-A stolen signing key can enable new apparently authentic tokens wherever that key remains accepted. The original 40-unit bound depended on there being no additional authorization paths or tokens; it cannot simply be carried into this changed scenario without examining whether forged tokens can reach and be accepted by the devices. Disconnection from the renewal service does not, by itself, establish that every route for installing tokens is closed.
-
-Reversing the mistaken suspension corrects a legal decision. It does not repair trust in the stolen key. Recovery should establish the affected devices and tokens, disable acceptance of the compromised key through an authorized recovery path, install replacement trust material, and reconcile consumption and outstanding balances before issuing replacement allowances. Devices not yet recovered must be treated separately. If the design lacks a secure recovery path, physical servicing or continued restriction may be necessary; a policy instruction cannot create that capability retroactively.
-
-Finally, restoring service does not necessarily make the operator whole. Lost work, delay, and interruption may remain. A remedy process must consider those losses separately from restarting the machines.
-
-</Fold>
-
-<Fold label="Show answer 4">
-
-One defensible pair is:
-
-“First, bind each token to a share of the aggregate permission rather than to the whole of it, and require the issuer to record how much of the total has already been committed across the fleet before signing another. This addresses the four-fold over-issue the case exposes. It costs a fleet-level record that must itself be kept current and protected, and it fails if that record is wrong. Second, give a suspension a delivery path the devices can receive, and pair it with a bounded local allowance that is not replenished while the renewal service is unreachable. This addresses the gap between a lawful suspension at noon and devices that never hear of it. It costs availability: permitted work stops when communications fail, and an operator can be interrupted by an outage nobody caused.”
-
-Other pairs can be justified—an enforceable expiry using trustworthy time, a recovery procedure that installs replacement trust material without the compromised key, a review route for a contested restriction. Credit depends on tying each change to something this case actually revealed and naming what it costs, not on choosing the most restrictive arrangement.
-
-</Fold>
+<Exercise id="v-hw-authorization-suspension" />
 
 ### Carry Forward
 

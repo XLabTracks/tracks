@@ -191,46 +191,7 @@ These probabilities assume the selection and perfect replay test specified above
 
 #### Questions
 
-**1. Assess the developer’s claim using the audit results.** Support your assessment with specific details from the packet.
-
-**2. Compare the two audit budgets.** Calculate replay GPU-hours and their percentage of the claimed run’s compute for 20 and 100 checks. Use the probability table to explain what the larger budget buys.
-
-**3. Recommend a next step in no more than 180 words.** Identify an implementation or confidentiality cost and rewrite the developer’s conclusion as a bounded claim. You may disagree with increasing the sample; justify the priority you choose.
-
-### Answer Keys
-
-<Fold label="Show answer 1">
-
-One defensible appraisal is:
-
-“The 20 selected intervals reproduce the committed transitions under the agreed test. The unchecked intervals and the provenance of the imported starting checkpoint remain unresolved, so the result does not establish the completeness of the declared training history. This transcript also leaves omitted project stages and activity on other devices or facilities unresolved, and therefore does not establish project-wide compliance or fleet completeness.”
-
-Matching the final checkpoint to M helps bind the submitted transcript to the model under review. It does not retroactively verify the starting checkpoint or establish that this is the only relevant history. Unresolved coverage is not itself evidence that a prohibited run occurred.
-
-</Fold>
-
-<Fold label="Show answer 2">
-
-- **20 checks:** 2,000 GPU-hours, or **2%** of the claimed run’s compute.
-- **100 checks:** 10,000 GPU-hours, or **10%**. This requires 8,000 additional GPU-hours and five times the replay budget.
-
-For one invalid interval, detection rises from 2% to 10%; for ten, it rises from approximately 18.4% to 65.3%. The larger budget strengthens this particular search but leaves a substantial chance of missing the illustrated deviations. It also leaves unsubmitted histories outside the sampling population.
-
-The table gives the probability of detection **if a specified deviation exists**, not the probability of compliance after acceptance. Inverting that conditional requires additional information, including assumptions about the prevalence and kinds of deviation. Actual deployment would also have to justify the stipulated perfect replay test and unpredictable selection.
-
-These percentages cover replay compute only. They exclude recording, storage, administration, proof generation if added, and investigation. No conversion to a legal compute allowance follows from the exercise’s GPU-hours.
-
-</Fold>
-
-<Fold label="Show answer 3">
-
-Example recommendation:
-
-“Before presenting this as project verification, establish the imported checkpoint’s provenance and extend the history to earlier covered stages. Reconcile project records with scheduler, cloud, and hardware-accounting evidence to look for omitted branches and resources. Retain unpredictable sampling, but choose its size against explicit deviation scenarios rather than a generic confidence target. This requires access to additional records, secure retention, and procedures for disputed disclosures; shared operator records may still omit the same activity. A defensible present conclusion is that 20 selected intervals reproduced successfully and the final checkpoint matches M. Project completeness, unchecked transitions, and other covered activity remain unresolved.”
-
-Other priorities can be justified. Credit depends on linking each action to a gap and naming the remaining dependence. More samples address the submitted history; they do not extend its population. A commitment to an earlier checkpoint fixes a value but does not establish its provenance. Substituting a zero-knowledge proof requires specifying its statement, coverage, and connection to the relevant execution; the label alone does not resolve these gaps.
-
-</Fold>
+<Exercise id="v-hw-training-claims-audit" />
 
 ### Carry Forward
 

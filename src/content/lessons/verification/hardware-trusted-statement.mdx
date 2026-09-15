@@ -208,53 +208,5 @@ The operator states:
 
 Write short answers before opening the answer key.
 
-1. Does the Attestation Result support the operator's conclusion? State the strongest claim it does support.
-2. Identify the Attester, Verifier, Reference Value Provider, Relying Party, and regulatory-response actor.
-3. At noon NVIDIA publishes a signed reference manifest for stack G. Device identity certificates remain valid, and the regulator continues to permit stack F until Friday. Explain what each fact establishes and how the inspectorate should assess a fresh report from a GPU still running F.
-4. Separate power records show consumption above the operator's estimate for the eight declared GPUs. How should this affect the inspectorate's assessment? Propose one follow-up check and explain what it could establish.
+<Exercise id="v-hw-trusted-statement-appraise" />
 
-### Answer Key
-
-<Fold label="Show answer 1">
-
-**Answer 1 — Scope of the result**
-
-No. Assuming the stated checks and measurement process are sound, the result supports the narrower claim that eight identified GPU attesters supplied fresh Evidence around 09:00 and their selected measured states satisfied the verifier's checks against the stated references.
-
-It does not establish a complete site inventory, cluster topology, the presence or operation of M, the work performed, or continuity throughout Monday. The absence of those claims is not itself proof of a violation. It limits what this result establishes.
-
-</Fold>
-
-<Fold label="Show answer 2">
-
-**Answer 2 — Roles**
-
-- **Attesters:** the protected attestation environments of the eight GPUs.
-- **Verifier:** NVIDIA Remote Attestation Service.
-- **Reference Value Provider:** NVIDIA, supplying the relevant manifests. NVIDIA also provides manufacturer endorsements and device-certification infrastructure, a distinct function.
-- **Relying Party:** the National Compute Inspectorate.
-- **Regulatory-response actor:** whichever institution the regime empowers to order remediation, inspection, suspension, or sanction. The scenario does not specify whether the inspectorate has all these powers.
-
-</Fold>
-
-<Fold label="Show answer 3">
-
-**Answer 3 — Recognition, identity, and permission**
-
-The new manifest provides manufacturer-recognized reference values for G. Valid device certificates allow continued authentication of the relevant device identities, subject to the remaining checks. The regulator's decision keeps F legally permitted until Friday.
-
-Provided the fresh report satisfies the other applicable requirements, continued use of F is not by itself grounds for rejection during that period. Publication of G does not automatically revoke F or amend the regulatory deadline. The verifier and relying party need policies that implement the intended transition rather than silently equating "newest" with "permitted." Nor would an acceptable F measurement alone establish that monitoring component M is running.
-
-</Fold>
-
-<Fold label="Show answer 4">
-
-**Answer 4 — An anomaly and a follow-up**
-
-The power discrepancy warrants investigation, not an immediate finding that a ninth GPU exists. Possible explanations include an inaccurate workload estimate, cooling demand, other equipment, or undeclared compute.
-
-One useful follow-up is a physical inventory reconciled against the device identifiers in the reports. That could establish whether additional accelerators are installed, though a one-time inspection cannot by itself reconstruct all earlier activity. Alternatively, separating accelerator power from cooling and other loads could test whether the discrepancy actually points toward additional compute.
-
-The eight reports may remain authentic and correctly appraised while coverage of the site remains uncertain. A strong answer distinguishes that coverage question from the validity of the received reports and explains both the value and the limits of the proposed follow-up.
-
-</Fold>

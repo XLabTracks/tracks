@@ -64,7 +64,7 @@ export function GenericTrackOverview({
         <p className="text-muted-foreground mt-4 text-sm">Lessons coming soon.</p>
       ) : signedIn && progress ? (
         <Card className="shadow-soft mt-6">
-          <CardContent className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <CardContent className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex-1">
               <div className="flex items-center justify-between text-sm">
                 <span className="font-medium">Your progress</span>

@@ -1,6 +1,8 @@
 
 ### 2.1.8 Policy Judgment: What Role Should Hardware Play?
 
+Protected compute counters and offline licensing sound great, but is the technological maturity there? What can realistically be implemented and agreed upon between nations right now? One year? Two? This section synthesizes what you've learned into actionable tips and strategies surrounding the current state of hardware mechanisms and policy implementation.
+
 The most common error in this area is maturity inflation. Separate five stages.
 
 | Maturity stage | What exists |
@@ -13,65 +15,50 @@ The most common error in this area is maturity inflation. Separate five stages.
 
 Do not infer stage five from evidence at stages one or two.
 
-#### Current Assessment, Dated August 2026
+## Current Assessment, Dated August 2026
 
 The evidence supports a bounded judgment.
 
-**Hardware can already contribute to:**
+<Fold label="Hardware can already contribute to">
 
-- Authenticating supported devices and selected state or configuration claims;
-- Protecting some measurement and confidential-computing functions under stated threat models;
-- Anchoring logs, credentials, and evidence from cloud or inspection systems;
-- Making some forms of software-only impersonation or tampering more difficult.
+- Authenticating supported devices and selected state or configuration claims
+- Protecting some measurement and confidential-computing functions under stated threat models
+- Anchoring logs, credentials, and evidence from cloud or inspection systems
+- Making some forms of software-only impersonation or tampering more difficult
 
-**Hardware research provides promising but incomplete evidence for:**
+</Fold>
 
-- Protected compute accounting;
-- Training-versus-inference classification;
-- Location and cluster-configuration verification;
-- Offline licensing, throttling, and revocation;
-- Off-chip digital and analog monitoring;
-- Sampled reconstruction of declared training runs.
+<Fold label="Hardware research provides promising but incomplete evidence for">
 
-**No public evidence establishes:**
+- Protected compute accounting
+- Training-versus-inference classification
+- Location and cluster-configuration verification
+- Offline licensing, throttling, and revocation
+- Off-chip digital and analog monitoring
+- Sampled reconstruction of declared training runs
 
-- A deployed, treaty-grade, end-to-end hardware system that meters and classifies frontier training across heterogeneous multi-node fleets against a state-level owner;
-- Universal coverage of legacy, custom, smuggled, or nonparticipating hardware;
-- Reliable detection of all undeclared compute;
-- A politically accepted international authority for keys, reference values, suspension, appeal, and enforcement.
+</Fold>
+
+<Fold label="No public evidence establishes">
+
+- A deployed, treaty-grade, end-to-end hardware system that meters and classifies frontier training across heterogeneous multi-node fleets against a state-level owner
+- Universal coverage of legacy, custom, smuggled, or nonparticipating hardware
+- Reliable detection of all undeclared compute
+- A politically accepted international authority for keys, reference values, suspension, appeal, and enforcement
+
+</Fold>
 
 A useful hardware recommendation therefore gives hardware a bounded job inside a layered regime. It names the corroborating evidence for the blind spot and the condition under which the recommendation expires.
 
 <PageBreak title="Hardware Mechanism Dossier" />
 
-#### Hardware Mechanism Dossier
+## Hardware Mechanism Dossier
 
-Use the following common anatomy for any proposal.
+Use the same anatomy for any proposal. Start with the policy goal, the legal rule, and the exact verification claim. Then state the mechanism's function (identify, attest, locate, measure, classify, restrict, or reconstruct) and its architecture (on-chip, off-chip digital, off-chip analog, or hybrid). Name the actors: the prover, the verifier, the evidence producer, the decision authority, and the enforcement authority. Describe the evidence produced and its freshness, and the trust chain that carries it. Record the current maturity, the technical dependencies, the political and confidentiality dependencies, and the cooperation required. Then model the adversary: the strongest plausible bypass, the collapsing weakness, the residual blind spot, and the independent corroborating layer that covers it. Close with the update condition and as-of date, and your confidence and source notes.
 
-- Policy goal
-- Legal rule
-- Exact verification claim
-- Function: identify, attest, locate, measure, classify, restrict, reconstruct
-- Architecture: on-chip, off-chip digital, off-chip analog, hybrid
-- Prover
-- Verifier
-- Evidence producer
-- Decision authority
-- Enforcement authority
-- Evidence produced and freshness
-- Trust chain
-- Current maturity
-- Technical dependencies
-- Political and confidentiality dependencies
-- Cooperation required
-- Strongest plausible bypass
-- Collapsing weakness
-- Residual blind spot
-- Independent corroborating layer
-- Update condition and as-of date
-- Confidence and source notes
+## Final Written Output: Hardware Assurance Brief
 
-#### Final Written Output: Hardware Assurance Brief
+Here is how this works. You write the brief in the memo desk, which opens from the card at the end of this section and saves your draft to your account. As you write, the desk's check rail flags rule-based issues it can detect, but it does not grade you. When the draft is done, you score it yourself against the rubric table below, one row at a time, and revise where a row falls short. The course is self-paced, so nobody else marks the brief. Bring it to your capstone work in module 4.
 
 **Length:** 700–1,000 words.
 **Audience:** a named national delegation or joint drafting group considering a three-month U.S.–China pause.
@@ -82,7 +69,7 @@ Your brief must include:
 
 1. **Goal, rule, and claim.** State the policy objective, legal obligation, and exact proposition the mechanism tests.
 2. **Actors and authority.** Name the prover, verifier, evidence producer, key or reference-value authority, decision authority, and enforcing institution.
-3. **Evidence and trust chain.** Explain what is measured, how evidence reaches the verifier, and which components or actors must remain trustworthy.
+3. **Evidence and trust chain.** Explain what the mechanism measures, how evidence reaches the verifier, and which components or actors must remain trustworthy.
 4. **Maturity and deployment path.** Separate deployed primitives, demonstrated components, proposed components, and missing institutions.
 5. **Strongest adversary response.** Model the best plausible bypass by the relevant actor.
 6. **Collapsing weakness.** Identify the unresolved assumption that defeats the proposed role.
@@ -95,8 +82,8 @@ Your brief must include:
 | --- | --- | --- |
 | Claim fidelity and goal-to-claim gap | 25% | The conclusion is precisely bounded and tied to the legal rule |
 | Trust chain and actor authority | 20% | Keys, measurements, reference values, updates, decisions, and enforcement have named owners |
-| Adversary modeling and prioritization | 20% | The strongest bypass and collapsing weakness are identified |
-| Feasibility and deployment path | 15% | Deployed, demonstrated, proposed, and missing elements are separated; time and scale are specified |
+| Adversary modeling and prioritization | 20% | The brief identifies the strongest bypass and collapsing weakness |
+| Feasibility and deployment path | 15% | The brief separates deployed, demonstrated, proposed, and missing elements; it specifies time and scale |
 | Layering and common-mode failure | 10% | The corroborating layer is genuinely independent and covers the named blind spot |
 | Audience fit and update conditions | 10% | The recommendation serves the named reader and states what would change it |
 
@@ -106,7 +93,7 @@ Your brief must include:
 
 <PageBreak title="Return to the Opening Puzzle" />
 
-#### Return to the Opening Puzzle
+## Return to the Opening Puzzle
 
 <ClaimLedger id="hw-opening-puzzle" set="hardware-opening" recall />
 

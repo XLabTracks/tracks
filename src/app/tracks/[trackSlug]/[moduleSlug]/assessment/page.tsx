@@ -100,7 +100,7 @@ export default async function AssessmentPage({
       <p className="text-muted-foreground mt-2">{assessment.prompt}</p>
 
       <Card className="shadow-soft mt-6">
-        <CardContent className="pt-6">
+        <CardContent>
           {user ? (
             <>
               {/* Keyed on the submission's lifecycle, not its updatedAt

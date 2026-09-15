@@ -54,7 +54,9 @@ export function WritingEditor({
   onReopen,
 }: WritingEditorProps) {
   const router = useRouter();
-  const [values, setValues] = useState<WritingValues>(() => initialValues ?? {});
+  const [values, setValues] = useState<WritingValues>(
+    () => initialValues ?? {}
+  );
   const [isSubmitted, setIsSubmitted] = useState(submitted);
   const [saveState, setSaveState] = useState<
     "idle" | "saving" | "saved" | "error"
@@ -79,7 +81,7 @@ export function WritingEditor({
 
   const totalWords = useMemo(
     () => sections.reduce((sum, s) => sum + countWords(values[s.id] ?? ""), 0),
-    [values, sections],
+    [values, sections]
   );
 
   // Mirror the server sanitizer: saveWritingDraft/submitWriting reject the
@@ -88,7 +90,7 @@ export function WritingEditor({
   // (The length cap is mirrored by maxLength on the textareas below.)
   const storable = useMemo(
     () => sections.every((s) => isStorableText(values[s.id] ?? "")),
-    [values, sections],
+    [values, sections]
   );
 
   useEffect(() => {
@@ -174,7 +176,9 @@ export function WritingEditor({
     <div className="space-y-4">
       {sections.map((section) => (
         <div key={section.id} className="space-y-1.5">
-          <Label htmlFor={`w-${section.id}`}>{section.label}</Label>
+          <Label htmlFor={`w-${section.id}`} className="leading-snug">
+            {section.label}
+          </Label>
           {section.guidance && (
             <p className="text-muted-foreground text-xs">{section.guidance}</p>
           )}
@@ -184,7 +188,7 @@ export function WritingEditor({
             placeholder={section.placeholder}
             onChange={(e) => setField(section.id, e.target.value)}
             disabled={isSubmitted}
-            rows={multiSection ? 4 : 6}
+            rows={multiSection ? 2 : 6}
             maxLength={WRITING_MAX_SECTION_CHARS}
             className="resize-y"
           />
@@ -213,7 +217,7 @@ export function WritingEditor({
           className={cn(
             aboveMax
               ? "text-amber-600 dark:text-amber-500"
-              : !belowMin && minWords != null && "text-met",
+              : !belowMin && minWords != null && "text-met"
           )}
         >
           {totalWords} words
@@ -223,16 +227,16 @@ export function WritingEditor({
         {onSaveDraft && !isSubmitted && (
           <span
             className={cn(
-              (!storable || saveState === "error") && "text-destructive",
+              (!storable || saveState === "error") && "text-destructive"
             )}
           >
             {!storable || saveState === "error"
               ? "Couldn't save"
               : saveState === "saving"
-                ? "Saving…"
-                : saveState === "saved"
-                  ? "Draft saved"
-                  : ""}
+              ? "Saving…"
+              : saveState === "saved"
+              ? "Draft saved"
+              : ""}
           </span>
         )}
       </div>
@@ -247,7 +251,10 @@ export function WritingEditor({
               <li key={criterion.id}>
                 <span className="font-medium">{criterion.label}</span>
                 {criterion.description && (
-                  <span className="text-muted-foreground"> — {criterion.description}</span>
+                  <span className="text-muted-foreground">
+                    {" "}
+                    — {criterion.description}
+                  </span>
                 )}
               </li>
             ))}

@@ -1,6 +1,8 @@
 
 ### 2.1.4 Measuring and Classifying Use
 
+The working rule for the paradigmatic compute governance treaty prohibits unlicensed training above some threshold, not inference. But how do you distinguish a training from an inference run? In this section, you'll explore how a protected counter can measure training-specific compute, how far current telemetry can tell training from inference, and which attacks target the classifier, the evidence channel, or the legal definition of a run.
+
 The working rule prohibits **unlicensed training above threshold T** while permitting inference and approved safety evaluations. Verifying that rule requires answers to three separate questions:
 
 1. How much counted compute occurred?
@@ -9,21 +11,21 @@ The working rule prohibits **unlicensed training above threshold T** while permi
 
 A system may answer one and fail the others.
 
-#### Compute Accounting
+## Compute Accounting
 
 Training thresholds are usually expressed in total operations, commonly total training FLOP. Throughput, such as FLOP per second, is a different quantity.
 
 A treaty-grade accounting rule must define:
 
-- Which operations count;
-- Whether low-precision, sparse, skipped, duplicated, or recomputed operations count differently;
-- Where counting occurs in the hardware or software stack;
-- How per-device records aggregate across a run, customer, cluster, facility, site, and time window;
-- How interrupted, resumed, sequential, or distributed runs are joined;
-- How counter resets, rollbacks, overflow, missing records, and clock changes are handled;
-- How the verifier detects padding or deliberately inefficient work intended to distort the count.
+- Which operations count
+- Whether low-precision, sparse, skipped, duplicated, or recomputed operations count differently
+- Where counting occurs in the hardware or software stack
+- How per-device records aggregate across a run, customer, cluster, facility, site, and time window
+- How interrupted, resumed, sequential, or distributed runs are joined
+- How counter resets, rollbacks, overflow, missing records, and clock changes are handled
+- How the verifier detects padding or deliberately inefficient work intended to distort the count
 
-Existing performance counters and management telemetry can measure useful quantities, but ordinary counters are not automatically suitable for adversarial verification. Hardware-mechanism surveys note that some existing counters can be reset or controlled by users. A stronger design needs a protected measurement path, secure state, authenticated reporting, freshness, and aggregation rules that the operator cannot silently rewrite.
+Existing performance counters and management telemetry can measure useful quantities, but ordinary counters are not automatically suitable for adversarial verification. Hardware-mechanism surveys note that users can reset or control some existing counters. A stronger design needs a protected measurement path, secure state, authenticated reporting, freshness, and aggregation rules that the operator cannot silently rewrite.
 
 <Src>O’Gara et al., *Hardware-Enabled Mechanisms for Verifying Responsible AI Development* — [arXiv:2505.03742](https://arxiv.org/abs/2505.03742), 2025; the sections on compute accounting, workload classification, cluster configuration, location verification, and offline licensing.</Src>
 
@@ -33,7 +35,7 @@ Even perfect accounting verifies the threshold, not the policy goal. Algorithmic
 
 <PageBreak title="Workload Classification" />
 
-#### Workload Classification
+## Workload Classification
 
 A compute counter cannot determine whether the operations were training, inference, evaluation, fine-tuning, or another permitted activity. Workload classification uses additional signals, such as temporal GPU telemetry, memory behavior, communication patterns, or authenticated code and configuration.
 
@@ -43,17 +45,17 @@ A June 2026 preprint by Rahman and Tajdari tested whether temporal GPU telemetry
 
 The limitations are equally important:
 
-- Difficult previously unseen adversarial workloads produced materially lower performance, reported in the study as 43–87 percent for the hardest cases;
-- Experiments were limited to single-node systems of up to eight GPUs;
-- Frontier-scale multi-node clusters were not tested;
-- Custom low-level kernels were not exhaustively covered;
-- The experiments used NVIDIA hardware;
-- Treaty relevance depends on a tamper-resistant telemetry source, an authenticated channel, and protected monitoring software;
+- Difficult previously unseen adversarial workloads produced materially lower performance, reported in the study as 43–87 percent for the hardest cases.
+- Experiments were limited to single-node systems of up to eight GPUs.
+- The study did not test frontier-scale multi-node clusters.
+- The study did not exhaustively cover custom low-level kernels.
+- The experiments used NVIDIA hardware.
+- Treaty relevance depends on a tamper-resistant telemetry source, an authenticated channel, and protected monitoring software.
 - Simple static heuristics are inadequate, because some inference configurations occupy the same basic utilization or arithmetic-intensity range as training.
 
 This is an **empirical component demonstration**, not an end-to-end verification regime.
 
-#### Separate Attacks by What They Target
+## Separate Attacks by What They Target
 
 A verifier should not treat every weakness as a classifier problem.
 
@@ -66,13 +68,8 @@ A verifier should not treat every weakness as a classifier problem.
 | Shift to uninstrumented hardware | Coverage and completeness |
 | Stay under the compute line through algorithmic improvement | The policy proxy itself |
 
-#### Activity: From Result to Policy Claim
+## Activity: From Result to Policy Claim
 
 For the telemetry study, write four statements.
 
-- **Observation:** What did the experiment measure?
-- **Supported inference:** What conclusion is justified within that setting?
-- **Unsupported policy leap:** What stronger claim would exceed the evidence?
-- **Deployment dependencies:** What additional technical and institutional components would be required?
-
-A well-bounded answer will not claim that the study proves treaty-grade detection across frontier clusters or against a state controlling the measurement path.
+<Exercise id="v-hw-result-to-policy-claim" />

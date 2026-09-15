@@ -255,7 +255,7 @@ export const verificationLessons: Lesson[] = [
     slug: "hardware-claim",
     moduleId: "v-infrastructure",
     sectionItemId: "v-hw-attestation",
-    title: "2.1.1 Break Down the Claim",
+    title: "2.1.1 What Evidence Proves Compliance?",
     contentRef: "verification/hardware-claim",
     estimatedMinutes: 30,
   },

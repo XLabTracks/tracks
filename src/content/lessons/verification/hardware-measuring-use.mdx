@@ -23,7 +23,7 @@ A treaty-grade accounting rule must define:
 - How counter resets, rollbacks, overflow, missing records, and clock changes are handled;
 - How the verifier detects padding or deliberately inefficient work intended to distort the count.
 
-Existing performance counters and management telemetry can measure useful quantities, but ordinary counters are not automatically suitable for adversarial verification. Hardware-mechanism surveys note that some existing counters can be reset or controlled by users. A stronger design needs a protected measurement path, secure state, authenticated reporting, freshness, and aggregation rules that the operator cannot silently rewrite.
+Existing performance counters and management telemetry can measure useful quantities, but ordinary counters are not automatically suitable for adversarial verification. Hardware-mechanism surveys note that users can reset or control some existing counters. A stronger design needs a protected measurement path, secure state, authenticated reporting, freshness, and aggregation rules that the operator cannot silently rewrite.
 
 <Src>O’Gara et al., *Hardware-Enabled Mechanisms for Verifying Responsible AI Development* — [arXiv:2505.03742](https://arxiv.org/abs/2505.03742), 2025; the sections on compute accounting, workload classification, cluster configuration, location verification, and offline licensing.</Src>
 
@@ -45,8 +45,8 @@ The limitations are equally important:
 
 - Difficult previously unseen adversarial workloads produced materially lower performance, reported in the study as 43–87 percent for the hardest cases;
 - Experiments were limited to single-node systems of up to eight GPUs;
-- Frontier-scale multi-node clusters were not tested;
-- Custom low-level kernels were not exhaustively covered;
+- The study did not test frontier-scale multi-node clusters;
+- The study did not exhaustively cover custom low-level kernels;
 - The experiments used NVIDIA hardware;
 - Treaty relevance depends on a tamper-resistant telemetry source, an authenticated channel, and protected monitoring software;
 - Simple static heuristics are inadequate, because some inference configurations occupy the same basic utilization or arithmetic-intensity range as training.

@@ -13,7 +13,6 @@ export function TeamRoster() {
           </span>
           <p className="nm">{person.name}</p>
           <p className="rl">{person.role}</p>
-          <p className="bio">{person.bio}</p>
           <p className="links">
             <a href={`mailto:${person.email}`} aria-label={`Email ${person.name}`} title={person.email}>
               <Mail aria-hidden="true" />

@@ -101,7 +101,7 @@
     column-gap: 16px;
   }
   .person {
-    grid-row: span 5;
+    grid-row: span 4;
     grid-template-rows: subgrid;
     gap: 0;
   }
@@ -130,7 +130,6 @@
 }
 .person .nm { font-family: var(--display); font-size: var(--fs-lg); font-weight: 500; }
 .person .rl { font-size: var(--fs-sm); color: var(--muted-foreground); }
-.person .bio { margin-top: 10px; font-size: var(--fs-sm); line-height: 1.6; }
 .person .links {
   display: flex;
   gap: 6px;
@@ -151,7 +150,7 @@
 .person .links svg { width: 18px; height: 18px; }
 
 /* The roster on the About page sits below the prose column, at the full
-   width of .wrap, so three cards with a bio each have room to breathe. */
+   width of .wrap. */
 .team { padding: 0 0 56px; }
 .team h2 { font-size: var(--fs-2xl); margin-bottom: 18px; }
 .prose + .team { padding-top: 0; }

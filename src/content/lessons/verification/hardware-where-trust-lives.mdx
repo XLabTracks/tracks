@@ -51,17 +51,17 @@ Baker and colleagues distinguish on-chip verification from external digital logg
 <ReadingCard
   id="reading-external-trust"
   href="https://arxiv.org/html/2507.15916v1"
-  title="Who must trust the external monitor?"
-  author="Baker, Mauricio, et al. | RAND working paper, arXiv:2507.15916v1"
+  title="Verifying International Agreements on AI"
+  author="Mauricio Baker et al. | RAND"
   year="2025"
   mins="8 min, including reflection"
 >
 
-**Required reading 1.** Baker, Mauricio, et al. *Verifying International Agreements on AI: Six Layers of Verification for Rules on Large-Scale AI Development and Deployment*. RAND working paper, 2025; arXiv:2507.15916v1.
+**Required reading 1 — Who must trust the external monitor?** Working paper, arXiv:2507.15916v1.
 
 **Read:** §4.2.1.1, “Prerequisites: Off-Chip Devices,” from its heading to immediately before §4.2.1.2. Skip linked appendices and footnotes. Do not read all of §4.2.
 
-**Focus:** Identify one measure intended to protect the verifier from false evidence and one intended to protect the monitored party from information theft. Could either interfere with the other?
+**Reading focus:** Identify one measure intended to protect the verifier from false evidence and one intended to protect the monitored party from information theft. Could either interfere with the other?
 
 **Technical boundary:** Treat the separate analysis computer as a place where sensitive records are examined under restrictions. You do not need to design its cryptography or reproduce a workload.
 
@@ -85,26 +85,24 @@ Petrie and Aarne explore an interlock on an accelerator’s data path, supported
   id="reading-interlock-boundary"
   href="https://arxiv.org/pdf/2506.03409"
   title="What must pass through the interlock?"
-  author="Petrie, James, and Onni Aarne | flexHEG report, Part II"
+  author="Petrie, J<ReadingCard
+  id="reading-interlock-boundary"
+  href="https://arxiv.org/pdf/2506.03409"
+  title="Technical Options for Flexible Hardware-Enabled Guarantees"
+  author="James Petrie and Onni Aarne | flexHEG report, Part II"
   year="April 2025"
   mins="8 min, including reflection"
 >
 
-**Required reading 2.** Petrie, James, and Onni Aarne. *Technical Options for Flexible Hardware-Enabled Guarantees*. 2025, Part II of the flexHEG report series; arXiv:2506.03409.
+**Required reading 2 — What must pass through the interlock?** Design proposal, April 2025, arXiv:2506.03409.
 
 **Read:** “Interlock-Based FlexHEG Design,” pp. 23–24. Read the prose beneath Figure 4 and continue until, but not including, “Repurposing the Network Interface Controller.” Printed and PDF-viewer page numbers coincide in the checked report.
 
-**Focus:** Identify the assumption that makes the observed path compulsory. What changes if another path remains available? What deployment cost follows from putting a component on the main path rather than beside it?
+**Reading focus:** Identify the assumption that makes the observed path compulsory. What changes if another path remains available? What deployment cost follows from putting a component on the main path rather than beside it?
 
 **Technical boundary:** You may skim the last paragraph’s bandwidth figures. A chiplet is a small chip packaged with other chips; a data path is the route information follows. No diagram reconstruction, networking protocol, or hardware implementation is required.
 
-</ReadingCard>
-
-<PageBreak title="Physical Measurement" />
-
-### Physical Measurement Changes the Question
-
-In [2.1.4](/tracks/verification/verification-infrastructure/hardware-measuring-use), we distinguished resource consumption from workload purpose. Here the distinction becomes architectural. A separately installed electrical meter could remain informative when accelerator firmware lies. But it measures electrical consumption at its boundary, not “unlicensed training.”
+</ReadingCard>dware-measuring-use), we distinguished resource consumption from workload purpose. Here the distinction becomes architectural. A separately installed electrical meter could remain informative when accelerator firmware lies. But it measures electrical consumption at its boundary, not “unlicensed training.”
 
 The inference still needs a defensible relationship between declared work and observed consumption, with uncertainty for other loads and operating conditions. A sensor may be independent of the vendor’s reporting path while its interpretation is not: for example, both analyses may depend on the same vendor-supplied efficiency model.
 
@@ -128,24 +126,22 @@ For our purposes, the incident motivates a question: if different monitoring com
   id="reading-shared-authority"
   href="https://blog.mozilla.org/security/2011/09/02/diginotar-removal-follow-up/"
   title="Where did the apparent separation fail?"
-  author="Johnathan Nightingale | Mozilla Security Blog, a first-party incident account"
+  author="Johnathan Nighting<ReadingCard
+  id="reading-shared-authority"
+  href="https://blog.mozilla.org/security/2011/09/02/diginotar-removal-follow-up/"
+  title="DigiNotar Removal Follow Up"
+  author="Johnathan Nightingale | Mozilla Security Blog"
   year="2 September 2011"
   mins="4 min, including reflection"
 >
 
-**Required reading 3.** Johnathan Nightingale. “DigiNotar Removal Follow Up.” *Mozilla Security Blog*, 2 Sept. 2011.
+**Required reading 3 — Where did the apparent separation fail?** First-party incident account, 2 September 2011.
 
 **Read:** Only the three paragraphs under “Staat der Nederlanden Certificates.” Stop at the author’s signature; skip the comments.
 
-**Focus:** What initially justified treating these certificates separately, and what caused that judgment to change? Translate this into one question you would ask a vendor advertising independent verification components.
+**Reading focus:** What initially justified treating these certificates separately, and what caused that judgment to change? Translate this into one question you would ask a vendor advertising independent verification components.
 
-</ReadingCard>
-
-<PageBreak title="A Hybrid Is Not Automatically Redundant" />
-
-### A Hybrid Is Not Automatically Redundant
-
-**Complementary** mechanisms answer different questions. **Redundant** mechanisms provide overlapping assurance about the same question. Either can be useful. Neither is established by the number of boxes.
+</ReadingCard>pping assurance about the same question. Either can be useful. Neither is established by the number of boxes.
 
 Consider three supposed checks: a device report, a second report from an external appliance, and an auditor’s dashboard. If the appliance imports the first report and the dashboard summarizes it, there is one originating measurement with several consumers. Independent signatures could protect each handoff while preserving an error in the original evidence.
 

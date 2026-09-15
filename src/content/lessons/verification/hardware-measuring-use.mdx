@@ -34,12 +34,12 @@ These choices should be explicit before comparing a measurement with T. Two exac
 <ReadingCard
   id="reading-metrics"
   href="https://docs.nvidia.com/datacenter/dcgm/latest/user-guide/feature-overview.html#metrics"
-  title="Read a metric definition, not a dashboard label"
-  author="NVIDIA | DCGM documentation, a vendor source for deployed monitoring tools"
+  title="Feature Overview: Profiling Metrics"
+  author="NVIDIA | DCGM documentation"
   mins="4 min"
 >
 
-**Required reading 1.** NVIDIA, “Feature Overview,” DCGM documentation.
+**Required reading 1 — Read a metric definition, not a dashboard label.** Vendor documentation for deployed monitoring tools.
 
 **Read:** Under “Profiling Metrics” → “Metrics,” read the definitions of Graphics Engine Activity, SM Activity, and Tensor Activity. Skip field identifiers, commands, installation instructions, and all other sections.
 
@@ -70,24 +70,22 @@ This is an analytic comparison, not a claim that every approach is already avail
 
 ### Accounting Means Reconciling Observations With Uses
 
-<ReadingCard
+<Read<ReadingCard
   id="reading-accounting"
   href="https://arxiv.org/html/2507.15916v1"
-  title="Can the declared work explain the observed activity?"
-  author="Baker, Mauricio, et al. | RAND working paper, arXiv:2507.15916v1"
+  title="Verifying International Agreements on AI"
+  author="Mauricio Baker et al. | RAND"
   year="2025"
   mins="6 min"
 >
 
-**Required reading 2.** Mauricio Baker et al., *Verifying International Agreements on AI: Six Layers of Verification for Rules on Large-Scale AI Development and Deployment*. 2025. A working paper.
+**Required reading 2 — Can the declared work explain the observed activity?** Working paper, arXiv:2507.15916v1.
 
 **Read:** Appendix A.6, “Compute Accounting via Analog Sensors”: the opening “Background” discussion, ending before Table 13. Skip the table, equations, and detailed implementation options.
 
 **Reading focus:** Why do the authors compare sources of compute with declared uses, rather than simply seek one total?
 
-</ReadingCard>
-
-Baker and colleagues propose comparing observed compute activity with verified declared uses. Their discussion distinguishes operations required by a model from extra operations actually executed, including recomputation. They also identify the difficulty of deriving an operation rate from physical measurements. This is an accounting proposal with implementation challenges, not a demonstrated universal sensor-to-FLOP conversion.
+</ReadingCard>er and colleagues propose comparing observed compute activity with verified declared uses. Their discussion distinguishes operations required by a model from extra operations actually executed, including recomputation. They also identify the difficulty of deriving an operation rate from physical measurements. This is an accounting proposal with implementation challenges, not a demonstrated universal sensor-to-FLOP conversion.
 
 <Src>Baker et al., [*Verifying International Agreements on AI*](https://arxiv.org/html/2507.15916v1), Appendix A.6.</Src>
 
@@ -194,19 +192,20 @@ At this point, a hardware regime has three separate outputs: an inventory with c
 <ReadingCard
   id="reading-classifier"
   href="https://arxiv.org/html/2606.19262v1"
+  title="Detecting Hidden ML Training With Zero-Overh<ReadingCard
+  id="reading-classifier"
+  href="https://arxiv.org/html/2606.19262v1"
   title="Detecting Hidden ML Training With Zero-Overhead Telemetry"
-  author="Rahman, Robi, and Sabiha Tajdari | arXiv:2606.19262v1, a research paper"
+  author="Robi Rahman and Sabiha Tajdari | arXiv:2606.19262v1"
   year="2026"
   mins="20 min, including reflection"
 >
 
-**Read:** Abstract; §2.2; Table 3 in §5.2 with its notes; §6.5; and Appendix F. Skip code and algorithm details; nothing here needs to be run.
+**Optional critical reading.** Research paper, version 1.
 
 **Purpose:** Assess a recent contribution using the lesson’s framework. Inclusion is not an endorsement of its strongest claims or evidence of field-wide consensus.
 
-</ReadingCard>
-
-Vocabulary: “hardened” means revised after exposure to attacks; “unseen” means withheld from the relevant classifier training; “white-box” means the attacker can inspect the classifier. A classification window is an interval of observations treated as one input.
+</ReadingCard>ox” means the attacker can inspect the classifier. A classification window is an interval of observations treated as one input.
 
 **1.** State the paper’s central empirical claim in one sentence. Identify the observations, evaluation unit, hardware coverage, and conditions to which it applies. Distinguish anything you cannot establish from the selected excerpts.
 

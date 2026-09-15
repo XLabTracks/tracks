@@ -60,16 +60,16 @@ For a pause agreement, the threat model also changes. An ownership scheme that d
 <ReadingCard
   id="reading-pol-claim-and-attack"
   href="https://arxiv.org/pdf/2103.05633v1"
-  title="What did the attack overturn?"
-  author="Jia et al. (2021) with Fang et al. | arXiv, two papers read in order"
+  title="Proof-of-Learning: Definitions and Practice"
+  author="Hengrui Jia et al. | arXiv, read with Fang et al."
   mins="12 min"
 >
 
-**Reading card 1 — a paired reading.** Jia et al., *Proof-of-Learning: Definitions and Practice* (2021, arXiv v1); Fang et al., *Proof-of-Learning Is Currently More Broken Than You Think* (first posted 2022; assigned v2, 2023). Read the original claim first, then the paper that attacks it — the first is not an uncontested result.
+**Required reading 1 — What did the attack overturn?** A paired reading: Jia et al. (2021, arXiv v1), then Fang et al., *Proof-of-Learning Is Currently More Broken Than You Think* (first posted 2022; assigned v2, 2023). Read the original claim first, then the paper that attacks it — the first is not an uncontested result.
 
 **Read:** Jia’s abstract and §V-A, “Mechanism Overview,” stopping before §V-B. Then Fang’s abstract and §I, “Introduction,” stopping before the contribution bullet list. Skip equations, algorithms, footnotes, and linked references. The card’s title link opens Jia; <a href="https://arxiv.org/html/2208.03567v2" target="_blank" rel="noopener" className="underline underline-offset-4">Fang: selected source ↗</a>.
 
-**Read for:** Reconstruct the original assurance about a forged history. Explain which assumptions the later paper challenges and which broader questions it leaves unresolved.
+**Reading focus:** Reconstruct the original assurance about a forged history. Explain which assumptions the later paper challenges and which broader questions it leaves unresolved.
 
 **Technical help:** “Gradient descent” is a procedure for adjusting model weights to reduce prediction error. “Spoofing” here means constructing a history that passes the test without being obtained through the claimed honest training process. You do not need to implement an attack.
 
@@ -96,25 +96,24 @@ This returns us to 2.1.6. A **verification cluster** is computing capacity used 
 The policy decision is therefore partly about access: who may see weights, data, code, and results, and under what controls? “Independent verification” need not mean public disclosure. It does require a credible account of why the party making the original claim cannot also dictate the test result.
 
 <ReadingCard
+<ReadingCard
   id="reading-training-data-limits"
   href="https://arxiv.org/html/2307.00682v1"
-  title="Which limitations survive the improved test?"
-  author="Choi, Dami, Yonadav Shavit, and David Duvenaud | arXiv:2307.00682v1"
+  title="Tools for Verifying Neural Models’ Training Data"
+  author="Dami Choi, Yonadav Shavit and David Duvenaud | arXiv"
   year="2023"
   mins="8 min"
 >
 
-**Reading card 2.** Choi, Shavit, and Duvenaud, *Tools for Verifying Neural Models’ Training Data* (2023), arXiv v1.
+**Required reading 2 — Which limitations survive the improved test?** Research paper, 2023, arXiv v1.
 
 **Read:** §7, “Discussion and Limitations,” in full, stopping before Acknowledgements. This includes its confidentiality and verifier-hardware paragraphs. Do not read the appendices.
 
-**Read for:** Choose one stated limitation that would change an inspectorate’s procurement decision. Explain what additional evidence or access arrangement would be needed to address it.
+**Reading focus:** Choose one stated limitation that would change an inspectorate’s procurement decision. Explain what additional evidence or access arrangement would be needed to address it.
 
 **Technical help:** Small changes to model weights can matter even if their numerical size is small. “Bit-wise reproducibility” means matching the stored numerical representation exactly.
 
-</ReadingCard>
-
-<PageBreak title="Zero Knowledge and the Statement" />
+</ReadingCard>title="Zero Knowledge and the Statement" />
 
 ### Zero Knowledge Changes Disclosure, Not the Scope of the Statement
 
@@ -137,27 +136,24 @@ Peigné, Nguyen, and Wang’s 2026 proposal combines commitments, external netwo
 The policy task is to evaluate the proposed combination. A valid proof of a sampled statement can coexist with a low probability of selecting a rare violation. Strong cryptography does not turn sparse sampling into exhaustive coverage.
 
 <ReadingCard
+  id="reading-zk-forecast-<ReadingCard
   id="reading-zk-forecast-and-caveats"
   href="https://arxiv.org/html/2606.05433v2"
-  title="Read a deployment claim against its caveats"
-  author="Peigné, Pierre, Ky Nguyen, and Paul Wang | arXiv:2606.05433v2, a research proposal"
+  title="Zero Knowledge Verification for Frontier AI Training Is Possible"
+  author="Pierre Peigné, Ky Nguyen and Paul Wang | arXiv"
   year="revised 22 August 2026"
   mins="15 min, including reflection"
 >
 
-**Reading card 3.** Peigné, Nguyen, and Wang, *Zero Knowledge Verification for Frontier AI Training Is Possible* (2026), **v2, revised 22 August 2026**.
+**Required reading 3 — Read a deployment claim against its caveats.** Research proposal, **v2, revised 22 August 2026**.
 
 **Read:** The abstract; Appendix B.10, numbered caveats **1, 4, and 5 only**; and the **first paragraph of Appendix G.5**, stopping before the next bold subheading. These are three short selections, not an assignment to read the appendices.
 
-**Read for:** Distinguish a forecast, an assumption awaiting measurement, and a limit on the assurance. Name one result you would require before relying on the proposal in a pilot.
+**Reading focus:** Distinguish a forecast, an assumption awaiting measurement, and a limit on the assurance. Name one result you would require before relying on the proposal in a pilot.
 
 **Technical help:** Proving throughput describes how quickly proof-generating work runs. Merkle hashing binds records into a structure that supports checking selected entries. In the G.5 paragraph, read the sampling ratio as “steps checked divided by total steps.” No algebra is required.
 
-</ReadingCard>
-
-### Who Pays for Checking?
-
-“Verification overhead” needs a denominator and a payer. Ask separately about recording during training, storing the record, producing proofs, checking proofs, and investigating discrepancies. A small proof may be quick to check but costly to generate. Low extra training time does not imply low total operating cost.
+</ReadingCard>tion overhead” needs a denominator and a payer. Ask separately about recording during training, storing the record, producing proofs, checking proofs, and investigating discrepancies. A small proof may be quick to check but costly to generate. Low extra training time does not imply low total operating cost.
 
 Replaying fewer intervals reduces work but may not reduce the minimum machine size needed to reproduce one interval. A verifier could need a substantial cluster briefly, even when its total computation is a small fraction of the original run. Compare peak capacity, total compute, storage, staff time, and delay to a usable decision.
 

@@ -4045,3 +4045,37 @@ card assigns.
 2.1.3 loses its time-allocation line on the owner's instruction. The same
 line still opens 2.1.2, 2.1.4, 2.1.5, 2.1.6 and 2.1.7 — say the word and
 they go too.
+
+## 2026-09-15 — reading cards put the work in the header again
+
+Course owner, on 2.1.4's DCGM card: "это не то как в норме карточки выглядят
+— в заголовке название, в боди то какие части читать какие нет."
+
+She is right, and 2.1.2 and 2.1.3 already had it: the card's header carries
+the work's title and its author line, and the body says which parts to read
+and which to skip. Eleven cards built from the later briefs had it inverted —
+a pedagogical question in the header and the source citation repeated as the
+body's first line — because those briefs supplied a "learner-facing title"
+column and it was taken literally.
+
+The question was not lost; it moved to where the house puts it, as the
+opening of the required-reading line. So the DCGM card now reads
+"Feature Overview: Profiling Metrics / NVIDIA | DCGM documentation" in the
+header and opens "**Required reading 1 — Read a metric definition, not a
+dashboard label.** Vendor documentation for deployed monitoring tools."
+
+Cards fixed: `reading-permission-unavailable`, `reading-offline-control`,
+`reading-metrics`, `reading-accounting`, `reading-classifier`,
+`reading-pol-claim-and-attack`, `reading-training-data-limits`,
+`reading-zk-forecast-and-caveats`, `reading-external-trust`,
+`reading-interlock-boundary`, `reading-shared-authority`. Author lines lost
+the source-type description they had been carrying — that belongs in the
+body's first line, beside the reading number.
+
+The field labels had grown three dialects, "Focus:", "Read for:" and
+"Reading focus:". All seventeen are "Reading focus:" now, which is what 2.1.2
+and 2.1.3 used.
+
+2.1.3's IAPS citation had been left as the fragment "The IAPS issue brief"
+with no period; it is now a citation like the rest — `Brass, [*Location
+Verification for AI Chips*](…), IAPS issue brief.`

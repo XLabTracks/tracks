@@ -30,17 +30,17 @@ It also illustrates the limit of the analogy. The documentation explicitly calls
 <ReadingCard
   id="reading-permission-unavailable"
   href="https://docs.nvidia.com/ai-enterprise/release-8/latest/infra-software/vgpu/licensing.html"
-  title="What happens when permission is unavailable?"
-  author="NVIDIA | AI Enterprise release-8 documentation, a living vendor document"
+  title="Licensing"
+  author="NVIDIA | AI Enterprise, release-8 documentation"
   year="accessed 13 September 2026"
   mins="5 min, including reflection"
 >
 
-**Required reading 1.** NVIDIA. “Licensing.” *NVIDIA AI Enterprise*, release-8 documentation.
+**Required reading 1 — What happens when permission is unavailable?** Living vendor documentation.
 
 **Read:** The opening “Licensing” section through the grace-period table. Stop before “Verifying the License Status of a Licensed NVIDIA vGPU for Compute Guest VM.”
 
-**Focus:** Identify what triggers restriction and what restores service. Which of those events establishes misconduct? Keep the new-client and disconnected-client cases separate.
+**Reading focus:** Identify what triggers restriction and what restores service. Which of those events establishes misconduct? Keep the new-client and disconnected-client cases separate.
 
 **Technical boundary:** Skip commands, configuration, and troubleshooting. You are interpreting a documented policy, not configuring a GPU.
 
@@ -56,24 +56,24 @@ Kulp and colleagues’ 2024 RAND working paper proposes offline licensing: a dev
 
 <ReadingCard
   id="reading-offline-control"
+  href="htt<ReadingCard
+  id="reading-offline-control"
   href="https://www.rand.org/content/dam/rand/pubs/working_papers/WRA3000/WRA3056-1/RAND_WRA3056-1.pdf"
-  title="What does an offline license actually control?"
-  author="Kulp, Gabriel, et al. | RAND working paper WR-A3056-1"
+  title="Hardware-Enabled Governance Mechanisms"
+  author="Gabriel Kulp, Daniel Gonzales, Everett Smith, et al. | RAND"
   year="18 January 2024"
   mins="10 min, including reflection"
 >
 
-**Required reading 2.** Kulp, Gabriel, et al. *Hardware-Enabled Governance Mechanisms: Developing Technical Solutions to Exempt Items Otherwise Classified Under Export Control Classification Numbers 3A090 and 4A090*. RAND, 18 Jan. 2024. Working paper WR-A3056-1.
+**Required reading 2 — What does an offline license actually control?** Working paper WR-A3056-1, 18 January 2024. Its full title runs "Developing Technical Solutions to Exempt Items Otherwise Classified Under Export Control Classification Numbers 3A090 and 4A090."
 
 **Read:** Chapter 6, printed pp. 37–38, from the chapter heading to before “Subsystems”; then “Discussion” on printed p. 48, stopping before “Summary.” In the PDF viewer these are pages 48–49 and 59.
 
-**Focus:** Distinguish limiting a resource from verifying its use. Explain why withholding future tokens need not immediately stop work already enabled.
+**Reading focus:** Distinguish limiting a resource from verifying its use. Explain why withholding future tokens need not immediately stop work already enabled.
 
 **Technical boundary:** No implementation or equations are assigned. The excerpt’s workload assumptions are the authors’ framing, not an established training detector; evaluate them using 2.1.4.
 
-</ReadingCard>
-
-The rest of this lesson develops a course-authored design test. It is not a description of either product’s complete architecture or a claim that its institutional arrangements already exist.
+</ReadingCard>sign test. It is not a description of either product’s complete architecture or a claim that its institutional arrangements already exist.
 
 ### Follow the Authorization, Not Just the Signature
 

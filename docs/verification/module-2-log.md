@@ -4118,3 +4118,36 @@ Five lessons have no textarea, and all five are correct: the 2.1 head's task
 is the `ClaimLedger` with its three-way buttons, 2.3.0, 2.3.3 and 2.3.6 run
 widgets, and 2.3.7's written output is a `MemoDesk` card into the desk. No
 task in either section is left without an answer surface.
+
+## 2026-09-15 — the optional card lost its Read line; unit 2.1 owes no brief
+
+Two answers to the owner.
+
+**The card had stopped saying what to read.** The rewrite that moved work
+titles into card headers replaced each body's first paragraph with the new
+required-reading line. In `reading-classifier` that first paragraph was the
+`**Read:**` instruction, not a citation, so the excerpt assignment —
+"Abstract; §2.2; Table 3 in §5.2 with its notes; §6.5; and Appendix F" — was
+destroyed. It is restored. Every other card kept its Read line; this was the
+only one, because it was the only card whose body did not open with a
+citation.
+
+Two repetitions went with it. The section heading already says "Optional:",
+so the card body now opens "**Critical reading.**" rather than repeating the
+word two lines below it — the say-it-once rule. And the section's own
+"Additional time: approximately 20 minutes" line was the same 20 minutes the
+card's meta line already prints, so the section keeps only what the card
+cannot say: that the activity is not a prerequisite for the next lesson.
+
+**Unit 2.1 has no brief.** Its eight written tasks are all exercises: the
+Chip Security Act breakdown from 2.1.1, one per lesson for 2.1.2 to 2.1.7,
+and the optional paper critique. The only long-form brief the unit ever had
+was `m2-1-hardware-brief`, the 1,000-word hardware assurance brief with its
+weighted rubric, and it was 2.1.8's final written output, so it went when
+2.1.8 did. The word "brief" now appears in 2.1 only as "briefly" and in the
+IAPS source's name; 2.1.4's optional question 4 asks for a three-sentence
+briefing inside its exercise, which is not the same thing.
+
+Restoring it is one edit — the slot's full text is in this log under the
+2.1.8 removal — but it needs a lesson to live in, and that is a curriculum
+decision.

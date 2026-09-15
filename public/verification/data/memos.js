@@ -280,7 +280,7 @@ window.VERIFICATION_MEMOS = [
     "title": "Bilateral Pilot Review",
     "status": "specified",
     "task": "v-hw-bilateral-pilot-review",
-    "brief": "Compare an on-chip design with an off-chip design for the working pause rule. Answer each question for both designs.",
+    "brief": "Two designs: on-chip, Architecture A built on [NVIDIA's Hopper confidential computing](https://images.nvidia.com/aem-dam/en-zz/Solutions/data-center/h100/PB-11133-001_v01.pdf); off-chip, Architecture B as proposed in [Cankaya et al.'s cluster I/O fingerprinting](https://arxiv.org/abs/2606.10724). Answer each question for both. A line per design is enough.",
     "audience": null,
     "words": 0,
     "href": "/tracks/verification/verification-infrastructure/hardware-where-trust-lives#v-hw-bilateral-pilot-review"

@@ -64,7 +64,8 @@
    padding-left for bullet lists at a higher specificity than a lone class.
    Without the `.prose` here the cards sit indented from every heading and
    paragraph on the page, which reads as a misalignment rather than a list. */
-.prose .roster {
+.prose .roster,
+.team .roster {
   list-style: none;
   display: grid;
   gap: 16px;
@@ -92,14 +93,15 @@
    two ROWS of cards, so the two cannot be set independently while this is
    on — which is fine at three people and would want revisiting past six. */
 @media (min-width: 700px) {
-  .prose .roster {
+  .prose .roster,
+  .team .roster {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     grid-auto-rows: auto;
     row-gap: 14px;
     column-gap: 16px;
   }
   .person {
-    grid-row: span 3;
+    grid-row: span 5;
     grid-template-rows: subgrid;
     gap: 0;
   }
@@ -107,9 +109,10 @@
 .mug {
   display: grid;
   place-items: center;
-  width: 72px;
-  height: 72px;
+  width: 96px;
+  height: 96px;
   border-radius: 50%;
+  overflow: hidden;
   background: var(--muted);
   color: var(--brand-ink);
   font-family: var(--display);
@@ -119,5 +122,36 @@
   user-select: none;
   -webkit-user-select: none;
 }
+.mug img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 35%;
+}
 .person .nm { font-family: var(--display); font-size: var(--fs-lg); font-weight: 500; }
 .person .rl { font-size: var(--fs-sm); color: var(--muted-foreground); }
+.person .bio { margin-top: 10px; font-size: var(--fs-sm); line-height: 1.6; }
+.person .links {
+  display: flex;
+  gap: 6px;
+  margin-top: 12px;
+  align-self: end;
+}
+.person .links a {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--brand-ink);
+}
+.person .links a:hover,
+.person .links a:focus-visible { background: var(--muted); }
+.person .links svg { width: 18px; height: 18px; }
+
+/* The roster on the About page sits below the prose column, at the full
+   width of .wrap, so three cards with a bio each have room to breathe. */
+.team { padding: 0 0 56px; }
+.team h2 { font-size: var(--fs-2xl); margin-bottom: 18px; }
+.prose + .team { padding-top: 0; }

@@ -13,7 +13,7 @@ Section 2.1.1 separated authenticity, correctness, and completeness. This sectio
 
 NVIDIA's H100 engineers state an important assumption explicitly: "Since the host or hypervisor is not trusted in CC mode". They explain that registers capable of compromising the guest's confidentiality or integrity must be protected from that host.
 
-<Src>Dhanuskodi et al., "Creating the First Confidential GPUs," "Starting the GPU in CC Mode." [Communications of the ACM](https://cacm.acm.org/practice/creating-the-first-confidential-gpus/)</Src>
+<Src>Dhanuskodi et al., ["Creating the First Confidential GPUs"](https://cacm.acm.org/practice/creating-the-first-confidential-gpus/), *Communications of the ACM*, "Starting the GPU in CC Mode."</Src>
 
 The central inversion for verification is this: **the deployed confidentiality system protects a tenant from the owner or operator of the machine; a verification regime needs evidence that protects an outside authority from false claims by that operator.**
 
@@ -48,7 +48,7 @@ A **root of trust** is a component or function whose correct operation the syste
 
 Secure boot enforces a boot policy. Measured boot records what loaded. A system can use both: reject unauthorized components and record measurements of the components that actually loaded. Remote attestation conveys selected evidence about the system to another party for appraisal.
 
-<Src>Microsoft, "Secure the Windows boot process." [Microsoft Learn](https://learn.microsoft.com/en-us/windows/security/operating-system-security/system-security/secure-the-windows-10-boot-process)</Src>
+<Src>Microsoft, ["Secure the Windows boot process"](https://learn.microsoft.com/en-us/windows/security/operating-system-security/system-security/secure-the-windows-10-boot-process), Microsoft Learn.</Src>
 
 Reference values and legal approval are separate. A manufacturer-signed reference integrity manifest can associate a measurement with a recognized software release. The regulator must still decide whether that release is permitted for the regulated activity.
 
@@ -161,7 +161,7 @@ It does not by itself establish that the eight GPUs were connected in the declar
 
 The confidentiality purpose can also constrain observation. NVIDIA's H100 CC-On mode disables performance counters to prevent their use in side-channel attacks. This illustrates a potential tension: protecting a tenant's workload from observation can remove signals that a compute-use verifier would want. A verification design that depends on those counters would need an additional measurement mechanism; a valid attestation report cannot substitute for missing telemetry.
 
-<Src>Dhanuskodi et al., "Creating the First Confidential GPUs," "Starting the GPU in CC Mode." [Communications of the ACM](https://cacm.acm.org/practice/creating-the-first-confidential-gpus/)</Src>
+<Src>Dhanuskodi et al., ["Creating the First Confidential GPUs"](https://cacm.acm.org/practice/creating-the-first-confidential-gpus/), *Communications of the ACM*, "Starting the GPU in CC Mode."</Src>
 
 ### Threat-Model Boundaries: Battering RAM
 

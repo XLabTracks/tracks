@@ -3984,3 +3984,32 @@ fills to a 32px gutter (2112px paragraphs at 2560). Two other surfaces do cap
 and were measured: `/tracks/verification` at `max-w-5xl` leaves 544px empty
 at 1920, and the memo desk's `.desk-head p` at 70ch leaves 792px. Neither is
 a lesson.
+
+## 2026-09-15 — a citation's link sits on the work's title, course-wide
+
+Course owner, on seeing `Microsoft, "Secure the Windows boot process."
+Microsoft Learn`: the link belongs inside the text, on the title, not on a
+label bolted to the end. "Если ссылка внутри текста то так пусть и будет по
+всем модулям."
+
+All 24 `<Src>` citations in 2.1 were rewritten so the link opens from the
+work's own name and the locator follows as plain text — `Kulp et al.,
+[*Hardware-Enabled Governance Mechanisms*](…), RAND WR-A3056-1, ch. 6.`
+Where the trailing label was the only thing naming the work, the title was
+restored: Baker, Sastry, Jia, Fang, Choi, Peigné, Petrie–Aarne and
+Rahman–Tajdari now print their titles rather than an arXiv number.
+
+The rest of the course was swept for the same shape. Most of it was already
+right — a quoted or italicised title carrying the link is the target — and
+eight places were not:
+
+- 2.1.1's New START citation and its H.R. 3447 source line put the
+  institution and the word "Source:" inside the link.
+- 0.1's Anthropic incident had a 96-character sentence as its link text; the
+  link is now on "disclosed" and the sentence reads as prose.
+- 2.4's SB 53 and AIWI/CARMA citations, 2.3's Kimball, 1.0.1's OTA report,
+  and the two Baker section pointers in 2.4 all began the link at the author
+  or the locator rather than the title.
+
+URLs are untouched, so the citation registry and the works-cited appendices
+are unchanged.

@@ -49,11 +49,11 @@ Fixing the record before the verifier’s unpredictable selection limits the dev
 
 Jia et al. introduced proof-of-learning in 2021, motivated partly by model ownership and integrity of outsourced training. Their scheme records intermediate states and checks selected updates by re-execution. The intended assurance includes making a forged history no cheaper to obtain than honest training.
 
-<Src>Jia et al. [arXiv:2103.05633](https://arxiv.org/pdf/2103.05633v1)</Src>
+<Src>Jia et al., [*Proof-of-Learning: Definitions and Practice*](https://arxiv.org/pdf/2103.05633v1).</Src>
 
 Fang et al. subsequently developed attacks on the proposed verification mechanism. Two issues matter here: tolerated numerical differences can conceal invalid updates, and an efficient selection rule can let an adversary influence which updates receive scrutiny. Their work challenges the scheme’s robustness; it does not establish that every possible method of verifying training is impossible.
 
-<Src>Fang et al., Introduction. [arXiv:2208.03567](https://arxiv.org/html/2208.03567v2)</Src>
+<Src>Fang et al., [*Proof-of-Learning Is Currently More Broken Than You Think*](https://arxiv.org/html/2208.03567v2), Introduction.</Src>
 
 For a pause agreement, the threat model also changes. An ownership scheme that deters someone unwilling to spend as much as the original trainer does not necessarily deter a state willing to fund expensive deception. Ask whether the attacker’s budget and objective match the policy problem before borrowing the security claim.
 
@@ -89,7 +89,7 @@ A failed replay is also not automatically a legal finding. Missing replay state,
 
 Choi, Shavit, and Duvenaud propose training-data verification that adds initialization and data-order commitments and tests based on temporary memorization of recently seen data. They report empirical defenses, while explicitly acknowledging attacks not covered and limits of generalization. Their protocol also requires the verifier to access sensitive material; an isolated cluster trusted by both sides is discussed as a possible way to reduce leakage.
 
-<Src>Choi et al., §§4 and 7. [arXiv:2307.00682](https://arxiv.org/html/2307.00682v1)</Src>
+<Src>Choi et al., [*Tools for Verifying Neural Models’ Training Data*](https://arxiv.org/html/2307.00682v1), §§4 and 7.</Src>
 
 This returns us to 2.1.6. A **verification cluster** is computing capacity used to perform the checks. It may create an independent execution path, but independence depends on who controls its software, inputs, administration, and outputs. Keeping it off the internet restricts one route of disclosure; it does not settle maintenance access or what an inspector can export.
 
@@ -132,7 +132,7 @@ There is a terminology trap. In proof-system literature, **completeness** genera
 
 Peigné, Nguyen, and Wang’s 2026 proposal combines commitments, external network observations, and zero-knowledge checks, targeting dense pretraining. Its revised version explicitly limits what sparse auditing establishes. The authors forecast a proof of concept in roughly 36 months; this is their estimate, not an independently established deployment schedule.
 
-<Src>Peigné et al., v2. [arXiv:2606.05433](https://arxiv.org/html/2606.05433v2)</Src>
+<Src>Peigné et al., [*Zero Knowledge Verification for Frontier AI Training Is Possible*](https://arxiv.org/html/2606.05433v2), v2.</Src>
 
 The policy task is to evaluate the proposed combination. A valid proof of a sampled statement can coexist with a low probability of selecting a rare violation. Strong cryptography does not turn sparse sampling into exhaustive coverage.
 

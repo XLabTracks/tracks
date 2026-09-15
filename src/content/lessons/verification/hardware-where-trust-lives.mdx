@@ -46,7 +46,7 @@ The attraction of moving monitoring outside the accelerator is not that external
 
 Baker and colleagues distinguish on-chip verification from external digital loggers and analog sensors, and discuss separate protected analysis. Their proposal also treats verifier equipment as a possible source of espionage or sabotage against the party being monitored. That two-sided problem is central here.
 
-<Src>Baker et al., §4.2.1.1. [arXiv:2507.15916](https://arxiv.org/html/2507.15916v1)</Src>
+<Src>Baker et al., [*Verifying International Agreements on AI*](https://arxiv.org/html/2507.15916v1), §4.2.1.1.</Src>
 
 <ReadingCard
   id="reading-external-trust"
@@ -79,7 +79,7 @@ There is also a difference between observing a copy and sitting on a required pa
 
 Petrie and Aarne explore an interlock on an accelerator’s data path, supported by a guarantee processor and physical protection. They explicitly discuss the performance burden of this placement and several possible integration points. Their interlock is not necessarily off-chip: placement is a design choice. This is an architecture proposal, not a demonstration that arbitrary existing GPUs can be comprehensively monitored by adding a network box.
 
-<Src>Petrie and Aarne, pp. 23–24. [arXiv:2506.03409](https://arxiv.org/pdf/2506.03409)</Src>
+<Src>Petrie and Aarne, [*Technical Options for Flexible Hardware-Enabled Guarantees*](https://arxiv.org/pdf/2506.03409), pp. 23–24.</Src>
 
 <ReadingCard
   id="reading-interlock-boundary"
@@ -118,7 +118,7 @@ We do not repeat the compute-accounting derivation here. The architectural quest
 
 In September 2011, Mozilla removed trust in the DigiNotar certificate authority after fraudulent certificate issuance. Its account described an uncertain breach scope and failures of notification. Certificates issued through a different DigiNotar-controlled intermediate for the Dutch government were initially exempted; Mozilla removed that exemption after the Dutch government’s assessment changed.
 
-<Src>Nightingale, “DigiNotar Removal Follow Up.” [Mozilla Security Blog](https://blog.mozilla.org/security/2011/09/02/diginotar-removal-follow-up/)</Src>
+<Src>Nightingale, [“DigiNotar Removal Follow Up”](https://blog.mozilla.org/security/2011/09/02/diginotar-removal-follow-up/), Mozilla Security Blog.</Src>
 
 A **certificate authority** vouches for the relationship between an identity and a public key. Here, the architecture lesson is that different certificate chains did not settle whether the underlying processes were independently secure. It is not a claim that every certificate was fraudulent, or that cryptography itself failed.
 

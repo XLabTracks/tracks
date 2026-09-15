@@ -21,7 +21,7 @@ The policy task is to establish both that the token accurately translates the pe
 
 NVIDIA documents software-enforced licensing for its AI Enterprise vGPU for Compute virtual machines. In the release-8 documentation, a VM without a license initially receives a 20-minute grace period; an already licensed VM disconnected from the cloud license service has a default seven-day grace period. Performance degrades if licensing is not restored, and full capability returns when a valid license is acquired. These are different situations, not two descriptions of the same timer.
 
-<Src>NVIDIA, “Licensing,” *NVIDIA AI Enterprise*, release 8. [NVIDIA AI Enterprise documentation](https://docs.nvidia.com/ai-enterprise/release-8/latest/infra-software/vgpu/licensing.html)</Src>
+<Src>NVIDIA, [“Licensing”](https://docs.nvidia.com/ai-enterprise/release-8/latest/infra-software/vgpu/licensing.html), *NVIDIA AI Enterprise*, release 8.</Src>
 
 This is a real product behavior, not a reported enforcement incident. It illustrates a control that can restrict useful computation because permission is unavailable—not because anyone established prohibited use. The same distinction matters in a treaty system when a renewal server fails or a network route is interrupted.
 
@@ -52,7 +52,7 @@ It also illustrates the limit of the analogy. The documentation explicitly calls
 
 Kulp and colleagues’ 2024 RAND working paper proposes offline licensing: a device authenticates an allowance, meters its consumption, and restricts selected functionality when the allowance is exhausted. Tokens need not arrive through a live internet connection. The proposal separates this control from verifying what the permitted compute actually did. It is a design proposal, not evidence of an operating international regime.
 
-<Src>Kulp et al., ch. 6. [RAND WR-A3056-1](https://www.rand.org/pubs/working_papers/WRA3056-1.html)</Src>
+<Src>Kulp et al., [*Hardware-Enabled Governance Mechanisms*](https://www.rand.org/pubs/working_papers/WRA3056-1.html), RAND WR-A3056-1, ch. 6.</Src>
 
 <ReadingCard
   id="reading-offline-control"
@@ -141,7 +141,7 @@ One possible safeguard is requiring two independently controlled approvals for a
 
 Procedural safeguards are part of compute-governance design, not an afterthought. Sastry and colleagues explicitly discuss limits on the scope of controls and information demands, alongside oversight and review. The following requirements apply that concern to our hypothetical licensing system; they are recommendations for this course scenario, not a statement of existing legal entitlements.
 
-<Src>Sastry et al., §5.B. [arXiv:2402.08797](https://arxiv.org/html/2402.08797v1)</Src>
+<Src>Sastry et al., [*Computing Power and the Governance of Artificial Intelligence*](https://arxiv.org/html/2402.08797v1), §5.B.</Src>
 
 A suspension procedure should specify the evidentiary threshold, authorized decision-maker, scope, reasons recorded, review deadline, and route to restoration. A provisional restriction is not a final finding of violation. If sensitive evidence cannot be disclosed publicly, the procedure still needs a credible reviewer who can examine it.
 
@@ -149,7 +149,7 @@ Restoration must also be operational. Who can issue replacement permission? What
 
 NIST’s firmware-resiliency guidance treats protection, detection, and recovery as complementary functions. It supports asking for a recovery design; it does not certify a particular licensing system or settle who should control recovery.
 
-<Src>Regenscheid, *Platform Firmware Resiliency Guidelines*, abstract. [NIST SP 800-193](https://csrc.nist.gov/pubs/sp/800/193/final)</Src>
+<Src>Regenscheid, [*Platform Firmware Resiliency Guidelines*](https://csrc.nist.gov/pubs/sp/800/193/final), NIST SP 800-193, abstract.</Src>
 
 ### Exceptions and Equipment Outside the Control Boundary
 

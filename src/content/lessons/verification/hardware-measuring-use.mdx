@@ -89,7 +89,7 @@ This is an analytic comparison, not a claim that every approach is already avail
 
 Baker and colleagues propose comparing observed compute activity with verified declared uses. Their discussion distinguishes operations required by a model from extra operations actually executed, including recomputation. They also identify the difficulty of deriving an operation rate from physical measurements. This is an accounting proposal with implementation challenges, not a demonstrated universal sensor-to-FLOP conversion.
 
-<Src>Baker et al., Appendix A.6. [arXiv:2507.15916](https://arxiv.org/html/2507.15916v1)</Src>
+<Src>Baker et al., [*Verifying International Agreements on AI*](https://arxiv.org/html/2507.15916v1), Appendix A.6.</Src>
 
 Consider an operator who explains every observed hour of GPU activity as permitted inference. The explanation is useful only if the declared inference really occurred and its claimed compute cost is credible. Inflating the declared cost could make unreported work appear accounted for. Conversely, a mismatch may reflect a poor cost model or equipment inefficiency rather than prohibited work.
 
@@ -111,7 +111,7 @@ Evidence linking jobs may include authenticated scheduler records, checkpoint li
 
 Distribution does not make compute disappear. It makes the relationship between records harder to establish. Work on distributed-training governance examines why large-cluster assumptions can miss activity spread across smaller installations; it is a reason to define the accounting boundary carefully, not evidence that every distributed evasion is feasible.
 
-<Src>Rahman, *Does Distributed Training Undermine Compute Governance?*. [arXiv:2605.29359](https://arxiv.org/abs/2605.29359)</Src>
+<Src>Rahman, [*Does Distributed Training Undermine Compute Governance?*](https://arxiv.org/abs/2605.29359)</Src>
 
 <PageBreak title="Recognizing a Workload From Telemetry" />
 
@@ -222,7 +222,7 @@ There is no required positive or negative verdict. Assess whether your account p
 
 The paper reports 98.2% overall binary accuracy and 43–87% detection on unseen white-box strategies after hardening; these are not interchangeable evaluation settings. Its experiments are single-node, up to eight GPUs. The hardware-operator case depends on protected telemetry collection and delivery beyond a classifier alone.
 
-<Src>Rahman and Tajdari, abstract, §2.2, §5.2, §6.5, and Appendix F. [arXiv:2606.19262](https://arxiv.org/html/2606.19262v1)</Src>
+<Src>Rahman and Tajdari, [*Detecting Hidden ML Training With Zero-Overhead Telemetry*](https://arxiv.org/html/2606.19262v1): abstract, §2.2, §5.2, §6.5, and Appendix F.</Src>
 
 A good briefing can recognize a useful empirical contribution without inferring reliable enforcement across a fleet. Further evidence could test generalization to independently selected workloads and multi-node systems, or validate the entire input path against a hostile operator. Specify what would count as a failure, not merely that more testing is desirable.
 

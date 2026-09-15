@@ -3,7 +3,7 @@
 
 Now that we understand the evidentiary thresholds, this section follows the chain from a chip's raw measurement to a readable, actionable statement for verifiers. We'll use NVIDIA's deployed GPU attestation to show who signs, who checks, who decides, what a valid signature does not establish, and how the same mechanism weakens as the operator gains physical control.
 
-Remote attestation is often described as a chip proving its state. That description hides several actors and several separate judgments.
+Remote attestation is a process in which a device produces signed evidence about its own identity and current state, and a separate party checks that evidence against expected values before deciding whether to trust the device. It is often described more loosely as a chip proving its state. That description hides several actors and several separate judgments.
 
 The IETF’s Remote ATtestation procedureS architecture distinguishes three roles: an **Attester** produces evidence, a **Verifier** appraises that evidence against reference values and policy, and a **Relying Party** decides what to do with the result. This separation matters. The component that checks a signature need not be the institution that decides compliance, and neither automatically has authority to impose a consequence.
 

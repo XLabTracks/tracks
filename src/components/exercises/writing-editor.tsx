@@ -184,7 +184,7 @@ export function WritingEditor({
             placeholder={section.placeholder}
             onChange={(e) => setField(section.id, e.target.value)}
             disabled={isSubmitted}
-            rows={multiSection ? 4 : 6}
+            rows={multiSection ? 2 : 6}
             maxLength={WRITING_MAX_SECTION_CHARS}
             className="resize-y"
           />

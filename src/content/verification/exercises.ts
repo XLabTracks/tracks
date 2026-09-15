@@ -189,15 +189,15 @@ export const verificationExercises: Exercise[] = [
     prompt:
       "Trust-chain autopsy. For the attestation chain in front of you, record each link. One or two lines per box is enough.",
     sections: [
-      { id: "claim", label: "The exact claim", placeholder: "What does the token or diagram actually assert?" },
-      { id: "roots", label: "The root or roots of trust" },
-      { id: "measurement", label: "The measurement component" },
-      { id: "authorities", label: "The key and reference-value authorities" },
-      { id: "update-revocation", label: "Update and revocation authority" },
-      { id: "verifier-relying", label: "The verifier and relying party" },
-      { id: "adversary", label: "The strongest relevant adversary" },
-      { id: "common-mode", label: "One common-mode failure" },
-      { id: "corroboration", label: "One independent corroborating source" },
+      { id: "claim", label: "What exactly does the token or diagram assert? State the claim in one sentence." },
+      { id: "roots", label: "Where does the chain bottom out? Name the root or roots of trust that every other claim inherits from." },
+      { id: "measurement", label: "Which component takes the measurement, and what does it actually observe?" },
+      { id: "authorities", label: "Who controls the signing keys, and who publishes the reference values the evidence is checked against?" },
+      { id: "update-revocation", label: "Who can update the firmware or reference values, and who can revoke a key, certificate, or device?" },
+      { id: "verifier-relying", label: "Who appraises the evidence, and who acts on the result?" },
+      { id: "adversary", label: "Which prover is the strongest relevant adversary here: a cloud customer, a laboratory with physical control, or a state-backed owner?" },
+      { id: "common-mode", label: "What single failure would break several links at once?" },
+      { id: "corroboration", label: "What evidence from outside this chain could check it?" },
     ],
   },
   {
@@ -207,9 +207,9 @@ export const verificationExercises: Exercise[] = [
     prompt:
       "Three evidence streams that do not share a source. For each, name the stream, the actor that produces it, and one way it could fail.",
     sections: [
-      { id: "stream-1", label: "Stream 1: what it is, who produces it, how it fails" },
-      { id: "stream-2", label: "Stream 2: what it is, who produces it, how it fails" },
-      { id: "stream-3", label: "Stream 3: what it is, who produces it, how it fails" },
+      { id: "stream-1", label: "Stream 1: which evidence stream would you use, who produces it, and how could it fail?" },
+      { id: "stream-2", label: "Stream 2: a second stream that does not share Stream 1's source. Who produces it, and how could it fail?" },
+      { id: "stream-3", label: "Stream 3: a third stream independent of both. Who produces it, and how could it fail?" },
     ],
     sampleAnswer:
       "A strong answer does not treat the site operator's inventory, the site operator's logs, and the site operator's declaration as three independent streams.",
@@ -237,7 +237,7 @@ export const verificationExercises: Exercise[] = [
     sections: [
       {
         id: "chain",
-        label: "Your chain, in order",
+        label: "In what order do the components connect, from the legal rule through to renewal or termination?",
         guidance:
           "Components to place: device identity, attested firmware, protected counter, training classifier, signed record, cross-device aggregation, license token, revocation list, regulator, international notification, inspection trigger, independent power measurement.",
       },
@@ -280,14 +280,14 @@ export const verificationExercises: Exercise[] = [
     prompt:
       "You receive a declared transcript and a limited verification-compute budget. Give each method a share of the budget, then record its cost, confidentiality exposure, spoofing opportunity, expected assurance, and the claim that remains untested.",
     sections: [
-      { id: "split", label: "Your split", guidance: "Shares across the seven methods, adding to the whole budget." },
-      { id: "rerun", label: "Full rerunning" },
-      { id: "sampling", label: "Random segment sampling" },
-      { id: "checkpoints", label: "Checkpoint checks" },
-      { id: "commitments", label: "Code and data commitments" },
-      { id: "totals", label: "Physical compute totals" },
-      { id: "telemetry", label: "Telemetry-timing comparison" },
-      { id: "inspection", label: "Random chip inspection" },
+      { id: "split", label: "How do you split the budget across the seven methods?", guidance: "Shares that add up to the whole budget." },
+      { id: "rerun", label: "Full rerunning: what does it cost, what does it expose, how could a prover spoof it, what assurance does it buy, and which claim stays untested?" },
+      { id: "sampling", label: "Random segment sampling: what does it cost, what does it expose, how could a prover spoof it, what assurance does it buy, and which claim stays untested?" },
+      { id: "checkpoints", label: "Checkpoint checks: what does it cost, what does it expose, how could a prover spoof it, what assurance does it buy, and which claim stays untested?" },
+      { id: "commitments", label: "Code and data commitments: what does it cost, what does it expose, how could a prover spoof it, what assurance does it buy, and which claim stays untested?" },
+      { id: "totals", label: "Physical compute totals: what does it cost, what does it expose, how could a prover spoof it, what assurance does it buy, and which claim stays untested?" },
+      { id: "telemetry", label: "Telemetry-timing comparison: what does it cost, what does it expose, how could a prover spoof it, what assurance does it buy, and which claim stays untested?" },
+      { id: "inspection", label: "Random chip inspection: what does it cost, what does it expose, how could a prover spoof it, what assurance does it buy, and which claim stays untested?" },
     ],
   },
   {

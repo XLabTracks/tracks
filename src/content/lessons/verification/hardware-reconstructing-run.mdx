@@ -1,17 +1,19 @@
 
 ### 2.1.7 Reconstructing a Declared Training Run
 
+The sections above verify what a device did, but a verifier may also want to test whether a declared training process plausibly produced the submitted model, so this extension surveys checkpoint, proof-of-learning, and zero-knowledge approaches and shows how far each is from deployment.
+
 This extension asks a different question: can a verifier test whether a declared training process plausibly produced the submitted checkpoints or model?
 
 Possible evidence includes:
 
-- Training records and code or data commitments;
-- Periodic checkpoints or weight snapshots;
-- Authenticated transcripts;
-- Sampled re-execution;
-- Probabilistic recomputation;
-- Dedicated verification clusters;
-- Proof-of-learning or proof-of-training-data protocols.
+- Training records and code or data commitments
+- Periodic checkpoints or weight snapshots
+- Authenticated transcripts
+- Sampled re-execution
+- Probabilistic recomputation
+- Dedicated verification clusters
+- Proof-of-learning or proof-of-training-data protocols
 
 Yonadav Shavit’s 2023 compute-monitoring proposal decomposed a possible system into on-chip weight snapshots, records intended to support later verification of training, and supply-chain monitoring intended to prevent accumulation of untracked chips. This decomposition remains useful because it separates verification of a declared run from completeness of the fleet.
 
@@ -35,6 +37,8 @@ A June 2026 paper proposes a zero-knowledge architecture for frontier training c
 
 <PageBreak title="Activity: Buy Assurance" />
 
-#### Activity: Buy Assurance With a Verification Budget
+## Activity: Buy Assurance With a Verification Budget
 
-You receive a declared transcript and a limited verification-compute budget. Allocate it among full rerunning, random segment sampling, checkpoint checks, code and data commitments, physical compute totals, telemetry-timing comparison, and random chip inspection. For each choice, record cost, confidentiality exposure, spoofing opportunity, expected assurance, and the claim that remains untested.
+You receive a declared transcript and a limited verification-compute budget. Split it among the seven methods below, and for each one record cost, confidentiality exposure, spoofing opportunity, expected assurance, and the claim that remains untested.
+
+<Exercise id="v-hw-buy-assurance" />

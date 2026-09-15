@@ -1,6 +1,8 @@
 
 ### 2.1.5 Authorization, Licensing, and Control
 
+This section examines offline licensing and the authorization chain behind it, from who issues a license to who can suspend one.
+
 A monitor produces evidence. A control mechanism changes what the machine can do. A complete policy still needs an authority that decides when control is justified.
 
 One proposed family of controls is offline licensing. The device performs only a bounded quantity or type of operation when it holds a valid authorization token. The token may encode a compute allowance, time window, location, workload condition, or other policy. A protected meter reduces the allowance as work occurs. A throttling or disabling mechanism responds when the allowance expires.
@@ -9,7 +11,7 @@ A complete authorization chain is:
 
 > legal rule → license criteria → issuer → authenticated device and state → permitted operation → meter or expiration → suspension or revocation → appeal or override → renewal or termination
 
-#### Questions a Policy Designer Must Answer
+## Questions a Policy Designer Must Answer
 
 - Who issues the authorization: one government, both parties, a multiparty authority, or another institution?
 - Which key or combination of keys is sufficient?
@@ -28,24 +30,26 @@ James Petrie’s 2024 firmware-based offline-licensing design is a useful propos
 
 <Src>J. Petrie, *Near-Term Enforcement of AI Chip Export Controls Using a Firmware-Based Design for Offline Licensing* — [arXiv:2404.18308](https://arxiv.org/abs/2404.18308), 2024.</Src>
 
-#### Control Authority Is Part of the Mechanism
+## Control Authority Is Part of the Mechanism
 
-A technically sound off-switch can be politically unacceptable when its control structure is vague. An international agreement might require:
+A technically sound off-switch can be politically unacceptable when its control structure is vague.
 
-- Split or threshold authorization, so no single party controls the switch;
-- Narrow, auditable conditions for suspension;
-- Logged and reviewable decisions;
-- Emergency action followed by time-bounded review;
-- A safe recovery path after false positives;
-- Independent tests for denial-of-service and abuse;
-- A plan for lawful legacy hardware and nonparticipating vendors.
+An international agreement might require:
+
+- Split or threshold authorization, so no single party controls the switch
+- Narrow, auditable conditions for suspension
+- Logged and reviewable decisions
+- Emergency action followed by time-bounded review
+- A safe recovery path after false positives
+- Independent tests for denial-of-service and abuse
+- A plan for lawful legacy hardware and nonparticipating vendors
 
 The choice is not simply “control or no control.” It is a distribution of authority, risk, and failure.
 
 <PageBreak title="Activity: Build the Authorization Chain" />
 
-#### Activity: Build the Authorization Chain
+## Activity: Build the Authorization Chain
 
-Assemble an end-to-end system for the working rule from the following components: device identity, attested firmware, protected counter, training classifier, signed record, cross-device aggregation, license token, revocation list, regulator, international notification, inspection trigger, and independent power measurement.
+Assemble an end-to-end system for the working rule from the following components: device identity, attested firmware, protected counter, training classifier, signed record, cross-device aggregation, license token, revocation list, regulator, international notification, inspection trigger, and independent power measurement. Then answer the six questions about what you built.
 
-Then answer: Which component measures the prohibited activity? Which only authenticates another component? Who decides the threshold was crossed? Which component can stop the activity? What detects an unregistered cluster? Which controls fail together if the manufacturer’s root key is compromised?
+<Exercise id="v-hw-authorization-chain" />

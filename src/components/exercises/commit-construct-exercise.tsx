@@ -221,7 +221,7 @@ export function CommitConstructCard({
         <>
           <div className="mt-2 space-y-2">
             {commit.framing && <Paragraphs text={commit.framing} />}
-            <Paragraphs text={commit.question} className="font-medium" />
+            <Paragraphs text={commit.question} />
             {commit.supposition && <Paragraphs text={commit.supposition} />}
             {commit.instruction && (
               <Paragraphs
@@ -275,7 +275,7 @@ export function CommitConstructCard({
       ) : (
         <>
           <div className="mt-2 space-y-2">
-            <Paragraphs text={construct.threatPrompt} className="font-medium" />
+            <Paragraphs text={construct.threatPrompt} />
             {construct.constraint && (
               <Paragraphs
                 text={construct.constraint}

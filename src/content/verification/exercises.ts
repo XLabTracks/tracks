@@ -182,4 +182,127 @@ export const verificationExercises: Exercise[] = [
     sampleAnswer:
       "- Diversion: public indictments and investigative reporting on chips leaving legitimate supply chains — Supermicro employees accused of diverting $2.5 billion of Nvidia servers to a pass-through entity, a Singaporean cloud provider with tens of thousands fewer chips in its Malaysian datacenters than it imported, and a table of smaller cases; allegations total about 282,000 H100-equivalents.\n\n- Resale: reporting on the grey market inside China — more than seventy distributors on one marketplace, nearly a hundred stores on another, orders of two or three hundred chips at a time and one of two thousand, contracts and photographs of chips physically present.\n\n- Which of the three streams it uses: none. No customs records, no export-licence data, no financial intelligence — those sit with governments. The public estimate rests on what enforcement has already surfaced (indictments) and what reporters found, and its largest guess is the share nobody detected: a detection rate of 10–80% with a median of 25%, plus whether alleged diversions arrived.\n\n- What that tells you: an outside observer sees the procurement trail only where a prosecutor or a journalist has already pulled it into the open. The rest is modelled, and the interval is the width of that model's uncertainty.\n\n- The one action: the Supermicro indictment. Its roughly 80,000 chips, about 141,000 H100-equivalents, are the largest single allegation on the diversion side, close to half of the ~300,000 H100-equivalents alleged in total; Megaspeed is next at about 111,000. Without it the diversion side loses its anchor and the estimate leans on the resale side alone.",
   },
+  {
+    id: "v-hw-trust-chain-autopsy",
+    type: "writing-prompt",
+    format: "free-form",
+    prompt:
+      "Trust-chain autopsy. For the attestation chain in front of you, record each link. One or two lines per box is enough.",
+    sections: [
+      { id: "claim", label: "What exactly does the token or diagram assert? State the claim in one sentence." },
+      { id: "roots", label: "Where does the chain bottom out? Name the root or roots of trust that every other claim inherits from." },
+      { id: "measurement", label: "Which component takes the measurement, and what does it actually observe?" },
+      { id: "authorities", label: "Who controls the signing keys, and who publishes the reference values the evidence is checked against?" },
+      { id: "update-revocation", label: "Who can update the firmware or reference values, and who can revoke a key, certificate, or device?" },
+      { id: "verifier-relying", label: "Who appraises the evidence, and who acts on the result?" },
+      { id: "adversary", label: "Which prover is the strongest relevant adversary here: a cloud customer, a laboratory with physical control, or a state-backed owner?" },
+      { id: "common-mode", label: "What single failure would break several links at once?" },
+      { id: "corroboration", label: "What evidence from outside this chain could check it?" },
+    ],
+  },
+  {
+    id: "v-hw-accounting-three-streams",
+    type: "writing-prompt",
+    format: "free-form",
+    prompt:
+      "Three evidence streams that do not share a source. For each, name the stream, the actor that produces it, and one way it could fail.",
+    sections: [
+      { id: "stream-1", label: "Stream 1: which evidence stream would you use, who produces it, and how could it fail?" },
+      { id: "stream-2", label: "Stream 2: a second stream that does not share Stream 1's source. Who produces it, and how could it fail?" },
+      { id: "stream-3", label: "Stream 3: a third stream independent of both. Who produces it, and how could it fail?" },
+    ],
+    sampleAnswer:
+      "A strong answer does not treat the site operator's inventory, the site operator's logs, and the site operator's declaration as three independent streams.",
+  },
+  {
+    id: "v-hw-result-to-policy-claim",
+    type: "writing-prompt",
+    format: "free-form",
+    prompt: "For the telemetry study, write four statements.",
+    sections: [
+      { id: "observation", label: "Observation: What did the experiment measure?" },
+      { id: "supported", label: "Supported inference: What conclusion is justified within that setting?" },
+      { id: "leap", label: "Unsupported policy leap: What stronger claim would exceed the evidence?" },
+      { id: "dependencies", label: "Deployment dependencies: What additional technical and institutional components would be required?" },
+    ],
+    sampleAnswer:
+      "A well-bounded answer will not claim that the study proves treaty-grade detection across frontier clusters or against a state controlling the measurement path.",
+  },
+  {
+    id: "v-hw-authorization-chain",
+    type: "writing-prompt",
+    format: "free-form",
+    prompt:
+      "Build the authorization chain for the working rule, then answer six questions about what you built.",
+    sections: [
+      {
+        id: "chain",
+        label: "In what order do the components connect, from the legal rule through to renewal or termination?",
+        guidance:
+          "Components to place: device identity, attested firmware, protected counter, training classifier, signed record, cross-device aggregation, license token, revocation list, regulator, international notification, inspection trigger, independent power measurement.",
+      },
+      { id: "measures", label: "Which component measures the prohibited activity?" },
+      { id: "authenticates", label: "Which only authenticates another component?" },
+      { id: "decides", label: "Who decides the threshold was crossed?" },
+      { id: "stops", label: "Which component can stop the activity?" },
+      { id: "detects", label: "What detects an unregistered cluster?" },
+      { id: "fail-together", label: "Which controls fail together if the manufacturer's root key is compromised?" },
+    ],
+  },
+  {
+    id: "v-hw-bilateral-pilot-review",
+    type: "writing-prompt",
+    format: "free-form",
+    prompt:
+      "Two designs: on-chip, Architecture A built on [NVIDIA's Hopper confidential computing](https://images.nvidia.com/aem-dam/en-zz/Solutions/data-center/h100/PB-11133-001_v01.pdf); off-chip, Architecture B as proposed in [Cankaya et al.'s cluster I/O fingerprinting](https://arxiv.org/abs/2606.10724). Answer each question for both. A line per design is enough.",
+    sections: [
+      { id: "us-distrust", label: "What would a U.S. delegation distrust in each design?" },
+      { id: "cn-distrust", label: "What would a Chinese delegation distrust in each design?" },
+      { id: "sensitive", label: "What would the operator regard as commercially sensitive in each design?" },
+      { id: "cooperation", label: "Whose cooperation is indispensable for each design?" },
+      { id: "technical", label: "What is the strongest technical assumption behind each design?" },
+      { id: "institutional", label: "What is the strongest institutional assumption behind each design?" },
+      { id: "abuse", label: "What is the main abuse risk of each design?" },
+      { id: "smallest-pilot", label: "What is the smallest pilot of each design that would produce decision-relevant evidence?" },
+      {
+        id: "choice",
+        label: "Which design would you pilot, and what must the pilot show?",
+        guidance:
+          "A pilot, not immediate universal deployment. State the evidence the pilot must produce before the mechanism deserves a larger role.",
+      },
+    ],
+  },
+  {
+    id: "v-hw-buy-assurance",
+    type: "writing-prompt",
+    format: "free-form",
+    optional: true,
+    prompt:
+      "You receive a declared transcript and a limited verification-compute budget. Give each method a share of the budget, then record its cost, confidentiality exposure, spoofing opportunity, expected assurance, and the claim that remains untested.",
+    sections: [
+      { id: "split", label: "How do you split the budget across the seven methods?", guidance: "Shares that add up to the whole budget." },
+      { id: "rerun", label: "Full rerunning: what does it cost, what does it expose, how could a prover spoof it, what assurance does it buy, and which claim stays untested?" },
+      { id: "sampling", label: "Random segment sampling: what does it cost, what does it expose, how could a prover spoof it, what assurance does it buy, and which claim stays untested?" },
+      { id: "checkpoints", label: "Checkpoint checks: what does it cost, what does it expose, how could a prover spoof it, what assurance does it buy, and which claim stays untested?" },
+      { id: "commitments", label: "Code and data commitments: what does it cost, what does it expose, how could a prover spoof it, what assurance does it buy, and which claim stays untested?" },
+      { id: "totals", label: "Physical compute totals: what does it cost, what does it expose, how could a prover spoof it, what assurance does it buy, and which claim stays untested?" },
+      { id: "telemetry", label: "Telemetry-timing comparison: what does it cost, what does it expose, how could a prover spoof it, what assurance does it buy, and which claim stays untested?" },
+      { id: "inspection", label: "Random chip inspection: what does it cost, what does it expose, how could a prover spoof it, what assurance does it buy, and which claim stays untested?" },
+    ],
+  },
+  {
+    id: "v-intel-debates",
+    type: "writing-prompt",
+    format: "free-form",
+    optional: true,
+    prompt:
+      "Pick one of the five controversies. State the strongest case for each side, a short paragraph each, written to satisfy that side's strongest advocate. Then commit to a position and name the evidence that would change it.",
+    sections: [
+      { id: "which", label: "Which controversy", placeholder: "Name the debate, 1 to 5." },
+      { id: "side-a", label: "The strongest case for the first side" },
+      { id: "side-b", label: "The strongest case for the other side" },
+      { id: "position", label: "Your position, in a sentence or two" },
+      { id: "falsifier", label: "The evidence that would change it" },
+    ],
+  },
 ];

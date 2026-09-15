@@ -1,6 +1,8 @@
 
 ### 2.1 Hardware
 
+Hardware mechanisms are verification tools built into or attached to the physical machines that train and run AI models: the chips, the servers, and the sensors around them. They can identify a device, attest to its state, measure and classify what it ran, restrict what it may run, or help reconstruct a training run. They are some of the most verifiable and unspoofable strategies for parties to verify adversarial compliance; but also some of the most technically immature and difficult to implement, because the chips belong to the party being checked and a signed statement can be authentic and still too narrow to settle a claim. First, let's reiterate why a verification regime uses physical compute as the measurable threshold.
+
 <Objectives scope="the core section">
 1. **Bound a hardware claim.** Distinguish what a mechanism identifies, attests, measures, classifies, restricts, or reconstructs, then state what remains outside the claim.
 2. **Trace the trust and authority chain.** Name who measures, signs, defines acceptable state, updates, revokes, appraises, decides, and enforces.
@@ -9,12 +11,11 @@
 5. **Recommend a bounded role.** State what hardware should carry in a layered regime, what it should not carry, which independent evidence must corroborate it, and what new evidence would change your recommendation.
 </Objectives>
 
-<PageBreak title="Why Compute, in the Words of the Field" />
+<PageBreak title="Why Compute?" />
 
-#### Why Compute, in the Words of the Field
+## Why Compute?
 
-Why compute is the input a regime can see, in the field's own words, as of
-early 2024:
+Compute governance is the idea of governing AI by governing the chips it runs on: who can get them, how many they hold, where those chips are, and what they are used for. Chips are physical objects. They can be counted, located, and withheld in a way that data and algorithms cannot, which is why a verification regime can see compute when it cannot see much else. The excerpt below is the field's own case for this, as of early 2024:
 
 <SourceQuote
   t="Computing Power and the Governance of Artificial Intelligence"
@@ -63,8 +64,8 @@ of Artificial Intelligence." [arXiv, 2402.08797](https://arxiv.org/abs/2402.0879
 2024, §3.B.
 
 <Callout variant="note">
-Note that detectability and supply chain are mostly covered in different
-modules in this course.
+Note that this course mostly covers detectability and supply chain in
+different modules.
 </Callout>
 
 <ReadingCard
@@ -108,7 +109,7 @@ and model weights have no nuclear counterpart).
 
 <PageBreak title="Test Your Judgement" />
 
-#### Test Your Judgement
+## Test Your Judgement
 
 During a three-month AI pause, a laboratory sends the verification authority a valid cryptographic statement from each of the 20,000 accelerators in its declared cluster. The laboratory says the tokens prove that the cluster complied.
 
@@ -118,6 +119,6 @@ Before reading further, classify each conclusion as **supported**, **possibly su
 
 Keep your answers; 2.1.8 returns to them.
 
-#### The Central Question
+## The Central Question
 
 A signed statement can be authentic and still be too narrow, stale, incomplete, or based on a compromised measurement. Hardware becomes useful for verification only when the whole chain is specified: the rule, the measurement, the evidence, the trust assumptions, the decision authority, and the response.

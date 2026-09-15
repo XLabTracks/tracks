@@ -226,6 +226,79 @@ window.VERIFICATION_MEMOS = [
     "href": "/tracks/verification/verification-infrastructure/hardware-claim#v-hw-claim-chip-security"
   },
   {
+    "id": "m2-1-trust-chain-autopsy",
+    "module": 2,
+    "unit": "2.1",
+    "title": "Trust-Chain Autopsy",
+    "status": "specified",
+    "task": "v-hw-trust-chain-autopsy",
+    "brief": "Trust-chain autopsy. For the attestation chain in front of you, record each link. One or two lines per box is enough.",
+    "audience": null,
+    "words": 0,
+    "href": "/tracks/verification/verification-infrastructure/hardware-trusted-statement#v-hw-trust-chain-autopsy"
+  },
+  {
+    "id": "m2-1-three-streams",
+    "module": 2,
+    "unit": "2.1",
+    "title": "Three Independent Evidence Streams",
+    "status": "specified",
+    "task": "v-hw-accounting-three-streams",
+    "brief": "Three evidence streams that do not share a source. For each, name the stream, the actor that produces it, and one way it could fail.",
+    "audience": null,
+    "words": 0,
+    "href": "/tracks/verification/verification-infrastructure/hardware-accounting#v-hw-accounting-three-streams"
+  },
+  {
+    "id": "m2-1-result-to-policy",
+    "module": 2,
+    "unit": "2.1",
+    "title": "From Result to Policy Claim",
+    "status": "specified",
+    "task": "v-hw-result-to-policy-claim",
+    "brief": "For the telemetry study, write four statements.",
+    "audience": null,
+    "words": 0,
+    "href": "/tracks/verification/verification-infrastructure/hardware-measuring-use#v-hw-result-to-policy-claim"
+  },
+  {
+    "id": "m2-1-authorization-chain",
+    "module": 2,
+    "unit": "2.1",
+    "title": "Build the Authorization Chain",
+    "status": "specified",
+    "task": "v-hw-authorization-chain",
+    "brief": "Build the authorization chain for the working rule, then answer six questions about what you built.",
+    "audience": null,
+    "words": 0,
+    "href": "/tracks/verification/verification-infrastructure/hardware-authorization#v-hw-authorization-chain"
+  },
+  {
+    "id": "m2-1-bilateral-pilot",
+    "module": 2,
+    "unit": "2.1",
+    "title": "Bilateral Pilot Review",
+    "status": "specified",
+    "task": "v-hw-bilateral-pilot-review",
+    "brief": "Two designs: on-chip, Architecture A built on [NVIDIA's Hopper confidential computing](https://images.nvidia.com/aem-dam/en-zz/Solutions/data-center/h100/PB-11133-001_v01.pdf); off-chip, Architecture B as proposed in [Cankaya et al.'s cluster I/O fingerprinting](https://arxiv.org/abs/2606.10724). Answer each question for both. A line per design is enough.",
+    "audience": null,
+    "words": 0,
+    "href": "/tracks/verification/verification-infrastructure/hardware-where-trust-lives#v-hw-bilateral-pilot-review"
+  },
+  {
+    "id": "m2-1-buy-assurance",
+    "module": 2,
+    "unit": "2.1",
+    "title": "Buy Assurance With a Verification Budget",
+    "status": "specified",
+    "task": "v-hw-buy-assurance",
+    "optional": true,
+    "brief": "You receive a declared transcript and a limited verification-compute budget. Give each method a share of the budget, then record its cost, confidentiality exposure, spoofing opportunity, expected assurance, and the claim that remains untested.",
+    "audience": null,
+    "words": 0,
+    "href": "/tracks/verification/verification-infrastructure/hardware-reconstructing-run#v-hw-buy-assurance"
+  },
+  {
     "id": "m2-1-hardware-brief",
     "module": 2,
     "unit": "2.1",
@@ -313,6 +386,19 @@ window.VERIFICATION_MEMOS = [
       "A prioritization with reasons, not a list of mechanisms",
       "Named blind spots, each with the mechanism elsewhere in the course that covers it"
     ]
+  },
+  {
+    "id": "m2-3-debates",
+    "module": 2,
+    "unit": "2.3",
+    "title": "The Debates",
+    "status": "specified",
+    "task": "v-intel-debates",
+    "optional": true,
+    "brief": "Pick one of the five controversies. State the strongest case for each side, a short paragraph each, written to satisfy that side's strongest advocate. Then commit to a position and name the evidence that would change it.",
+    "audience": null,
+    "words": 0,
+    "href": "/tracks/verification/verification-infrastructure/intelligence-action#v-intel-debates"
   },
   {
     "id": "m3-written-output",

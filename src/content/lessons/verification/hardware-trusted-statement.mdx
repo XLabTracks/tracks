@@ -1,33 +1,30 @@
 
 ### 2.1.2 From a Chip to a Trusted Statement
 
-Remote attestation is often described as a chip proving its state. That description hides several actors and several separate judgments.
+Now that we understand the evidentiary thresholds, this section follows the chain from a chip's raw measurement to a readable, actionable statement for verifiers. We'll use NVIDIA's deployed GPU attestation to show who signs, who checks, who decides, what a valid signature does not establish, and how the same mechanism weakens as the operator gains physical control.
+
+Remote attestation is a process in which a device produces signed evidence about its own identity and current state, and a separate party checks that evidence against expected values before deciding whether to trust the device. It is often described more loosely as a chip proving its state. That description hides several actors and several separate judgments.
 
 The IETF’s Remote ATtestation procedureS architecture distinguishes three roles: an **Attester** produces evidence, a **Verifier** appraises that evidence against reference values and policy, and a **Relying Party** decides what to do with the result. This separation matters. The component that checks a signature need not be the institution that decides compliance, and neither automatically has authority to impose a consequence.
 
 <Src>H. Birkholz et al., [“Remote ATtestation procedureS (RATS) Architecture”](https://www.rfc-editor.org/rfc/rfc9334.html) — IETF RFC 9334, January 2023.</Src>
 
-#### The Minimum Vocabulary
+## Important Terms
 
-**Hardware-rooted identity.** A device uses a cryptographic key and certificate, or another hardware-bound credential, to authenticate evidence. Some designs derive secrets from physical properties such as a physically unclonable function. Others provision or generate keys during manufacturing. “Hardware-rooted” does not mean literally unforgeable. It means that impersonation should require defeating a defined hardware and key-management boundary.
-
-**Root of trust.** The component or assumption at the bottom of the chain. Other claims inherit its integrity. A root of trust may protect key use, measure boot state, verify firmware, or isolate code. A flaw at this layer can invalidate many apparently separate controls at once.
-
-**Secure boot.** A mechanism that restricts low-level code to versions authorized by a signing policy before execution.
-
-**Measured boot.** A mechanism that records cryptographic measurements of code or configuration as it starts. A verifier can later compare those measurements with expected values.
-
-**Attestation evidence.** Signed claims or measurements about a device and its state. The evidence must normally include a freshness mechanism, such as a nonce or trusted time, so an old compliant statement cannot be replayed.
-
-**Reference values and endorsements.** Information used to decide what measurements should be expected and which keys or device properties should be trusted.
-
-**Revocation.** The ability to stop trusting a compromised key, certificate, firmware version, device, reference value, or authority.
-
-**Appraisal policy.** The rule that turns measured facts into a result such as “acceptable for this workload.” This is a policy judgment, not a property of the signature itself.
+| Term | Definition |
+| --- | --- |
+| **Hardware-rooted identity** | A device uses a cryptographic key and certificate, or another hardware-bound credential, to authenticate evidence. Some designs derive secrets from physical properties such as a physically unclonable function. Others provision or generate keys during manufacturing. “Hardware-rooted” does not mean literally unforgeable. It means that impersonation should require defeating a defined hardware and key-management boundary. |
+| **Root of trust** | The component or assumption at the bottom of the chain. Other claims inherit its integrity. A root of trust may protect key use, measure boot state, verify firmware, or isolate code. A flaw at this layer can invalidate many apparently separate controls at once. |
+| **Secure boot** | A mechanism that restricts low-level code to versions authorized by a signing policy before execution. |
+| **Measured boot** | A mechanism that records cryptographic measurements of code or configuration as it starts. A verifier can later compare those measurements with expected values. |
+| **Attestation evidence** | Signed claims or measurements about a device and its state. The evidence must normally include a freshness mechanism, such as a nonce or trusted time, so an old compliant statement cannot be replayed. |
+| **Reference values and endorsements** | Information used to decide what measurements should be expected and which keys or device properties should be trusted. |
+| **Revocation** | The ability to stop trusting a compromised key, certificate, firmware version, device, reference value, or authority. |
+| **Appraisal policy** | The rule that turns measured facts into a result such as “acceptable for this workload.” This is a policy judgment, not a property of the signature itself. |
 
 <PageBreak title="A Deployed Primitive" />
 
-#### A Deployed Primitive: Current NVIDIA GPU Attestation
+## A Deployed Primitive: Current NVIDIA GPU Attestation
 
 Current NVIDIA documentation describes an operational attestation chain for supported GPUs. Evidence is collected from the GPU, checked against signed Reference Integrity Measurements, evaluated locally or by NVIDIA’s Remote Attestation Service, and checked against certificate-revocation information. This is a useful deployed primitive because it makes the trust chain concrete.
 
@@ -41,28 +38,28 @@ A simplified chain looks like this:
 
 For each link, ask:
 
-- Who controls it?
-- What can that actor falsify, suppress, delay, revoke, or refuse?
-- Is cooperation legally required, technically required, or merely convenient?
-- What independent evidence checks the link?
-- What happens when the link fails?
+1. Who controls it?
+2. What can that actor falsify, suppress, delay, revoke, or refuse?
+3. Is cooperation legally required, technically required, or merely convenient?
+4. What independent evidence checks the link?
+5. What happens when the link fails?
 
-#### What a Signature Does and Does Not Do
+## What a Signature Does and Does Not Do
 
 A valid signature supports a statement such as “the holder of this trusted key signed these claims.” It does not by itself establish that:
 
-- The measurement code observed the right property;
-- The measurement was complete;
-- The reference value was correct;
-- The evidence described the current state rather than a replayed state;
-- The device remained compliant after the measurement;
-- The device occupied the declared location or topology;
-- No other device or workload existed;
-- An institution may lawfully act on the result.
+- The measurement code observed the right property
+- The measurement was complete
+- The reference value was correct
+- The evidence described the current state rather than a replayed state
+- The device remained compliant after the measurement
+- The device occupied the declared location or topology
+- No other device or workload existed
+- An institution may lawfully act on the result
 
 Cryptography can faithfully transmit a false or insufficient measurement. The value of attestation therefore depends on the measurement boundary and the governance of keys, reference values, updates, revocation, and decisions.
 
-#### The Adversary Changes the Assurance
+## The Adversary Changes the Assurance
 
 <div className="trio-table">
 
@@ -76,16 +73,8 @@ Cryptography can faithfully transmit a false or insufficient measurement. The va
 
 The same product can be strong against a remote tenant and weak against an owner with physical access. “Secure” is not a mechanism property without an adversary.
 
-#### Activity: Trust-Chain Autopsy
+## Activity: Trust-Chain Autopsy
 
-Take an attestation token or architecture diagram supplied with this section. Record:
+Take the NVIDIA attestation chain described above, or an attestation token or architecture diagram of your own, and record each link.
 
-1. The exact claim;
-2. The root or roots of trust;
-3. The measurement component;
-4. The key and reference-value authorities;
-5. Update and revocation authority;
-6. The verifier and relying party;
-7. The strongest relevant adversary;
-8. One common-mode failure;
-9. One independent corroborating source.
+<Exercise id="v-hw-trust-chain-autopsy" />

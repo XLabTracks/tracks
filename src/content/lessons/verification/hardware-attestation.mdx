@@ -1,7 +1,7 @@
 
 ### 2.1 Hardware
 
-Hardware mechanisms are some of the most verifiable, reliable, and unspoofable strategies for parties to verify each other's compliance. In this section, you will learn what a chip can prove about how it is being used, who has to be trusted for that proof to hold, and how it fails when the operator controls the machine. You will end by deciding what role hardware should play in a verification regime.
+Hardware mechanisms are verification tools built into or attached to the physical machines that train and run AI models: the chips, the servers, and the sensors around them. They can identify a device, attest to its state, measure and classify what it ran, restrict what it may run, or help reconstruct a training run. They are some of the most verifiable and unspoofable strategies for parties to verify adversarial compliance; but also some of the most technically immature and difficult to implement, because the chips belong to the party being checked and a signed statement can be authentic and still too narrow to settle a claim. First, let's reiterate why a verification regime uses physical compute as the measurable threshold.
 
 <Objectives scope="the core section">
 1. **Bound a hardware claim.** Distinguish what a mechanism identifies, attests, measures, classifies, restricts, or reconstructs, then state what remains outside the claim.

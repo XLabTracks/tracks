@@ -1,6 +1,8 @@
 
 ### 2.1.7 Reconstructing a Declared Training Run
 
+The sections above verify what a device did, but a verifier may also want to test whether a declared training process plausibly produced the submitted model, so this extension surveys checkpoint, proof-of-learning, and zero-knowledge approaches and shows how far each is from deployment.
+
 This extension asks a different question: can a verifier test whether a declared training process plausibly produced the submitted checkpoints or model?
 
 Possible evidence includes:
@@ -37,4 +39,6 @@ A June 2026 paper proposes a zero-knowledge architecture for frontier training c
 
 ## Activity: Buy Assurance With a Verification Budget
 
-You receive a declared transcript and a limited verification-compute budget. Allocate it among full rerunning, random segment sampling, checkpoint checks, code and data commitments, physical compute totals, telemetry-timing comparison, and random chip inspection. For each choice, record cost, confidentiality exposure, spoofing opportunity, expected assurance, and the claim that remains untested.
+You receive a declared transcript and a limited verification-compute budget. Split it among the seven methods below, and for each one record cost, confidentiality exposure, spoofing opportunity, expected assurance, and the claim that remains untested.
+
+<Exercise id="v-hw-buy-assurance" />

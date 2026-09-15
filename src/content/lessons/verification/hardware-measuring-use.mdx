@@ -1,6 +1,8 @@
 
 ### 2.1.4 Measuring and Classifying Use
 
+The working rule for the paradigmatic compute governance treaty prohibits unlicensed training above some threshold, not inference. But how do you distinguish a training from an inference run? In this section, you'll explore how a protected counter can measure training-specific compute, how far current telemetry can tell training from inference, and which attacks target the classifier, the evidence channel, or the legal definition of a run.
+
 The working rule prohibits **unlicensed training above threshold T** while permitting inference and approved safety evaluations. Verifying that rule requires answers to three separate questions:
 
 1. How much counted compute occurred?
@@ -70,9 +72,4 @@ A verifier should not treat every weakness as a classifier problem.
 
 For the telemetry study, write four statements.
 
-- **Observation:** What did the experiment measure?
-- **Supported inference:** What conclusion is justified within that setting?
-- **Unsupported policy leap:** What stronger claim would exceed the evidence?
-- **Deployment dependencies:** What additional technical and institutional components would be required?
-
-A well-bounded answer will not claim that the study proves treaty-grade detection across frontier clusters or against a state controlling the measurement path.
+<Exercise id="v-hw-result-to-policy-claim" />

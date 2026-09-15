@@ -1,6 +1,8 @@
 
 ### 2.1.6 Where Should Trust Live?
 
+In this section, trust means the parts of a verification system whose honest operation the verifier has to assume rather than check. There are many possibilities for where that trust can sit: on-chip, off-chip digital, off-chip analog, and hybrid. This section compares them against one verification target and weighs what each design reveals and who each design empowers.
+
 Hardware verification can place trust inside the accelerator, in a separate digital monitor, in physical sensors, or across a hybrid design. Moving trust does not remove it.
 
 Use one verification target for the comparison:
@@ -87,27 +89,10 @@ Count independent failure modes, not mechanism names. A signed meter, a signed c
 
 ## The Confidentiality Trade
 
-Hardware evidence can reduce disclosure by returning a bounded claim rather than raw code, data, weights, or traces. It can also concentrate power in manufacturers, key authorities, and verifiers. A proposal should specify:
-
-- Exactly what leaves the facility
-- Who can link evidence across devices, sites, and time
-- Whether the result reveals commercially sensitive utilization or topology
-- Whether raw evidence is retained
-- Who can query the system
-- How abuse is audited
-- What happens when parties disagree about the verifier or reference values
+Hardware evidence can reduce disclosure by returning a bounded claim rather than raw code, data, weights, or traces. It can also concentrate power in manufacturers, key authorities, and verifiers. A proposal should specify exactly what leaves the facility, who can link evidence across devices, sites, and time, whether the result reveals commercially sensitive utilization or topology, whether raw evidence is retained, who can query the system, how abuse is audited, and what happens when parties disagree about the verifier or reference values.
 
 ## Activity: Bilateral Pilot Review
 
-Compare an on-chip design with an off-chip design for the working pause rule. For each, record:
+Compare an on-chip design with an off-chip design for the working pause rule. Record each judgment for both designs, then choose an architecture for a **pilot**, not immediate universal deployment.
 
-- What a U.S. delegation would distrust
-- What a Chinese delegation would distrust
-- What the operator would regard as commercially sensitive
-- Whose cooperation is indispensable
-- The strongest technical assumption
-- The strongest institutional assumption
-- The main abuse risk
-- The smallest pilot that would produce decision-relevant evidence
-
-Choose an architecture for a **pilot**, not immediate universal deployment. State the evidence the pilot must produce before the mechanism deserves a larger role.
+<Exercise id="v-hw-bilateral-pilot-review" />

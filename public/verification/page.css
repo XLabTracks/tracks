@@ -3,7 +3,19 @@
 
    Trap: .wrap is 1120px wide for the landing's constellation, which is far
    too wide to read at. Prose here sets its own measure in ch and does not
-   inherit one. */
+   inherit one.
+
+   Second trap, and the reason every rule below is scoped to .wrap: `prose` is
+   also Tailwind Typography's class, which the app puts on the lesson column
+   (.lesson-body.prose). This file reaches the same document as that column —
+   it is linked with React's `precedence`, so once one of the course's own
+   pages has loaded it, it is hoisted into <head> and stays there for the rest
+   of the document's life, including after a client-side navigation into a
+   lesson. A bare `.prose { max-width: 66ch }` then silently caps the reading
+   column at two thirds of its width while the page chrome around it stays
+   full width. .wrap is the standalone pages' own wrapper and appears nowhere
+   around the lesson column, so the scope is what keeps the two `prose`
+   vocabularies apart. */
 
 .page-head { padding: 44px 0 0; }
 .page-head h1 { font-size: var(--fs-title); text-wrap: balance; }
@@ -15,13 +27,13 @@
   color: var(--muted-foreground);
 }
 
-.prose { max-width: 66ch; padding: 34px 0 56px; }
-.prose h2 { font-size: var(--fs-2xl); margin-top: 34px; }
-.prose h2:first-child { margin-top: 0; }
-.prose p { margin-top: 12px; line-height: 1.7; }
-.prose ul { margin-top: 12px; padding-left: 20px; }
-.prose li { margin-top: 8px; line-height: 1.65; }
-.prose a { color: var(--brand-ink); text-underline-offset: 3px; }
+.wrap .prose { max-width: 66ch; padding: 34px 0 56px; }
+.wrap .prose h2 { font-size: var(--fs-2xl); margin-top: 34px; }
+.wrap .prose h2:first-child { margin-top: 0; }
+.wrap .prose p { margin-top: 12px; line-height: 1.7; }
+.wrap .prose ul { margin-top: 12px; padding-left: 20px; }
+.wrap .prose li { margin-top: 8px; line-height: 1.65; }
+.wrap .prose a { color: var(--brand-ink); text-underline-offset: 3px; }
 
 /* Uniform hairline on all four sides; the accent lives in the text inside,
    never on one edge. */
@@ -61,7 +73,7 @@
    padding-left for bullet lists at a higher specificity than a lone class.
    Without the `.prose` here the cards sit indented from every heading and
    paragraph on the page, which reads as a misalignment rather than a list. */
-.prose .roster,
+.wrap .prose .roster,
 .team .roster {
   list-style: none;
   display: grid;
@@ -90,7 +102,7 @@
    two ROWS of cards, so the two cannot be set independently while this is
    on — which is fine at three people and would want revisiting past six. */
 @media (min-width: 480px) {
-  .prose .roster,
+  .wrap .prose .roster,
   .team .roster {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-auto-rows: auto;

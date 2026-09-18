@@ -4151,3 +4151,83 @@ briefing inside its exercise, which is not the same thing.
 Restoring it is one edit — the slot's full text is in this log under the
 2.1.8 removal — but it needs a lesson to live in, and that is a curriculum
 decision.
+
+## 2026-09-18 — 2.1.6 gets a sorting exercise, and the repo gets a sort board
+
+The owner asked for a sorting exercise in 2.1, chose the four-architecture
+idea, and set the constraint: "ключи строго по пейперу" — keys strictly per
+the papers.
+
+**The form.** No drag-into-buckets widget existed. `mechanism-sort` is
+sliders, `evidence-taxonomies` is a browser with no commit, `anatomy-drill`
+is one card at a time with retry, and `policy-scoping`'s board is a 2×2 grid
+fused to its own exception question. What did exist is `kit/drag.tsx`, the
+pointer-plus-keyboard drag primitive three widgets already share. So the new
+part is a board, not a third private case: `kit/sort-board.tsx` renders any
+`SortBoardDef` — a tray, hairline zone bands, Check, Show the key — and
+`engines/sort-board.ts` holds the grading, pure and tested. A second sorter
+in 2.2, 2.3 or 2.4 is a data file and two registry lines.
+
+Three verdict tiers, borrowed from `anatomy-drill` because the content needs
+them: `right`, `defensible` (an authored `near` note per zone), `miss`.
+Without the middle tier the interlock card below has no honest answer.
+
+**The keys.** Every one is a quotation or a direct reading of a source the
+lesson already assigns.
+
+- Signed device report, approved-software record → on-chip. Baker §4.1.1.2
+  (chips "could sign cryptographic certificates that confirm how they
+  produced their results") and §4.1.1.1 (the mechanisms "require a hardware
+  security feature known as secure boot").
+- Counter telemetry → on-chip, because the counters are in the accelerator
+  and the host tool is a consumer. The card carries NVIDIA's CC-On note:
+  "all performance counters have been disabled to prevent their use in
+  side-channel attacks." Off-chip digital is the defensible answer.
+- Rack-edge network tap → off-chip digital, Baker verbatim: "Off-chip
+  input/output loggers (i.e., network taps)."
+- Re-signing appliance, off-site trusted cluster → off-chip digital, and
+  both are appraisal rather than collection. Baker separates devices for
+  data collection from devices for data analysis, and names "trusted
+  clusters" for the off-site case.
+- Repurposed network controller → off-chip digital. Petrie and Aarne, p. 24:
+  "A promising option for a retrofittable Interlock is repurposing or
+  replacing the Network Interface Controller (NIC)."
+- Electricity meter, electromagnetic measurements → off-chip analog, both
+  from one Baker sentence: analog sensors log "power draw, temperature, and
+  electromagnetic measurements."
+- Power estimate against signed totals → hybrid, the lesson's own row.
+
+**Two cards resolve to "not settled by the description", and one of them is
+a correction to the brief as proposed.** The proposed list had a seal on a
+meter housing. A tamper-evident enclosure belongs to none of the four
+families: in Baker it sits among the measures that let a Verifier trust an
+off-chip device — "Verifier-trusted supply chains, mutual vetting,
+tamper-evident enclosures … and ideally tamper-proofing" — so it secures a
+collector rather than being one. Rather than drop the card, it keeps its
+place with that as its key, which is a real thing to learn from a
+procurement diagram. The other is the flexHEG interlock: Petrie and Aarne
+list four placements ("as an IP block within the accelerator die … as a
+chiplet … as a part of high bandwidth memory (HBM), or … a separate
+component that operates as a network relay or switch"), while Baker's
+summary table files FlexHEGs under "Off-chip network tap (and analysis)."
+The lesson already says placement is a design choice; the card makes the
+learner act on it. On-chip and off-chip digital are both defensible there.
+
+**Placement.** A new page, "Sort the Mechanisms", between the architecture
+table and "Digital Access Is Not Complete Visibility" — explanation, then
+exercise, which is the break rule in `reading-pages.md`. 2.1.6 now reads in
+seven parts.
+
+**Played before shipping**, as the shuffle file demands. Twelve cards into
+five zones at 1280px and at 390px: no horizontal overflow, no control under
+the 44px floor, drag, tap and keyboard (focus, Enter to pick up, focus the
+zone, Enter to drop) all place a card, placements survive a reload, a card
+moved after a check drops its verdict, an all-wrong board scores 0 of 12
+with two defensible, and the key scores 12 of 12. The tray runs through
+`shuffleAnswerOptions` seeded on the board id, and the file is now in
+`answer-order.test.ts`'s surface list; the longest run of one answer in the
+shown order is two.
+
+**Left for the owner.** The lesson's opening line still allots "30 minutes
+for the exercise and answer review", which was written when the lesson had
+one exercise.

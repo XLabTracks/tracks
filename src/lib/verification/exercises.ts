@@ -9,6 +9,7 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "collection-map", title: "The Collection Map", bridged: false },
   { id: "verification-landscape", title: "The Verification Landscape", bridged: false },
   { id: "policy-cost", title: "Everything Comes With a Cost", bridged: false },
+  { id: "architecture-sort", title: "Sort the Mechanisms", bridged: false },
   { id: "mechanism-sort", title: "Place Your Bets — Mechanism Sort", bridged: false },
   { id: "mechanism-sort-reveal", title: "The Reference Map", bridged: false },
   { id: "policy-scoping", title: "Scoping an Anti-ASI Policy", bridged: true },

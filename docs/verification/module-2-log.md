@@ -4256,3 +4256,41 @@ its axes and cards steps and was not driven to a drag — its chips carry
 inline background and border colours, which `cloneNode` copies, and nothing
 in the clone path is size- or widget-specific, but that one is unverified by
 hand.
+
+### The same day — the empty space to the right of the text, found
+
+Owner, twice now: "почему опять огромное пустое пространство справа от
+текста". The first report could not be reproduced and was left open with a
+question. This one came with a screenshot of 2.1's "Why Compute" page, and it
+is reproducible.
+
+**Two files own a bare `.prose` selector**, `public/verification/page.css`
+(`max-width: 66ch`) and `public/verification/platform.css` (type scale, list
+layout, link colour). They were written for the course's own standalone
+pages, where `prose` is their own class. It is also Tailwind Typography's
+class, and the app puts it on the lesson column: `.lesson-body.prose`.
+
+The two vocabularies meet because those sheets are linked with React's
+`precedence`, which hoists them into `<head>` and leaves them there for the
+rest of the document's life. Open `/verification/about` or `/verification/map`
+first, navigate on to a lesson without a full reload, and the lesson column
+is still inside a document holding `.prose { max-width: 66ch }`. The chrome
+around it — breadcrumb, title, part strip — is outside `.lesson-body` and
+stays full width, which is exactly the shape of the screenshot: a reading
+column at two thirds width under a full-width strip.
+
+Measured on the 2.1 head at a 1052px column: the article and its SourceQuote
+card render at 1052px, and with that one rule present at 660px — 63% of the
+column, the ratio in the screenshot.
+
+Both files are now scoped to `.wrap`, the standalone pages' own wrapper,
+which appears nowhere around the lesson column. The three pages that use
+`.prose` (about, team, accessibility) put it inside `.wrap` and keep exactly
+what they had: 726px, 18px, 30.24px line-height, 34px top padding. All nine
+pages that load these sheets render with no errors and no overflow.
+`prose-scope.test.ts` fails if a bare `.prose` rule comes back — checked
+against the old selector, so the test can fail.
+
+Worth keeping in mind for anything else lifted from the static site: these
+sheets share a document with the app, so every bare class in them is a class
+the app may also use.

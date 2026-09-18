@@ -4231,3 +4231,28 @@ shown order is two.
 **Left for the owner.** The lesson's opening line still allots "30 minutes
 for the exercise and answer review", which was written when the lesson had
 one exercise.
+
+### The same day — dragging now moves the object
+
+Owner: "это drag n drop и когда тащишь объект в корзину его все еще видно то
+есть мы физически перетаскиваем."
+
+`kit/drag.tsx` had been following the pointer with a small pill carrying the
+item's label. That is a handle, not the thing — so the change is in the
+shared primitive, not in one board. On drag activation the provider clones
+the source element, pins the clone to the width and height it had on screen,
+strips its id, role and drag hooks, marks it `aria-hidden`, and neutralizes
+any positioning it inherited; the clone rides under the cursor at full
+opacity while the original stays faded in place. The grab offset is kept, so
+the card does not jump to the cursor — you hold it where you took hold of
+it.
+
+This changes every widget on the primitive. Driven in a browser, not only in
+tests: on the new architecture board a card carries its full text at 263×194
+and the drop zone rings while it is over it; dragged back out of a column it
+carries the 806×74 it had there; `anatomy-drill`'s specimen card clones at
+672×114 with `position: static`. `policy-scoping`'s sort phase sits behind
+its axes and cards steps and was not driven to a drag — its chips carry
+inline background and border colours, which `cloneNode` copies, and nothing
+in the clone path is size- or widget-specific, but that one is unverified by
+hand.

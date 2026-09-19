@@ -64,7 +64,9 @@ For one defined population and period, a basic reconciliation is:
 
 <PageBreak title="Location Verification" />
 
-### Location Verification: Identify the Responder, Then Bound Its Location
+### Location: Has a Chip Been Moved?
+
+Suppose an operator declares that its chips remain at an approved facility. Location verification can help check that claim remotely and identify cases requiring an inspection.
 
 <ReadingCard
   id="reading-location"
@@ -75,65 +77,50 @@ For one defined population and period, a basic reconciliation is:
   mins="6 min"
 >
 
-**Required reading 2 — What can a timed response establish?** Issue brief describing a proposal and prototype.
+**Required reading 2.** Issue brief describing a proposal and prototype.
 
-**Read:** The explanation of device identity, trusted landmarks, and response time, starting at "Technical location verification relies..." and ending after the Singapore prototype illustration. Then read FAQ Q4 and Q7. Skip the cost estimates and other FAQs.
+**Read:** from “Technical location verification relies…” through the Singapore prototype illustration, then FAQ Q4 and Q7. Skip the cost estimates and other FAQs.
 
-**Reading focus:** Distinguish a bound on the respondent's location from exact coordinates. Identify when the mechanism cannot obtain a response and which institutional process must handle that situation.
+**Reading question:** How do device identity and response time together constrain a chip’s possible location? What does the brief propose when chips are reportedly in storage or transit for a suspiciously long time?
 
 </ReadingCard>
 
-The IAPS proposal combines authenticated device responses with timing measured from trusted servers at known locations, called landmarks. The brief reports an H100 prototype; that demonstration is not evidence of a comprehensive regulatory deployment.
+The proposal combines two pieces of evidence: which chip responded and how quickly its response arrived. A trusted server at a known location—a landmark—sends an unpredictable challenge. The chip returns an authenticated response, and the landmark measures the round-trip time. The response must be tied to the chip itself; timing a nearby server would establish a bound on that server’s location.
 
-<Src>Brass, [*Location Verification for AI Chips*](https://www.iaps.ai/research/location-verification-for-ai-chips), IAPS issue brief.</Src>
+Because signals cannot travel faster than light, a sufficiently fast response limits how far away the chip could be:
 
-The essential sequence is to send an unpredictable challenge, authenticate the response as coming from the relevant device, and measure elapsed time using a trusted timing process. Timing an ordinary response from an operator's nearby server would locate that server, not necessarily the accelerator.
+Distance to the chip ≤ speed of light × round-trip time ÷ 2
 
-An idealized physical bound is:
+For example, a 2 millisecond round trip gives an upper bound of approximately 300 km. Processing and network delays make this bound looser: the chip could be much closer. This is an illustrative calculation, not the prototype’s measured accuracy.
 
-**Maximum distance ≤ speed of light × measured round-trip time ÷ 2.**
+Each landmark therefore defines a region of possible locations. Multiple landmarks can narrow that region. If it excludes a prohibited territory, the result can support a claim that the chip is outside that territory—even if it cannot identify the chip’s building. The IAPS brief reports an H100 prototype demonstrating the basic approach.
 
-For a 2 millisecond response, this gives an upper bound of approximately 300 km. This is an illustrative calculation, not a claim about achieved accuracy. Processing, queuing, and indirect network routes consume time too, so the device may be much closer. Measurement error must be handled conservatively.
+Missing reports require an enforcement process. A slow or absent response does not establish where a chip is. Chips legitimately in storage or transit may be unable to report, but an operator could also claim those statuses to avoid verification. IAPS proposes investigating suspiciously prolonged storage or transit and notifying BIS. A workable regime would need reporting deadlines, evidence requirements for exemptions, and a process for follow-up inspections.
 
-The resulting region is a set of possible locations, not a pin on a map. Several trustworthy landmarks can narrow that set. If the whole set lies within an allowed jurisdiction, it can support a jurisdiction-level claim. If the set crosses a border, the result does not resolve which side the device occupies. Even a successful country-level check need not establish the declared building.
+Location verification supplies evidence for these decisions. It does not itself disable a chip; authorization and control are discussed in [2.1.5](/tracks/verification/verification-infrastructure/hardware-authorization).
 
-The full IAPS report distinguishes general geolocation from the narrower task of excluding restricted countries and discusses attacks on delay-based inference. A physical speed limit is more conservative than a model fitted to typical internet routes: an adversary may use a faster-than-expected route without violating physics.
+### Topology: How Are the Devices Connected?
 
-<Src>Brass and Aarne, [*Location Verification for AI Chips*](https://static1.squarespace.com/static/64edf8e7f2b10d716b5ba0e1/t/6670467ebe2a477eb1554f40/1718634112482/Location%2BVerification%2Bfor%2BAI%2BChips.pdf), "Delay-based methods for The General Geolocation Problem."</Src>
+A location check can help establish where a registered chip is. A topology check addresses a different claim: whether a set of devices has the expected connections and configuration.
 
-A slow response does not by itself prove that the chip is far away. No response establishes neither location nor destruction. The IAPS brief explicitly recognizes that chips in transit or storage may not report and calls for follow-up when those statuses persist suspiciously. Location verification also does not itself disable a chip; authorization and control are separate mechanisms, examined in 2.1.5. The exercise at the end of this page returns to the location claim you wrote in 2.1.1.
-
-### Topology: Where a Device Is Is Not What It Connects To
-
-Location and topology answer different questions. Two GPUs in one facility may belong to separate systems. Devices in different facilities may participate in one distributed workload. A count of nearby devices cannot substitute for evidence of their connections, and connectivity alone does not establish what work occurred.
+This matters when a verification regime relies on a declared hardware configuration. Authenticating each GPU separately does not establish how those GPUs are connected. Checking the relevant switches and links can provide additional evidence about the system they form.
 
 <ReadingCard
   id="reading-topology"
   href="https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/hopper_ppcie.html"
-  title="Hopper Multi-GPU (PPCIE) Attestation Example"
+  title="Device Checks and System Checks"
   author="NVIDIA"
   mins="4 min"
+  optional
 >
 
-**Required reading 3 — Compare two measurement boundaries.** Vendor documentation examples: the Hopper PPCIE page read against the Blackwell multi-GPU page.
-
-**Read:** "Overview" on both pages. On the Hopper page, also inspect the final stage/status table in the example output. Skip commands and token listings.
-
-**Reading focus:** Compare what the two workflows check. What additional statement does checking a system's topology permit, and where does the boundary of that statement end?
-
-These pages sit under NVIDIA's deprecated Python SDK examples. They are assigned to compare documented evidence boundaries, not as current installation instructions or a ranking of GPU generations.
-
-<a href="https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/hopper_ppcie.html" target="_blank" rel="noopener" className="underline underline-offset-4">Read the Hopper PPCIE example ↗</a> · <a href="https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/blackwell_multi_gpu.html" target="_blank" rel="noopener" className="underline underline-offset-4">Revisit the Blackwell example ↗</a>
+**Read:** the “Overview” sections of the <a href="https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/hopper_ppcie.html" target="_blank" rel="noopener" className="underline underline-offset-4">Hopper PPCIE example</a> and the <a href="https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/blackwell_multi_gpu.html" target="_blank" rel="noopener" className="underline underline-offset-4">Blackwell multi-GPU example</a>. On the Hopper page, also inspect the final stage/status table. Skip commands and token listings.
 
 </ReadingCard>
 
-The Hopper PPCIE example covers GPU and NVSwitch integrity and checks the system's topology against an expected configuration. Its output distinguishes GPU attestation, switch attestation, and topology checks. In contrast, the assigned Blackwell example independently attests GPUs without topology or switch attestation.
+The Hopper workflow checks GPU and NVSwitch integrity and compares the topology with an expected configuration. The assigned Blackwell workflow attests each GPU independently, without topology or switch attestation. These are examples from NVIDIA’s deprecated Python SDK documentation; the comparison concerns the checks performed by these workflows.
 
-The relevant distinction is therefore between workflows and their measurement boundaries, not simply between chips with or without "attestation."
-
-<Src>NVIDIA's [Hopper PPCIE](https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/hopper_ppcie.html) and [Blackwell multi-GPU](https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/blackwell_multi_gpu.html) attestation examples.</Src>
-
-For a regulatory topology claim, ask which devices, links, and interfaces are included; how they are bound to authenticated identities; who performs the checks; and when the configuration was observed. A statement about a checked GPU–switch system cannot establish the absence of another server in the building or every connection outside that system. Nor does it establish how a job used the system over a reporting period.
+For governance, the crucial question is how much of the relevant system the check covers. A successful check of a GPU–switch configuration does not establish the size of an entire distributed training cluster. That would require evidence covering connections between servers and facilities. Establishing how much computation a training run used would also require evidence about activity over time.
 
 <PageBreak title="Completeness Has a Denominator" />
 

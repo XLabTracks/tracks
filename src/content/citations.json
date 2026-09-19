@@ -588,14 +588,6 @@
       "about": "The source page of the one-page infographic 0.1.2 reproduces — an organization's whole theory of change made legible on a single sheet.",
       "org": "Slow Food USA"
     },
-    "https://static1.squarespace.com/static/64edf8e7f2b10d716b5ba0e1/t/6670467ebe2a477eb1554f40/1718634112482/Location%2BVerification%2Bfor%2BAI%2BChips.pdf": {
-      "title": "Location Verification for AI Chips",
-      "about": "The full 2024 report behind the issue brief: a survey of location-verification methods, the delay-based approach to the general geolocation problem, and why a physical speed limit is a more conservative bound than a model fitted to typical internet routes.",
-      "authors": "Brass, Asher, and Onni Aarne",
-      "publisher": "Institute for AI Policy and Strategy",
-      "date": "2024",
-      "standalone": true
-    },
     "https://techcrunch.com/2025/06/18/xai-is-facing-a-lawsuit-for-operating-over-400-mw-of-gas-turbines-without-permits/": {
       "title": "xAI Is Facing a Lawsuit for Operating over 400 MW of Gas Turbines without Permits",
       "about": "How aerial and thermal photography commissioned by the Southern Environmental Law Center established the number of gas turbines running at xAI's Memphis site.",

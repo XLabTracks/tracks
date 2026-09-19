@@ -4294,3 +4294,54 @@ against the old selector, so the test can fail.
 Worth keeping in mind for anything else lifted from the static site: these
 sheets share a document with the app, so every bare class in them is a class
 the app may also use.
+
+## 2026-09-19 — 2.1.3's location and topology sections, rewritten by the owner
+
+The owner supplied replacement prose for both sections of 2.1.3 and it is in
+verbatim. The two headings are hers: "Location: Has a Chip Been Moved?" and
+"Topology: How Are the Devices Connected?", replacing "Location Verification:
+Identify the Responder, Then Bound Its Location" and "Topology: Where a Device
+Is Is Not What It Connects To".
+
+Her card copy maps onto the house card as: work title in the header and
+linked, `author | publisher (year) | mins` on the meta line, what to read and
+the question in the body. Her label "Reading question" is kept over the
+"Reading focus" the other cards use, because it is what she wrote.
+
+**The NVIDIA card is now optional.** It was "Required reading 3"; her header
+reads "Optional technical example", so the card takes the `optional` prop and
+prints "Optional:" in front of its title, which is the one form the course
+allows. The word appears once: it is not repeated in the body. The two pages
+it assigns are linked inside her own Read sentence rather than on a label line
+under it — the line had the Hopper page linked twice, once from the card title
+and once from the label.
+
+Four things her text removes, recorded because each was a decision when it
+went in:
+
+- **"The exercise at the end of this page returns to the location claim you
+  wrote in 2.1.1."** She asked for that pointer on 2026-09-12, and the
+  paragraph carrying it is one of the paragraphs replaced. Her text does not
+  have it, so it is gone. Restoring it is one sentence.
+- **The paragraph on the full IAPS report** (Brass and Aarne, the 2024 report
+  behind the brief) with its `<Src>` — general geolocation versus excluding
+  restricted countries, and why a physical speed limit is more conservative
+  than a model fitted to typical internet routes. Its URL was cited nowhere
+  else, so its `citations.json` entry went with it.
+- **The other two `<Src>` lines**, for the IAPS brief and the two NVIDIA
+  pages. Both works stay cited through their reading cards, so nothing left
+  the works-cited list but the report above: the lesson now cites four works
+  instead of five.
+- **"Required reading 3"** as a number. The lesson assigns two required
+  readings and one optional example.
+
+One addition, and it is a link rather than words: her "authorization and
+control are discussed in 2.1.5" points at 2.1.5's page, the way every other
+cross-reference in 2.1 does.
+
+The formula line is set as she wrote it, as plain running text
+("Distance to the chip ≤ speed of light × round-trip time ÷ 2"). The
+paragraph it replaced was bold. Rendered and read in a browser: both sections
+render, the optional prefix prints in front of the card title, both NVIDIA
+links resolve, and the lesson now reads in four parts. The part-strip label
+for that page is still "Location Verification".

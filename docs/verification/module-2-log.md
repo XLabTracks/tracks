@@ -4374,3 +4374,27 @@ two on "licence" with the count reading "1 of 80 briefs match.", the empty
 state on a term that matches nothing, and the selected brief still on screen
 under a filter that excludes it. The scratch route was deleted before the
 commit.
+
+### The same day — the brief filter matches the summary too
+
+Owner: "чтобы поиск проходил И по словам в саммари И по названию." The filter
+added an hour earlier matched title and theme only, so a word that lives in a
+brief's summary found nothing.
+
+It now matches title, summary and theme. The summaries carry the substance —
+"evasion", "deployed", "specify", "module" appear in them and in no title at
+all — so title-only search was missing the half of the bank a learner would
+actually search for.
+
+**A match on text nobody can see reads as a bug**, so each row prints its
+summary as a muted second line **while a filter is active**, and only then.
+Unfiltered, the list stays one line per brief, because eighty three-line rows
+in a 320px box is a worse way to browse than the catalogue page that exists
+for browsing.
+
+Driven on a scratch route again (the real page needs a session and a
+database): unfiltered, eighty-one rows and no summaries; "evasion", a word in
+no title, gives four briefs with their summaries shown and the word visible in
+them; "licence" gives one; cleared, back to eighty-one rows with the
+summaries gone. The catalogue page's own search also matches skills; this one
+does not.

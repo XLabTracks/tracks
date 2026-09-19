@@ -16,24 +16,26 @@ function BriefRow({
   selected,
   onPick,
   title,
+  summary,
   slug,
 }: {
   selected: boolean;
   onPick: () => void;
   title: string;
+  summary?: string;
   slug?: string;
 }) {
   return (
     <div
       className={
-        "flex items-center gap-2 rounded-md border px-2.5 py-1.5 text-sm " +
+        "flex items-start gap-2 rounded-md border px-2.5 py-1.5 text-sm " +
         "has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-2 " +
         (selected
           ? "border-primary/50 bg-primary/5"
           : "hover:bg-muted border-transparent")
       }
     >
-      <label className="flex min-w-0 flex-1 cursor-pointer items-center gap-2 select-none">
+      <label className="flex min-w-0 flex-1 cursor-pointer items-start gap-2 select-none">
         <input
           type="radio"
           name="signup-brief"
@@ -44,7 +46,14 @@ function BriefRow({
         <span aria-hidden="true" className="text-brand-ink w-4 shrink-0 text-center">
           {selected ? "✓" : ""}
         </span>
-        <span className="min-w-0 flex-1">{title}</span>
+        <span className="min-w-0 flex-1">
+          {title}
+          {summary ? (
+            <span className="text-muted-foreground mt-0.5 block text-xs leading-snug">
+              {summary}
+            </span>
+          ) : null}
+        </span>
       </label>
       {slug ? (
         <a
@@ -66,7 +75,10 @@ export function SignupForm({
   initialProposal,
   state,
 }: {
-  themes: { theme: string; briefs: { slug: string; title: string }[] }[];
+  themes: {
+    theme: string;
+    briefs: { slug: string; title: string; summary: string }[];
+  }[];
   initialBrief: string;
   initialProposal: string;
   state: "new" | "submitted";
@@ -93,6 +105,7 @@ export function SignupForm({
           (b) =>
             b.slug === brief ||
             b.title.toLowerCase().includes(needle) ||
+            b.summary.toLowerCase().includes(needle) ||
             g.theme.toLowerCase().includes(needle),
         ),
       }))
@@ -133,7 +146,7 @@ export function SignupForm({
           type="search"
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          placeholder={`Filter ${total} briefs by title or theme…`}
+          placeholder={`Filter ${total} briefs by title, summary or theme…`}
           autoComplete="off"
         />
         {filter.trim() ? (
@@ -161,6 +174,7 @@ export function SignupForm({
                     selected={brief === b.slug}
                     onPick={() => setBrief(b.slug)}
                     title={b.title}
+                    summary={filter.trim() ? b.summary : undefined}
                     slug={b.slug}
                   />
                 ))}

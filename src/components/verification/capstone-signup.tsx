@@ -28,12 +28,15 @@ export async function CapstoneSignup() {
     }
   }
 
-  const themes: { theme: string; briefs: { slug: string; title: string }[] }[] = [];
+  const themes: {
+    theme: string;
+    briefs: { slug: string; title: string; summary: string }[];
+  }[] = [];
   for (const e of [...bank.entries].sort(
     (a, b) => a.track.localeCompare(b.track) || a.title.localeCompare(b.title),
   )) {
     const g = themes.at(-1);
-    const brief = { slug: e.slug, title: e.title };
+    const brief = { slug: e.slug, title: e.title, summary: e.summary };
     if (g && g.theme === e.track) g.briefs.push(brief);
     else themes.push({ theme: e.track, briefs: [brief] });
   }

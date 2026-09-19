@@ -1,13 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 
 import {
   saveCapstoneSignup,
   withdrawCapstoneSignup,
 } from "@/app/actions/verification-capstone";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -72,9 +73,33 @@ export function SignupForm({
 }) {
   const router = useRouter();
   const [brief, setBrief] = useState(initialBrief);
+  const [filter, setFilter] = useState("");
   const [proposal, setProposal] = useState(initialProposal);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+
+  const total = useMemo(
+    () => themes.reduce((n, g) => n + g.briefs.length, 0),
+    [themes],
+  );
+
+  const shownThemes = useMemo(() => {
+    const needle = filter.trim().toLowerCase();
+    if (!needle) return themes;
+    return themes
+      .map((g) => ({
+        theme: g.theme,
+        briefs: g.briefs.filter(
+          (b) =>
+            b.slug === brief ||
+            b.title.toLowerCase().includes(needle) ||
+            g.theme.toLowerCase().includes(needle),
+        ),
+      }))
+      .filter((g) => g.briefs.length > 0);
+  }, [themes, filter, brief]);
+
+  const shown = shownThemes.reduce((n, g) => n + g.briefs.length, 0);
 
   function run(fn: () => Promise<{ ok: true } | { ok: false; error: string }>) {
     setError(null);
@@ -100,13 +125,31 @@ export function SignupForm({
     >
       <fieldset className="space-y-2">
         <legend className="text-sm leading-none font-medium">Brief from the bank</legend>
+        <Label htmlFor="signup-brief-filter" className="sr-only">
+          Filter the bank
+        </Label>
+        <Input
+          id="signup-brief-filter"
+          type="search"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          placeholder={`Filter ${total} briefs by title or theme…`}
+          autoComplete="off"
+        />
+        {filter.trim() ? (
+          <p className="text-muted-foreground text-sm" aria-live="polite">
+            {shown === 0
+              ? "Nothing matches that."
+              : `${shown} of ${total} briefs match.`}
+          </p>
+        ) : null}
         <div className="border-input max-h-80 space-y-4 overflow-y-auto rounded-md border p-3">
           <BriefRow
             selected={brief === ""}
             onPick={() => setBrief("")}
             title="— none, I am proposing my own —"
           />
-          {themes.map((g) => (
+          {shownThemes.map((g) => (
             <div key={g.theme}>
               <p className="text-muted-foreground eyebrow select-none">
                 {g.theme}

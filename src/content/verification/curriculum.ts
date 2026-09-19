@@ -109,7 +109,7 @@ export const verificationModules: Module[] = [
     id: "v-capstone",
     slug: "capstone",
     trackId: "verification",
-    title: "Capstone: What Would Be Enough for a Three-Month Emergency Pause?",
+    title: "Capstone",
     summary:
       "Putting it all together — then the feasibility judgments the capstone runs on: the four metrics, and how to do the research they ask for, from a practising AI governance researcher. Then the capstone itself: layer the imperfect mechanisms into a regime you can defend, and say where to go from here.",
     order: 4,

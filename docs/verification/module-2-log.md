@@ -4345,3 +4345,32 @@ paragraph it replaced was bold. Rendered and read in a browser: both sections
 render, the optional prefix prints in front of the card title, both NVIDIA
 links resolve, and the lesson now reads in four parts. The part-strip label
 for that page is still "Location Verification".
+
+### The same day — module 4 is "Capstone", and the bank picker gets a filter
+
+Owner: "just capstone", against the sidebar showing module 4 wrapping onto
+two lines. The module's title in `curriculum.ts` goes from "Capstone: What
+Would Be Enough for a Three-Month Emergency Pause?" to "Capstone", and
+`course.js` is regenerated. The question itself is not lost — the capstone
+memo slot still says the workspace holds "the track's own capstone template:
+design a minimal verification regime for a three-month emergency pause, then
+break it yourself" — but it is no longer the first thing the sidebar says.
+
+Owner, on the sign-up sheet's brief list: "no search here?" There was not.
+The list is eighty briefs in a scrolling box, grouped by theme; the
+filterable catalogue is a different page, `/verification/capstone-bank`, and
+its search belongs to the static page's own script. So the picker
+(`capstone-signup-form.tsx`) now carries its own filter: one input, matching
+title or theme, with a live count and a "Nothing matches that." state.
+
+One rule in the filter that is worth keeping if it is ever rewritten: **a
+brief that is currently selected always passes the filter.** Otherwise typing
+a narrowing term hides the learner's own choice while the radio stays set,
+and the form looks like nothing is chosen when something is.
+
+Driven in a browser on a scratch route, because the real page needs a session
+and a database and this container has neither: eighty-one rows unfiltered,
+two on "licence" with the count reading "1 of 80 briefs match.", the empty
+state on a term that matches nothing, and the selected brief still on screen
+under a filter that excludes it. The scratch route was deleted before the
+commit.

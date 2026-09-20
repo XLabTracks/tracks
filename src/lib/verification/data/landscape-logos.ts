@@ -19,6 +19,7 @@ export const ORG_MARKS: OrgMark[] = [
   { id: "epoch", tokens: ["Epoch AI"], label: "Epoch AI", short: "Epoch AI", icon: "epoch.svg" },
   { id: "metr", tokens: ["METR"], label: "METR", short: "METR", icon: "metr.png" },
   { id: "apollo", tokens: ["Apollo Research"], label: "Apollo Research", short: "Apollo", icon: "apollo.png" },
+  { id: "accenture", tokens: ["Accenture"], label: "Accenture", short: "Accenture" },
   { id: "flexheg", tokens: ["FlexHEG"], label: "FlexHEG", short: "FlexHEG", icon: "flexheg.ico" },
   { id: "aria", tokens: ["ARIA"], label: "ARIA (UK)", short: "ARIA", icon: "aria.png" },
   { id: "bis", tokens: ["Bureau of Industry and Security"], label: "US Bureau of Industry and Security", short: "US BIS", icon: "bis.ico" },
@@ -74,7 +75,7 @@ export function marksInText(text: string): OrgMark[] {
   );
 }
 
-export function marksForEffs(effs: readonly [string, string][]): OrgMark[] {
+export function marksForEffs(effs: readonly [string, string, string?][]): OrgMark[] {
   const seen = new Set<string>();
   const out: OrgMark[] = [];
   for (const [name] of effs) {
@@ -91,7 +92,7 @@ export function marksForEffs(effs: readonly [string, string][]): OrgMark[] {
 export function marksForCell(
   rowKey: string,
   colKey: string,
-  effs: readonly [string, string][],
+  effs: readonly [string, string, string?][],
 ): OrgMark[] {
   const extra = CELL_ORGS[rowKey]?.[colKey] ?? [];
   if (!extra.length) return marksForEffs(effs);
@@ -99,7 +100,7 @@ export function marksForCell(
   return ORG_MARKS.filter((m) => ids.has(m.id));
 }
 
-export function iconMarksForEffs(effs: readonly [string, string][]): OrgMark[] {
+export function iconMarksForEffs(effs: readonly [string, string, string?][]): OrgMark[] {
   const seen = new Set<string>();
   const out: OrgMark[] = [];
   for (const m of marksForEffs(effs)) {

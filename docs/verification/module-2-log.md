@@ -4398,3 +4398,43 @@ no title, gives four briefs with their summaries shown and the word visible in
 them; "licence" gives one; cleared, back to eighty-one rows with the
 summaries gone. The catalogue page's own search also matches skills; this one
 does not.
+
+## 2026-09-20 — Accenture on the verification landscape
+
+Owner asked for the Anthropic–Accenture embedded-evaluation announcement to be
+added under evaluations on the field map — the tiled grid in 0.1, which is
+`verification-landscape`, not the `actor-map` widget of the same family.
+
+It goes in the **Evaluations & standards × Industry** square, beside in-house
+dangerous-capability evals and third-party pre-deployment testing. The cell's
+own "how it connects" line already said "the evaluated party is often also the
+evaluator, which is the verification problem in miniature", and an evaluator
+placed inside the lab with employee-level access is the next position along
+that line.
+
+Its wording is taken from the announcement and nothing beyond it: September
+2026, evaluators working inside the lab with access comparable to an
+employee's, red-teaming, alignment assessments and safeguard testing, led by
+Faculty. The investment figure and the CEO-essay framing in the source are
+left out as detail the map does not carry for any other effort.
+
+**The effort is named "Accenture embedded evaluation (2026)", deliberately
+without "Anthropic" in the name.** `marksForEffs` scans only the effort's
+name, so a name carrying "Anthropic" would also light the Anthropic tile on
+that square — a change to an existing cell nobody asked for. Anthropic is
+named in the body instead, where the matcher does not look. If the Anthropic
+tile is wanted there too, moving the word into the name is the whole change.
+
+Two small mechanisms went with it: `ORG_MARKS` gains an `accenture` entry
+(no icon — the grid tiles render `short` as text and nothing in the app reads
+`icon` today), and `LandscapeCell.eff` takes an optional third element, the
+source URL, which the detail panel renders as a link on the effort's name.
+Every existing entry is unchanged by that; Accenture is the first effort on
+the map with a source link.
+
+Driven in a browser: the square's aria-label now ends "activity 2 of 3,
+Accenture", the tile prints Accenture, and the detail panel shows the entry
+once with its link.
+
+**Left for the owner:** the map's own disclaimer says efforts are "current to
+early 2026". A September 2026 entry makes that line stale.

@@ -33,3 +33,15 @@ lessons. Those are gone from the course's own prose.
 - **A source with no link.** If no URL is known for a work, the citation is
   left as it stands and reported, rather than given a link that was guessed.
   `(The Substrate, 2026)` in 2.3's finance lesson is the open case.
+
+## A label may carry the citation, but not a different form
+
+`<FeasibilityCard>` in 4.1 gives each card three labelled parts — **Source:**,
+**Excerpt:**, **What you should glean:**. The label stays: it is the card's
+structure, not a citation dialect. What goes after it follows the same rule as
+everywhere else — author, then the title as the linked phrase, then publisher
+and year as plain text.
+
+What is not allowed after such a label is a second shape: an author–date
+bracket before the title, a bare unitalicised title, or an `(arXiv:2303.11341)`
+repeated after a link that already points at arXiv.

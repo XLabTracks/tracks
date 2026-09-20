@@ -59,6 +59,7 @@ export const CELL_ORGS: Record<string, Record<string, string[]>> = {
   },
   evals: {
     acad: ["crfm", "mlcommons"],
+    industry: ["openai", "anthropic", "deepmind"],
   },
 };
 

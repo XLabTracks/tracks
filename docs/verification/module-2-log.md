@@ -4438,3 +4438,16 @@ once with its link.
 
 **Left for the owner:** the map's own disclaimer says efforts are "current to
 early 2026". A September 2026 entry makes that line stale.
+
+### The same day — the labs get tiles on their own evaluations square
+
+Owner: "anthopic openai and companies themselves run a lot of evals!" The
+square's own text said so — "labs run extensive internal evaluations and
+publish frameworks" — and the square carried no lab. The tiles come from
+`marksForEffs`, which scans only an effort's **name**, and both authored
+efforts there are named generically ("In-house dangerous-capability evals",
+"Third-party pre-deployment testing"), so the matcher had nothing to find.
+That is what `CELL_ORGS` is for: `evals.industry` now names openai, anthropic
+and deepmind, exactly as `inst.industry` already tiles them through its
+efforts' names. The square reads OpenAI, Anthropic, DeepMind, Accenture, and
+its aria-label lists all four.

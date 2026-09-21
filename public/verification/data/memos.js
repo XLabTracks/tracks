@@ -305,6 +305,19 @@ window.VERIFICATION_MEMOS = [
     ]
   },
   {
+    "id": "m2-3-debates",
+    "module": 2,
+    "unit": "2.3",
+    "title": "The Debates",
+    "status": "specified",
+    "task": "v-intel-debates",
+    "optional": true,
+    "brief": "Pick one of the five controversies. State the strongest case for each side, a short paragraph each, written to satisfy that side's strongest advocate. Then commit to a position and name the evidence that would change it.",
+    "audience": null,
+    "words": 0,
+    "href": "/tracks/verification/verification-infrastructure/intelligence-action#v-intel-debates"
+  },
+  {
     "id": "m3-written-output",
     "module": 3,
     "unit": "3.x",

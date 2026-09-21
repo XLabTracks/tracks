@@ -214,7 +214,7 @@ function SidebarNav({
                       {module.order}
                     </span>
                     <span className="sr-only">Module {module.order}: </span>
-                    <span className="line-clamp-3">{module.title}</span>
+                    <span>{module.title}</span>
                   </span>
                 </AccordionTrigger>
                 <AccordionContent className="pb-1">
@@ -415,7 +415,7 @@ function SidebarItemGroup({
           ) : (
             <Circle className={cn("opacity-30", MARKER_CLASS)} aria-hidden />
           )}
-          <span className="min-w-0 flex-1 line-clamp-2">{title}</span>
+          <span className="min-w-0 flex-1">{title}</span>
           <span className="text-muted-foreground ml-auto flex shrink-0 items-center gap-0.5 text-xs tabular-nums">
             {!expanded && linkedRows.length}
             <ChevronRight
@@ -549,10 +549,9 @@ function SidebarItemRow({
         <Circle className={cn("opacity-30", MARKER_CLASS)} aria-hidden />
       )}
       <span className="flex min-w-0 flex-col">
-        <span className="line-clamp-2">
-          {/* Inside the clamp, in front of the title: a prefix cannot be
-              orphaned from what it qualifies the way a chip on its own line
-              could. */}
+        <span>
+          {/* In front of the title: a prefix cannot be orphaned from what it
+              qualifies the way a chip on its own line could. */}
           {item.optional && <OptionalPrefix />}
           {item.title}
           {done && !item.completion && (

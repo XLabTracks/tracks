@@ -38,7 +38,7 @@ export function WhatDoTheySay() {
             <div className="flex items-center gap-3">
               <Avatar figure={f} className="size-11 text-sm" />
               <div className="min-w-0">
-                <p className="text-foreground truncate text-sm font-semibold">
+                <p className="text-foreground text-sm font-semibold">
                   {f.name}
                 </p>
                 <p className="text-muted-foreground text-2xs">

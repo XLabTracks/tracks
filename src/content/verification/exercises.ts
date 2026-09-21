@@ -246,4 +246,19 @@ export const verificationExercises: Exercise[] = [
     sampleAnswer:
       "There is no required positive or negative verdict. Assess whether your account preserves the evaluation conditions, distinguishes evidence from assumptions, and names a follow-up that tests the gap you identify.\n\nThe paper reports 98.2% overall binary accuracy and 43–87% detection on unseen white-box strategies after hardening; these are not interchangeable evaluation settings. Its experiments are single-node, up to eight GPUs. The hardware-operator case depends on protected telemetry collection and delivery beyond a classifier alone.\n\nRahman and Tajdari, [*Detecting Hidden ML Training With Zero-Overhead Telemetry*](https://arxiv.org/html/2606.19262v1): abstract, §2.2, §5.2, §6.5, and Appendix F.\n\nA good briefing can recognize a useful empirical contribution without inferring reliable enforcement across a fleet. Further evidence could test generalization to independently selected workloads and multi-node systems, or validate the entire input path against a hostile operator. Specify what would count as a failure, not merely that more testing is desirable.\n\nDistinguish low measured workload overhead from the costs of collection, authentication, transmission, storage, analysis, incident review, and maintaining security. A title is not an estimate of all those costs. If the excerpts do not identify an evaluation detail precisely enough, mark it unknown and identify which methods or data you would inspect; do not infer it from a headline percentage.",
   },
+  {
+    id: "v-intel-debates",
+    type: "writing-prompt",
+    format: "free-form",
+    optional: true,
+    prompt:
+      "Pick one of the five controversies. State the strongest case for each side, a short paragraph each, written to satisfy that side's strongest advocate. Then commit to a position and name the evidence that would change it.",
+    sections: [
+      { id: "which", label: "Which controversy", placeholder: "Name the debate, 1 to 5." },
+      { id: "side-a", label: "The strongest case for the first side" },
+      { id: "side-b", label: "The strongest case for the other side" },
+      { id: "position", label: "Your position, in a sentence or two" },
+      { id: "falsifier", label: "The evidence that would change it" },
+    ],
+  },
 ];

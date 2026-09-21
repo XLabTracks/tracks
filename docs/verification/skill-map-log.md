@@ -158,3 +158,27 @@ and pressing Skill Map or Memo Desk in the notebook stays in the notebook.
 - The panel resizes from its left edge: drag, or arrow keys on the handle
   (Home resets, double-click too). The width is a device preference under
   `vt-notebook-width`, outside the learner-work purge and the account sync.
+
+## 2026-09-14 — the notebook's Skill Map view is bars and descriptions only
+
+Owner: the figure in the notebook was redundant — "only have progress
+bars and descriptions, don't need the map." The notebook's Skill Map view
+no longer draws the web; it lists one row per skill by module (bar in the
+module hue, fraction and state word), and each row opens to the skill's
+description — its learner goals and the ladder of units that fill it. The
+ladder row is `VTSkillMap.rung`, the same renderer the map page's panel
+uses, so the two cannot disagree. The web itself stays on
+`/verification/map`, which the view links to.
+
+## 2026-09-14 — notebook footer rules restored; sidebar titles no longer clamp
+
+The bars-only edit replaced a range of `notebook.css` that ran past the
+progress block and took the page-title, block, sketch and footer rules
+with it, so the footer's buttons rendered inline and touching. Restored
+verbatim from the previous commit. Owner, same day: "get rid of
+unnecessary/arbitrary weird ellipses" — the track sidebar clamped lesson
+titles to two lines and module titles to three, and an active row's bolder
+weight pushed a title that just fit into a third line and a "…". The clamps
+are gone (both tracks' sidebar, one component); titles wrap in full. Two
+widget labels that truncated a name (`what-do-they-say`, `mechanism-sort`)
+wrap now too.

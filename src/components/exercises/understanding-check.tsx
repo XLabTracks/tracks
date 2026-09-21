@@ -23,7 +23,7 @@ export function UnderstandingCheckCard({
         {EXERCISE_TYPE_LABELS["understanding-check"]}
       </p>
       <div className="space-y-2">
-        <Paragraphs text={prompt} className="font-medium" />
+        <Paragraphs text={prompt} />
       </div>
 
       <Textarea

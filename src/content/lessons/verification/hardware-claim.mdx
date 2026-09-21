@@ -1,6 +1,4 @@
-### 2.1.1 What Evidence Proves Compliance?
-
-Before judging any hardware mechanism, we need to first establish and clarify what exactly it's being asked to prove.
+### 2.1.1 Break Down the Claim
 
 <Objectives scope="this section">
 1. Separate a policy goal, a legal rule, and a verification claim.
@@ -8,7 +6,7 @@ Before judging any hardware mechanism, we need to first establish and clarify wh
 3. Explain what a piece of hardware evidence establishes and what requires additional evidence or assumptions.
 </Objectives>
 
-## Why the Claim Comes First
+#### Why the Claim Comes First
 
 Suppose an operator gives you a signed report showing how much computation its chips performed. Would that establish compliance with a training limit?
 
@@ -26,23 +24,23 @@ Before considering a mechanism, distinguish three things:
 
 A useful verification claim specifies what is being checked and its scope: the relevant devices or activities, the applicable time interval, and the definitions that determine the result.
 
-## Worked Example: A Limit on Training
+#### Worked Example: A Limit on Training
 
-MIRI's draft international agreement proposes restrictions on training compute alongside restrictions on dangerous research. It distinguishes a **Strict Threshold**, above which the agreement prohibits training, from a lower **Monitored Threshold**, above which training requires approval and monitoring. Here we focus on the upper limit. [Scher et al., sec. 4](https://arxiv.org/html/2511.10783v1).
+MIRI's draft international agreement proposes restrictions on training compute alongside restrictions on dangerous research. It distinguishes a **Strict Threshold**, above which training is prohibited, from a lower **Monitored Threshold**, above which training requires approval and monitoring. Here we focus on the upper limit. [Scher et al., sec. 4](https://arxiv.org/html/2511.10783v1).
 
 - **Policy goal:** prevent the premature development of artificial superintelligence.
-- **Proposed legal rule, simplified:** parties must prohibit training runs above the Strict Threshold.
+- **Proposed legal rule:** parties must prohibit training runs above the Strict Threshold.
 - **Verification claim:** no training run subject to this prohibition exceeded the Strict Threshold, counting the operations attributable to that run across devices, sites, and reporting periods under the agreement's accounting rules.
 
 The unit of compliance is a **training run**. Evidence about an individual device must therefore be connected to the run and combined with other relevant records. A reporting period does not reset a limit that applies to the whole run.
 
-The phrase "under the agreement's accounting rules" also matters. Those rules must determine which operations count and which activities belong to the same run. Without these definitions, even an accurate measurement may not settle whether a run exceeded the limit.
+The phrase "under the agreement's accounting rules" also matters. Those rules must determine which operations count and which activities belong to the same run. Without these definitions, even an accurate measurement may not settle whether the limit was exceeded.
 
-<PageBreak title="What a Counting Rule Captures" />
+<PageBreak title="Scope and Limitations" />
 
-## What a Counting Rule Captures, and Leaves Out
+#### Scope and Limitations
 
-New START illustrates the distinction between a policy goal and a legal rule. Its central limits included a ceiling of 1,550 deployed strategic warheads under the treaty's accounting rules. For deployed intercontinental and submarine-launched ballistic missiles, the count reflected the actual number of reentry vehicles fitted to each missile. Each deployed heavy bomber equipped for nuclear armaments, however, counted as just one warhead, although it could carry multiple nuclear weapons. Bomber weapons were normally stored separately rather than loaded onto aircraft, and the parties adopted a fixed attribution rule for them. The treaty thus combined actual counts for deployed missile warheads with an agreed attribution for bombers. [Arms Control Association, "New START at a Glance," Articles II-III](https://www.armscontrol.org/factsheets/new-start-glance).
+New START illustrates the distinction between a policy goal and a legal rule. Its central limits included a ceiling of 1,550 deployed strategic warheads under the treaty's accounting rules. For deployed intercontinental and submarine-launched ballistic missiles, the count reflected the actual number of reentry vehicles fitted to each missile. Each deployed heavy bomber equipped for nuclear armaments, however, counted as just one warhead, although it could carry multiple nuclear weapons. Bomber weapons were normally stored separately rather than loaded onto aircraft, and the parties adopted a fixed attribution rule for them. The treaty thus combined actual counts for deployed missile warheads with an agreed attribution for bombers. Arms Control Association, ["New START at a Glance"](https://www.armscontrol.org/factsheets/new-start-glance), Articles II-III.
 
 A verifier applying that rule correctly could establish compliance with the numerical limit. That finding would not establish that the parties possessed only 1,550 nuclear weapons or that their bombers could deliver only the number attributed to them. Assessing the strategic significance of compliance required understanding what the accounting rule left out.
 
@@ -50,25 +48,25 @@ A training limit raises a similar question. Even if every relevant operation wer
 
 There are therefore two judgments to make: **does the evidence establish compliance with the rule, and does the rule adequately serve the policy goal?** A gap between the rule and the goal may be an acceptable compromise, or it may undermine the agreement. Making that gap explicit allows it to be evaluated.
 
-## Authenticity, Correctness, and Completeness
+#### Authenticity, Correctness, and Completeness
 
 Use three questions to assess the relationship between evidence and a verification claim. These are working distinctions for this course.
 
-**Authenticity.** Did the evidence come from the claimed source, and has it been altered?
+**Authenticity: did the evidence come from the claimed source, and has it been altered?**
 
 Check freshness separately: a report signed today may contain measurements collected earlier. RFC 9334 explicitly distinguishes the age of the reported values from the time they are signed. The relevant question is whether the evidence covers the time specified in the verification claim. [RFC 9334, sec. 10.4](https://www.rfc-editor.org/rfc/rfc9334.html#section-10.4).
 
-**Correctness.** Does the evidence accurately establish the property being tested, using definitions that match the rule?
+**Correctness: does the evidence accurately establish the property being tested, using definitions that match the rule?**
 
 A counter might accurately measure a class of operations that differs from the agreement's definition of training compute. A classifier might assign a workload label that does not capture what the agreement defines as training.
 
-**Completeness.** Does the evidence cover all devices, activities, and time periods relevant to the claim?
+**Completeness: does the evidence cover all devices, activities, and time periods relevant to the claim?**
 
 Reports may accurately describe every registered device while omitting an undeclared cluster. A complete device inventory may still leave gaps in the activity recorded over time.
 
 These questions interact. Preventing omissions within a device may require a protected measurement path. Establishing whether relevant devices are missing altogether may require inventory records, inspections, or other evidence.
 
-## What Does a Counter Establish?
+#### What Does a Counter Establish?
 
 Consider this hypothetical report:
 
@@ -94,7 +92,7 @@ The direction of the inference also matters. An incomplete count below a thresho
 
 <PageBreak title="Exercise: The Chip Security Act" />
 
-## Exercise: Break Down the Chip Security Act
+#### Exercise: Break Down the Chip Security Act
 
 The training example began with a proposed rule and worked toward a verification claim. Now apply the same approach to a different policy.
 
@@ -108,6 +106,6 @@ Read the source summary below. Answer using the text provided, and distinguish t
 
 **C — Requirements, section 4(a).** Within 180 days of enactment, Commerce would have to require location-verification mechanisms before specified foreign exports, reexports, or transfers of covered products. It would also have to require authorization holders to report credible information about a location differing from the application, diversion to another user, or tampering.
 
-[Source: H.R. 3447, introduced text, secs. 2-4](https://www.govinfo.gov/content/pkg/BILLS-119hr3447ih/html/BILLS-119hr3447ih.htm).
+Source: [H.R. 3447](https://www.govinfo.gov/content/pkg/BILLS-119hr3447ih/html/BILLS-119hr3447ih.htm), introduced text, secs. 2-4.
 
 <Exercise id="v-hw-claim-chip-security" />

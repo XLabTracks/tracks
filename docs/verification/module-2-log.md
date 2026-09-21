@@ -4451,3 +4451,18 @@ That is what `CELL_ORGS` is for: `evals.industry` now names openai, anthropic
 and deepmind, exactly as `inst.industry` already tiles them through its
 efforts' names. The square reads OpenAI, Anthropic, DeepMind, Accenture, and
 its aria-label lists all four.
+
+### The same day — the FLOP fold's citations follow the new rule
+
+`docs/verification/citation-form.md` landed on main in #79: the link opens
+from the work's title, a passage-ending citation rides on its own `<Src>`
+line, one inside a sentence keeps the title as its linked phrase.
+
+Four citations could not be fixed there. They live in the "Power, From Watts
+to FLOP" fold, which on main still sits in `intelligence-masint.mdx` and on
+this branch has moved into the 2.1 head — so a fix on main would have been
+undone by the move. Kaplan, Hoffmann, the H100 datasheet and You & Owen now
+carry `<Src>` lines here instead.
+
+The dozen author–date parentheticals in the Sastry `<SourceQuote>` a few
+lines below are reproduced text and stay exactly as their authors wrote them.

@@ -135,6 +135,7 @@ describe("every answer surface goes through the shuffle", () => {
     "src/components/verification/widgets/protocol-actors.tsx",
     "src/components/verification/widgets/whistleblower-levers.tsx",
     "src/components/verification/kit/drill-deck.tsx",
+    "src/components/verification/kit/sort-board.tsx",
     "src/components/mdx/reader/check.tsx",
   ];
 

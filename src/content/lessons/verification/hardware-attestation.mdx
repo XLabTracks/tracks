@@ -1,8 +1,6 @@
 
 ### 2.1 Hardware
 
-Hardware mechanisms are verification tools built into or attached to the physical machines that train and run AI models: the chips, the servers, and the sensors around them. They can identify a device, attest to its state, measure and classify what it ran, restrict what it may run, or help reconstruct a training run. They are some of the most verifiable and unspoofable strategies for parties to verify adversarial compliance; but also some of the most technically immature and difficult to implement, because the chips belong to the party being checked and a signed statement can be authentic and still too narrow to settle a claim. First, let's reiterate why a verification regime uses physical compute as the measurable threshold.
-
 <Objectives scope="the core section">
 1. **Bound a hardware claim.** Distinguish what a mechanism identifies, attests, measures, classifies, restricts, or reconstructs, then state what remains outside the claim.
 2. **Trace the trust and authority chain.** Name who measures, signs, defines acceptable state, updates, revokes, appraises, decides, and enforces.
@@ -11,11 +9,87 @@ Hardware mechanisms are verification tools built into or attached to the physica
 5. **Recommend a bounded role.** State what hardware should carry in a layered regime, what it should not carry, which independent evidence must corroborate it, and what new evidence would change your recommendation.
 </Objectives>
 
-<PageBreak title="Why Compute?" />
+The compute primer is optional: we assume you are already familiar with FLOP, model parameters, and training compute. If these concepts are new to you—or you are unsure how FLOP differs from FLOP/s—read the primer before continuing.
 
-## Why Compute?
+<Fold label="Optional: Power, From Watts to FLOP">
 
-Compute governance is the idea of governing AI by governing the chips it runs on: who can get them, how many they hold, where those chips are, and what they are used for. Chips are physical objects. They can be counted, located, and withheld in a way that data and algorithms cannot, which is why a verification regime can see compute when it cannot see much else. The excerpt below is the field's own case for this, as of early 2024:
+A watt measures how quickly energy is used: one joule per second. A 2 kW
+kettle converts 2,000 joules of electrical energy into heat every second. A
+computing cluster drawing 130 MW consumes 130 million joules per second.
+Watts describe a rate, not a total amount of energy.
+
+A FLOP is one arithmetic operation, such as an addition or multiplication, on
+floating-point numbers—the computer’s way of representing values such as 0.25
+or −3.7 across a wide range of magnitudes. FLOP count the arithmetic
+performed; FLOP per second measure how fast it happens.
+
+Think of a language model as an enormous collection of adjustable numbers,
+called parameters. During pretraining, it processes text divided into
+tokens—words or pieces of words—and predicts what comes next. Its prediction
+errors guide small adjustments to the parameters. This process repeats across
+the training data, teaching the model patterns that help it make better
+predictions.
+
+Most of the arithmetic involved is matrix multiplication. For a conventional
+dense transformer, the training cost can be approximated as:
+
+$$
+\text{Training FLOP} \approx 6 \times \text{number of parameters} \times \text{number of tokens processed}.
+$$
+
+The factor of six accounts for both making predictions and calculating how
+the parameters should change. It is an approximation, not an exact count for
+every model architecture.
+
+<Src>Kaplan et al., [*Scaling Laws for Neural Language Models*](https://arxiv.org/abs/2001.08361), arXiv, 2020.</Src>
+
+This gives two main ways to spend more compute: train a larger model, or
+train it on more text. More parameters make processing each token more
+expensive; more tokens mean more processing overall. The 2022 Chinchilla
+study found that, to get the best performance from a fixed training budget
+under its experimental conditions, model size and training data should grow
+in roughly equal proportions. Following that rule, ten times more compute
+would mean about 3.2 times as many parameters and 3.2 times as many tokens.
+
+<Src>Hoffmann et al., [*Training Compute-Optimal Large Language Models*](https://arxiv.org/abs/2203.15556), arXiv, 2022.</Src>
+
+The connection to electricity is physical. Arithmetic in a chip requires
+switching transistors, which charges and discharges tiny electrical
+capacitances and dissipates energy as heat.
+
+For a rough hardware benchmark, an NVIDIA H100 SXM has a power rating of up
+to 700 W and a peak throughput of approximately $10^{15}$ dense, 16-bit
+floating-point operations per second. Dividing power by throughput gives an
+energy cost on the order of $10^{-12}$ joules per FLOP. This is a peak-based
+GPU estimate, not a measurement of an entire training facility.
+
+<Src>NVIDIA, [*NVIDIA H100 Tensor Core GPU Datasheet*](https://resources.nvidia.com/en-us-hopper-architecture/nvidia-tensor-core-gpu-datasheet), 2022.</Src>
+
+Using that illustrative efficiency, a training run requiring $10^{25}$ FLOP
+would consume:
+
+$$
+10^{25}\ \text{FLOP}\times10^{-12}\ \text{joules/FLOP} =10^{13}\ \text{joules} \approx2.8\ \text{GWh}.
+$$
+
+Spread over three months, that corresponds to roughly 1.3 MW of average power
+under those assumptions. A facility actually drawing 130 MW for three months
+would instead consume about 280 GWh—a hundred times as much energy.
+
+The hundredfold gap between the two examples is the difference between a 2023
+frontier run and a 2025–26 one. Frontier training compute has grown 4 to 5
+times a year, and after efficiency gains and longer runs are netted out, the
+power a frontier run draws has still grown 2.2 times a year.
+
+<Src>You and Owen, [*How Much Power Will Frontier AI Training Demand in 2030?*](https://epoch.ai/publications/power-demands-of-frontier-ai-training), Epoch AI, 2025.</Src>
+The signature scales with the run, and the run has been getting bigger faster
+than the chips have been getting cheaper to feed.
+
+</Fold>
+
+<PageBreak title="Why Compute" />
+
+#### Why Compute
 
 <SourceQuote
   t="Computing Power and the Governance of Artificial Intelligence"
@@ -64,8 +138,8 @@ of Artificial Intelligence." [arXiv, 2402.08797](https://arxiv.org/abs/2402.0879
 2024, §3.B.
 
 <Callout variant="note">
-Note that this course mostly covers detectability and supply chain in
-different modules.
+Note that detectability and supply chain are mostly covered in different
+modules in this course.
 </Callout>
 
 <ReadingCard
@@ -109,7 +183,7 @@ and model weights have no nuclear counterpart).
 
 <PageBreak title="Test Your Judgement" />
 
-## Test Your Judgement
+#### Test Your Judgement
 
 During a three-month AI pause, a laboratory sends the verification authority a valid cryptographic statement from each of the 20,000 accelerators in its declared cluster. The laboratory says the tokens prove that the cluster complied.
 
@@ -117,8 +191,6 @@ Before reading further, classify each conclusion as **supported**, **possibly su
 
 <ClaimLedger id="hw-opening-puzzle" set="hardware-opening" />
 
-Keep your answers; 2.1.8 returns to them.
-
-## The Central Question
+#### The Central Question
 
 A signed statement can be authentic and still be too narrow, stale, incomplete, or based on a compromised measurement. Hardware becomes useful for verification only when the whole chain is specified: the rule, the measurement, the evidence, the trust assumptions, the decision authority, and the response.

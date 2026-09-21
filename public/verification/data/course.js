@@ -166,8 +166,7 @@ window.COURSE = {
             "hardware-measuring-use",
             "hardware-authorization",
             "hardware-where-trust-lives",
-            "hardware-reconstructing-run",
-            "hardware-policy-studio"
+            "hardware-reconstructing-run"
           ]
         },
         {

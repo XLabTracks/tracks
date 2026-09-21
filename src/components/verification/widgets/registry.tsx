@@ -54,6 +54,10 @@ const PolicyCost = dynamic<VerificationWidgetProps>(
   () => import("./policy-cost").then((module) => module.PolicyCost),
   { loading: WidgetLoading },
 );
+const ArchitectureSort = dynamic<VerificationWidgetProps>(
+  () => import("./architecture-sort").then((module) => module.ArchitectureSort),
+  { loading: WidgetLoading },
+);
 const MechanismSort = dynamic<VerificationWidgetProps>(
   () => import("./mechanism-sort").then((module) => module.MechanismSort),
   { loading: WidgetLoading },
@@ -171,6 +175,7 @@ export const verificationWidgets: Record<
   "datacenter-power": DatacenterPower,
   "locating-compute": LocatingCompute,
   "policy-cost": PolicyCost,
+  "architecture-sort": ArchitectureSort,
   "mechanism-sort": MechanismSort,
   "mechanism-sort-reveal": MechanismSortReveal,
   "packet-tasks": PacketTasks,

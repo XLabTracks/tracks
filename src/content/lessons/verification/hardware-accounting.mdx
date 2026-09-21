@@ -1,73 +1,186 @@
+<Objectives scope="this section">
+1. Use registries and device credentials to connect covered accelerators to owners, facilities, jurisdictions, and reporting obligations.
+2. Examine mechanisms and proposals for verifying device identity, location, and cluster topology.
+3. Explain why registered and attested devices do not alone establish that no undeclared hardware exists.
+4. Combine hardware records with supply-chain, inspection, cloud, intelligence, and human evidence to test fleet completeness.
+</Objectives>
 
-### 2.1.3 Accounting for Hardware: Identity, Location, Topology, and Completeness
+### A Perfect Report from an Incomplete Fleet
 
-An isolated statement from one device doesn't actually prove the necessary negative: that an illicit training run is not happening anywhere within the relevant jurisdiction. As such, this section zooms out to clusters and systems: what a device credential establishes, how far location and cluster topology can be verified today, and why proving that no compute exists outside the declared system needs evidence that hardware cannot supply on its own.
+An operator declares 1,000 accelerators. All 1,000 produce authentic, fresh attestation reports. Each report passes every requested check.
 
-A registry of covered accelerators can support several verification tasks. It can link a device credential to an owner, facility, jurisdiction, and reporting obligation. It can also make discrepancies visible when manufacturer, shipping, customs, provider, or site records disagree.
+Now suppose the operator also runs 200 accelerators that were never declared.
 
-A registry is not a sensor. It is an institutional record whose value depends on how entries are created and reconciled.
+Nothing about the first 1,000 reports has become false. The problem is the population to which the evidence applies. A system that verifies every device presented to it has not necessarily verified every device covered by the agreement.
 
-## Identity
+Hardware accounting therefore has two tasks: **follow the devices already known to the regime, and test whether its list is missing devices.** Device credentials help with the first. Establishing the second requires evidence that does not originate solely from that list.
 
-A device credential can help a verifier distinguish a genuine covered device from an unauthenticated substitute. The verifier still needs to know:
+The policy objective determines which population matters. An export-control regime may follow a specified class of exported products. An international pause may cover accelerators of several origins, including domestic production and pre-existing stock. An excellent registry of one manufacturer's exports cannot establish completeness for the broader population.
 
-- Who created or certified the identity
-- Whether duplicate or counterfeit credentials are detectable
-- How ownership transfers are recorded
-- How lost, damaged, exported, or scrapped devices are handled
-- How legacy and nonparticipating hardware enters the regime
-- What evidence links the credential to the physical device being inspected
+### A Registry Connects Technical Identity to Obligations
 
-Identity is a useful anchor for evidence from other mechanisms. It does not establish location, interconnection, use, or completeness.
+<ReadingCard
+  id="reading-registry"
+  href="https://www.cnas.org/publications/reports/preventing-ai-chip-smuggling-to-china"
+  title="Preventing AI Chip Smuggling to China"
+  author="Tim Fist and Erich Grunewald | CNAS"
+  year="24 October 2023"
+  mins="5 min"
+>
 
-## Location
+**Required reading 1 — From a list to an inspection program.** Working paper and policy proposal.
 
-Location-verification proposals often use network timing or challenge-response measurements. A verifier sends unpredictable challenges and checks whether response times are consistent with the claimed region. Such protocols may make some forms of remote spoofing costly, but they depend on:
+**Read:** "Recommendation 1: BIS should pilot an AI chip registry and inspection program," then the "Program steps" subsection of "Technical annex: random chip sampling program logistics." Stop before "How many inspections would be required?"
 
-- Secure time
-- Protected processing
-- Network conditions
-- Calibration
-- A tolerable false-positive rate
+**Reading focus:** Identify what gets entered in the registry, how devices are selected for checking, and what the proposed program does when an owner cannot produce a device.
 
-Hardware-governance surveys continue to treat robust, scalable location verification as an open research area rather than a fielded treaty capability.
+Read this as a proposed design, not as a statement of current law or an operating program. Its historical cost and stockpile estimates are not needed for this lesson.
 
-<Src>O’Gara et al., *Hardware-Enabled Mechanisms for Verifying Responsible AI Development* — [arXiv:2505.03742](https://arxiv.org/abs/2505.03742), 2025.</Src>
+</ReadingCard>
 
-A location claim should therefore state its resolution and error model. “Inside Country A,” “inside this data center,” and “inside this rack” are different claims.
+Fist and Grunewald propose connecting a chip-ownership registry to short-notice inspections and reporting of resale, loss, and destruction. The registry gives inspectors a population from which to select devices and parties to contact. It is the reporting and inspection process, not the database alone, that makes entries testable.
 
-## Cluster Topology
+For this course, a useful registry design would distinguish the following fields. This is an illustrative schema, not a description of an existing government database.
 
-A collection of individually authenticated devices is not automatically a cluster. A verifier may need to establish:
+| Record | Question it answers | Evidence needed beyond the database entry |
+| --- | --- | --- |
+| Covered hardware identifier and credential binding | Which physical accelerator does this record refer to? | Device authentication, provisioning records, and a mapping between chip, board, and server identifiers |
+| Legal owner | Who holds title? | Purchase and transfer records, with entity verification |
+| Custodian and operator | Who holds the hardware, and who controls its operation? | Hosting contracts, site records, and inspections |
+| Declared facility and jurisdiction | Where should it be? | Delivery records, location checks, or physical verification at the required precision |
+| Applicable authorization and reporting duty | Which rule applies, and who must respond? | An authorization issued by the competent authority and an identified responsible party |
+| Lifecycle status and event history | Is it installed, stored, in transit, under repair, transferred, or destroyed? | Dated, device-specific records supporting each transition |
+| Last observation and unresolved discrepancy | What has actually been checked, and what remains uncertain? | Retained evidence, timestamps, verification results, and review history |
 
-- Which devices were connected
-- Which interconnects and switches were used
-- Whether the configuration changed during the reporting period
-- Whether the workload was split across declared and undeclared devices
-- Whether the cluster definition aggregates sequential, distributed, or cross-site activity
+A manufacturer credential authenticates a device identity. It does not establish its legal owner or which company is renting its compute. A cloud customer, cloud operator, colocation provider, and equipment owner may be four different entities.
 
-Current attestation support illustrates the distinction. Some configurations can report more about protected interconnects, while others attest devices independently. The treaty claim must follow the evidence, not the marketing category.
+Updates should preserve history rather than overwrite it. If a device moves from Facility A to Facility B, the record needs a departure, custody during transit, and arrival confirmation. Replacing a board or rotating a credential should not accidentally create a second accelerator in the count. Conversely, two different accelerators must not be merged because a server label was reused.
 
-## Completeness
+For one defined population and period, a basic reconciliation is:
 
-The hardest claim is often negative: no relevant compute existed outside the declared system.
+**Expected closing stock = opening stock + additions − verified removals.**
 
-Attestation covers devices that participate. A registry covers devices that entered the registry. Neither proves that the fleet is complete. Completeness can draw on:
+"Removals" depend on the boundary. Moving a chip out of one facility removes it from that facility's stock, but not necessarily from the operator's or treaty's stock. Loss may end possession without ending the obligation to report or investigate. A row marked "destroyed" is a claim to check, not a reason to delete the evidence trail.
 
-- Manufacturer and foundry production records
-- Packaging, distribution, export, customs, and shipping records
-- Provider inventories and allocation records
-- Physical inspection and device counts
-- Power, cooling, construction, procurement, and network evidence
-- Intelligence on undeclared facilities or diversion
-- Insiders who report substitution, tampering, or hidden capacity
+<PageBreak title="Location Verification" />
 
-Hardware is therefore strongest for known, instrumented compute. The intelligence and human sections will address what remains when the operator never registers the device, never installs the monitor, or never submits evidence.
+### Location: Has a Chip Been Moved?
 
-<PageBreak title="Try It" />
+Suppose an operator declares that its chips remain at an approved facility. Location verification can help check that claim remotely and identify cases requiring an inspection.
 
-## Try It
+<ReadingCard
+  id="reading-location"
+  href="https://www.iaps.ai/research/location-verification-for-ai-chips"
+  title="Location Verification for AI Chips"
+  author="Asher Brass | Institute for AI Policy and Strategy"
+  year="May 2025"
+  mins="6 min"
+>
 
-The treaty body wants to support the claim: “All covered accelerators at Site X are registered and accounted for.” Choose three evidence streams that do not share the same source. For each, name the actor that produces it and one way it could fail.
+**Required reading 2.** Issue brief describing a proposal and prototype.
 
-<Exercise id="v-hw-accounting-three-streams" />
+**Read:** from “Technical location verification relies…” through the Singapore prototype illustration, then FAQ Q4 and Q7. Skip the cost estimates and other FAQs.
+
+**Reading question:** How do device identity and response time together constrain a chip’s possible location? What does the brief propose when chips are reportedly in storage or transit for a suspiciously long time?
+
+</ReadingCard>
+
+The proposal combines two pieces of evidence: which chip responded and how quickly its response arrived. A trusted server at a known location—a landmark—sends an unpredictable challenge. The chip returns an authenticated response, and the landmark measures the round-trip time. The response must be tied to the chip itself; timing a nearby server would establish a bound on that server’s location.
+
+Because signals cannot travel faster than light, a sufficiently fast response limits how far away the chip could be:
+
+Distance to the chip ≤ speed of light × round-trip time ÷ 2
+
+For example, a 2 millisecond round trip gives an upper bound of approximately 300 km. Processing and network delays make this bound looser: the chip could be much closer. This is an illustrative calculation, not the prototype’s measured accuracy.
+
+Each landmark therefore defines a region of possible locations. Multiple landmarks can narrow that region. If it excludes a prohibited territory, the result can support a claim that the chip is outside that territory—even if it cannot identify the chip’s building. The IAPS brief reports an H100 prototype demonstrating the basic approach.
+
+Missing reports require an enforcement process. A slow or absent response does not establish where a chip is. Chips legitimately in storage or transit may be unable to report, but an operator could also claim those statuses to avoid verification. IAPS proposes investigating suspiciously prolonged storage or transit and notifying BIS. A workable regime would need reporting deadlines, evidence requirements for exemptions, and a process for follow-up inspections.
+
+Location verification supplies evidence for these decisions. It does not itself disable a chip; authorization and control are discussed in [2.1.5](/tracks/verification/verification-infrastructure/hardware-authorization).
+
+### Topology: How Are the Devices Connected?
+
+A location check can help establish where a registered chip is. A topology check addresses a different claim: whether a set of devices has the expected connections and configuration.
+
+This matters when a verification regime relies on a declared hardware configuration. Authenticating each GPU separately does not establish how those GPUs are connected. Checking the relevant switches and links can provide additional evidence about the system they form.
+
+<ReadingCard
+  id="reading-topology"
+  href="https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/hopper_ppcie.html"
+  title="Device Checks and System Checks"
+  author="NVIDIA"
+  mins="4 min"
+  optional
+>
+
+**Read:** the “Overview” sections of the <a href="https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/hopper_ppcie.html" target="_blank" rel="noopener" className="underline underline-offset-4">Hopper PPCIE example</a> and the <a href="https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/blackwell_multi_gpu.html" target="_blank" rel="noopener" className="underline underline-offset-4">Blackwell multi-GPU example</a>. On the Hopper page, also inspect the final stage/status table. Skip commands and token listings.
+
+</ReadingCard>
+
+The Hopper workflow checks GPU and NVSwitch integrity and compares the topology with an expected configuration. The assigned Blackwell workflow attests each GPU independently, without topology or switch attestation. These are examples from NVIDIA’s deprecated Python SDK documentation; the comparison concerns the checks performed by these workflows.
+
+For governance, the crucial question is how much of the relevant system the check covers. A successful check of a GPU–switch configuration does not establish the size of an entire distributed training cluster. That would require evidence covering connections between servers and facilities. Establishing how much computation a training run used would also require evidence about activity over time.
+
+<PageBreak title="Completeness Has a Denominator" />
+
+### Completeness Has a Denominator
+
+Three populations must remain distinct:
+
+| Population | What defines it? | What a successful check leaves open |
+| --- | --- | --- |
+| Responding devices | Devices from which valid evidence was received | Which expected devices did not respond? |
+| Registered devices | Devices the regime knows about | Which covered devices were never registered? |
+| All covered devices | The agreement's hardware, geographic, and organizational scope | Whether the evidence reaches that population at all |
+
+If 900 out of 1,000 registered devices respond, the response rate is 90% of registered devices. It is not a measurement that 90% of all covered devices have been found. Even a 100% response rate cannot establish that the register is complete.
+
+Sampling has the same boundary. Inspections selected only from a register can test claims about listed equipment. They cannot directly select an omitted identifier. Inspectors might discover additional hardware while visiting a site, but that is an additional discovery channel, not a property of sampling the list.
+
+This does not make registries useless. Knowing that a particular expected device has disappeared is valuable. The distinction is between a **known device whose whereabouts are unresolved** and a **device the regime does not yet know exists**. Repeated challenges address the former; independent discovery is needed for the latter.
+
+### Test the Register from Outside It
+
+The following is an analytic checklist for a layered regime, not a claim that these sources always exist or are independent.
+
+| Evidence source | Useful comparison | Remaining limitation |
+| --- | --- | --- |
+| Manufacturing, distribution, and shipping records | Do produced and delivered device identifiers enter the register, or have documented destinations outside its scope? | Incomplete suppliers, intermediaries, forged records, and non-cooperating manufacturers |
+| Physical inspections and repair records | Do observed devices match records, including stored and non-operating equipment? | Limited access, advance notice, scope, and temporary relocation |
+| Cloud inventory, allocation, and billing records | Do tenant allocations and provider inventories reconcile with declared devices? | Provider-controlled logs and mappings from virtual resources to physical devices |
+| Intelligence and infrastructure observations | Do facilities, procurement, power, or cooling suggest capacity absent from declarations? | Indirect signals and alternative explanations; capacity is not observed use |
+| Human evidence | Can technicians, auditors, or other witnesses identify omitted equipment, sites, or altered records? | Access limits, mistakes, incentives, and the need to corroborate and protect sources |
+
+Independence matters more than the number of documents. An inventory spreadsheet, dashboard, and audit summary may all copy the same operator-maintained database. Agreement among them then says little about omissions from that database.
+
+Records also need timestamps and a common unit of account. A supplier counts boards, a cloud scheduler counts virtual instances, and a treaty may count physical accelerator packages. Before treating differences as suspicious, reconcile those units, reporting dates, repairs, replacements, and transfers.
+
+Non-response should remain visible until resolved. It may reflect maintenance, connectivity failure, deliberate obstruction, or diversion. An agreement can impose a reporting obligation with its own consequences, but failure to report and proof of prohibited activity are different findings. A useful status is "unresolved," not an automatic reassignment to "compliant" or "smuggled."
+
+<PageBreak title="Exercise: Reconcile the Fleet" />
+
+### Exercise — Reconcile the Fleet
+
+This is a hypothetical evidence packet, not a real operator or an existing law. All counts refer to physical accelerators with distinct identifiers. All documents use the same reporting cutoff.
+
+Under an agreement, every covered accelerator held by an operator must be registered. Installed devices must provide daily identity and jurisdiction evidence. Devices in repair remain registered, with device-specific custody records. Rules governing emergency exceptions and sanctions are not supplied in this packet.
+
+| Item | Evidence supplied |
+| --- | --- |
+| Registry | 80 devices: 64 installed at Facility A and 16 assigned to Facility B |
+| Daily reports | Fresh, valid reports from all 64 A identifiers and 8 B identifiers; their permitted-location regions lie wholly within the allowed jurisdiction |
+| Operator's explanation | The remaining 8 B devices are at repair depot R |
+| Repair receipt | Depot R acknowledges custody of 6 of those 8 identifiers; no receipt is supplied for the other 2 |
+| Supplier records | 88 unique devices delivered to the operator; 8 distinct returned identifiers accepted back by the supplier. Those returns are excluded from the 80 registered identifiers |
+| Topology evidence | An independently obtained verifier result for a specified 8-GPU/NVSwitch system at A reports successful device and topology checks. No evidence describes the site's other systems or inter-site connections |
+
+The operator concludes:
+
+> The 72 responding devices were within the allowed jurisdiction when checked. Every registered device is at its declared facility, and none can be part of a larger cluster.
+
+<Exercise id="v-hw-accounting-reconcile" />
+
+### Carry Forward
+
+Hardware accounting establishes which equipment the regime knows about, what has been observed, and where evidence is missing. It does not yet tell us how much work occurred or what kind of work it was. Section 2.1.4 turns to those questions.

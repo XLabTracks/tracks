@@ -3295,3 +3295,1159 @@ threshold land, but a reader who knows the hardware will notice the device.
 Flag, unchanged from yesterday: "distinguish three things" and "Use three
 questions" announce their own item counts, which the 2026-09-08 ruling
 forbids. Kept verbatim.
+
+## 2026-09-13 — 2.1.2 rebuilt as Hardware Identity and Attestation
+
+Owner's content and implementation brief, Part A applied, Part B kept out of
+the page. The lesson replaces "From a chip to a trusted statement": the
+direction-of-trust framing and its institutional inversion, what hardware
+identity establishes, the secure-boot/measured-boot/reference-value table,
+the five-stage chain from Evidence to regulatory response, the control table,
+what current GPU attestation can and cannot show, the Battering RAM
+threat-model boundary, the appraisal exercise, and its four answers. Title
+and estimatedMinutes follow the brief: 45 minutes, with the four card times
+summing to the 20 minutes of assigned excerpts.
+
+Four required readings sit at their points of use as ReadingCards, with the
+ids the brief specifies: reading-rats, reading-h100, reading-blackwell,
+reading-battering-ram. Each card shows the source title as its outbound
+link, the "Required reading N" line with the brief's pedagogical title and
+the document type, the read-and-stop boundaries, the reading focus, and the
+author, year and minutes on its meta line; card 1 carries both verified RFC
+anchors as extra links. The four answers are separate Folds labelled only
+"Show answer 1" to "Show answer 4", collapsed on load and operable from the
+keyboard. The rejected attestation-report simulator was not built, and no
+form, score, submission or backend was added: the questions are prose and
+the answers are disclosures.
+
+Two structural adaptations, both to the site rather than the copy. The
+section headings are Title Case per the standing rule, and they are `###`
+rather than the `####` the other 2.1 lessons use: the in-lesson nav is built
+from `##`/`###` headings plus cards and folds, so at `####` the sidebar
+listed the four sources and the four answers with no sections to hang them
+under. The body's own title heading is dropped rather than repeated, as in
+2.3's lessons; the reader was already discarding it.
+
+Sources checked. RFC 9334's §4.1 is "Roles" and §5 is "Topological Patterns"
+with the passport, background-check and combination subsections, and §6 is
+"Roles and Entities", so "stop before §6" is right. The Blackwell example
+says in its own words that each GPU is attested independently with no
+topology or switch attestation, and it has the Overview and Claims sections
+the card assigns. Battering RAM's page carries both assigned sections, the
+low-cost DDR4 interposer that passes boot checks and remaps later, the
+replayed SEV-SNP launch measurement, and a threat list naming rogue cloud
+employees, technicians, law enforcement and supply-chain tampering; its
+paper is at the 47th IEEE Symposium on Security and Privacy, May 2026. The
+Microsoft page carries Secure Boot, Trusted Boot and Measured Boot as
+separate mechanisms. Eight works were registered and the Blackwell page was
+promoted out of `pending`.
+
+Two registry removals the suite required: the un-anchored RFC 9334 entry,
+whose last link left with the old lesson's source block, and the Hopper
+multi-GPU URL, which was pending and is no longer linked.
+
+Flags for the owner:
+
+- The CACM article could not be re-verified from here: cacm.acm.org answers
+  every request from this network with a Cloudflare 403. The host/hypervisor
+  quotation and the performance-counter sentence are reproduced exactly as
+  the brief supplies them, with their adjacent citations, and neither was
+  checked against the article.
+- The shared ReadingCard component opens links with `rel="noopener"`, not
+  `rel="noopener noreferrer"`, and marks the outbound link with an
+  aria-hidden arrow rather than an "opens in new tab" announcement. That is
+  the convention on every card in the course; the two extra links inside
+  card 1 follow it rather than diverging. Changing it is a course-wide
+  change, not a 2.1.2 change.
+- The card ids are the brief's strings, and the component prefixes its
+  anchors, so the rendered anchors read `#reading-reading-rats`. Harmless
+  but visible in a deep link; say the word and the ids become `rats` and so on.
+- 2.1.2's section headings now render at `h3` while 2.1.1's render at `h4`.
+  Aligning 2.1.1 is a one-line change whenever wanted.
+
+## 2026-09-13 — 2.1.3 rebuilt as Accounting for Hardware; the FLOP fold moves to 2.1
+
+Owner's content and implementation brief, Part A applied, Part B kept out of
+the page. The lesson replaces the old accounting page: the perfect report
+from an incomplete fleet, the registry schema and its reconciliation
+identity, location verification as a bound on the responder rather than a
+pin, topology as a separate question from location, the three populations
+and their denominator, the checklist for testing a register from outside it,
+the fleet-reconciliation exercise, its four answers, and the hand-off to
+2.1.4. Title "2.1.3 Accounting for Hardware", 45 minutes, card times summing
+to the 15 minutes of excerpts.
+
+Three required readings at their points in her order, with the ids the brief
+specifies: reading-registry, reading-location, reading-topology. The topology
+card carries both NVIDIA example links, as the brief requires; the other two
+carry one each. Four answers are separate Folds labelled only "Show answer 1"
+to "Show answer 4", collapsed on load, keyboard-operable. No simulator, no
+form, no scoring, no backend; the whole evidence packet is visible before the
+answers. The proof-of-learning bibliography was not moved into this lesson
+and 2.1.7 keeps it untouched. The Chip Security Act does not reappear here.
+
+Headings are Title Case and set at `###`, as in 2.1.2 and for the same
+reason: the in-lesson nav is built from `##`/`###` headings plus cards and
+folds, so at `####` the sidebar would list three sources and four answers
+with no sections under which to hang them. The body's own title heading is
+dropped rather than repeated.
+
+Sources checked on 13 September 2026. The CNAS working paper is by Tim Fist
+and Erich Grunewald, dated 24 October 2023, and carries "Recommendation 1:
+BIS should pilot an AI chip registry and inspection program" and the
+"Program steps" list inside "Technical annex: random chip sampling program
+logistics", ending where the brief says to stop. The IAPS page states in its
+own words that the issue brief was written May 2025 by Asher Brass and that
+the full 2024 report is by Asher Brass and Onni Aarne, so the two are kept
+apart as the brief instructs; the full report's "Delay-based methods for The
+General Geolocation Problem" section is at page 17 and stays an inline
+reference. The Hopper PPCIE page sits under NVIDIA's deprecated Python SDK
+examples and says its attestation covers GPUs and NVSwitch devices and
+checks that the topology matches the expected configuration, against the
+Blackwell example's independent per-GPU attestation. Four works registered;
+the Blackwell page was already registered from 2.1.2.
+
+Also in this pass, on the owner's instruction: the optional "Power, From
+Watts to FLOP" fold moves out of 2.3.3 into the 2.1 head, still optional and
+unchanged, where it sits after the compute readings and before Test Your
+Judgement. Its four citations travel with it, so 2.3.3's appendix drops from
+11 works to 7 and 2.1's grows. Minutes were not adjusted on either page: the
+block is optional on both, and both numbers are the owner's.
+
+Flags: 2.1's head still reads 25 minutes and 2.3.3 still reads 40, now that
+530 optional words have moved between them; say the word and either changes.
+The alternative home for the fold was 2.1.4, which is where compute counting
+is taught, rather than the section head.
+
+## 2026-09-13 — 2.1 head: the compute primer gets its lead-in and moves to the top
+
+The owner supplied one paragraph, used verbatim: "The compute primer is
+optional: we assume you are already familiar with FLOP, model parameters, and
+training compute. If these concepts are new to you—or you are unsure how FLOP
+differs from FLOP/s—read the primer before continuing."
+
+It names the fold that arrived here from 2.3.3 the day before, so the fold
+moved up with it: the pair now sits directly under the objectives and above
+"Why Compute, in the Words of the Field", rather than after the reading
+cards. "Read the primer before continuing" is only literally true if the
+primer is reachable before the rest of the page, and the Sastry passage that
+used to come first quantifies performance in operations per second, which is
+exactly the distinction the paragraph says a reader may be unsure of. The
+fold's own text, label and citations are unchanged; nothing else on the page
+moved.
+
+Flags: the lead-in says the primer is optional and the fold's label says
+"Optional: Power, From Watts to FLOP", so the word prints twice in two
+adjacent lines. The label is left alone because it is the platform's standing
+mark for optional material and it came over from 2.3.3 with the block; drop
+the prefix, or rename the label to say "compute primer", on a word.
+
+Second flag, older than this edit: section 2.1 is the only part of the course
+whose lessons set their sections at `####`. Seven of its nine do, so those
+lessons have no docked "In this lesson" nav at all — the nav is built from
+`##`/`###` — while every other lesson in modules 0 through 4, and 2.1.2 and
+2.1.3, has one. The head is among the seven and stayed that way in this pass:
+choosing whether 2.1 wants the nav its neighbours have is a design call, not
+a typo, and conforming one file of seven would only split the section
+further.
+
+## 2026-09-13 — 2.1.5 rebuilt as Authorization, Licensing, and Control
+
+Built from the owner's Part A brief, which replaces the whole body. The old
+2.1.5 was a question list, a chain written as one arrow line, and an
+assembly activity; none of it survives except the subject. Title is now
+"2.1.5 Authorization, Licensing, and Control" and the unit reads 75 minutes,
+15 + 35 + 25 as the brief allocates, with the allocation sentence in the
+body and the total left to the page chrome that already prints it.
+
+Shape follows 2.1.2 and 2.1.3: no title heading, sections at `###`, the two
+required readings as ReadingCards, the four answers as Folds labelled only
+"Show answer 1" to "Show answer 4" and collapsed on load. The evidence
+packet, the director's announcement and all four questions are visible
+before any answer opens. No widget, no scoring, no simulated switch — the
+brief forbids all three and the lesson needs none. References to 2.1.1,
+2.1.2, 2.1.3, 2.1.4 and 2.1.6 are links to their real routes, as the brief
+asks; all five resolve.
+
+Sources checked on 13 September 2026, all four read in full at the assigned
+places. NVIDIA's release-8 "Licensing" page states in its own words that the
+licence "is enforced through software", and its Table 74 gives an unlicensed
+VM a 20-minute grace period and a licensed VM disconnected from the licence
+server 7 days (the CLS default, configurable for DLS), with full capability
+"restored immediately when a valid license is acquired"; the next heading is
+"Verifying the License Status of a Licensed NVIDIA vGPU for Compute Guest
+VM", which is exactly where the brief stops the excerpt. The RAND working
+paper is WR-A3056-1, 18 January 2024, by Kulp, Gonzales, Smith, Heim, Puri,
+Vermeer and Winkelman; printed page 37 is viewer page 48, so the offset of
+eleven the brief gives is right, chapter 6 opens "Offline Licensing
+Approach" on printed 37, "Subsystems" is on printed 38, and "Discussion" and
+"Summary" are both on printed 48. Sastry §5.B is "Guardrails for Compute
+Governance", whose fifth principle asks for substantive and procedural
+safeguards and names limits on the types of control imposed, on the
+information regulators may request, and on the entities covered, alongside
+review and public reporting — which is what the lesson attributes to it.
+NIST SP 800-193 is by Andrew Regenscheid, May 2018, and its abstract is
+protection, detection and recovery, nothing about licensing.
+
+Fetching trap worth keeping: rand.org answers a plain request with a
+CloudFront 403, and a headless browser with ERR_CONNECTION_RESET. curl with
+an ordinary desktop User-Agent gets both the publication page and the PDF.
+The PDF is not the AES-encrypted kind this log warned about for RR-A3686-1 —
+PyMuPDF reads its text layer directly.
+
+Five works registered: the NVIDIA page, the RAND publication page, the RAND
+PDF, the arXiv full-text render (a separate URL from the abstract page
+already registered, and the one that can carry a reader to §5.B), and the
+NIST page. The appendix prints five.
+
+One citation was removed, not lost: Petrie's "Near-Term Enforcement of AI
+Chip Export Controls Using a Firmware-Based Design for Offline Licensing"
+(arXiv:2404.18308, April 2024) was cited only by the old 2.1.5, so
+rebuilding the body orphaned it and the registry entry had to go with it.
+It is the closest published proposal to this lesson's subject and Part A
+does not mention it; say the word and it comes back as a further-reading
+card with its entry restored.
+
+Flags:
+
+- "Consider three translation errors", "at least four functions" and "Keep
+  three sentences in your notebook" announce item counts, which the
+  2026-09-08 ruling forbids. Kept verbatim, as in 2.1.1, because they are
+  the owner's own sentences.
+- The lesson says the primer is optional in one place and the fold's label
+  says "Optional:" in another — not this lesson; see the entry above.
+- A wide three-column table is laid out badly, and it is a platform rule
+  rather than this lesson: `.lesson-body table :is(th, td):last-child {
+  width: 100% }` in globals.css hands all the slack to the last column, so
+  in a 992px box the middle column resolves to about 109px and its sentences
+  set one or two words to the line while the last column has 781px. Every
+  three-column table in 2.1.3 is the same: 103px, 118px, 114px middle
+  columns against 774px, 767px, 749px last ones. Two-column tables are
+  unaffected. The rule exists so the header rule reaches the edge of the
+  box, which sharing the slack across every column after the first would
+  also do. Not changed here: it would repaint every table in the course,
+  which is the owner's call, not a side effect of a content brief.
+
+## 2026-09-13 — 2.1.6 and 2.1.7 rebuilt; 2.1.8 removed; the table rule fixed
+
+Three things in one pass, because the first two depend on the third.
+
+**2.1.6 Where Should Trust Live?** Built from the owner's Part A. The old
+body was four architecture sections with strengths-and-concerns bullet
+lists, a confidentiality checklist and a bilateral pilot activity; the new
+one separates collection, appraisal and control, puts the four families in
+one comparison table, teaches common-mode failure, and ends on a procurement
+review of three green reports. Unit now reads 85 minutes (20 + 35 + 30).
+Three reading cards, four collapsed answer folds, links to 2.1.1, 2.1.4,
+2.1.5 and 2.1.7 by route.
+
+Sources read at the assigned places. Baker §4.2.1.1 is "Prerequisites:
+Off-Chip Devices" and ends where §4.2.1.2 "Verification Mechanisms" begins;
+it separates off-chip I/O loggers from analog sensors, sends analysis to
+trusted chips on-site or off-site, and states the two-sided problem in its
+own words — devices that "could be designed with hidden functionalities for
+espionage or sabotage", against a Verifier that needs its own confidence in
+the same devices. The flexHEG PDF has 59 pages, says Part II and April 2025
+on the cover, and its printed and viewer page numbers coincide: p. 23 opens
+"Interlock-Based FlexHEG Design" under Figure 4, p. 24 carries the
+performance downside and the four integration points (an IP block on the
+die, a chiplet beside it, part of the HBM, or a network relay), and
+"Repurposing the Network Interface Controller" begins on p. 24 where the
+excerpt stops. Mozilla's post is Johnathan Nightingale, 2 September 2011;
+"Staat der Nederlanden Certificates" is exactly three paragraphs ending at
+his signature, and issue 2 of the three named at the top is "The scope of
+the breach remains unknown".
+
+**2.1.7 Independent Verification of Training Claims.** Built from the
+owner's Part A. Three reading cards (12 + 8 + 15), three answer folds, 110
+minutes. Jia's §V-A is "Mechanism Overview" and is followed by "B. PoL
+Creation", so the excerpt boundary holds; Fang v2 is dated 17 April 2023 on
+an August 2022 identifier, its §I is "Introduction" and §IV is "Efficient
+Verification of Valid Proofs". Choi §7 is "Discussion and Limitations" with
+the confidentiality and verifier-hardware paragraphs the card names, ending
+at Acknowledgements. Peigné v2 is dated 22 August 2026, estimates "a
+deployable proof of concept within approximately 36 months", and B.10 items
+1, 4 and 5 are proving throughput, sampling security at f < 1% as
+"defense-in-depth argument, not a hard theorem", and GPU-concurrent Merkle
+hashing; G.5 opens "Sparse auditing is detection-grade, not universal."
+
+The title is "2.1.7 Independent Verification of Training Claims" and the
+lesson keeps `optional: true`, so the page prints "Optional: 2.1.7 …" from
+the shared prefix. The brief's own header said "2.1.7 Optional Technical
+Supplement"; carrying the word in the title as well would print it twice,
+which the 2026-08-20 ruling forbids. The "Why optional" paragraph is intact.
+
+Anchored URLs were normalised to their plain form (`#S1`, `#S7`, `#page=23`
+dropped) so each work is one registry row rather than two; every card and
+reference names its section in the link text, and the brief itself says a
+viewer may ignore the fragment.
+
+**2.1.8 removed**, on the owner's instruction ("we get rid of 2.8 its too
+early for it"; 2.8 is not a unit the course has, and 2.1.8 is the
+policy-judgment studio). Gone: the lesson, its curriculum entry, its place
+in the module's itemIds, its `verificationUnitOfLesson` join, and the memo
+slot it owned. 2.1 now has seven items. What went with it, so it can come
+back in one edit:
+
+- The maturity ladder (deployed primitive → empirical component
+  demonstration → end-to-end prototype → relevant-scale pilot → operating
+  governance regime) and the dated August 2026 assessment of what hardware
+  can, might and cannot do.
+- The hardware mechanism dossier, a 22-field common anatomy for any
+  proposal.
+- Memo slot `m2-1-hardware-brief`, "Hardware assurance brief", status
+  `specified`, 1,000 words, audience "a named national delegation or joint
+  drafting session considering a three-month U.S.–China pause", with its
+  six-dimension weighted rubric. It was 2.1.8's own final written output,
+  so it could not survive the lesson; the removed source is saved outside
+  the repo and the slot is reproduced in this entry's history. Unit 2.1 now
+  owes no written output.
+- The `recall` half of the `hw-opening-puzzle` ClaimLedger. The 2.1 head
+  still runs the ledger; its promise that "2.1.8 returns to them" is gone
+  because nothing returns to them now. The two closing paragraphs on what an
+  attestation token does and does not support went with the lesson.
+
+Flags on the removal: 2.1.7's brief and Part A were written expecting 2.1.8
+to exist and pointed at it three times ("proceed directly from 2.1.6 to
+2.1.8", "Carry forward to 2.1.8", "a direct path to 2.1.8"); those pointers
+are dropped, and the same two pointers are dropped from 2.1.6. The
+`.rubric-table` rule in globals.css now has no user. `outline-taxonomy-spec.md`
+still lists 2.1.8 — it records the author's outline, not the build, so it
+was left alone.
+
+**The table rule.** The flag in the 2.1.5 entry above is answered without a
+course-wide repaint: the platform already had the remedy. `.pair-table`,
+`.trio-table` and `.quad-table` are fixed-layout wrappers with stated column
+widths, added one at a time as tables needed them, and `.trio-table`'s own
+comment describes exactly the defect reported — "the middle column came out
+a word wide while the right-hand one took the page". It simply had no user.
+The three-column tables in 2.1.3 and 2.1.5 are now wrapped in it and measure
+238/376/376 in a 992px box instead of 103/118/770.
+
+2.1.6's architecture comparison has six columns, which none of the family
+covers, so `.hex-table` joins them: 11/20/18/17/17/17, and the one thing the
+others do not need — six columns of sentences cannot wrap into a phone's
+measure, so the table keeps a 720px floor and scrolls inside its own box
+below it. Measured on a 375px viewport: box 739 wide against a 341 client,
+page overflow 0, which is the behaviour CLAUDE.md's table rule describes and
+the shared block treatment cannot deliver without a floor.
+
+Observation, not a regression: `/…/hardware-policy-studio` still answers 200
+with an empty body, but so does any invented slug on that route — the
+dispatching route does not 404 an unknown item in dev. Nothing in the
+sidebar, the course data or the module counts still points at it.
+
+## 2026-09-13 — 2.1.2 to 2.1.7: the interpretation comes out of the conditions
+
+Course owner's review, against the ВсОШ Moscow sample she uses as the model
+(items 6.4 and 7.3: the student is given data and a proposed conclusion and
+has to find the problematic step himself). Her correction to her own earlier
+note: "does X allow…? justify" is a fine question shape. The defect is not
+the yes/no grammar but whether any reasoning is left to do.
+
+Removed from the evidence packets — the author's reading of the facts, not
+the facts:
+
+- 2.1.2: "The result contains no switch or topology claim and no claim about
+  component M" listed the absent claims before question 1 asked what the
+  result supports. Replaced with "Those entries are the whole of the
+  Attestation Result" — exhaustive, so the task stays determinate, without
+  naming what is missing.
+- 2.1.5: "A translation error gave each device its own allowance of ten
+  units" had already classified the fault. Now the row states only that each
+  of the four devices was issued ten units; the permit above it authorises
+  ten in total, so the discrepancy is there to be found.
+- 2.1.6: the components were labelled "A: on-chip reporter", "B: external
+  digital appliance", "C: external meter" and question 1 then asked for
+  their architectural type. They are now A, B and C, with placement and
+  function moved into the description. B's row gives an exhaustive list of
+  its inputs and actions — "Its only input is A's report. It checks A's
+  signature, copies A's values into a second report, and signs that report"
+  — instead of telling the reader it adds no observation.
+- 2.1.7: the Access and Other-evidence rows enumerated unverified
+  provenance, an incomplete project history, other devices, facilities and
+  branches. They now describe what the packet contains and say it contains
+  nothing else.
+
+Kept, because without them the tasks stop being determinate: unit
+conventions, the no-overlap and maximum-rate stipulations, the sampling
+rule, the stipulated perfect replay test, and the coverage that is expressly
+established.
+
+Questions, using the owner's replacements verbatim where she supplied them:
+
+- 2.1.3 Q1 pre-sorted the devices into the three categories the key builds.
+  Now: "What does the packet establish about the whereabouts of the 80
+  registered devices? Support your answer with the supplied records and
+  calculations." Q3 lost its closing instruction to test the inventory
+  beyond the registry; the pair of checks, the named evidence-holder and the
+  stated limitation stay.
+- 2.1.5 Q1 announced that the quantity differs from the permission. Now:
+  "How much further computation could the installed tokens enable after
+  noon? Compare your answer with the permit and the director's statement."
+  Q3 no longer says to distinguish correcting the decision from recovering
+  the control — that is the centre of the key. Q4's six-part checklist
+  (default, exception, review, restoration, residual risk) became: "Recommend
+  two changes to the licensing arrangement. Explain how each addresses a
+  problem revealed by the case and identify a cost or risk of implementing
+  it. Limit your answer to 180 words."
+- 2.1.6 Q1 singled B out as the suspect component. Now: "Classify components
+  A–C using the architectural families introduced in the lesson. Justify each
+  classification by describing where its evidence originates." Q2 lost the
+  bounding request it duplicated from Q4.
+- 2.1.7 Q1 listed nearly the whole key. Now: "Assess the developer's claim
+  using the audit results. Support your assessment with specific details from
+  the packet." Q2 lost the clause stating the negative conclusion in advance;
+  Q3 lost the sentence naming both categories of gap.
+
+Answer keys 1 and 4 in 2.1.5 were rewritten rather than left standing: her
+rule is that a checklist removed from a question may not survive as a hidden
+requirement in its key. Key 1 now answers what Q1 asks — the 40-unit bound,
+the comparison with the permit and with the director's sentence — and marks
+the allocation design as an optional extension the question does not require.
+Key 4 is now a two-change recommendation with a cost named for each. The
+three levels in 2.1.7's key, and the three evidence categories in 2.1.3's,
+stay in the keys, which is where she wants them.
+
+Heading: 2.1.5's exercise was "What Has Actually Stopped?". "Actually"
+presupposes the finding, which is what she objects to in a heading; the word
+is gone and the question stands.
+
+Still owed, and flagged to her:
+
+- **2.1.4 could not be touched.** Everything she describes there — job J, the
+  80% of equal-duration windows, "operations per window are not supplied",
+  the accuracy/precision/recall calculation, the heading "One job, several
+  incomplete answers" — is in a draft that has never been in this
+  repository. The 2.1.4 in the tree is the older outline transcription:
+  compute accounting, workload classification, the attack table and a
+  four-statement activity, with no exercise and no job J. Her 2.1.5 brief
+  refers to job J as if 2.1.4 already carried it, so the draft exists
+  somewhere else.
+- **The series tells the reader the operator is wrong.** Every packet from
+  2.1.2 to 2.1.7 ends on an overreaching claim, so "proves compliance" is
+  itself the signal to start listing gaps. Fixing it means one case whose
+  claim is defensible, or true under a named assumption, or splits into two
+  competing readings — which claim flips is a curriculum decision, not a
+  mechanical edit. The two plausible candidates: 2.1.2, where the operator's
+  three-part conclusion could be narrowed to something the result does
+  support, and 2.1.3, whose operator conclusion is already evaluated sentence
+  by sentence and could have one sentence that survives.
+- Her closing suggestion is cut off mid-sentence: "Return to your claim from
+  2.1.1. Propose one change to the verification procedure and explain how it
+  would affect your …". Nothing in the repository yet carries a return to a
+  2.1.1 claim, so there is nothing to edit until the rest of the sentence and
+  its home arrive.
+- 2.1.1's current text has never been sent to her for review.
+
+## 2026-09-13 — 2.1.4 rebuilt as Measuring and Classifying Use
+
+Built from Part A of the owner's draft, with the four changes she attached to
+it. Unit is 60 minutes (10 + 25 + 25) plus a separately labelled optional
+activity of 20; the old body was the outline transcription — compute
+accounting, a classifier summary, an attack table and a four-statement
+activity, with no exercise and no job J.
+
+Her four instructions, as applied:
+
+- The exercise is **"Exercise — Assessing Job J"**. The draft's heading, "One
+  job, several incomplete answers", reported the finding, which is what she
+  objects to in a heading.
+- The packet's classification row lost "operations per window are not
+  supplied". It now reads "80% of observed equal-duration windows are labeled
+  training" — the equal-duration condition is kept, because without it the
+  arithmetic is undefined; the reason the reader cannot multiply by 0.8 is no
+  longer handed over.
+- Q3 asks for overall accuracy, precision, recall **and** the fraction of
+  training windows missed, then "What conclusions about job J, if any, can be
+  drawn from these evaluation results? Justify your answer." The draft's
+  closing instruction stated the verdict in advance.
+- Answer 4 no longer calls "No run is established to exceed 90 units" a
+  stronger verification claim. The claim under test and the finding about J
+  are now two separate quoted statements: the claim keeps its unit and
+  aggregation boundary and does not move with the evidence; the finding says
+  J's compute lies between 81 and 93 units, its category is under
+  investigation, its authorization is unresolved, and its status cannot be
+  decided on this packet. The key says explicitly why the substitution is
+  wrong — a claim phrased as "no run is established to exceed" converts the
+  proposition under test into a statement about how much evidence was
+  gathered, which a regime could satisfy by gathering less. Question 4's tail
+  was changed to match, since it had asked for the two to be written as one.
+
+Arithmetic re-checked: 32 + 21 + 28 = 81, plus a gap of [0, 12] gives
+[81, 93] against a threshold of 90; the operator's 49 is 21 + 28 with the
+pre-restart 32 dropped; accuracy 945/1,000 = 94.5%, precision 90/135 = 2/3
+≈ 66.7%, recall 90/100 = 90%, missed 10/100 = 10%.
+
+Sources checked on 13 September 2026. NVIDIA's DCGM page defines Graphics
+Engine Activity and SM Activity as fractions of *time* and Tensor Activity as
+a fraction of *cycles*; SM Activity says in its own words that "warps waiting
+on memory requests are considered active"; and the Tensor Activity note gives
+the interval-average point exactly — an activity of 0.2 "could indicate 20%
+of the SMs are at 100% utilization over the entire time period, 100% of the
+SMs are at 20% utilization". The `#metrics` anchor exists. Baker's Appendix
+A.6 is "Compute Accounting via Analog Sensors", its Background compares
+"sources of compute" with "uses of compute" rather than seeking one total,
+separates model FLOP from hardware FLOP because the latter counts recomputed
+operations, states that "there is no simple way to deduce an AI chip's rate
+of computation, even with analog measurements", and cites Table 13 where the
+excerpt stops. The H100 blog states that in CC-On "all performance counters
+have been disabled to prevent their use in side-channel attacks". The
+distributed-training paper is Robi Rahman, 28 May 2026. Rahman and Tajdari is
+arXiv:2606.19262v1, 17 June 2026; §2.2 is "Threat Model" and carries the
+cloud-tenant/hardware-operator distinction, §5.2 is "Adversary–Defender
+Iteration" and **Table 3 is indeed its summary table**, §6.5 is "Implications
+for HEMs", Appendix F is "Limitations and Future Work" and says the
+experiments were "conducted exclusively on single-node hardware
+configurations, testing workloads on instances up to only 8 GPUs"; the
+abstract gives 98.2% across the whole corpus and 43–87% against the most
+challenging unexpected workloads.
+
+One correction to the draft: it cites the CC-On reference as NVIDIA Technical
+Blog, "Hardware security for NVIDIA H100 GPUs". The page is titled
+"Confidential Computing on NVIDIA H100 GPUs for Secure and Trustworthy AI",
+and the real title is used.
+
+Three works registered (the DCGM anchor, the H100 blog, the versioned
+Rahman–Tajdari render); the entry for Baker's full text now records both
+assigned excerpts, since 2.1.4 and 2.1.6 read different parts of it. O'Gara
+et al., arXiv:2505.03742, was cited only by the old body and its entry went
+with it; it is the hardware-mechanism survey behind the old note that
+ordinary counters can be reset by users, and comes back in one edit.
+
+Presentation: "Optional:" is printed once, on the section heading, and the
+optional reading card does not repeat it. The review guide is a single
+collapsed fold after the four questions, so its 98.2% and 43–87% figures are
+not visible until the reader has attempted them. Two of the four tables take
+`.trio-table`; the confusion matrix keeps its right-aligned number columns.
+
+Flags: "Four Questions to Ask About a Classification Result" announces an
+item count, which the 2026-09-08 ruling forbids. Kept verbatim, as in 2.1.1
+and 2.1.5, because it is the owner's own heading. Question 4's first half
+still names what each recommendation must identify; that matches the
+structure she said to keep in 2.1.5's Q4, so it was left alone.
+
+## 2026-09-14 — 2.1.3 gets the series' first supportable operator claim
+
+Course owner's decision: the positive result goes here, on the data the
+packet already has. Her replacement for the operator's words:
+
+> The 72 responding devices were within the allowed jurisdiction when
+> checked. Every registered device is at its declared facility, and none can
+> be part of a larger cluster.
+
+The first sentence is supported — this is what the mechanism actually
+delivers, and until now no packet in 2.1.2 to 2.1.7 delivered anything, so
+"proves compliance" had become the reader's signal to start listing gaps.
+The other two are not established. Question 2 still asks for the sentences to
+be evaluated separately, which is the point: the student has to recognise the
+sound conclusion and then bound it exactly.
+
+Answer 2 was rewritten around that. It states the assumptions the first
+sentence rests on — authentic responses, a credential bound to the registered
+device rather than to something answering for it, and timing measured by a
+trusted process — and then bounds the finding three ways: 72 devices and not
+80, at the moments of the checks and not between them, and to a jurisdiction
+and not an address. Sentence two fails on the last two of those; sentence
+three fails because the topology result covers one specified 8-GPU/NVSwitch
+system and nothing in the packet describes any other system or inter-site
+link.
+
+Question 4 is replaced with the owner's sentence: "Return to your location
+claim from 2.1.1. Propose one change to the verification procedure and
+explain how it would affect your assessment of that claim." Its key assesses
+the link between the proposed change and one definite weakness in this
+evidence, and whether the new conclusion is genuinely stronger; it does not
+ask for every weakness. The worked example — a second independently surveyed
+landmark, so the intersection of two bounded regions can support a claim at
+facility precision — uses only what the lesson already taught, and names what
+the change still does not fix: nothing about the intervals between
+challenges, and both bounds resting on the same credential binding.
+
+The lesson's location section now ends with a definite forward pointer, "The
+exercise at the end of this page returns to the location claim you wrote in
+2.1.1", rather than leaving the return to an unnamed later task.
+
+2.1.1's exercise did not need restoring. `v-hw-claim-chip-security` is in the
+repository and its second item already reads "Formulate a verification claim
+about the location of a covered product. Specify what would need to be
+established and the time covered." That is the claim question 4 sends the
+reader back to.
+
+Removed with the old question 4: the monthly random-sample audit redesign and
+its key — what unpredictable selection can and cannot detect, and the point
+that a passing sample says nothing about devices outside the sampling frame.
+That argument survives elsewhere in the section (2.1.7's audit exercise turns
+on exactly it), and the text is in this file's history if it is ever wanted
+back here.
+
+The case is not carried into 2.1.6, per the owner's instruction.
+
+## 2026-09-14 — main merged into the 2.1 branch
+
+Nine commits came over, including three that touch this work directly.
+
+**Part-by-part reading is on again** (`chunkedReading: true`, PR #68), which
+is the substantive consequence for 2.1. The rebuilt lessons carried no
+`<PageBreak>` markers, so on the merged tree they would have been the only
+lessons in the course reading as one page. Breaks were placed per
+`docs/verification/reading-pages.md` — at a change from explanation to
+exercise, and between source packets a learner reads independently — giving
+2.1 head 3 pages, 2.1.1 3, 2.1.2 3, 2.1.3 4, 2.1.4 6, 2.1.5 5, 2.1.6 6,
+2.1.7 5. Pages run roughly 400 to 1,400 words, inside the doc's own 700–1,400
+flag except where a short page carries one complete action. 2.3.3 regained
+the two breaks it lost when the FLOP fold moved out.
+
+**Title-casing** (PR #67) had renamed the old 2.1 lessons. Those titles lost
+to the owner's current ones — "2.1.2 Hardware Identity and Attestation" over
+"From a Chip to a Trusted Statement", "2.1.3 Accounting for Hardware" over
+the longer subtitle form, "2.1.7 Independent Verification of Training Claims"
+over "Reconstructing a Declared Training Run" — and 2.1.8 stayed deleted
+rather than returning as "Policy Judgment: What Role Should Hardware Play?".
+2.1.1's title took main's casing, "Break Down the Claim", since this branch
+had not changed it.
+
+**The memo desk now indexes every written component** (PR #71/#72/#73). All
+five new module-2 slots were kept; only `m2-1-hardware-brief` was dropped,
+because the lesson that owned it is gone. The desk therefore holds 19 slots
+rather than 20.
+
+Conflicts resolved: eight lesson bodies to this branch's rebuilt versions,
+`hardware-policy-studio.mdx` left deleted, `curriculum.ts` to this branch's
+titles and minutes with main's `chunkedReading`, `memos.ts` to main's slot
+list minus the deleted one, and both generated data files rebuilt rather than
+hand-merged.
+
+Two copy edits from the owner in the same pass: the 2.1 head's section
+heading is now "Why Compute" — the lead sentence beneath it already says "in
+the field's own words" — and 2.1.1's worked example reads "Proposed legal
+rule:" without ", simplified".
+
+After the merge: 1,238 tests pass, typecheck clean, lint 0 errors, both
+generators up to date, and every 2.1 lesson paginates in the browser.
+
+## 2026-09-15 — 2.1 stops inventing its own exercise and citation shapes
+
+Course owner's review caught two places where these lessons had grown their
+own pattern beside one the repository already had.
+
+**Citations.** The rebuilt bodies carried their sources as inline
+"[Reference: …](url)" links, so a two-line citation rendered underlined in
+the middle of running prose. `<Src>` exists for exactly this — "a citation
+riding with the passage it belongs to, rather than a bibliography nobody
+opens" — and main's versions of these same five lessons carried eleven of
+them. All 24 references are now `<Src>` blocks with the link on a short
+identifier, the shape the old bodies used.
+
+**Exercises.** The questions were a numbered markdown list and the keys four
+`<Fold label="Show answer N">` disclosures. That was a third pattern: the
+course already had `<VerificationExercise>` (32 uses, all of 2.4) and
+`<Exercise>` (21 uses, including 2.1.1), and `WritingExercise.sampleAnswer`
+is documented as "a model answer revealed once the learner has submitted —
+the write-then-compare shape of an understanding check, but persisted like
+every other piece of writing". The owner asked why that was not simply
+copied, and there is no good answer: each brief said "four native answer
+disclosures" and that was implemented literally.
+
+Six lessons now carry one `writing-prompt` exercise each, prompt as authored
+and the four keys joined into its `sampleAnswer`:
+`v-hw-trusted-statement-appraise`, `v-hw-accounting-reconcile`,
+`v-hw-measuring-job-j`, `v-hw-authorization-suspension`,
+`v-hw-trust-three-reports`, `v-hw-training-claims-audit`. The learner writes
+in the account-backed editor and the key reveals on submit; no grader card is
+offered, because the exercise is a check against its own answer.
+
+Each needed a memo-desk slot — main's PR #71 made the desk index every
+written component, and `memos.test.ts` fails a writing exercise without one.
+Six `task` slots added under unit 2.1; the desk holds 25 slots.
+
+Two consequences worth naming. The in-lesson nav had been listing four "Show
+answer" rows per lesson and now lists the exercise once. And 2.1.4's
+confusion matrix stayed in the lesson body, because writing prompts render
+markdown without GFM tables; its question 3 now says "the results in the
+table above" rather than "the following results".
+
+Also in this pass, on the owner's instruction: 2.1.1's heading is "Scope and
+Limitations" with its page label to match, and the 2.1 head drops the lead-in
+sentence under "Why Compute" — the SourceQuote beneath it already carries the
+attribution.
+
+Tables: main replaced the block-scroll treatment with a `.table-scroll`
+wrapper and an auto-layout table filling it, which is the fix this log
+reported on 13 September and better. The `.hex-table` rule and the ten
+trio/hex wrappers added here are gone; 2.1.6's six-column comparison measures
+115/245/261/276/275/298 at 1920 on its own.
+
+Open: the owner reports a wide empty margin to the right of lesson text. Not
+reproduced — at 1536, 1920, 2000 and 2560, in both themes, the reading column
+fills to a 32px gutter (2112px paragraphs at 2560). Two other surfaces do cap
+and were measured: `/tracks/verification` at `max-w-5xl` leaves 544px empty
+at 1920, and the memo desk's `.desk-head p` at 70ch leaves 792px. Neither is
+a lesson.
+
+## 2026-09-15 — a citation's link sits on the work's title, course-wide
+
+Course owner, on seeing `Microsoft, "Secure the Windows boot process."
+Microsoft Learn`: the link belongs inside the text, on the title, not on a
+label bolted to the end. "Если ссылка внутри текста то так пусть и будет по
+всем модулям."
+
+All 24 `<Src>` citations in 2.1 were rewritten so the link opens from the
+work's own name and the locator follows as plain text — `Kulp et al.,
+[*Hardware-Enabled Governance Mechanisms*](…), RAND WR-A3056-1, ch. 6.`
+Where the trailing label was the only thing naming the work, the title was
+restored: Baker, Sastry, Jia, Fang, Choi, Peigné, Petrie–Aarne and
+Rahman–Tajdari now print their titles rather than an arXiv number.
+
+The rest of the course was swept for the same shape. Most of it was already
+right — a quoted or italicised title carrying the link is the target — and
+eight places were not:
+
+- 2.1.1's New START citation and its H.R. 3447 source line put the
+  institution and the word "Source:" inside the link.
+- 0.1's Anthropic incident had a 96-character sentence as its link text; the
+  link is now on "disclosed" and the sentence reads as prose.
+- 2.4's SB 53 and AIWI/CARMA citations, 2.3's Kimball, 1.0.1's OTA report,
+  and the two Baker section pointers in 2.4 all began the link at the author
+  or the locator rather than the title.
+
+URLs are untouched, so the citation registry and the works-cited appendices
+are unchanged.
+
+## 2026-09-15 — the owner rewrites 2.1.2's roles section; 2.1.3 drops its time line
+
+"From Device Evidence to Regulatory Response" now carries the owner's text.
+It replaces two passages: the one-line lead-in that had introduced the table
+("RFC 9334 separates three roles because a signed report does not interpret
+itself"), and the paragraph under it about the fifth stage.
+
+Her version names the two judgements before the table — the Verifier's
+appraisal against reference values and policy, then the Relying Party's
+decision about a key or an operation — and adds a sentence the section did
+not have: the same split locates a failure, which may be a wrong measurement,
+an unsuitable policy, or an unsupported conclusion drawn from a sound
+assessment. The closing paragraph now says that an attestation result informs
+regulatory review rather than establishing a violation, and that a
+determination needs the legal rule, sufficient evidence and the authority to
+decide.
+
+Two things were kept that her text does not mention. The table stays, because
+her closing paragraph refers to "the fifth stage shown here". The
+passport/background-check paragraph stays because the card above assigns §5,
+"Topological Patterns", and nothing else in the lesson uses it.
+
+Her citation reads "RFC 9334, §§4.1 and 6"; the card assigns §4.1 and §5 and
+stops before §6. The citation is set as written, as a `<Src>` opening from
+the RFC's name at §6, which is registered. Worth a ruling: either the card
+should carry §6 as well, or the citation should point at the sections the
+card assigns.
+
+2.1.3 loses its time-allocation line on the owner's instruction. The same
+line still opens 2.1.2, 2.1.4, 2.1.5, 2.1.6 and 2.1.7 — say the word and
+they go too.
+
+## 2026-09-15 — reading cards put the work in the header again
+
+Course owner, on 2.1.4's DCGM card: "это не то как в норме карточки выглядят
+— в заголовке название, в боди то какие части читать какие нет."
+
+She is right, and 2.1.2 and 2.1.3 already had it: the card's header carries
+the work's title and its author line, and the body says which parts to read
+and which to skip. Eleven cards built from the later briefs had it inverted —
+a pedagogical question in the header and the source citation repeated as the
+body's first line — because those briefs supplied a "learner-facing title"
+column and it was taken literally.
+
+The question was not lost; it moved to where the house puts it, as the
+opening of the required-reading line. So the DCGM card now reads
+"Feature Overview: Profiling Metrics / NVIDIA | DCGM documentation" in the
+header and opens "**Required reading 1 — Read a metric definition, not a
+dashboard label.** Vendor documentation for deployed monitoring tools."
+
+Cards fixed: `reading-permission-unavailable`, `reading-offline-control`,
+`reading-metrics`, `reading-accounting`, `reading-classifier`,
+`reading-pol-claim-and-attack`, `reading-training-data-limits`,
+`reading-zk-forecast-and-caveats`, `reading-external-trust`,
+`reading-interlock-boundary`, `reading-shared-authority`. Author lines lost
+the source-type description they had been carrying — that belongs in the
+body's first line, beside the reading number.
+
+The field labels had grown three dialects, "Focus:", "Read for:" and
+"Reading focus:". All seventeen are "Reading focus:" now, which is what 2.1.2
+and 2.1.3 used.
+
+2.1.3's IAPS citation had been left as the fragment "The IAPS issue brief"
+with no period; it is now a citation like the rest — `Brass, [*Location
+Verification for AI Chips*](…), IAPS issue brief.`
+
+## 2026-09-15 — a broken commit repaired, and 2.1/2.3 audited
+
+**The card rewrite in c14c1e46 shipped broken MDX.** Its script collected
+every `<ReadingCard>` match against the original string and then spliced
+replacements in document order, so after the first splice in a file every
+later offset was wrong. In the four files with more than one card —
+2.1.4, 2.1.5, 2.1.6, 2.1.7 — that inserted a second `<ReadingCard` opening
+inside the previous card and cut a paragraph in half. 2.1.4 lost the first
+half of its vocabulary line, which reappeared as "ox" means the attacker can
+inspect the classifier" after a `</ReadingCard>`.
+
+The suite stayed green throughout: MDX still compiled, so 1,238 tests said
+nothing about it. The check that catches this is counting opening against
+closing tags, which is now part of the audit below. Reverted to e0ab1388 and
+redone splicing from the end of the file backwards, so earlier offsets hold.
+
+**2.1.4's optional activity is an exercise now.** Its four questions were
+loose numbered markdown and its review guide sat behind a full-width red
+`Open review guide` fold — the shape the rest of 2.1 stopped using two
+commits ago. It is `v-hw-measuring-paper-critique`, `optional: true`, with
+the guide as its `sampleAnswer` and a memo slot to match; the desk holds 26.
+The `<Src>` inside the guide became an ordinary markdown citation, because a
+`sampleAnswer` is a string rendered as markdown, not MDX. Its URL is still
+cited by the card above it, so nothing orphaned.
+
+**Audit of 2.1 and 2.3, sixteen lessons.** Tag balance, undeclared exercise
+ids, orphan writing exercises, raw MDX leaking into the rendered text,
+`undefined`/`NaN`, empty sections (a heading followed straight by another
+heading), phone overflow, and whether every task offers somewhere to answer.
+
+All sixteen render 200 and clean: no raw tags, no empty sections, no phone
+overflow, every `<Exercise>` id declared, every writing exercise holding
+exactly one memo slot.
+
+Five lessons have no textarea, and all five are correct: the 2.1 head's task
+is the `ClaimLedger` with its three-way buttons, 2.3.0, 2.3.3 and 2.3.6 run
+widgets, and 2.3.7's written output is a `MemoDesk` card into the desk. No
+task in either section is left without an answer surface.
+
+## 2026-09-15 — the optional card lost its Read line; unit 2.1 owes no brief
+
+Two answers to the owner.
+
+**The card had stopped saying what to read.** The rewrite that moved work
+titles into card headers replaced each body's first paragraph with the new
+required-reading line. In `reading-classifier` that first paragraph was the
+`**Read:**` instruction, not a citation, so the excerpt assignment —
+"Abstract; §2.2; Table 3 in §5.2 with its notes; §6.5; and Appendix F" — was
+destroyed. It is restored. Every other card kept its Read line; this was the
+only one, because it was the only card whose body did not open with a
+citation.
+
+Two repetitions went with it. The section heading already says "Optional:",
+so the card body now opens "**Critical reading.**" rather than repeating the
+word two lines below it — the say-it-once rule. And the section's own
+"Additional time: approximately 20 minutes" line was the same 20 minutes the
+card's meta line already prints, so the section keeps only what the card
+cannot say: that the activity is not a prerequisite for the next lesson.
+
+**Unit 2.1 has no brief.** Its eight written tasks are all exercises: the
+Chip Security Act breakdown from 2.1.1, one per lesson for 2.1.2 to 2.1.7,
+and the optional paper critique. The only long-form brief the unit ever had
+was `m2-1-hardware-brief`, the 1,000-word hardware assurance brief with its
+weighted rubric, and it was 2.1.8's final written output, so it went when
+2.1.8 did. The word "brief" now appears in 2.1 only as "briefly" and in the
+IAPS source's name; 2.1.4's optional question 4 asks for a three-sentence
+briefing inside its exercise, which is not the same thing.
+
+Restoring it is one edit — the slot's full text is in this log under the
+2.1.8 removal — but it needs a lesson to live in, and that is a curriculum
+decision.
+
+## 2026-09-18 — 2.1.6 gets a sorting exercise, and the repo gets a sort board
+
+The owner asked for a sorting exercise in 2.1, chose the four-architecture
+idea, and set the constraint: "ключи строго по пейперу" — keys strictly per
+the papers.
+
+**The form.** No drag-into-buckets widget existed. `mechanism-sort` is
+sliders, `evidence-taxonomies` is a browser with no commit, `anatomy-drill`
+is one card at a time with retry, and `policy-scoping`'s board is a 2×2 grid
+fused to its own exception question. What did exist is `kit/drag.tsx`, the
+pointer-plus-keyboard drag primitive three widgets already share. So the new
+part is a board, not a third private case: `kit/sort-board.tsx` renders any
+`SortBoardDef` — a tray, hairline zone bands, Check, Show the key — and
+`engines/sort-board.ts` holds the grading, pure and tested. A second sorter
+in 2.2, 2.3 or 2.4 is a data file and two registry lines.
+
+Three verdict tiers, borrowed from `anatomy-drill` because the content needs
+them: `right`, `defensible` (an authored `near` note per zone), `miss`.
+Without the middle tier the interlock card below has no honest answer.
+
+**The keys.** Every one is a quotation or a direct reading of a source the
+lesson already assigns.
+
+- Signed device report, approved-software record → on-chip. Baker §4.1.1.2
+  (chips "could sign cryptographic certificates that confirm how they
+  produced their results") and §4.1.1.1 (the mechanisms "require a hardware
+  security feature known as secure boot").
+- Counter telemetry → on-chip, because the counters are in the accelerator
+  and the host tool is a consumer. The card carries NVIDIA's CC-On note:
+  "all performance counters have been disabled to prevent their use in
+  side-channel attacks." Off-chip digital is the defensible answer.
+- Rack-edge network tap → off-chip digital, Baker verbatim: "Off-chip
+  input/output loggers (i.e., network taps)."
+- Re-signing appliance, off-site trusted cluster → off-chip digital, and
+  both are appraisal rather than collection. Baker separates devices for
+  data collection from devices for data analysis, and names "trusted
+  clusters" for the off-site case.
+- Repurposed network controller → off-chip digital. Petrie and Aarne, p. 24:
+  "A promising option for a retrofittable Interlock is repurposing or
+  replacing the Network Interface Controller (NIC)."
+- Electricity meter, electromagnetic measurements → off-chip analog, both
+  from one Baker sentence: analog sensors log "power draw, temperature, and
+  electromagnetic measurements."
+- Power estimate against signed totals → hybrid, the lesson's own row.
+
+**Two cards resolve to "not settled by the description", and one of them is
+a correction to the brief as proposed.** The proposed list had a seal on a
+meter housing. A tamper-evident enclosure belongs to none of the four
+families: in Baker it sits among the measures that let a Verifier trust an
+off-chip device — "Verifier-trusted supply chains, mutual vetting,
+tamper-evident enclosures … and ideally tamper-proofing" — so it secures a
+collector rather than being one. Rather than drop the card, it keeps its
+place with that as its key, which is a real thing to learn from a
+procurement diagram. The other is the flexHEG interlock: Petrie and Aarne
+list four placements ("as an IP block within the accelerator die … as a
+chiplet … as a part of high bandwidth memory (HBM), or … a separate
+component that operates as a network relay or switch"), while Baker's
+summary table files FlexHEGs under "Off-chip network tap (and analysis)."
+The lesson already says placement is a design choice; the card makes the
+learner act on it. On-chip and off-chip digital are both defensible there.
+
+**Placement.** A new page, "Sort the Mechanisms", between the architecture
+table and "Digital Access Is Not Complete Visibility" — explanation, then
+exercise, which is the break rule in `reading-pages.md`. 2.1.6 now reads in
+seven parts.
+
+**Played before shipping**, as the shuffle file demands. Twelve cards into
+five zones at 1280px and at 390px: no horizontal overflow, no control under
+the 44px floor, drag, tap and keyboard (focus, Enter to pick up, focus the
+zone, Enter to drop) all place a card, placements survive a reload, a card
+moved after a check drops its verdict, an all-wrong board scores 0 of 12
+with two defensible, and the key scores 12 of 12. The tray runs through
+`shuffleAnswerOptions` seeded on the board id, and the file is now in
+`answer-order.test.ts`'s surface list; the longest run of one answer in the
+shown order is two.
+
+**Left for the owner.** The lesson's opening line still allots "30 minutes
+for the exercise and answer review", which was written when the lesson had
+one exercise.
+
+### The same day — dragging now moves the object
+
+Owner: "это drag n drop и когда тащишь объект в корзину его все еще видно то
+есть мы физически перетаскиваем."
+
+`kit/drag.tsx` had been following the pointer with a small pill carrying the
+item's label. That is a handle, not the thing — so the change is in the
+shared primitive, not in one board. On drag activation the provider clones
+the source element, pins the clone to the width and height it had on screen,
+strips its id, role and drag hooks, marks it `aria-hidden`, and neutralizes
+any positioning it inherited; the clone rides under the cursor at full
+opacity while the original stays faded in place. The grab offset is kept, so
+the card does not jump to the cursor — you hold it where you took hold of
+it.
+
+This changes every widget on the primitive. Driven in a browser, not only in
+tests: on the new architecture board a card carries its full text at 263×194
+and the drop zone rings while it is over it; dragged back out of a column it
+carries the 806×74 it had there; `anatomy-drill`'s specimen card clones at
+672×114 with `position: static`. `policy-scoping`'s sort phase sits behind
+its axes and cards steps and was not driven to a drag — its chips carry
+inline background and border colours, which `cloneNode` copies, and nothing
+in the clone path is size- or widget-specific, but that one is unverified by
+hand.
+
+### The same day — the empty space to the right of the text, found
+
+Owner, twice now: "почему опять огромное пустое пространство справа от
+текста". The first report could not be reproduced and was left open with a
+question. This one came with a screenshot of 2.1's "Why Compute" page, and it
+is reproducible.
+
+**Two files own a bare `.prose` selector**, `public/verification/page.css`
+(`max-width: 66ch`) and `public/verification/platform.css` (type scale, list
+layout, link colour). They were written for the course's own standalone
+pages, where `prose` is their own class. It is also Tailwind Typography's
+class, and the app puts it on the lesson column: `.lesson-body.prose`.
+
+The two vocabularies meet because those sheets are linked with React's
+`precedence`, which hoists them into `<head>` and leaves them there for the
+rest of the document's life. Open `/verification/about` or `/verification/map`
+first, navigate on to a lesson without a full reload, and the lesson column
+is still inside a document holding `.prose { max-width: 66ch }`. The chrome
+around it — breadcrumb, title, part strip — is outside `.lesson-body` and
+stays full width, which is exactly the shape of the screenshot: a reading
+column at two thirds width under a full-width strip.
+
+Measured on the 2.1 head at a 1052px column: the article and its SourceQuote
+card render at 1052px, and with that one rule present at 660px — 63% of the
+column, the ratio in the screenshot.
+
+Both files are now scoped to `.wrap`, the standalone pages' own wrapper,
+which appears nowhere around the lesson column. The three pages that use
+`.prose` (about, team, accessibility) put it inside `.wrap` and keep exactly
+what they had: 726px, 18px, 30.24px line-height, 34px top padding. All nine
+pages that load these sheets render with no errors and no overflow.
+`prose-scope.test.ts` fails if a bare `.prose` rule comes back — checked
+against the old selector, so the test can fail.
+
+Worth keeping in mind for anything else lifted from the static site: these
+sheets share a document with the app, so every bare class in them is a class
+the app may also use.
+
+## 2026-09-19 — 2.1.3's location and topology sections, rewritten by the owner
+
+The owner supplied replacement prose for both sections of 2.1.3 and it is in
+verbatim. The two headings are hers: "Location: Has a Chip Been Moved?" and
+"Topology: How Are the Devices Connected?", replacing "Location Verification:
+Identify the Responder, Then Bound Its Location" and "Topology: Where a Device
+Is Is Not What It Connects To".
+
+Her card copy maps onto the house card as: work title in the header and
+linked, `author | publisher (year) | mins` on the meta line, what to read and
+the question in the body. Her label "Reading question" is kept over the
+"Reading focus" the other cards use, because it is what she wrote.
+
+**The NVIDIA card is now optional.** It was "Required reading 3"; her header
+reads "Optional technical example", so the card takes the `optional` prop and
+prints "Optional:" in front of its title, which is the one form the course
+allows. The word appears once: it is not repeated in the body. The two pages
+it assigns are linked inside her own Read sentence rather than on a label line
+under it — the line had the Hopper page linked twice, once from the card title
+and once from the label.
+
+Four things her text removes, recorded because each was a decision when it
+went in:
+
+- **"The exercise at the end of this page returns to the location claim you
+  wrote in 2.1.1."** She asked for that pointer on 2026-09-12, and the
+  paragraph carrying it is one of the paragraphs replaced. Her text does not
+  have it, so it is gone. Restoring it is one sentence.
+- **The paragraph on the full IAPS report** (Brass and Aarne, the 2024 report
+  behind the brief) with its `<Src>` — general geolocation versus excluding
+  restricted countries, and why a physical speed limit is more conservative
+  than a model fitted to typical internet routes. Its URL was cited nowhere
+  else, so its `citations.json` entry went with it.
+- **The other two `<Src>` lines**, for the IAPS brief and the two NVIDIA
+  pages. Both works stay cited through their reading cards, so nothing left
+  the works-cited list but the report above: the lesson now cites four works
+  instead of five.
+- **"Required reading 3"** as a number. The lesson assigns two required
+  readings and one optional example.
+
+One addition, and it is a link rather than words: her "authorization and
+control are discussed in 2.1.5" points at 2.1.5's page, the way every other
+cross-reference in 2.1 does.
+
+The formula line is set as she wrote it, as plain running text
+("Distance to the chip ≤ speed of light × round-trip time ÷ 2"). The
+paragraph it replaced was bold. Rendered and read in a browser: both sections
+render, the optional prefix prints in front of the card title, both NVIDIA
+links resolve, and the lesson now reads in four parts. The part-strip label
+for that page is still "Location Verification".
+
+### The same day — module 4 is "Capstone", and the bank picker gets a filter
+
+Owner: "just capstone", against the sidebar showing module 4 wrapping onto
+two lines. The module's title in `curriculum.ts` goes from "Capstone: What
+Would Be Enough for a Three-Month Emergency Pause?" to "Capstone", and
+`course.js` is regenerated. The question itself is not lost — the capstone
+memo slot still says the workspace holds "the track's own capstone template:
+design a minimal verification regime for a three-month emergency pause, then
+break it yourself" — but it is no longer the first thing the sidebar says.
+
+Owner, on the sign-up sheet's brief list: "no search here?" There was not.
+The list is eighty briefs in a scrolling box, grouped by theme; the
+filterable catalogue is a different page, `/verification/capstone-bank`, and
+its search belongs to the static page's own script. So the picker
+(`capstone-signup-form.tsx`) now carries its own filter: one input, matching
+title or theme, with a live count and a "Nothing matches that." state.
+
+One rule in the filter that is worth keeping if it is ever rewritten: **a
+brief that is currently selected always passes the filter.** Otherwise typing
+a narrowing term hides the learner's own choice while the radio stays set,
+and the form looks like nothing is chosen when something is.
+
+Driven in a browser on a scratch route, because the real page needs a session
+and a database and this container has neither: eighty-one rows unfiltered,
+two on "licence" with the count reading "1 of 80 briefs match.", the empty
+state on a term that matches nothing, and the selected brief still on screen
+under a filter that excludes it. The scratch route was deleted before the
+commit.
+
+### The same day — the brief filter matches the summary too
+
+Owner: "чтобы поиск проходил И по словам в саммари И по названию." The filter
+added an hour earlier matched title and theme only, so a word that lives in a
+brief's summary found nothing.
+
+It now matches title, summary and theme. The summaries carry the substance —
+"evasion", "deployed", "specify", "module" appear in them and in no title at
+all — so title-only search was missing the half of the bank a learner would
+actually search for.
+
+**A match on text nobody can see reads as a bug**, so each row prints its
+summary as a muted second line **while a filter is active**, and only then.
+Unfiltered, the list stays one line per brief, because eighty three-line rows
+in a 320px box is a worse way to browse than the catalogue page that exists
+for browsing.
+
+Driven on a scratch route again (the real page needs a session and a
+database): unfiltered, eighty-one rows and no summaries; "evasion", a word in
+no title, gives four briefs with their summaries shown and the word visible in
+them; "licence" gives one; cleared, back to eighty-one rows with the
+summaries gone. The catalogue page's own search also matches skills; this one
+does not.
+
+## 2026-09-20 — Accenture on the verification landscape
+
+Owner asked for the Anthropic–Accenture embedded-evaluation announcement to be
+added under evaluations on the field map — the tiled grid in 0.1, which is
+`verification-landscape`, not the `actor-map` widget of the same family.
+
+It goes in the **Evaluations & standards × Industry** square, beside in-house
+dangerous-capability evals and third-party pre-deployment testing. The cell's
+own "how it connects" line already said "the evaluated party is often also the
+evaluator, which is the verification problem in miniature", and an evaluator
+placed inside the lab with employee-level access is the next position along
+that line.
+
+Its wording is taken from the announcement and nothing beyond it: September
+2026, evaluators working inside the lab with access comparable to an
+employee's, red-teaming, alignment assessments and safeguard testing, led by
+Faculty. The investment figure and the CEO-essay framing in the source are
+left out as detail the map does not carry for any other effort.
+
+**The effort is named "Accenture embedded evaluation (2026)", deliberately
+without "Anthropic" in the name.** `marksForEffs` scans only the effort's
+name, so a name carrying "Anthropic" would also light the Anthropic tile on
+that square — a change to an existing cell nobody asked for. Anthropic is
+named in the body instead, where the matcher does not look. If the Anthropic
+tile is wanted there too, moving the word into the name is the whole change.
+
+Two small mechanisms went with it: `ORG_MARKS` gains an `accenture` entry
+(no icon — the grid tiles render `short` as text and nothing in the app reads
+`icon` today), and `LandscapeCell.eff` takes an optional third element, the
+source URL, which the detail panel renders as a link on the effort's name.
+Every existing entry is unchanged by that; Accenture is the first effort on
+the map with a source link.
+
+Driven in a browser: the square's aria-label now ends "activity 2 of 3,
+Accenture", the tile prints Accenture, and the detail panel shows the entry
+once with its link.
+
+**Left for the owner:** the map's own disclaimer says efforts are "current to
+early 2026". A September 2026 entry makes that line stale.
+
+### The same day — the labs get tiles on their own evaluations square
+
+Owner: "anthopic openai and companies themselves run a lot of evals!" The
+square's own text said so — "labs run extensive internal evaluations and
+publish frameworks" — and the square carried no lab. The tiles come from
+`marksForEffs`, which scans only an effort's **name**, and both authored
+efforts there are named generically ("In-house dangerous-capability evals",
+"Third-party pre-deployment testing"), so the matcher had nothing to find.
+That is what `CELL_ORGS` is for: `evals.industry` now names openai, anthropic
+and deepmind, exactly as `inst.industry` already tiles them through its
+efforts' names. The square reads OpenAI, Anthropic, DeepMind, Accenture, and
+its aria-label lists all four.

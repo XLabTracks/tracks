@@ -58,6 +58,18 @@ describe("landscape org marks", () => {
     expect(marks.map((m) => m.id)).toEqual(["rand", "cnas", "flexheg"]);
   });
 
+  it("tiles Accenture on the evaluations square it was added to", () => {
+    const cell = LANDSCAPE_CELLS.evals.industry;
+    const entry = cell.eff.find(([name]) => name.startsWith("Accenture"));
+    expect(entry, "the Accenture effort is missing").toBeTruthy();
+    expect(entry![2]).toBe(
+      "https://www.anthropic.com/news/accenture-embedded-evaluation",
+    );
+    expect(marksForCell("evals", "industry", cell.eff).map((m) => m.id)).toContain(
+      "accenture",
+    );
+  });
+
   it("keeps tokens long enough to be distinctive", () => {
     for (const m of ORG_MARKS) {
       for (const tok of m.tokens) {

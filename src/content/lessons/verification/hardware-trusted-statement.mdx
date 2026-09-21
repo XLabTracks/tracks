@@ -7,7 +7,7 @@
 
 Allow approximately 20 minutes for the assigned excerpts, 15 minutes for this section, and 10 minutes for the exercise and answer review. Read each excerpt where its card appears; there is no need to read all four before starting.
 
-### The Direction of Trust
+## The Direction of Trust
 
 Section 2.1.1 separated authenticity, correctness, and completeness. This section examines a deployed mechanism that helps establish the first and supports selected checks of the second: remote attestation.
 
@@ -21,7 +21,7 @@ This is an institutional inversion, not an entirely new technical adversary: the
 
 Attestation supplies part of that system. It does not supply the inventory, the duty to answer, or the sanction.
 
-### What Hardware Identity Establishes
+## What Hardware Identity Establishes
 
 Imagine a report with these claims:
 
@@ -35,7 +35,7 @@ Calling that entity a particular physical device requires further trust: in manu
 
 A **root of trust** is a component or function whose correct operation the system takes as a starting assumption. Different roots may measure the next boot stage, protect keys and measurements, or report evidence. A chain of trust extends that starting point to additional components. "Hardware-rooted" locates an initial trust assumption; it does not eliminate trust.
 
-### Secure Boot, Measured Boot, and Reference Values
+## Secure Boot, Measured Boot, and Reference Values
 
 | Mechanism | What it does | What it does not establish |
 | --- | --- | --- |
@@ -52,7 +52,7 @@ Secure boot enforces a boot policy. Measured boot records what loaded. A system 
 
 Reference values and legal approval are separate. A manufacturer-signed reference integrity manifest can associate a measurement with a recognized software release. The regulator must still decide whether that release is permitted for the regulated activity.
 
-### From Device Evidence to Regulatory Response
+## From Device Evidence to Regulatory Response
 
 <ReadingCard
   id="reading-rats"
@@ -93,7 +93,7 @@ In the **passport model**, the Attester obtains an Attestation Result and presen
 
 <PageBreak title="Who Controls the Chain" />
 
-### Who Controls the Chain
+## Who Controls the Chain
 
 <ReadingCard
   id="reading-h100"
@@ -133,7 +133,7 @@ The adversary matters. A hostile application, a host administrator, and an owner
 
 An agreement must therefore allocate authority to issue and revoke credentials, publish reference values, approve software, change appraisal policy, and review disputed results. A software update changes the device's state. A new reference manifest describes a recognized state. Revocation changes whether a credential is acceptable. A regulatory decision changes which states are legally permitted. These actions need not occur together.
 
-### What Current GPU Attestation Can Show
+## What Current GPU Attestation Can Show
 
 <ReadingCard
   id="reading-blackwell"
@@ -167,7 +167,7 @@ The confidentiality purpose can also constrain observation. NVIDIA's H100 CC-On 
 
 <Src>Dhanuskodi et al., ["Creating the First Confidential GPUs"](https://cacm.acm.org/practice/creating-the-first-confidential-gpus/), *Communications of the ACM*, "Starting the GPU in CC Mode."</Src>
 
-### Threat-Model Boundaries: Battering RAM
+## Threat-Model Boundaries: Battering RAM
 
 <ReadingCard
   id="reading-battering-ram"
@@ -196,7 +196,7 @@ The demonstrated attacks concern CPU confidential-computing systems, including I
 
 <PageBreak title="Exercise: Appraise the Result" />
 
-### Exercise — Appraise the Result
+## Exercise — Appraise the Result
 
 The following is a hypothetical regulation and simplified evidence summary, not an actual NVIDIA token or existing law.
 

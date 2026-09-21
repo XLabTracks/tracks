@@ -9,7 +9,7 @@ Allow 35 minutes of selected reading, 40 minutes for the lesson, and 35 minutes 
 
 **Why optional:** This supplement goes further into how a declared training history might be checked. You can proceed directly from [2.1.6](/tracks/verification/verification-infrastructure/hardware-where-trust-lives) and complete the core policy track. Take this lesson if you expect to assess research proposals, commission verification systems, or need to understand what a “proof of training” actually establishes. “Technical” means examining the mechanism and its assumptions; you will not run code, reproduce experiments, or derive cryptographic proofs. The three reading cards are assigned excerpts for readers taking this supplement, not whole papers.
 
-### A Different Route to Evidence
+## A Different Route to Evidence
 
 In [2.1.4](/tracks/verification/verification-infrastructure/hardware-measuring-use), we asked how much work occurred and what kind of workload produced the observed signals. In 2.1.6, we asked which measurement paths survive a compromised component. Here we examine another route: ask the developer to supply a training history and check parts of the computation independently.
 
@@ -25,7 +25,7 @@ Keep three claims separate:
 
 The second claim depends on how the agreement defines a run. If it covers a development project, a record of one successful training trajectory may omit failed attempts or other experiments that still count. That is the counting-rule problem from 2.1.4, not a defect that replay alone can repair.
 
-### What Would the Verifier Replay?
+## What Would the Verifier Replay?
 
 A **checkpoint** is a saved state of training. It may contain model weights and additional information needed to resume. A **training transcript** connects checkpoints to the procedure, inputs, and sequence of updates that allegedly produced them.
 
@@ -45,7 +45,7 @@ Fixing the record before the verifier’s unpredictable selection limits the dev
 
 <PageBreak title="Research Case: Proof-of-Learning" />
 
-### Research Case: A Proposed Proof Meets Adversarial Testing
+## Research Case: A Proposed Proof Meets Adversarial Testing
 
 Jia et al. introduced proof-of-learning in 2021, motivated partly by model ownership and integrity of outsourced training. Their scheme records intermediate states and checks selected updates by re-execution. The intended assurance includes making a forged history no cheaper to obtain than honest training.
 
@@ -75,7 +75,7 @@ For a pause agreement, the threat model also changes. An ownership scheme that d
 
 </ReadingCard>
 
-### Matching a Checkpoint Is a Test With a Specification
+## Matching a Checkpoint Is a Test With a Specification
 
 What counts as a match? Repeating floating-point computation on a different stack can yield numerical differences. A replay procedure must either constrain execution sufficiently for exact comparison or justify a tolerance. A permissive tolerance may admit a false account; an excessively strict one may reject an honest one. Fang’s discussion makes this a security question, not merely an engineering inconvenience.
 
@@ -85,7 +85,7 @@ A failed replay is also not automatically a legal finding. Missing replay state,
 
 <PageBreak title="Strengthening the Transcript Check" />
 
-### Strengthening the Transcript Check Changes Its Requirements
+## Strengthening the Transcript Check Changes Its Requirements
 
 Choi, Shavit, and Duvenaud propose training-data verification that adds initialization and data-order commitments and tests based on temporary memorization of recently seen data. They report empirical defenses, while explicitly acknowledging attacks not covered and limits of generalization. Their protocol also requires the verifier to access sensitive material; an isolated cluster trusted by both sides is discussed as a possible way to reduce leakage.
 
@@ -116,7 +116,7 @@ The policy decision is therefore partly about access: who may see weights, data,
 
 <PageBreak title="Zero Knowledge and the Statement" />
 
-### Zero Knowledge Changes Disclosure, Not the Scope of the Statement
+## Zero Knowledge Changes Disclosure, Not the Scope of the Statement
 
 In a zero-knowledge proof, a prover can establish a specified mathematical statement while concealing its private supporting information, subject to the proof system’s assumptions. The verifier still learns the public statement and its result; the surrounding system may disclose metadata.
 
@@ -155,7 +155,7 @@ The policy task is to evaluate the proposed combination. A valid proof of a samp
 
 </ReadingCard>
 
-### Who Pays for Checking?
+## Who Pays for Checking?
 
 “Verification overhead” needs a denominator and a payer. Ask separately about recording during training, storing the record, producing proofs, checking proofs, and investigating discrepancies. A small proof may be quick to check but costly to generate. Low extra training time does not imply low total operating cost.
 
@@ -165,7 +165,7 @@ A deployment forecast should be tied to milestones: a working implementation of 
 
 <PageBreak title="Exercise: All Sampled Intervals Passed" />
 
-### Exercise — All Sampled Intervals Passed
+## Exercise — All Sampled Intervals Passed
 
 **Hypothetical evidence review, continuing the pause case.** A developer claims that model M’s entire covered development project complied with its authorization. It submits one transcript of 1,000 equal-cost intervals, beginning from an imported checkpoint. The transcript ends at a checkpoint whose identity matches model M. The agreement counts covered work across the project, including relevant earlier stages and failed branches.
 
@@ -189,10 +189,10 @@ The audit team proposes increasing the sample to 100 distinct intervals. Use the
 
 These probabilities assume the selection and perfect replay test specified above. The number of invalid intervals is unknown in the actual packet. The table does not describe the performance of any cited paper.
 
-#### Questions
+### Questions
 
 <Exercise id="v-hw-training-claims-audit" />
 
-### Carry Forward
+## Carry Forward
 
 For any training-verification proposal, record **the statement checked, the population covered, the attack tested, the information disclosed, and the total cost**. Then identify what independent evidence must cover the remaining activity. This is enough to discuss a bounded policy role without implementing the proof system yourself.

@@ -7,7 +7,7 @@
 
 Allow 20 minutes for the three required reading cards, 35 minutes for the lesson, and 30 minutes for the exercise and answer review. Each card assigns an excerpt, not a complete paper. No code, hardware access, installation, or cryptographic calculations are required. Other inline links are references, not extra assignments.
 
-### Move the Mechanism, Move the Trust
+## Move the Mechanism, Move the Trust
 
 In [2.1.5](/tracks/verification/verification-infrastructure/hardware-authorization), we followed permission from an authority to a device and back through review and recovery. Now ask where the machinery that measures, interprets, and restricts activity should be placed.
 
@@ -15,7 +15,7 @@ A monitor built into an accelerator may see internal activity that an external o
 
 Keep the pause claim from [2.1.1](/tracks/verification/verification-infrastructure/hardware-claim): no covered, unlicensed training run exceeded the agreed threshold. We are comparing architectures that might support parts of that claim, not assuming any architecture already establishes it. This lesson does not select an entire international regime.
 
-### Locate Three Functions, Not One Box
+## Locate Three Functions, Not One Box
 
 Every proposal should distinguish:
 
@@ -31,7 +31,7 @@ Likewise, distinguish physical location from dependence. An off-chip appliance c
 
 <PageBreak title="Four Architectural Choices" />
 
-### Four Architectural Choices
+## Four Architectural Choices
 
 The following is a course-authored comparison of representative designs, not a universal ranking or vendor specification. A specific implementation may change any entry.
 
@@ -69,7 +69,7 @@ Baker and colleagues distinguish on-chip verification from external digital logg
 
 <PageBreak title="Sort the Mechanisms" />
 
-### Sort the Mechanisms
+## Sort the Mechanisms
 
 The table above sorts clean examples. A procurement document does not arrive sorted, and the first question to ask of any row in one is what it observes and where that observation starts.
 
@@ -77,7 +77,7 @@ The table above sorts clean examples. A procurement document does not arrive sor
 
 <PageBreak title="Digital Access and Visibility" />
 
-### Digital Access Is Not Complete Visibility
+## Digital Access Is Not Complete Visibility
 
 Suppose a tap records every message passing through a particular network port. That establishes coverage of that port, not of all computation on the attached devices. Some work may occur without crossing it. Even observed traffic may be encrypted, and readable messages do not automatically reveal which high-level training procedure produced them.
 
@@ -110,7 +110,7 @@ Petrie and Aarne explore an interlock on an accelerator’s data path, supported
 
 <PageBreak title="Physical Measurement" />
 
-### Physical Measurement Changes the Question
+## Physical Measurement Changes the Question
 
 In [2.1.4](/tracks/verification/verification-infrastructure/hardware-measuring-use), we distinguished resource consumption from workload purpose. Here the distinction becomes architectural. A separately installed electrical meter could remain informative when accelerator firmware lies. But it measures electrical consumption at its boundary, not “unlicensed training.”
 
@@ -122,7 +122,7 @@ Physical signals may also disclose sensitive operational patterns. “We do not 
 
 We do not repeat the compute-accounting derivation here. The architectural question is which assumptions the physical observation removes, and which assumptions its interpretation introduces.
 
-### Historical Case — Different Certificate Chains, Shared Control
+## Historical Case — Different Certificate Chains, Shared Control
 
 In September 2011, Mozilla removed trust in the DigiNotar certificate authority after fraudulent certificate issuance. Its account described an uncertain breach scope and failures of notification. Certificates issued through a different DigiNotar-controlled intermediate for the Dutch government were initially exempted; Mozilla removed that exemption after the Dutch government’s assessment changed.
 
@@ -151,7 +151,7 @@ For our purposes, the incident motivates a question: if different monitoring com
 
 <PageBreak title="A Hybrid Is Not Automatically Redundant" />
 
-### A Hybrid Is Not Automatically Redundant
+## A Hybrid Is Not Automatically Redundant
 
 **Complementary** mechanisms answer different questions. **Redundant** mechanisms provide overlapping assurance about the same question. Either can be useful. Neither is established by the number of boxes.
 
@@ -168,7 +168,7 @@ A **common-mode failure** is one cause undermining several protections together.
 
 To test a hybrid, remove one dependency in thought. If the vendor’s firmware reports false values, what evidence remains? If the common update authority is compromised, what survives? If the facility supplies the wrong inventory, which mechanism could notice? State the surviving claim, not just the surviving device.
 
-### The Monitor Is Inside Someone Else’s Security Boundary
+## The Monitor Is Inside Someone Else’s Security Boundary
 
 The verifier wants accurate, complete observations. The operator wants protection of models, data, and legitimate service. The host state may also reject equipment that a foreign actor could use for surveillance or disruption. A design trusted by one of these actors can be unacceptable to another.
 
@@ -182,7 +182,7 @@ The same applies to enforcement. A passive meter cannot implement the suspension
 
 <PageBreak title="Exercise: Three Green Reports" />
 
-### Exercise — Three Green Reports
+## Exercise — Three Green Reports
 
 **Hypothetical procurement review.** Two states are considering a six-month monitoring pilot at one registered facility. The operator will not release model weights or raw workload contents outside the facility. The inspectorate wants evidence about aggregate counted computation and possible undeclared use. Both states worry about the other’s influence over suppliers. This pilot cannot establish that no other facilities exist.
 
@@ -199,11 +199,11 @@ All three reports are green. No compromise has been established.
 
 The supplier concludes: “Agreement among three independently signed reports proves compliance, even if one vendor component is compromised.”
 
-#### Questions
+### Questions
 
 <Exercise id="v-hw-trust-three-reports" />
 
-### Carry Forward
+## Carry Forward
 
 For any architecture, finish this sentence:
 

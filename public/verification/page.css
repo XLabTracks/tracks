@@ -116,7 +116,7 @@
   }
 }
 @media (min-width: 700px) {
-  .prose .roster,
+  .wrap .prose .roster,
   .team .roster {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -161,4 +161,4 @@
    width of .wrap. */
 .team { padding: 0 0 56px; }
 .team h2 { font-size: var(--fs-2xl); margin-bottom: 18px; }
-.prose + .team { padding-top: 0; }
+.wrap .prose + .team { padding-top: 0; }

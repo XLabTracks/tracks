@@ -51,8 +51,6 @@ Here, **DCGM** is NVIDIA’s Data Center GPU Manager. An **SM** is a processing 
 
 NVIDIA defines these activity metrics in terms of time or cycles, not a direct total of floating-point operations. Its SM Activity definition includes work waiting for memory. Tensor Activity is an interval average and can correspond to different distributions of activity across the chip and time.
 
-<Src>NVIDIA’s DCGM [metric definitions](https://docs.nvidia.com/datacenter/dcgm/latest/user-guide/feature-overview.html#metrics)</Src>
-
 Thus “80% utilization” is not sufficient evidence that the GPU performed 80% of its peak advertised operations. The conversion would require a validated model of the specific metric, hardware, instructions, and workload. Power consumption is also a signal, not a universal FLOP meter.
 
 There are several ways to produce a compute estimate, each with a different dependency:
@@ -88,8 +86,6 @@ This is an analytic comparison, not a claim that every approach is already avail
 </ReadingCard>
 
 Baker and colleagues propose comparing observed compute activity with verified declared uses. Their discussion distinguishes operations required by a model from extra operations actually executed, including recomputation. They also identify the difficulty of deriving an operation rate from physical measurements. This is an accounting proposal with implementation challenges, not a demonstrated universal sensor-to-FLOP conversion.
-
-<Src>Baker et al., [*Verifying International Agreements on AI*](https://arxiv.org/html/2507.15916v1), Appendix A.6.</Src>
 
 Consider an operator who explains every observed hour of GPU activity as permitted inference. The explanation is useful only if the declared inference really occurred and its claimed compute cost is credible. Inflating the declared cost could make unreported work appear accounted for. Conversely, a mismatch may reflect a poor cost model or equipment inefficiency rather than prohibited work.
 

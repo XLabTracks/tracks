@@ -13,8 +13,6 @@ Section 2.1.1 separated authenticity, correctness, and completeness. This sectio
 
 NVIDIA's H100 engineers state an important assumption explicitly: "Since the host or hypervisor is not trusted in CC mode". They explain that registers capable of compromising the guest's confidentiality or integrity must be protected from that host.
 
-<Src>Dhanuskodi et al., ["Creating the First Confidential GPUs"](https://cacm.acm.org/practice/creating-the-first-confidential-gpus/), *Communications of the ACM*, "Starting the GPU in CC Mode."</Src>
-
 The central inversion for verification is this: **the deployed confidentiality system protects a tenant from the owner or operator of the machine; a verification regime needs evidence that protects an outside authority from false claims by that operator.**
 
 This is an institutional inversion, not an entirely new technical adversary: the untrusted host is already part of NVIDIA's model. But the two uses demand different outcomes. A tenant can respond to failed attestation by withholding its model or data. A regulator must also determine whether every covered machine reported, whether the operator concealed devices, and what follows from silence or failure.
@@ -164,8 +162,6 @@ A successful result can therefore support a bounded claim:
 It does not by itself establish that the eight GPUs were connected in the declared topology, that no additional GPU was concealed, that they performed training rather than inference, that they participated in one job, or that the accepted state persisted throughout the reporting period.
 
 The confidentiality purpose can also constrain observation. NVIDIA's H100 CC-On mode disables performance counters to prevent their use in side-channel attacks. This illustrates a potential tension: protecting a tenant's workload from observation can remove signals that a compute-use verifier would want. A verification design that depends on those counters would need an additional measurement mechanism; a valid attestation report cannot substitute for missing telemetry.
-
-<Src>Dhanuskodi et al., ["Creating the First Confidential GPUs"](https://cacm.acm.org/practice/creating-the-first-confidential-gpus/), *Communications of the ACM*, "Starting the GPU in CC Mode."</Src>
 
 ## Threat-Model Boundaries: Battering RAM
 

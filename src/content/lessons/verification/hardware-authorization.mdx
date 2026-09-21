@@ -7,7 +7,7 @@
 
 Allow 15 minutes for required external reading, 35 minutes for the lesson, and 25 minutes for the exercise and answer review. No code, software installation, GPU access, or cryptographic calculations are required. Read the specified excerpts, not the full documents. Inline references support factual claims; they are not additional reading assignments.
 
-### A Valid Permission Is Not a Compliant Workload
+## A Valid Permission Is Not a Compliant Workload
 
 In [2.1.4](/tracks/verification/verification-infrastructure/hardware-measuring-use), an operator presented a genuine authorization for a safety evaluation. That did not establish whether the work stayed within its scope. This lesson asks a further question: could a machine enforce the authorization before prohibited work happens?
 
@@ -17,7 +17,7 @@ Suppose an authority permits a specified evaluation on registered hardware, with
 
 The policy task is to establish both that the token accurately translates the permission and that the enforcement mechanism constrains the activity the rule actually covers. The authenticity, correctness, and completeness questions from [2.1.1](/tracks/verification/verification-infrastructure/hardware-claim) have not disappeared.
 
-### A Deployed Example: Permission Can Expire Without a Misconduct Finding
+## A Deployed Example: Permission Can Expire Without a Misconduct Finding
 
 NVIDIA documents software-enforced licensing for its AI Enterprise vGPU for Compute virtual machines. In the release-8 documentation, a VM without a license initially receives a 20-minute grace period; an already licensed VM disconnected from the cloud license service has a default seven-day grace period. Performance degrades if licensing is not restored, and full capability returns when a valid license is acquired. These are different situations, not two descriptions of the same timer.
 
@@ -48,7 +48,7 @@ It also illustrates the limit of the analogy. The documentation explicitly calls
 
 <PageBreak title="From Commercial Licensing to Control" />
 
-### From Commercial Licensing to Hardware-Backed Control
+## From Commercial Licensing to Hardware-Backed Control
 
 Kulp and colleagues’ 2024 RAND working paper proposes offline licensing: a device authenticates an allowance, meters its consumption, and restricts selected functionality when the allowance is exhausted. Tokens need not arrive through a live internet connection. The proposal separates this control from verifying what the permitted compute actually did. It is a design proposal, not evidence of an operating international regime.
 
@@ -75,7 +75,7 @@ Kulp and colleagues’ 2024 RAND working paper proposes offline licensing: a dev
 
 The rest of this lesson develops a course-authored design test. It is not a description of either product’s complete architecture or a claim that its institutional arrangements already exist.
 
-### Follow the Authorization, Not Just the Signature
+## Follow the Authorization, Not Just the Signature
 
 The chain starts before a signing key is used and continues after a device refuses work.
 
@@ -98,7 +98,7 @@ That is the connection to the previous lessons: identity from [2.1.2](/tracks/ve
 
 <PageBreak title="Define What Stop Means" />
 
-### Define What “Stop” Means
+## Define What “Stop” Means
 
 **Throttling** reduces a rate or capability. **Suspension** stops specified activity pending a condition or decision. **Revocation** withdraws an authorization or trust in a credential. These can interact, but they are not interchangeable.
 
@@ -110,7 +110,7 @@ The rule should therefore name the controlled activity and the permitted stoppin
 
 Do not assume the hardware can separate training from inference sufficiently well to implement a narrowly targeted suspension. That is precisely the measurement question left open in 2.1.4. A design may have to choose a coarser restriction, with a correspondingly larger burden on permitted use.
 
-### Offline Operation Changes the Reach of a Decision
+## Offline Operation Changes the Reach of a Decision
 
 Withdrawing legal permission and changing a remote device’s behavior are two separate events. An offline device cannot react to a new revocation message it has not received.
 
@@ -129,7 +129,7 @@ One design allows bounded continued operation during a communications failure. A
 
 <PageBreak title="Who Controls the Controller?" />
 
-### Who Controls the Controller?
+## Who Controls the Controller?
 
 An attacker need not bypass a meter if they can obtain tokens the meter accepts. A dishonest official need not compromise a key if their office already controls issuance. Technical security and lawful use of authority are different requirements.
 
@@ -151,7 +151,7 @@ NIST’s firmware-resiliency guidance treats protection, detection, and recovery
 
 <Src>Regenscheid, [*Platform Firmware Resiliency Guidelines*](https://csrc.nist.gov/pubs/sp/800/193/final), NIST SP 800-193, abstract.</Src>
 
-### Exceptions and Equipment Outside the Control Boundary
+## Exceptions and Equipment Outside the Control Boundary
 
 An emergency exception should describe an activity, not just a favored operator. Specify its devices, allowable work, budget, duration, approving authority, and subsequent review. If a special allowance is intended only for permitted inference, the design needs a credible way to restrict it to that use. An emergency label is not a workload classifier.
 
@@ -163,11 +163,11 @@ Return briefly to the Chip Security Act exercise: a location check could inform 
 
 <PageBreak title="Exercise: After the Suspension" />
 
-### Exercise — The Authority Has Revoked Permission. What Has Stopped?
+## Exercise — The Authority Has Revoked Permission. What Has Stopped?
 
 **This is a hypothetical extension of the course’s pause case, not an NVIDIA or RAND implementation.** It does not resolve the historical uncertainty about job J in 2.1.4. The authority is now considering a new, separately authorized activity.
 
-#### Rule and Evidence Packet
+### Rule and Evidence Packet
 
 An evaluation permit authorizes **ten further compute units in total across four registered devices**, A–D. Counted units use the agreement’s convention; no unit conversion is needed. The permit prohibits use outside the specified evaluation. The issuer is supposed to translate the aggregate permission into device allowances.
 
@@ -186,11 +186,11 @@ The program director proposes this announcement:
 
 > “Permission was revoked at noon, so the evaluation stopped at noon. In any event, hardware licensing limits any further work to ten units and guarantees that all four devices will be disabled by 17:00. If our decision was wrong, restoring the issuer’s key will make the operator whole.”
 
-#### Questions
+### Questions
 
 <Exercise id="v-hw-authorization-suspension" />
 
-### Carry Forward
+## Carry Forward
 
 Keep three sentences in your notebook:
 

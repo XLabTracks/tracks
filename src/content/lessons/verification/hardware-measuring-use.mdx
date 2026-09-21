@@ -7,7 +7,7 @@
 
 Allow approximately 10 minutes for required external reading, 25 minutes for the lesson, and 25 minutes for the exercise and answer review. A separate optional critical-reading activity takes approximately 20 additional minutes and is not required to complete the lesson. No code, software installation, GPU access, or execution of the linked examples is required. Read the excerpts where their cards appear. Inline references are supporting sources, not additional assignments.
 
-### Three Questions, Three Different Kinds of Evidence
+## Three Questions, Three Different Kinds of Evidence
 
 Return to the pause example from [2.1.1](/tracks/verification/verification-infrastructure/hardware-claim): a covered party must not conduct an unlicensed training run above threshold T. In [2.1.3](/tracks/verification/verification-infrastructure/hardware-accounting), we asked which devices the regime could account for. Suppose, for this lesson, that the relevant devices are known. What would establish whether their use broke the rule?
 
@@ -23,7 +23,7 @@ The Chip Security Act claim from the preceding sections remains separate: eviden
 
 <PageBreak title="What Does a Compute Number Count?" />
 
-### What Does a Compute Number Count?
+## What Does a Compute Number Count?
 
 A **FLOP** is a floating-point operation. **FLOP/s** measures a rate; a total over a run is measured in FLOP. A **GPU-hour** measures time allocated to or used by a GPU, depending on the accounting convention. None of these terms alone specifies the legal counting rule.
 
@@ -68,7 +68,7 @@ This is an analytic comparison, not a claim that every approach is already avail
 
 <PageBreak title="Reconciling Observations With Uses" />
 
-### Accounting Means Reconciling Observations With Uses
+## Accounting Means Reconciling Observations With Uses
 
 <ReadingCard
   id="reading-accounting"
@@ -95,7 +95,7 @@ Consider an operator who explains every observed hour of GPU activity as permitt
 
 A useful report therefore preserves both the evidence and the uncertainty. “Between 81 and 93 units under convention C” may be a more defensible statement than “87 units,” particularly when the legal threshold is 90.
 
-### A Restart Is Not a New Legal Run
+## A Restart Is Not a New Legal Run
 
 Counter readings belong to a device, a time interval, and a counting convention. They also need continuity information. If a counter restarts from zero after reboot, its latest reading does not include earlier execution. Resetting the device does not erase that execution from the agreement’s accounting.
 
@@ -115,7 +115,7 @@ Distribution does not make compute disappear. It makes the relationship between 
 
 <PageBreak title="Recognizing a Workload From Telemetry" />
 
-### Recognizing a Workload From Telemetry
+## Recognizing a Workload From Telemetry
 
 **Telemetry** is a sequence of measurements such as power draw, memory use, utilization, and data movement. A **classifier** uses patterns in those measurements to assign a label, such as training or non-training.
 
@@ -123,7 +123,7 @@ In conventional neural-network training, the system computes outputs, calculates
 
 For policy purposes, the useful question is not whether a classifier’s headline accuracy sounds high. It is which errors remain, under which conditions, and what decision the evidence will support. The framework below can be applied to any proposed classifier; completing this lesson does not depend on accepting a particular recent research result.
 
-### Four Questions to Ask About a Classification Result
+## Four Questions to Ask About a Classification Result
 
 **1. What was the unit of evaluation?** An accurate label for a short observation window is not automatically an accurate label for an entire run. Nor is the fraction of windows labeled training the fraction of operations spent training: windows may contain very different amounts or mixtures of work.
 
@@ -139,7 +139,7 @@ The confidentiality trade-off remains. H100 CC-On’s disabled performance count
 
 <Src>NVIDIA, [“Confidential Computing on NVIDIA H100 GPUs for Secure and Trustworthy AI”](https://developer.nvidia.com/blog/confidential-computing-on-h100-gpus-for-secure-and-trustworthy-ai/)</Src>
 
-### Authorization Is Not Another Classifier Label
+## Authorization Is Not Another Classifier Label
 
 Suppose the classifier correctly detects parameter updates. The operator presents a genuine authorization for a safety evaluation. Neither fact settles compliance: the authorization may permit those updates, prohibit them, or allow them only within specified models, procedures, devices, dates, or compute limits.
 
@@ -151,7 +151,7 @@ The appropriate response to an unresolved case might be obtaining additional evi
 
 <PageBreak title="Exercise: Assessing Job J" />
 
-### Exercise — Assessing Job J
+## Exercise — Assessing Job J
 
 This is a hypothetical continuation of the pause claim from 2.1.1. The quantities and evaluation results below are invented for the exercise, not findings from the assigned paper.
 
@@ -181,13 +181,13 @@ The classifier evaluation used in question 3:
 
 <Exercise id="v-hw-measuring-job-j" />
 
-### Carry Forward
+## Carry Forward
 
 At this point, a hardware regime has three separate outputs: an inventory with coverage limits, a compute account with continuity and uncertainty, and an appraisal of workload evidence against the rule. None is yet a decision about who may stop a machine. Section 2.1.5 examines that authority and the safeguards around it.
 
 <PageBreak title="Optional: What Does This Paper Establish?" />
 
-### Optional: What Does This Paper Actually Establish?
+## Optional: What Does This Paper Actually Establish?
 
 This activity is not a prerequisite for the next lesson.
 

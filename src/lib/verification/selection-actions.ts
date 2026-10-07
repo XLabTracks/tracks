@@ -43,5 +43,5 @@ export const ACTION_LABELS: Record<SelectionActionId, string> = {
   unhighlight: "Remove highlight",
   define: "Define",
   notebook: "Add to notebook",
-  report: "Report a bug",
+  report: "Report an issue",
 };

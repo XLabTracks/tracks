@@ -18,7 +18,7 @@ export const FOOT: ChromeLink[] = [
   { label: "Support us", href: null },
   { label: "Team", href: "team" },
   { label: "Contact", href: "mailto:xlab-info@uchicago.edu" },
-  { label: "Report a bug", href: "https://github.com/XLabTracks/tracks/issues" },
+  { label: "Report an issue", href: "https://github.com/XLabTracks/tracks/issues" },
   { label: "Privacy Policy", href: "/privacy" },
   { label: "Accessibility", href: "accessibility" },
 ];

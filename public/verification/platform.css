@@ -149,22 +149,31 @@
 }
 .frac { font-family: var(--label); font-size: var(--fs-xs); color: var(--muted-foreground); }
 
-/* ---------- authored prose ---------- */
+/* ---------- authored prose ----------
 
-.prose { font-size: var(--fs-lg); line-height: 1.68; }
-.prose > * + * { margin-top: 16px; }
-.prose h3 { font-size: var(--fs-xl); margin-top: 30px; }
-.prose ul { padding-left: 20px; display: grid; gap: 8px; }
-.prose li { line-height: 1.6; }
-.prose code {
+   Scoped to .wrap, and it has to stay that way: `prose` is also Tailwind
+   Typography's class, which the app puts on the lesson column
+   (.lesson-body.prose). This file is linked with React's `precedence`, so
+   once one of the course's own pages has loaded it, it is hoisted into
+   <head> and stays for the rest of the document's life — a later lesson in
+   the same document would otherwise take these rules on top of its own.
+   .wrap is the standalone pages' wrapper and is nowhere around the lesson
+   column, so it is what keeps the two `prose` vocabularies apart. */
+
+.wrap .prose { font-size: var(--fs-lg); line-height: 1.68; }
+.wrap .prose > * + * { margin-top: 16px; }
+.wrap .prose h3 { font-size: var(--fs-xl); margin-top: 30px; }
+.wrap .prose ul { padding-left: 20px; display: grid; gap: 8px; }
+.wrap .prose li { line-height: 1.6; }
+.wrap .prose code {
   font-family: var(--label);
   font-size: .89em;
   padding: 2px 4px;
   border-radius: var(--radius-xs);
   background: var(--muted);
 }
-.prose a { color: var(--brand-ink); text-underline-offset: 3px; }
-.prose b { font-weight: 600; }
+.wrap .prose a { color: var(--brand-ink); text-underline-offset: 3px; }
+.wrap .prose b { font-weight: 600; }
 
 /* An editorial aside. Uniform hairline, tinted ground — the emphasis is the
    surface, not a painted rib. */

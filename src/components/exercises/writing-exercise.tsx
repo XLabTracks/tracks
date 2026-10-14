@@ -36,11 +36,11 @@ export function WritingExerciseCard({
       </p>
       {promptHtml ? (
         <div
-          className="space-y-3 font-medium leading-relaxed [&_a]:underline [&_a]:underline-offset-4 [&_li]:mt-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_ul]:list-disc [&_ul]:pl-5"
+          className="space-y-3 leading-relaxed [&_a]:underline [&_a]:underline-offset-4 [&_li]:mt-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_ul]:list-disc [&_ul]:pl-5"
           dangerouslySetInnerHTML={{ __html: promptHtml }}
         />
       ) : (
-        <p className="font-medium">{exercise.prompt}</p>
+        <p>{exercise.prompt}</p>
       )}
       <div className="mt-4">
         <WritingEditor

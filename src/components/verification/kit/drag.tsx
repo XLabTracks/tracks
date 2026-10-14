@@ -25,7 +25,7 @@ interface DragCtx extends DragState {
   arm: (id: string) => void;
   toggleArm: (id: string) => void;
   disarm: () => void;
-  beginPointerDrag: (id: string, e: PointerEvent) => void;
+  beginPointerDrag: (id: string, e: PointerEvent, node: HTMLElement) => void;
   setOverZone: (zoneId: string | null) => void;
   dropOn: (zoneId: string) => void;
   announce: (msg: string) => void;
@@ -61,6 +61,13 @@ export function DragProvider({
     id: string;
     startX: number;
     startY: number;
+    lastX: number;
+    lastY: number;
+    grabX: number;
+    grabY: number;
+    width: number;
+    height: number;
+    node: HTMLElement;
     active: boolean;
     pointerId: number;
   } | null>(null);
@@ -110,11 +117,19 @@ export function DragProvider({
   }, []);
 
   const beginPointerDrag = useCallback(
-    (id: string, e: PointerEvent) => {
+    (id: string, e: PointerEvent, node: HTMLElement) => {
+      const rect = node.getBoundingClientRect();
       drag.current = {
         id,
         startX: e.clientX,
         startY: e.clientY,
+        lastX: e.clientX,
+        lastY: e.clientY,
+        grabX: e.clientX - rect.left,
+        grabY: e.clientY - rect.top,
+        width: rect.width,
+        height: rect.height,
+        node,
         active: false,
         pointerId: e.pointerId,
       };
@@ -126,6 +141,8 @@ export function DragProvider({
     function move(e: PointerEvent) {
       const d = drag.current;
       if (!d || d.pointerId !== e.pointerId) return;
+      d.lastX = e.clientX;
+      d.lastY = e.clientY;
       if (!d.active) {
         const dist = Math.hypot(e.clientX - d.startX, e.clientY - d.startY);
         if (dist < 5) return;
@@ -134,7 +151,7 @@ export function DragProvider({
         setState((s) => ({ ...s, draggingId: d.id, draggingLabel: label, armedId: null }));
       }
       if (ghost.current) {
-        ghost.current.style.transform = `translate(${e.clientX + 12}px, ${e.clientY + 12}px)`;
+        ghost.current.style.transform = `translate(${e.clientX - d.grabX}px, ${e.clientY - d.grabY}px)`;
       }
       const el = document
         .elementFromPoint(e.clientX, e.clientY)
@@ -167,6 +184,32 @@ export function DragProvider({
   }, [onDrop, announce, setOverZone]);
 
   const draggingLabel = state.draggingLabel;
+  const draggingId = state.draggingId;
+
+  useEffect(() => {
+    const host = ghost.current;
+    const d = drag.current;
+    if (!host || !d || draggingId !== d.id) return;
+    const clone = d.node.cloneNode(true) as HTMLElement;
+    clone.removeAttribute("data-drag-item");
+    clone.removeAttribute("id");
+    clone.removeAttribute("role");
+    clone.removeAttribute("tabindex");
+    clone.removeAttribute("aria-pressed");
+    clone.setAttribute("aria-hidden", "true");
+    clone.classList.remove("opacity-40");
+    clone.style.opacity = "1";
+    clone.style.width = `${d.width}px`;
+    clone.style.height = `${d.height}px`;
+    clone.style.margin = "0";
+    clone.style.position = "static";
+    clone.style.inset = "auto";
+    clone.style.transform = "none";
+    for (const el of clone.querySelectorAll("[id]")) el.removeAttribute("id");
+    host.style.transform = `translate(${d.lastX - d.grabX}px, ${d.lastY - d.grabY}px)`;
+    host.replaceChildren(clone);
+    return () => host.replaceChildren();
+  }, [draggingId]);
 
   return (
     <Ctx.Provider
@@ -188,10 +231,8 @@ export function DragProvider({
         <div
           ref={ghost}
           aria-hidden
-          className="border-primary bg-card text-foreground pointer-events-none fixed top-0 left-0 z-50 rounded-md border px-2.5 py-1 text-xs font-medium shadow-lg"
-        >
-          {draggingLabel}
-        </div>
+          className="pointer-events-none fixed top-0 left-0 z-50 drop-shadow-xl"
+        />
       )}
       <div ref={liveRef} aria-live="polite" className="sr-only" />
     </Ctx.Provider>
@@ -247,7 +288,7 @@ export function Draggable({
       onPointerDown={(e) => {
         if (disabled || e.button !== 0) return;
         moved.current = false;
-        ctx.beginPointerDrag(id, e.nativeEvent);
+        ctx.beginPointerDrag(id, e.nativeEvent, e.currentTarget);
       }}
       onClick={() => {
         if (!disabled && !ctx.draggingId && !moved.current) ctx.toggleArm(id);

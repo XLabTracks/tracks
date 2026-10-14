@@ -181,7 +181,7 @@ export function TapRevealCard({
       <p className="text-muted-foreground mb-1.5 text-xs font-medium tracking-wide uppercase">
         {EXERCISE_TYPE_LABELS[exercise.type]}
       </p>
-      <Paragraphs text={exercise.prompt} className="font-medium" />
+      <Paragraphs text={exercise.prompt} />
       <TapRevealBody
         exerciseId={exercise.id}
         answer={exercise.answer}

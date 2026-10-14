@@ -196,9 +196,21 @@ function CellDetail({
       <p className="mt-2">{cell.state}</p>
       {cell.eff.length > 0 && (
         <ul className="mt-2 space-y-1.5">
-          {cell.eff.map(([name, body], i) => (
+          {cell.eff.map(([name, body, href], i) => (
             <li key={i}>
-              <span className="font-medium">{name}</span>. {body}
+              {href ? (
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener"
+                  className="font-medium underline underline-offset-4"
+                >
+                  {name}
+                </a>
+              ) : (
+                <span className="font-medium">{name}</span>
+              )}
+              . {body}
             </li>
           ))}
         </ul>

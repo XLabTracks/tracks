@@ -218,34 +218,18 @@
 }
 .nb-view-lead a { color: var(--brand-ink); text-underline-offset: 3px; }
 
-/* Both surfaces bring the layouts their pages use, keyed on the viewport;
-   inside a column of the panel's width those are wrong on a monitor, so
-   the panel scope wins: one column, nothing sticky, the chip bar as five
-   equal numerals. */
-.nb-panel .constellation { grid-template-columns: minmax(0, 1fr); gap: 16px; }
-.nb-panel .sky-panel { position: static; max-height: none; display: block; margin-top: 4px; }
-.nb-panel .sky-panel .p-body { display: block; }
-.nb-panel .mod-filters { width: 100%; margin-top: 4px; }
-.nb-panel .mod-filters button { flex: 1 1 0; padding-inline: 0; text-align: center; }
-.nb-panel .mod-filters .mod-name { display: none; }
-/* Dragged wide enough, the chips get their names back — measured against
-   the panel's own column, which is what the names have to fit. */
-.nb-pages { container-type: inline-size; }
-@container (min-width: 700px) {
-  .nb-panel .mod-filters .mod-name { display: inline; }
-}
-.nb-panel .sky-key { grid-template-columns: minmax(0, 1fr); }
+/* The desk brings the layout its page uses, keyed on the viewport; inside
+   a column of the panel's width that is wrong on a monitor, so the panel
+   scope wins: one column, nothing sticky. */
 .nb-panel .desk { grid-template-columns: minmax(0, 1fr); padding-bottom: 0; }
 .nb-panel .slot-rail, .nb-panel .check-rail { position: static; }
 .nb-panel .slot-rail { max-height: 36vh; overflow-y: auto; }
 
-/* Progress by skill, under the figure. Derived view, so nothing here is an
-   input except the row itself, which pins its star. The module hue fills
-   the bar and colours the module's name (its text variant), and the
-   fraction and state word beside each bar are the reading — hue never
-   stands alone. */
-.nb-skills { margin-top: 26px; }
-.nb-skills-head { font-family: var(--display); font-size: var(--fs-lg); font-weight: 500; }
+/* Progress by skill. Derived view: the module hue fills the bar and colours
+   the module's name (its text variant), and the fraction and state word
+   beside each bar are the reading — hue never stands alone. Each row is a
+   native disclosure whose summary is the bar row; open, the description
+   sits under it. The marker is the platform's own, at the row's end. */
 .nb-skill-sum { margin-top: 4px; font-size: var(--fs-sm); color: var(--muted-foreground); }
 .nb-skill-mod { margin-top: 20px; }
 .nb-skill-modname {
@@ -256,23 +240,34 @@
   color: var(--mod-text, var(--muted-foreground));
 }
 .nb-skill-modname b { font-weight: 700; margin-right: .5em; }
-.nb-skill {
+.nb-skill { border-bottom: var(--hairline) solid var(--border); }
+.nb-skill-row {
   display: flex;
   align-items: center;
   gap: 10px;
-  width: 100%;
   min-height: 44px;
   padding: 6px 0;
-  border: 0;
-  border-bottom: var(--hairline) solid var(--border);
-  background: transparent;
-  color: var(--foreground);
-  font: inherit;
   font-size: var(--fs-sm);
-  text-align: left;
   cursor: pointer;
+  list-style: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
-.nb-skill:hover .nb-skill-name { text-decoration: underline; text-underline-offset: 3px; }
+.nb-skill-row::-webkit-details-marker { display: none; }
+.nb-skill-row::after {
+  content: "";
+  flex: none;
+  width: 7px;
+  height: 7px;
+  margin-left: 2px;
+  border-right: 1.5px solid var(--muted-foreground);
+  border-bottom: 1.5px solid var(--muted-foreground);
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform .15s;
+}
+.nb-skill[open] > .nb-skill-row::after { transform: rotate(-135deg) translateY(-2px); }
+.nb-skill-row:hover .nb-skill-name { text-decoration: underline; text-underline-offset: 3px; }
+.nb-skill-row:focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }
 .nb-skill-name { flex: 1 1 auto; min-width: 0; }
 .nb-skill-bar {
   flex: 0 0 84px;
@@ -289,6 +284,32 @@
   color: var(--muted-foreground);
   white-space: nowrap;
 }
+.nb-skill-body { padding: 2px 0 16px; font-size: var(--fs-sm); line-height: 1.6; }
+.nb-skill-body .nb-source { margin-top: 0; }
+.nb-skill-goals { margin: 8px 0 0; padding-left: 20px; list-style: disc; }
+.nb-skill-goals li + li { margin-top: 4px; }
+.nb-skill-goals li.sub { list-style: circle; margin-left: 18px; }
+.nb-skill-sec {
+  margin-top: 14px;
+  font-family: var(--label);
+  font-size: var(--fs-2xs);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+.nb-skill-rungs { margin: 4px 0 0; padding: 0; list-style: none; }
+.nb-skill-rungs li {
+  display: grid;
+  grid-template-columns: 14px 44px 1fr;
+  gap: 8px;
+  padding: 8px 0;
+}
+.nb-skill-rungs li + li { border-top: var(--hairline) solid var(--border); }
+.nb-skill-rungs .state { font-family: var(--label); font-size: var(--fs-xs); color: var(--mod-text, var(--brand-ink)); }
+.nb-skill-rungs a.u { color: var(--brand-ink); text-decoration: none; }
+.nb-skill-rungs a.u:hover { text-decoration: underline; text-underline-offset: 3px; }
+.nb-skill-rungs .a { color: var(--muted-foreground); }
+.nb-skill-rungs li.hit .a { color: var(--foreground); }
 
 .nb-title {
   width: 100%;

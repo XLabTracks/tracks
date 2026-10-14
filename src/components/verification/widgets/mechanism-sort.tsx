@@ -640,7 +640,7 @@ function Gaps({
                   aria-hidden
                 />
                 <span
-                  className="min-w-0 flex-1 truncate font-medium"
+                  className="min-w-0 flex-1 font-medium"
                   style={{ color: LAYER_COLOR[m.layer] }}
                 >
                   {m.short}

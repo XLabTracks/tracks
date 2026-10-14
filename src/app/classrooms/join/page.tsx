@@ -19,7 +19,7 @@ export default async function JoinClassroomPage() {
         Enter the code your instructor shared with you.
       </p>
       <Card className="shadow-soft mt-6">
-        <CardContent className="pt-6">
+        <CardContent>
           <JoinClassroomForm />
         </CardContent>
       </Card>

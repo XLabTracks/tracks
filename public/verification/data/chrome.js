@@ -50,7 +50,7 @@ window.VT_CHROME = {
       "href": "mailto:xlab-info@uchicago.edu"
     },
     {
-      "label": "Report a bug",
+      "label": "Report an issue",
       "href": "https://github.com/XLabTracks/tracks/issues"
     },
     {

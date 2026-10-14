@@ -29,7 +29,7 @@ export function Prompt({
       <p className="text-xs font-semibold tracking-[0.14em] uppercase [color:var(--brand-ink,var(--primary))]">
         {label}
       </p>
-      <p className="text-foreground mt-1.5 text-lg leading-snug font-medium text-balance">
+      <p className="text-foreground mt-1.5 text-lg leading-snug font-medium text-pretty">
         {children}
       </p>
     </div>

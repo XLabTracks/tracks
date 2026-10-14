@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { TeamRoster } from "@/components/verification/team-roster";
 import { verificationModules } from "@/content/verification/curriculum";
 import { memoSlots } from "@/content/verification/memos";
 import { SKILL_NODES } from "@/lib/verification/data/skills";
@@ -134,6 +135,11 @@ export default function Page() {
             </p>
 
           </div>
+
+          <section className="team" id="team">
+            <h2>Team</h2>
+            <TeamRoster />
+          </section>
         </div>
       </main>
     </>

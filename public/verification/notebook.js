@@ -15,11 +15,14 @@
    Three views under one header — Notes, Skill Map, Memo Desk — switched by
    the tabs beside the title and never by leaving the page: the map and the
    desk are the two learner surfaces that are not lessons, and the book is
-   where they live. Both are drawn by their own files (map.js over
-   skill-web.js, memo-desk.js), loaded on first use through the same
-   registry LegacyScripts keeps (window.__vtScripts), so a file either side
-   has run never runs twice. The views are built once and hidden, never
-   rebuilt: the desk holds a draft's field state and listeners.
+   where they live. The Skill Map view is the bars — one row per skill,
+   opening to the skill's description and ladder — and no figure: the web
+   is the map page's, and drawing it again in a 560px column was the same
+   thing twice. The desk is memo-desk.js's own. Both load their files on
+   first use through the registry LegacyScripts keeps (window.__vtScripts),
+   so a file either side has run never runs twice. The views are built once
+   and hidden, never rebuilt: the desk holds a draft's field state and
+   listeners.
 
    The panel is resizable from its left edge — a drag, or arrow keys on the
    handle — and the width is a device preference (vt-notebook-width), not
@@ -47,7 +50,7 @@ window.VTNotebook = (function () {
   let footEl = null, tabsEl = null;
   let view = 'notes';
   const views = {};
-  let map = null, desk = null;
+  let desk = null;
 
   const WIDTH_KEY = 'vt-notebook-width';
   const WIDTH_DEFAULT = 560;
@@ -500,8 +503,7 @@ window.VTNotebook = (function () {
     }, Promise.resolve());
   }
 
-  const MAP_FILES = ['data/course.js', 'data/skills.js', 'data/chrome.js', 'platform.js', 'skill-web.js', 'map.js'];
-  const MAP_SHEETS = ['skill-web.css', 'map.css'];
+  const MAP_FILES = ['data/course.js', 'data/skills.js', 'data/chrome.js', 'platform.js', 'map.js'];
   const DESK_FILES = ['data/course.js', 'data/skills.js', 'data/memos.js', 'data/chrome.js', 'platform.js', 'memo-store.js', 'memo-desk.js'];
   const DESK_SHEETS = ['memo-desk.css', 'exercise.css'];
 
@@ -514,19 +516,25 @@ window.VTNotebook = (function () {
     return el;
   }
 
-  /* The bars under the figure: one row per skill, grouped by module, the
-     module hue on the bar and on the module's name, the fraction and the
-     state word beside it — hue never stands alone. Derived from
-     VT.skillProgress, the same arithmetic the rings use, never a second
-     copy of it. A row pins its star. */
+  /* Progress by skill: one row per skill, grouped by module, the module hue
+     on the bar and on the module's name, the fraction and the state word
+     beside it — hue never stands alone. Derived from VT.skillProgress, the
+     same arithmetic the map page's rings use, never a second copy of it.
+     A row is a disclosure: open, it shows the skill's description — the
+     owner's learner goals and the ladder of units that fill it, the same
+     ladder row the map page's panel prints (VTSkillMap.rung).
+
+     Repainted whenever progress moves, so the open rows are remembered
+     across the repaint or a Mark complete would fold what was being read. */
   function paintBars(host) {
     const el = host.querySelector('.nb-skills');
     const S = window.SKILLS;
-    if (!el || !S || !window.VT) return;
+    if (!el || !S || !window.VT || !window.VTSkillMap) return;
+    const open = {};
+    el.querySelectorAll('details[open]').forEach(function (d) { open[d.dataset.skill] = true; });
     el.innerHTML = '';
     const prog = S.nodes.map(function (n) { return { node: n, p: VT.skillProgress(n) }; });
     const full = prog.filter(function (x) { return x.p.frac >= 1; }).length;
-    el.appendChild(mk('h3', 'nb-skills-head', 'Progress by skill'));
     el.appendChild(mk('p', 'nb-skill-sum', full + ' of ' + prog.length + ' skills complete'));
     S.moduleNames.forEach(function (name, m) {
       const rows = prog.filter(function (x) { return x.node.mod === m; });
@@ -536,73 +544,56 @@ window.VTNotebook = (function () {
       sec.style.setProperty('--mod-text', 'var(--mod-' + m + '-text)');
       sec.appendChild(mk('p', 'nb-skill-modname', '<b>M' + m + '</b>' + esc(name)));
       rows.forEach(function (x) {
-        const row = mk('button', 'nb-skill');
-        row.type = 'button';
-        row.setAttribute('data-skill', x.node.id);
-        row.appendChild(mk('span', 'nb-skill-name', esc(x.node.label)));
+        const n = x.node;
+        const row = mk('details', 'nb-skill');
+        row.dataset.skill = n.id;
+        if (open[n.id]) row.open = true;
+        const head = mk('summary', 'nb-skill-row');
+        head.appendChild(mk('span', 'nb-skill-name',
+          (n.opt ? '<span class="optional-prefix">Optional:</span> ' : '') + esc(n.label)));
         const bar = mk('span', 'nb-skill-bar');
         const fill = mk('i');
         fill.style.width = Math.round(x.p.frac * 100) + '%';
         bar.appendChild(fill);
-        row.appendChild(bar);
-        row.appendChild(mk('span', 'nb-skill-frac',
+        head.appendChild(bar);
+        head.appendChild(mk('span', 'nb-skill-frac',
           VT.fracText(x.p) + ' &middot; ' + x.p.state));
+        row.appendChild(head);
+        row.appendChild(mk('div', 'nb-skill-body',
+          '<p class="nb-source">rooted in ' + esc(n.unit) + '</p>' +
+          '<ul class="nb-skill-goals">' + n.goals.map(function (g) {
+            return '<li' + (g[0] ? ' class="sub"' : '') + '>' + VT.fmt(g[1]) + '</li>';
+          }).join('') + '</ul>' +
+          '<p class="nb-skill-sec">The ladder — what each unit adds</p>' +
+          '<ul class="nb-skill-rungs">' + n.rungs.map(VTSkillMap.rung).join('') + '</ul>'));
         sec.appendChild(row);
       });
       el.appendChild(sec);
     });
   }
 
-  /* The map is drawn once and refreshed on every return: progress moves
-     while the book is closed (Mark complete), and the figure's rings and
-     the bars must say so when it opens. */
+  /* Built once; repainted on every return, because progress moves while
+     the book is closed (Mark complete) and the bars must say so when it
+     opens. */
   function mountMap() {
     const host = viewEl('map');
-    if (map) { map.refresh(); paintBars(host); return; }
+    if (host.dataset.ready) { paintBars(host); return; }
     if (host.dataset.loading) return;
     host.dataset.loading = '1';
-    host.innerHTML = '<p class="nb-empty">Loading the skill map…</p>';
-    loadAll(MAP_FILES, MAP_SHEETS).then(function () {
-      if (!window.VTSkillMap) {
-        host.innerHTML = '<p class="nb-empty">The skill map did not load. <a href="/verification/map">Open it as a page</a>.</p>';
+    host.innerHTML = '<p class="nb-empty">Loading your progress…</p>';
+    loadAll(MAP_FILES).then(function () {
+      if (!window.SKILLS || !window.VT || !window.VTSkillMap) {
+        host.innerHTML = '<p class="nb-empty">Your progress did not load. <a href="/verification/map">Open the Skill Map page</a>.</p>';
         return;
       }
       host.innerHTML =
-        '<p class="nb-view-lead">Pin a star, or its row in the key, to read it. The ring around a star ' +
-        'fills as you complete the units that feed it. ' +
-        '<a href="/verification/map">Full-width edition</a>.</p>' +
-        '<div class="mod-filters"></div>' +
-        '<div class="constellation"><div><div class="sky"></div>' +
-        '<div class="sky-legend">' +
-          '<span>number inside a star — find it in the key below</span>' +
-          '<span>ring around a star — how much of it you hold</span>' +
-          '<span>solid beam — fed from inside the module</span>' +
-          '<span>dashed line — fed from another module</span>' +
-          '<span class="on-hover">click a star or a key row to pin it</span>' +
-          '<span class="on-touch">tap a star or a key row to pin it</span>' +
-        '</div>' +
-        '<div class="sky-panel"></div>' +
-        '<ol class="sky-key"></ol></div></div>' +
+        '<p class="nb-view-lead">One row per skill. Open a row for what the skill lets you do and ' +
+        'which unit fills each rung; the bar fills as you complete those units. ' +
+        'The figure is on the <a href="/verification/map">Skill Map page</a>.</p>' +
         '<div class="nb-skills"></div>';
-      map = window.VTSkillMap.mount({
-        sky: host.querySelector('.sky'),
-        panel: host.querySelector('.sky-panel'),
-        filters: host.querySelector('.mod-filters'),
-        key: host.querySelector('.sky-key')
-      });
-      if (!map) {
-        host.innerHTML = '<p class="nb-empty">The skill map did not load. <a href="/verification/map">Open it as a page</a>.</p>';
-        return;
-      }
+      host.dataset.ready = '1';
       paintBars(host);
-      if (window.VT && VT.onChange) VT.onChange(function () { paintBars(host); });
-      host.addEventListener('click', function (e) {
-        const row = e.target.closest('[data-skill]');
-        if (!row) return;
-        map.pin(row.getAttribute('data-skill'));
-        const panel = host.querySelector('.sky-panel');
-        if (panel && panel.scrollIntoView) panel.scrollIntoView({ block: 'nearest' });
-      });
+      if (VT.onChange) VT.onChange(function () { paintBars(host); });
     });
   }
 

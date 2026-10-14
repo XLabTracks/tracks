@@ -21,7 +21,7 @@ export default async function NewClassroomPage() {
         You&apos;ll be the instructor. Share the join code with your students.
       </p>
       <Card className="shadow-soft mt-6">
-        <CardContent className="pt-6">
+        <CardContent>
           <CreateClassroomForm trackOptions={trackOptions} />
         </CardContent>
       </Card>

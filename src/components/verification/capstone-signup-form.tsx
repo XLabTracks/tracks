@@ -1,13 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 
 import {
   saveCapstoneSignup,
   withdrawCapstoneSignup,
 } from "@/app/actions/verification-capstone";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -15,24 +16,26 @@ function BriefRow({
   selected,
   onPick,
   title,
+  summary,
   slug,
 }: {
   selected: boolean;
   onPick: () => void;
   title: string;
+  summary?: string;
   slug?: string;
 }) {
   return (
     <div
       className={
-        "flex items-center gap-2 rounded-md border px-2.5 py-1.5 text-sm " +
+        "flex items-start gap-2 rounded-md border px-2.5 py-1.5 text-sm " +
         "has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-2 " +
         (selected
           ? "border-primary/50 bg-primary/5"
           : "hover:bg-muted border-transparent")
       }
     >
-      <label className="flex min-w-0 flex-1 cursor-pointer items-center gap-2 select-none">
+      <label className="flex min-w-0 flex-1 cursor-pointer items-start gap-2 select-none">
         <input
           type="radio"
           name="signup-brief"
@@ -43,7 +46,14 @@ function BriefRow({
         <span aria-hidden="true" className="text-brand-ink w-4 shrink-0 text-center">
           {selected ? "✓" : ""}
         </span>
-        <span className="min-w-0 flex-1">{title}</span>
+        <span className="min-w-0 flex-1">
+          {title}
+          {summary ? (
+            <span className="text-muted-foreground mt-0.5 block text-xs leading-snug">
+              {summary}
+            </span>
+          ) : null}
+        </span>
       </label>
       {slug ? (
         <a
@@ -65,16 +75,44 @@ export function SignupForm({
   initialProposal,
   state,
 }: {
-  themes: { theme: string; briefs: { slug: string; title: string }[] }[];
+  themes: {
+    theme: string;
+    briefs: { slug: string; title: string; summary: string }[];
+  }[];
   initialBrief: string;
   initialProposal: string;
   state: "new" | "submitted";
 }) {
   const router = useRouter();
   const [brief, setBrief] = useState(initialBrief);
+  const [filter, setFilter] = useState("");
   const [proposal, setProposal] = useState(initialProposal);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+
+  const total = useMemo(
+    () => themes.reduce((n, g) => n + g.briefs.length, 0),
+    [themes],
+  );
+
+  const shownThemes = useMemo(() => {
+    const needle = filter.trim().toLowerCase();
+    if (!needle) return themes;
+    return themes
+      .map((g) => ({
+        theme: g.theme,
+        briefs: g.briefs.filter(
+          (b) =>
+            b.slug === brief ||
+            b.title.toLowerCase().includes(needle) ||
+            b.summary.toLowerCase().includes(needle) ||
+            g.theme.toLowerCase().includes(needle),
+        ),
+      }))
+      .filter((g) => g.briefs.length > 0);
+  }, [themes, filter, brief]);
+
+  const shown = shownThemes.reduce((n, g) => n + g.briefs.length, 0);
 
   function run(fn: () => Promise<{ ok: true } | { ok: false; error: string }>) {
     setError(null);
@@ -100,13 +138,31 @@ export function SignupForm({
     >
       <fieldset className="space-y-2">
         <legend className="text-sm leading-none font-medium">Brief from the bank</legend>
+        <Label htmlFor="signup-brief-filter" className="sr-only">
+          Filter the bank
+        </Label>
+        <Input
+          id="signup-brief-filter"
+          type="search"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          placeholder={`Filter ${total} briefs by title, summary or theme…`}
+          autoComplete="off"
+        />
+        {filter.trim() ? (
+          <p className="text-muted-foreground text-sm" aria-live="polite">
+            {shown === 0
+              ? "Nothing matches that."
+              : `${shown} of ${total} briefs match.`}
+          </p>
+        ) : null}
         <div className="border-input max-h-80 space-y-4 overflow-y-auto rounded-md border p-3">
           <BriefRow
             selected={brief === ""}
             onPick={() => setBrief("")}
             title="— none, I am proposing my own —"
           />
-          {themes.map((g) => (
+          {shownThemes.map((g) => (
             <div key={g.theme}>
               <p className="text-muted-foreground eyebrow select-none">
                 {g.theme}
@@ -118,6 +174,7 @@ export function SignupForm({
                     selected={brief === b.slug}
                     onPick={() => setBrief(b.slug)}
                     title={b.title}
+                    summary={filter.trim() ? b.summary : undefined}
                     slug={b.slug}
                   />
                 ))}

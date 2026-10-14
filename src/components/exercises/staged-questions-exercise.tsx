@@ -221,7 +221,7 @@ export function StagedQuestionsCard({
       )}
       <div className="mt-2 space-y-2">
         {question.framing && <Paragraphs text={question.framing} />}
-        <Paragraphs text={question.question} className="font-medium" />
+        <Paragraphs text={question.question} />
         {question.instruction && (
           <Paragraphs text={question.instruction} className="text-muted-foreground text-sm" />
         )}

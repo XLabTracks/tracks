@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 
+import { TeamRoster } from "@/components/verification/team-roster";
+
 /* Team — one of the course's own pages.
  *
  * It was a hand-written .html file under public/verification/ until the two
  * halves were folded together: a page served outside the app has no session,
  * so it could only ask an API whether somebody was signed in and never show
- * them their own account. The markup is unchanged, and it carries no script of
- * its own — it is prose, and the chrome, the theme and the notebook belong to
- * the app now. */
+ * them their own account. The roster itself is TeamRoster, shared with the
+ * About page so the two can never list different people. */
 
 export const metadata: Metadata = { title: "Team" };
 
@@ -23,29 +24,10 @@ export default function Page() {
             <h1>Team</h1>
           </div>
 
-          <div className="prose">
+          <section className="team">
+            <TeamRoster />
+          </section>
 
-            <ul className="roster">
-              {/* Flat, not name+role wrapped in a div: the card is a subgrid, so
-                   every row has to be a direct child to sit in a shared track. */}
-              <li className="person">
-                <span className="mug" aria-hidden="true">MG</span>
-                <p className="nm">Marie Veronica Gordi</p>
-                <p className="rl">Role not supplied yet</p>
-              </li>
-              <li className="person">
-                <span className="mug" aria-hidden="true">AC</span>
-                <p className="nm">Ava Chen</p>
-                <p className="rl">Role not supplied yet</p>
-              </li>
-              <li className="person">
-                <span className="mug" aria-hidden="true">PS</span>
-                <p className="nm">Purusha Shirvani</p>
-                <p className="rl">Role not supplied yet</p>
-              </li>
-            </ul>
-
-          </div>
         </div>
       </main>
     </>

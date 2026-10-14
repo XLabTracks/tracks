@@ -19,7 +19,7 @@ describe("actionsFor", () => {
     expect(actionsFor(facts())).toEqual(["highlight", "define", "notebook"]);
   });
 
-  it("adds Report a bug last, and only once a form is configured", () => {
+  it("adds Report an issue last, and only once a form is configured", () => {
     expect(actionsFor(facts())).not.toContain("report");
     expect(actionsFor(facts({ reportSupported: true }))).toEqual([
       "highlight",
@@ -29,7 +29,7 @@ describe("actionsFor", () => {
     ]);
   });
 
-  it("offers Report a bug on a passage too, not just a short phrase", () => {
+  it("offers Report an issue on a passage too, not just a short phrase", () => {
     const passage = "a".concat(" b".repeat(SHORT_WORDS + 4));
     expect(actionsFor(facts({ text: passage, reportSupported: true }))).toEqual([
       "highlight",

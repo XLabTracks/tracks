@@ -20,7 +20,7 @@ export function ChoiceExerciseCard({
       <p className="text-muted-foreground mb-1.5 text-xs font-medium tracking-wide uppercase">
         {EXERCISE_TYPE_LABELS[exercise.type]}
       </p>
-      <p className="font-medium"><MathText text={exercise.prompt} /></p>
+      <p><MathText text={exercise.prompt} /></p>
       <ChoiceExerciseBody exercise={exercise} />
     </aside>
   );

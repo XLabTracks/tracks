@@ -435,6 +435,73 @@
   animation: control-reveal-in 0.35s ease-out both;
 }
 
+/* Landing-page motion, shared by the Control and Verification landings.
+   Only `opacity` and `translate` animate (compositor-only; `translate`, not
+   `transform`, so a hover lift can compose with it). The scroll reveal is CSS
+   and the default state is VISIBLE: it only hides inside `@supports`, so a
+   browser without scroll-driven animation shows the page as it always was.
+   The range ends at `entry 70%`, never on `cover`, or the last elements on a
+   page run out of scroll and sit part-faded forever. */
+@keyframes landing-rise {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+/* A hero already on screen at load plays on a clock: each child a beat behind
+   the one above. `backwards` so nothing flashes before its delay. */
+.landing-stagger > * {
+  animation: landing-rise 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
+}
+.landing-stagger > :nth-child(2) {
+  animation-delay: 0.1s;
+}
+.landing-stagger > :nth-child(3) {
+  animation-delay: 0.2s;
+}
+.landing-stagger > :nth-child(n + 4) {
+  animation-delay: 0.3s;
+}
+
+@supports (animation-timeline: view()) {
+  [data-reveal] {
+    animation: landing-rise 1s linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 70%;
+  }
+}
+
+.landing-lift {
+  transition:
+    transform 0.2s cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 0.2s ease-out;
+}
+.landing-lift:hover {
+  transform: translateY(-2px);
+}
+.landing-lift:active {
+  transform: translateY(0);
+  transition-duration: 0.06s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-stagger > *,
+  [data-reveal] {
+    animation: none;
+  }
+  .landing-lift,
+  .landing-lift:hover,
+  .landing-lift:active {
+    transform: none;
+    transition: none;
+  }
+}
+
 /* Two-worlds figure: capability curves draw in once on load. The paths set
    pathLength=1, so a unit dash covers the whole curve regardless of length. */
 @keyframes two-worlds-draw {

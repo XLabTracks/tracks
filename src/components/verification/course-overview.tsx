@@ -1,18 +1,22 @@
 "use client";
 
 import { ChevronRight } from "lucide-react";
-import { courseOverview } from "@/content/verification/overview";
+import type { CourseOverviewSection } from "@/content/verification/overview";
 import { NotebookLink } from "@/components/verification/notebook-link";
 
-export function CourseOverview() {
+export function CourseOverview({
+  sections,
+}: {
+  sections: CourseOverviewSection[];
+}) {
   return (
     <div className="not-prose mt-6 grid items-start gap-3 md:grid-cols-2">
-      {courseOverview.map((section) => (
+      {sections.map((section) => (
         <details
           key={section.id}
           id={`overview-${section.id}`}
           data-reveal
-          className="border-border bg-card group overview-card rounded-xl border transition-shadow duration-200 open:shadow-soft-md"
+          className="border-border bg-card group landing-lift rounded-xl border transition-shadow duration-200 open:shadow-soft-md"
         >
           <summary className="flex cursor-pointer list-none items-start gap-3 p-4 select-none [&::-webkit-details-marker]:hidden">
             <span className="text-foreground text-base font-semibold">

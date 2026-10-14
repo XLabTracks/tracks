@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CourseOverview } from "@/components/verification/course-overview";
+import { courseOverview } from "@/content/verification/overview";
 import { LegacyScripts } from "@/components/verification/legacy-scripts";
 
 /* Verification — one of the course's own pages.
@@ -151,7 +152,7 @@ export default function Page() {
         <section className="band">
           <div className="wrap">
             <h2 data-reveal>What this course is</h2>
-            <CourseOverview />
+            <CourseOverview sections={courseOverview} />
           </div>
         </section>
       </main>

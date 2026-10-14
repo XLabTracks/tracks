@@ -56,7 +56,7 @@ export function SiteHeader() {
             puts roughly 13px of ink beside 18px type — matching theme.css's
             .brand-mark. The two cuts follow the platform's dark class. */}
         <Link
-          href="/"
+          href={onControlTrack ? "/tracks/control" : "/"}
           className="flex items-center gap-1.5 text-lg leading-none font-bold tracking-tight select-none"
         >
           {wordmarkName}{" "}

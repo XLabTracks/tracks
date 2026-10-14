@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FileText, Lock, Route, Settings } from "lucide-react";
+import { FileText, Lock, Route } from "lucide-react";
 import {
   isOptionalItem,
   itemIdOf,
@@ -13,12 +13,18 @@ import { PREREQUISITES_ENFORCED } from "@/lib/content/prerequisites";
 import { OptionalPrefix } from "@/components/content/optional-tag";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-
-const KIND_LABEL: Record<string, string> = {
-  foundations: "Foundations",
-  technical: "Technical",
-  governance: "Governance",
-};
+import { CourseOverview } from "@/components/verification/course-overview";
+import { controlOverview } from "@/content/control-overview";
+import {
+  LANDING_ACTIONS,
+  LANDING_BAND_PAD as BAND_PAD,
+  LANDING_BUTTON as HERO_BUTTON,
+  LANDING_H1,
+  LANDING_H2 as BAND_H2,
+  LANDING_HERO,
+  LANDING_LEDE,
+  LANDING_WRAP as WRAP,
+} from "@/components/landing/landing";
 
 /** "~4¾ h" from minutes (nearest quarter-hour); "~40 min" under an hour. */
 function formatDuration(minutes: number): string {
@@ -50,6 +56,7 @@ function moduleMetaLine(items: ModuleItem[]): string | null {
   if (readings) parts.push(`${readings} reading${readings === 1 ? "" : "s"}`);
   return parts.length ? parts.join(" · ") : null;
 }
+
 
 const EXPECTATIONS = [
   {
@@ -90,30 +97,23 @@ export function ControlTrackLanding({
 
   return (
     <div>
-      <div className="mx-auto w-full max-w-5xl px-5 lg:px-10">
-        <section className="pt-14 pb-12 lg:pt-20">
-          <p className="text-destructive dark:text-primary font-mono text-xs font-medium tracking-widest uppercase">
-            {KIND_LABEL[track.kind] ?? track.kind} track
-          </p>
-          <h1 className="mt-4 text-5xl font-semibold tracking-tight text-balance sm:text-6xl">
+      <section className={LANDING_HERO}>
+        <div className={`landing-stagger ${WRAP}`}>
+          <h1 className={LANDING_H1}>
             {track.title}
           </h1>
-          <p className="text-muted-foreground mt-5 max-w-[64ch] text-lg leading-relaxed text-pretty">
+          <p className={LANDING_LEDE}>
             {track.description}
           </p>
-          <div className="mt-6 flex flex-wrap items-center gap-2">
-            <Badge variant="secondary">{modules.length} modules</Badge>
-            <Badge variant="secondary">{totalItems} items</Badge>
-          </div>
-          <div className="mt-7 flex flex-wrap items-center gap-3">
+          <div className={LANDING_ACTIONS}>
             {heroHref && (
-              <Button asChild size="lg">
+              <Button asChild size="lg" className={HERO_BUTTON}>
                 <Link href={heroHref}>
                   {started ? "Continue the track" : "Start module 1"}
                 </Link>
               </Button>
             )}
-            <Button asChild size="lg" variant="secondary">
+            <Button asChild size="lg" variant="outline" className={HERO_BUTTON}>
               <a href="#modules">Browse the syllabus</a>
             </Button>
           </div>
@@ -130,85 +130,108 @@ export function ControlTrackLanding({
               only if you want progress saved.
             </p>
           )}
-        </section>
+        </div>
+      </section>
 
-        <section id="modules" className="scroll-mt-20 pb-6">
-          <div className="border-border flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-b pb-3.5">
-            <h2 className="text-2xl font-semibold tracking-tight">The modules</h2>
-            {showLocks && (
-              <span className="text-muted-foreground inline-flex items-center gap-1.5 text-sm">
-                <Lock className="size-3.5" aria-hidden />
-                Prerequisites enforced — modules unlock in order
-              </span>
-            )}
+      <section
+        id="modules"
+        className="border-border bg-card scroll-mt-20 border-y"
+      >
+        <div className={`${WRAP} ${BAND_PAD}`}>
+          <div
+            data-reveal
+            className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2"
+          >
+            <h2 className={BAND_H2}>The modules</h2>
+            <span className="text-muted-foreground text-sm">
+              {modules.length} modules · {totalItems} items
+            </span>
           </div>
+          {showLocks && (
+            <p className="text-muted-foreground mt-3 inline-flex items-center gap-1.5 text-sm">
+              <Lock className="size-3.5" aria-hidden />
+              Prerequisites enforced — modules unlock in order
+            </p>
+          )}
 
-          {modules.map(({ module, items }) => {
-            const meta = moduleMetaLine(items);
-            const duration = module.estimatedMinutes
-              ? formatDuration(module.estimatedMinutes)
-              : null;
-            const prereqOrders = module.prerequisiteModuleIds
-              .map((id) => orderByModuleId.get(id))
-              .filter((n): n is number => typeof n === "number");
-            const unlocksAfter = prereqOrders.length ? Math.max(...prereqOrders) : null;
-            const isFirst = module.order === 1;
-            return (
-              <div
-                key={module.id}
-                className="border-border grid grid-cols-[2.5rem_1fr] gap-x-4 border-b py-6 last:border-b-0 sm:grid-cols-[3.5rem_1fr_auto] sm:gap-x-6"
-              >
-                <span className="text-muted-foreground pt-0.5 font-mono text-sm">
-                  {String(module.order).padStart(2, "0")}
-                </span>
-                <div className="min-w-0">
-                  <h3 className="text-[17px] font-semibold tracking-tight">
-                    <Link
-                      href={`/tracks/${track.slug}/${module.slug}`}
-                      className="-my-2 inline-block py-2 hover:underline underline-offset-4"
-                    >
-                      {module.title}
-                    </Link>
-                  </h3>
-                  {meta && (
-                    <p className="text-muted-foreground mt-1.5 font-mono text-xs">
-                      {meta}
-                    </p>
-                  )}
+          <ol role="list" className="mt-7 flex list-none flex-col gap-4">
+            {modules.map(({ module, items }) => {
+              const meta = moduleMetaLine(items);
+              const duration = module.estimatedMinutes
+                ? formatDuration(module.estimatedMinutes)
+                : null;
+              const prereqOrders = module.prerequisiteModuleIds
+                .map((id) => orderByModuleId.get(id))
+                .filter((n): n is number => typeof n === "number");
+              const unlocksAfter = prereqOrders.length ? Math.max(...prereqOrders) : null;
+              const isFirst = module.order === 1;
+              return (
+                <li
+                  key={module.id}
+                  data-reveal
+                  className="border-border bg-background landing-lift hover:shadow-soft-md rounded-xl border"
+                >
+                  <div className="flex flex-wrap items-start gap-x-6 gap-y-3 p-5">
+                    <div className="min-w-[16rem] flex-1">
+                      <p className="text-muted-foreground text-xs">
+                        Module {String(module.order).padStart(2, "0")}
+                        {meta && <> · {meta}</>}
+                      </p>
+                      <h3 className="mt-1.5 text-lg font-semibold tracking-tight">
+                        <Link
+                          href={`/tracks/${track.slug}/${module.slug}`}
+                          className="-my-2 inline-block py-2 hover:underline underline-offset-4"
+                        >
+                          {module.title}
+                        </Link>
+                      </h3>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      {isFirst && <Badge>Start here</Badge>}
+                      {showLocks && unlocksAfter !== null && (
+                        <span className="text-muted-foreground inline-flex items-center gap-1.5 text-sm">
+                          <Lock className="size-3.5" aria-hidden />
+                          after {String(unlocksAfter).padStart(2, "0")}
+                        </span>
+                      )}
+                      {duration && (
+                        <span className="text-muted-foreground text-sm">{duration}</span>
+                      )}
+                    </div>
+                  </div>
                   {items.length > 0 && (
                     <ModuleItemsTable track={track} module={module} items={items} />
                   )}
-                </div>
-                <div className="col-start-2 mt-3 flex items-center gap-3 sm:col-start-3 sm:mt-0 sm:flex-col sm:items-end sm:gap-2">
-                  {isFirst && <Badge>Start here</Badge>}
-                  {showLocks && unlocksAfter !== null && (
-                    <span className="text-muted-foreground inline-flex items-center gap-1.5 text-sm">
-                      <Lock className="size-3.5" aria-hidden />
-                      after {String(unlocksAfter).padStart(2, "0")}
-                    </span>
-                  )}
-                  {duration && (
-                    <span className="text-muted-foreground text-sm">{duration}</span>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </section>
-      </div>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+      </section>
 
-      <section className="border-border bg-muted/50 border-t">
-        <div className="mx-auto w-full max-w-5xl px-5 py-12 lg:px-10">
-          <div className="grid gap-10 md:grid-cols-[1fr_1.5fr] md:items-center md:gap-14">
-            <div>
-              <h2 className="text-2xl font-semibold tracking-tight">
-                Prerequisites
-              </h2>
-            </div>
+      <section>
+        <div className={`${WRAP} ${BAND_PAD}`}>
+          <h2 data-reveal className={BAND_H2}>
+            What this course is
+          </h2>
+          <CourseOverview sections={controlOverview} />
+        </div>
+      </section>
+
+      <section className="border-border border-t">
+        <div className={`${WRAP} ${BAND_PAD}`}>
+          <div className="grid gap-8 md:grid-cols-[1fr_1.5fr] md:gap-14">
+            <h2 data-reveal className={BAND_H2}>
+              Prerequisites
+            </h2>
             <div className="flex flex-col gap-5">
               {EXPECTATIONS.map(({ icon: Icon, title, body }) => (
-                <div key={title} className="grid grid-cols-[1.25rem_1fr] gap-3">
-                  <Icon className="mt-0.5 size-4" aria-hidden />
+                <div
+                  key={title}
+                  data-reveal
+                  className="grid grid-cols-[1.25rem_1fr] gap-3"
+                >
+                  <Icon className="text-primary mt-0.5 size-4" aria-hidden />
                   <div>
                     <h3 className="text-[15px] font-semibold">{title}</h3>
                     <p className="text-muted-foreground mt-0.5 text-sm leading-relaxed">
@@ -235,7 +258,7 @@ function ModuleItemsTable({
   items: ModuleItem[];
 }) {
   return (
-    <div className="border-border mt-4 max-w-2xl overflow-hidden rounded-lg border">
+    <div className="border-border border-t">
       {items.map((item) => {
         const minutes =
           item.kind === "lesson"
@@ -244,7 +267,7 @@ function ModuleItemsTable({
         return (
           <div
             key={itemIdOf(item)}
-            className="border-border grid grid-cols-[1fr_auto] items-baseline gap-x-4 border-b px-3.5 py-2.5 last:border-b-0 sm:grid-cols-[1fr_auto_auto]"
+            className="border-border grid grid-cols-[1fr_auto] items-baseline gap-x-4 border-b px-5 py-2.5 last:border-b-0 sm:grid-cols-[1fr_auto_auto]"
           >
             <Link
               href={`/tracks/${track.slug}/${module.slug}/${itemSlugOf(item)}`}

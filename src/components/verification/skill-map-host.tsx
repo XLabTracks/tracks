@@ -8,6 +8,10 @@ type SkillMapApi = {
   mount: (opts?: { query?: boolean }) => unknown;
 };
 
+type ProgressApi = {
+  setServerUnits?: (units: string[]) => void;
+};
+
 const SCRIPTS = [
   "data/course.js",
   "data/skills.js",
@@ -17,16 +21,21 @@ const SCRIPTS = [
   "map.js",
 ];
 
-export function SkillMapHost() {
+export function SkillMapHost({ units }: { units: string[] }) {
   const mounted = useRef(false);
 
   const mount = useCallback(() => {
     if (mounted.current) return;
-    const map = (window as unknown as { VTSkillMap?: SkillMapApi }).VTSkillMap;
+    const runtime = window as unknown as {
+      VTSkillMap?: SkillMapApi;
+      VT?: ProgressApi;
+    };
+    const map = runtime.VTSkillMap;
     if (!map) return;
     mounted.current = true;
+    runtime.VT?.setServerUnits?.(units);
     map.mount({ query: true });
-  }, []);
+  }, [units]);
 
   return (
     <>

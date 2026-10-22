@@ -2,7 +2,9 @@ import type { ReactNode } from "react";
 import { NotebookPen } from "lucide-react";
 import { memoSlots } from "@/content/verification/memos";
 import type { MemoDraft, MemoField } from "@/lib/verification/memo-drafts";
+import type { InstructorNote } from "@/lib/submission-notes-read";
 import { OptionalPrefix } from "@/components/content/optional-tag";
+import { SubmissionNotes } from "@/components/classrooms/submission-notes";
 
 /**
  * The learner's memo-desk drafts, read for their instructor.
@@ -18,7 +20,18 @@ import { OptionalPrefix } from "@/components/content/optional-tag";
  * same document and are deliberately not read: `getMemoDrafts` selects the
  * memos store alone.
  */
-export function StudentMemoDrafts({ drafts }: { drafts: MemoDraft[] | null }) {
+export function StudentMemoDrafts({
+  drafts,
+  classroomId,
+  studentId,
+  notes,
+}: {
+  drafts: MemoDraft[] | null;
+  classroomId: string;
+  studentId: string;
+  /** Null when the annotations table has not been migrated. */
+  notes: Map<string, InstructorNote[]> | null;
+}) {
   if (drafts === null) {
     return (
       <section className="mt-8">
@@ -51,7 +64,13 @@ export function StudentMemoDrafts({ drafts }: { drafts: MemoDraft[] | null }) {
       ) : (
         <div className="mt-3 space-y-3">
           {drafts.map((draft) => (
-            <Draft key={draft.id} draft={draft} />
+            <Draft
+              key={draft.id}
+              draft={draft}
+              classroomId={classroomId}
+              studentId={studentId}
+              notes={notes?.get(draft.id) ?? (notes ? [] : null)}
+            />
           ))}
         </div>
       )}
@@ -91,7 +110,17 @@ function withBold(text: string): ReactNode[] {
     );
 }
 
-function Draft({ draft }: { draft: MemoDraft }) {
+function Draft({
+  draft,
+  classroomId,
+  studentId,
+  notes,
+}: {
+  draft: MemoDraft;
+  classroomId: string;
+  studentId: string;
+  notes: InstructorNote[] | null;
+}) {
   const { slot, fields } = draft;
   // A memo prints To/From/Date/Subject; every other genre collapses the
   // letterhead to its last row, so the one field is a title, not a subject.
@@ -160,6 +189,16 @@ function Draft({ draft }: { draft: MemoDraft }) {
             </div>
           ))}
         </dl>
+      )}
+
+      {notes && (
+        <SubmissionNotes
+          classroomId={classroomId}
+          studentId={studentId}
+          targetId={draft.id}
+          targetKind="memo"
+          notes={notes}
+        />
       )}
     </div>
   );

@@ -1,14 +1,11 @@
 import { PenLine } from "lucide-react";
-import { getExerciseById } from "@/lib/content";
-import { isWritingExercise, type WritingSection } from "@/lib/content/types";
+import { writingSections } from "@/lib/content/writing-response";
 import type { TrackWritingTask } from "@/components/mdx/lesson-content";
 import type { ExerciseSubmissionMap } from "@/lib/progress";
+import type { InstructorNote } from "@/lib/submission-notes-read";
 import { OptionalPrefix } from "@/components/content/optional-tag";
+import { SubmissionNotes } from "@/components/classrooms/submission-notes";
 import { Badge } from "@/components/ui/badge";
-
-const DEFAULT_SECTIONS: WritingSection[] = [
-  { id: "response", label: "Response" },
-];
 
 const STATUS_WORD = {
   draft: "Draft",
@@ -30,9 +27,16 @@ const STATUS_WORD = {
 export function StudentWrittenWork({
   tasks,
   submissions,
+  classroomId,
+  studentId,
+  notes,
 }: {
   tasks: TrackWritingTask[];
   submissions: ExerciseSubmissionMap;
+  classroomId: string;
+  studentId: string;
+  /** Null when the annotations table has not been migrated. */
+  notes: Map<string, InstructorNote[]> | null;
 }) {
   if (tasks.length === 0) return null;
 
@@ -77,6 +81,9 @@ export function StudentWrittenWork({
                   key={task.exerciseId}
                   task={task}
                   row={submissions.get(task.exerciseId)}
+                  classroomId={classroomId}
+                  studentId={studentId}
+                  notes={notes?.get(task.exerciseId) ?? (notes ? [] : null)}
                 />
               ))}
             </div>
@@ -98,15 +105,17 @@ function isSubmitted(
 function Task({
   task,
   row,
+  classroomId,
+  studentId,
+  notes,
 }: {
   task: TrackWritingTask;
   row: ReturnType<ExerciseSubmissionMap["get"]>;
+  classroomId: string;
+  studentId: string;
+  notes: InstructorNote[] | null;
 }) {
-  const exercise = getExerciseById(task.exerciseId);
-  const sections =
-    exercise && isWritingExercise(exercise)
-      ? (exercise.sections ?? DEFAULT_SECTIONS)
-      : DEFAULT_SECTIONS;
+  const sections = writingSections(task.exerciseId, "exercise");
   const open = row?.status === "submitted" || row?.status === "graded";
   const values = (row?.responseJson ?? {}) as Record<string, string>;
 
@@ -156,6 +165,16 @@ function Task({
         <p className="text-muted-foreground mt-3 text-xs">
           Reasoning-transparency grade: {row.score}
         </p>
+      )}
+
+      {notes && (
+        <SubmissionNotes
+          classroomId={classroomId}
+          studentId={studentId}
+          targetId={task.exerciseId}
+          targetKind="exercise"
+          notes={notes}
+        />
       )}
     </div>
   );

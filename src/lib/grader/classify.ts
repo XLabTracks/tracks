@@ -17,9 +17,15 @@ export function classifyLength(text: string): LengthClass {
   return "long";
 }
 
-// Hy3's free endpoint was deprecated. This current free model supports the
-// structured-output and reasoning parameters the grader now requires.
-const DEFAULT_MODEL = "openai/gpt-oss-120b:free";
+// The free tier is where the server-wide key grades, and free slugs are
+// withdrawn without notice: openai/gpt-oss-120b:free (and Hy3's endpoint
+// before it) went to zero serving endpoints while the paid variant stayed,
+// so every ungraded learner got "Grading service error (400)" and nothing
+// said why. Whatever stands here has to support strict structured output and
+// a reasoning effort, which is a narrow slice of what is free — check
+// https://openrouter.ai/api/v1/models/<slug>/endpoints before changing it,
+// and OPENROUTER_MODEL overrides it without a deploy when it next dies.
+const DEFAULT_MODEL = "nvidia/nemotron-3-super-120b-a12b:free";
 const DEFAULT_SERVER_FALLBACK = "openrouter/free";
 
 // Grading billed to a user's own (or a classroom's) OpenRouter key defaults

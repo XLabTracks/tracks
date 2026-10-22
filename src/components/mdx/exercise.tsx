@@ -37,6 +37,8 @@ import {
 } from "./exercise-cards";
 import type { WritingValues } from "@/components/exercises/writing-editor";
 import { TransparencyFeedback } from "@/components/exercises/transparency-feedback";
+import { FacilitatorFeedback } from "@/components/learn/facilitator-feedback";
+import { getSharedNotes } from "@/lib/submission-notes-read";
 import { feedbackToHtml } from "@/lib/grader/feedback-html";
 import { parseGraderReport, parseVerdict } from "@/lib/grader/parse";
 import { getGraderKeyView } from "@/lib/grader/grading-key";
@@ -273,6 +275,9 @@ export async function Exercise({ id }: ExerciseProps) {
           onSaveDraft={saveWritingDraft.bind(null, exercise.id, "exercise", exercise.format)}
           onSubmit={submitWriting.bind(null, exercise.id, "exercise", exercise.format)}
           onReopen={reopenWriting.bind(null, exercise.id, "exercise")}
+        />
+        <FacilitatorFeedback
+          notes={(await getSharedNotes(user.id)).get(exercise.id) ?? []}
         />
         {submission?.status === "submitted" &&
           (exercise.sampleAnswer ? (

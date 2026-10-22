@@ -1,8 +1,11 @@
 import { ArrowUpRight, PenLine } from "lucide-react";
 import { memoCardSlotsForLesson, type MemoSlot } from "@/content/verification/memos";
+import { getCurrentUserOrSignedOut } from "@/lib/auth";
+import { getSharedNotes } from "@/lib/submission-notes-read";
+import { FacilitatorFeedback } from "@/components/learn/facilitator-feedback";
 import { MemoDeskHost } from "@/components/verification/memo-desk-host";
 
-export function MemoDesk({ lesson }: { lesson: string }) {
+export async function MemoDesk({ lesson }: { lesson: string }) {
   const slots = memoCardSlotsForLesson(lesson);
   if (!slots.length) {
     return (
@@ -14,8 +17,15 @@ export function MemoDesk({ lesson }: { lesson: string }) {
   const elsewhere = slots.filter((slot) => slot.href);
   const here = slots.filter((slot) => !slot.href);
 
+  const user = await getCurrentUserOrSignedOut();
+  const shared = user ? await getSharedNotes(user.id) : null;
+  const feedback = shared
+    ? slots.flatMap((slot) => shared.get(slot.id) ?? [])
+    : [];
+
   return (
     <div className="not-prose my-6 space-y-3" data-widget>
+      {feedback.length > 0 && <FacilitatorFeedback notes={feedback} />}
       {elsewhere.map((slot) => (
         <PageSlot key={slot.id} slot={slot} href={slot.href!} />
       ))}

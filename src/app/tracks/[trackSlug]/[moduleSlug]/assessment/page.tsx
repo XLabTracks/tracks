@@ -20,6 +20,8 @@ import {
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { WritingEditor, type WritingValues } from "@/components/exercises/writing-editor";
 import { TransparencyFeedback } from "@/components/exercises/transparency-feedback";
+import { FacilitatorFeedback } from "@/components/learn/facilitator-feedback";
+import { getSharedNotes } from "@/lib/submission-notes-read";
 import { feedbackToHtml } from "@/lib/grader/feedback-html";
 import { parseGraderReport, parseVerdict } from "@/lib/grader/parse";
 import { getGraderKeyView } from "@/lib/grader/grading-key";
@@ -128,6 +130,9 @@ export default async function AssessmentPage({
                 onSubmit={submitWriting.bind(null, assessment.id, "assessment", assessment.format)}
                 onReopen={reopenWriting.bind(null, assessment.id, "assessment")}
                 submitLabel="Submit assessment"
+              />
+              <FacilitatorFeedback
+                notes={(await getSharedNotes(user.id)).get(assessment.id) ?? []}
               />
               {submission?.status === "submitted" && (
                 <TransparencyFeedback

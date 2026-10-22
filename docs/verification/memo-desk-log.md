@@ -190,3 +190,44 @@ on the tasks whose prompt opens with the word, since the row also carries
 `OptionalPrefix` from `exercise.optional`. The lessons mark those in the
 prompt text and print no prefix. The row keeps the component and drops the
 word from the text.
+
+## 2026-10-22 — a facilitator can annotate, privately or back to the learner
+
+Course owner: "добавь опцию фасилитатору делать аннотации сабмишенов
+(приватно и отправляя обратно студенту)."
+
+`SubmissionNote` carries both, and the difference is per note rather than
+per instructor, because the two things somebody writes about one piece of
+work are different documents: a private read of how a learner is doing, and
+the sentence they are given back. Each note says which it is in words beside
+a glyph, never by colour alone.
+
+`targetId` is a string content id with no FK — a writing exercise, an
+assessment, or a **memo-desk slot**. That is why it does not point at
+`Submission.id`: the memos are course work and have no Submission row, and
+the owner had just ruled that they are work. `targetKind` names the register
+and the action validates against it: the exercise and assessment registers
+are closed and checked against the content graph, while a memo id is only
+bounded in shape — a learner's store may still hold a slot the outline has
+dropped, and their facilitator has to be able to write about what is on the
+screen.
+
+Where the learner reads it: under the writing exercise in the lesson, under
+the end-of-module assessment, and above the memo desk embedded in the
+lesson. Never the private ones — `getSharedNotes` filters on the column, so
+a private note is not fetched for a learner's page at all. The author's name
+and their classroom travel with every shared note, because feedback from
+nobody reads differently from feedback from a person, and a learner in two
+cohorts needs to know which one sent it.
+
+Found and fixed on the way: `/classrooms/[id]/students/[sid]` answered a
+stranger with **200** and the title "Student progress" before rendering the
+404 body — the static `metadata` export flushed the head, the trap this
+repo had already written down for `/verification/applications`. The gate now
+runs in `generateMetadata`, and `getClassroom` is `cache()`-wrapped so
+asking twice costs one query. That alone did not fix the status, because
+`src/app/classrooms/loading.tsx` put a Suspense boundary over the whole
+subtree and a streamed response has already sent its 200. The skeleton is
+four list rows — the shape of the classrooms index and of nothing else under
+it — so it moved into a `(index)` route group with that page. Verified: the
+index still streams its skeleton, and a non-instructor now gets a real 404.

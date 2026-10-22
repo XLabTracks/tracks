@@ -23,7 +23,10 @@ import {
   type ExerciseSubmissionMap,
 } from "@/lib/progress";
 import { getTrackWritingTasks } from "@/components/mdx/lesson-content";
+import { getMemoDrafts } from "@/lib/verification/state-read";
+import type { MemoDraft } from "@/lib/verification/memo-drafts";
 import { OptionalPrefix } from "@/components/content/optional-tag";
+import { StudentMemoDrafts } from "@/components/classrooms/student-memo-drafts";
 import { StudentWrittenWork } from "@/components/classrooms/student-written-work";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import {
@@ -65,6 +68,15 @@ export default async function StudentDetailPage({
   const writtenWork: ExerciseSubmissionMap = await getExerciseSubmissionMap(
     sid,
   ).catch((): ExerciseSubmissionMap => new Map());
+
+  // The memo desk's drafts are course work too, and they are the one piece of
+  // it kept in VerificationState rather than a Submission row. Only when the
+  // room reaches the Verification track: nothing else in the graph has a desk.
+  const memoDrafts: MemoDraft[] | null = trackList.some(
+    (track) => track.id === "verification",
+  )
+    ? await getMemoDrafts(sid)
+    : [];
 
   const trackData = await Promise.all(
     trackList.map(async (track) => {
@@ -217,6 +229,10 @@ export default async function StudentDetailPage({
               tasks={writingTasks}
               submissions={writtenWork}
             />
+
+            {track.id === "verification" && (
+              <StudentMemoDrafts drafts={memoDrafts} />
+            )}
           </section>
         ))}
       </div>

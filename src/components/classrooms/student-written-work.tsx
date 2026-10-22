@@ -161,12 +161,23 @@ function Task({
   );
 }
 
+/**
+ * The first line of a prompt, as a label.
+ *
+ * A prompt whose own text opens "Optional:" loses that word here, because
+ * the row already carries `OptionalPrefix` from `exercise.optional`: the
+ * lessons mark an optional task in the prompt itself and print no prefix, so
+ * showing both is the one dialect the house rule forbids.
+ */
 function firstLine(prompt: string): string {
   const line =
     prompt
       .split("\n")
       .map((part) => part.trim())
       .find(Boolean) ?? "Writing task";
-  const plain = line.replace(/^#+\s*/, "").replace(/[*_`]/g, "");
+  const plain = line
+    .replace(/^#+\s*/, "")
+    .replace(/[*_`]/g, "")
+    .replace(/^optional:\s*/i, "");
   return plain.length > 140 ? `${plain.slice(0, 139).trimEnd()}…` : plain;
 }

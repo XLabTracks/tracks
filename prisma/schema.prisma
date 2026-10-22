@@ -39,6 +39,7 @@ model User {
   memberships        ClassroomMembership[]
   createdClassrooms  Classroom[]           @relation("ClassroomCreatedBy")
   createdAssignments Assignment[]          @relation("AssignmentCreatedBy")
+  instructorGrades   InstructorGrade[]     @relation("InstructorGradeGrader")
   apiKeys            UserApiKey[]
   reviewCards        ReviewCard[]
   highlights         Highlight[]
@@ -240,22 +241,23 @@ enum SubmissionStatus {
 }
 
 model Submission {
-  id              String           @id @default(cuid())
-  userId          String
-  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  contentId       String
-  kind            SubmissionKind
-  format          String?
+  id               String            @id @default(cuid())
+  userId           String
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contentId        String
+  kind             SubmissionKind
+  format           String?
   // closed-ended answers (selected option ids) or sectioned writing values
-  responseJson    Json?
-  responseText    String?
-  status          SubmissionStatus @default(draft)
-  score           Float?
-  feedback        String? // reserved for the planned feedback flow (with status=graded)
-  version         Int              @default(1) // reserved — not yet used for revision history
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  gradingAttempts GradingAttempt[]
+  responseJson     Json?
+  responseText     String?
+  status           SubmissionStatus  @default(draft)
+  score            Float?
+  feedback         String? // reserved for the planned feedback flow (with status=graded)
+  version          Int               @default(1) // reserved — not yet used for revision history
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  gradingAttempts  GradingAttempt[]
+  instructorGrades InstructorGrade[]
   // No separate @@index([userId, contentId]): it is a strict prefix of the
   // unique above, which serves every Submission predicate in the app.
 
@@ -339,6 +341,7 @@ model Classroom {
   memberships ClassroomMembership[]
   apiKeys     ClassroomApiKey[]
   assignments Assignment[]
+  grades      InstructorGrade[]
 }
 
 model ClassroomMembership {
@@ -381,4 +384,29 @@ model Assignment {
   updatedAt   DateTime  @updatedAt
 
   @@index([classroomId])
+}
+
+// An instructor's grade on one student's submitted writing, per classroom (a
+// student in two classrooms can be graded by each). `criteria` is the
+// reasoning-transparency rubric scored by hand: an array of
+// { id: "C1".."C7", score: 0..3 | null, note } — the same shape and the same
+// /45 total (rubricTotal) as the LLM grader's. The total is derived at read
+// time, never stored. `responseHash` fingerprints the writing that was
+// graded, so a resubmission with different text reads as an older grade.
+model InstructorGrade {
+  id           String     @id @default(cuid())
+  classroomId  String
+  classroom    Classroom  @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+  submissionId String
+  submission   Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  graderId     String?
+  grader       User?      @relation("InstructorGradeGrader", fields: [graderId], references: [id], onDelete: SetNull)
+  criteria     Json
+  comment      String?
+  responseHash String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@unique([classroomId, submissionId])
+  @@index([submissionId])
 }

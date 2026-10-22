@@ -112,7 +112,7 @@ const PROCEDURE_CLOSING_STEPS = [
   `N/A handling: if a criterion genuinely cannot apply (e.g., C7 data-sharing for a piece with no data analysis; C1 for a very short note where a summary would be pure overhead), score it N/A, exclude it from the total, and rescale: final score = (points earned / points possible) × 45. Use N/A sparingly — most criteria apply to most analytical writing.`,
   `Compute: Total = 3×(C1+C2+C3+C4) + (C5+C6+C7), max 45 (rescaled if any N/A).`,
   `Map to band:
-   - 38–45: GiveWell-tier; check whether transparency cost matched the document's stakes.
+   - 38–45: Exemplary; check whether transparency cost matched the document's stakes.
    - 28–37: Strong; reader can update efficiently. Target for a serious research post.
    - 18–27: Standard good academic/analytical writing; reader must guess confidence levels and support quality.
    - 8–17: Persuasive writing; evidence pile, uniform confidence, laundered support.

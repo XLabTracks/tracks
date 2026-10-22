@@ -288,6 +288,19 @@ server; the client only ever sees states, classroom names, and `last4`s
 (`getGraderKeyView`, passed into `TransparencyFeedback`; it probes
 decryption, so a key orphaned by secret rotation surfaces as `needs-reentry`
 and grading errors rather than silently billing the server-wide key).
+**Instructor grades.** A classroom instructor grades a student's submitted
+writing exercise by hand on the same rubric (`InstructorGrade`, one row per
+classroom × submission; needs `db/migrations/20261022120000_instructor_grades.sql`).
+The criteria, validation and /45 total are shared with the LLM grader
+(`rubricTotal` in `rubric.ts`, `src/lib/grader/instructor-grade.ts`); the
+total is derived at read time, and `responseHash` marks a grade stale when
+the text changes, never a timestamp (the LLM grader writes the same row).
+Instructors read and grade on the student page's Written work section
+(`src/components/classrooms/written-work.tsx`), which finds an item's writing
+through `getItemWritingExerciseIds`; students see the grade under their
+answer (`InstructorFeedback`). `saveInstructorGrade` re-checks that the caller
+instructs the classroom and the writer is its student. Drafts are listed by
+status only, and Verification memo-desk drafts are not covered yet.
 `src/lib/control-model/` is the pure closed-form model behind the Control
 track's demos — its calibration test pins the paper's headline numbers (±4pp);
 plan-level rationale lives in the demos, the code + test are normative.

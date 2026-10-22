@@ -59,20 +59,31 @@ export function resolveAssignmentItem(
   contentId: string,
 ): AssignmentItemView | null {
   const location = getContentLocation(contentId);
-  if (!location) return null;
-  const items = getItemsForModule(location.module.id);
-  const item = items.find((it) => itemIdOf(it) === contentId);
-  if (!item) return null;
-  // A section head answers for its subsections everywhere (the groupDone rule
-  // in item-done.ts), so assigning one assigns its whole group — otherwise a
-  // nine-section submodule would report done from its opening page.
-  const children = items.filter((it) => sectionIdOf(it) === contentId);
+  const group = assignedModuleItems(contentId);
+  if (!location || group.length === 0) return null;
   return {
     id: contentId,
-    title: itemTitleOf(item),
+    title: itemTitleOf(group[0]),
     href: location.href,
-    progressIds: [item, ...children].flatMap(getItemProgressContentIds),
+    progressIds: group.flatMap(getItemProgressContentIds),
   };
+}
+
+/**
+ * The module items an assigned content id stands for: the item itself, then
+ * — when it is a section head — its subsections. A section head answers for
+ * its subsections everywhere (the groupDone rule in item-done.ts), so
+ * assigning one assigns its whole group; otherwise a nine-section submodule
+ * would report done from its opening page. Empty for anything that is not a
+ * module item proper.
+ */
+export function assignedModuleItems(contentId: string): ModuleItem[] {
+  const location = getContentLocation(contentId);
+  if (!location) return [];
+  const items = getItemsForModule(location.module.id);
+  const item = items.find((it) => itemIdOf(it) === contentId);
+  if (!item) return [];
+  return [item, ...items.filter((it) => sectionIdOf(it) === contentId)];
 }
 
 /** The Json column read back defensively: an array of strings, else empty. */

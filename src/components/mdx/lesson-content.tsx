@@ -6,9 +6,11 @@ import { isLessonTitleHeading } from "@/lib/content/lesson-heading";
 import {
   getExerciseById,
   getItemsForModule,
+  getLessonById,
   getModulesForTrack,
+  type ModuleItem,
 } from "@/lib/content";
-import { isWritingExercise } from "@/lib/content/types";
+import { isWritingExercise, type WritingExercise } from "@/lib/content/types";
 // Lesson MDX maths is rendered at build time by rehype-katex, so it arrives
 // as finished markup with no component to carry its styles — see globals.css.
 import "katex/dist/katex.min.css";
@@ -137,17 +139,73 @@ export async function getTrackRequiredWritingIds(
   for (const mod of getModulesForTrack(trackId)) {
     for (const item of getItemsForModule(mod.id)) {
       if (item.kind !== "lesson") continue;
-      const sections = await getLessonSections(item.lesson.contentRef);
-      for (const section of sections) {
-        if (!section.exercise) continue;
-        const exercise = getExerciseById(section.exercise);
-        if (!exercise || !isWritingExercise(exercise)) continue;
-        if (exercise.optional) continue;
-        ids.push(exercise.id);
+      for (const exercise of await lessonWritingExercises(
+        item.lesson.contentRef
+      )) {
+        if (!exercise.optional) ids.push(exercise.id);
       }
     }
   }
   return ids;
+}
+
+/** The writing exercises a lesson body embeds, in reading order. */
+async function lessonWritingExercises(
+  contentRef: string
+): Promise<WritingExercise[]> {
+  const sections = await getLessonSections(contentRef);
+  return sections.flatMap((section) => {
+    const exercise = section.exercise
+      ? getExerciseById(section.exercise)
+      : undefined;
+    return exercise && isWritingExercise(exercise) ? [exercise] : [];
+  });
+}
+
+/**
+ * Every writing exercise a module item asks for, optional ones included, in
+ * reading order: a lesson's embedded `<Exercise/>` blocks, or a paper's
+ * spliced activities — its exercises, sequences, and the bodies of its
+ * inserted lessons. What an instructor reads and grades for that item.
+ */
+export async function getItemWritingExerciseIds(
+  item: ModuleItem
+): Promise<string[]> {
+  const ids: string[] = [];
+  if (item.kind === "lesson") {
+    for (const exercise of await lessonWritingExercises(
+      item.lesson.contentRef
+    )) {
+      ids.push(exercise.id);
+    }
+  } else {
+    for (const edit of item.paper.edits ?? []) {
+      if (edit.op !== "activity") continue;
+      for (const activity of edit.items) {
+        if (activity.kind === "lesson") {
+          const lesson = getLessonById(activity.id);
+          if (!lesson) continue;
+          for (const exercise of await lessonWritingExercises(
+            lesson.contentRef
+          )) {
+            ids.push(exercise.id);
+          }
+          continue;
+        }
+        const candidates =
+          activity.kind === "exercise"
+            ? [activity.id]
+            : activity.kind === "sequence"
+              ? activity.exerciseIds
+              : [];
+        for (const id of candidates) {
+          const exercise = getExerciseById(id);
+          if (exercise && isWritingExercise(exercise)) ids.push(id);
+        }
+      }
+    }
+  }
+  return [...new Set(ids)];
 }
 
 /**

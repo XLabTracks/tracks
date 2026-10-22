@@ -1,4 +1,4 @@
-import { RUBRIC_CRITERIA } from "./rubric";
+import { RUBRIC_CRITERIA, rubricTotal } from "./rubric";
 import type { LengthClass } from "./prompts";
 import type { CriterionResult } from "./parse";
 
@@ -77,14 +77,6 @@ function jsonText(content: string): string {
   return fenced?.[1] ?? trimmed;
 }
 
-function bandFor(score: number): string {
-  if (score >= 38) return "GiveWell-tier";
-  if (score >= 28) return "Strong";
-  if (score >= 18) return "Standard";
-  if (score >= 8) return "Persuasive";
-  return "Opaque assertion";
-}
-
 function expectedFixCount(lengthClass: LengthClass): number {
   return { short: 1, medium: 2, long: 3 }[lengthClass];
 }
@@ -148,18 +140,9 @@ export function parseStructuredGrade(
   // class rule server-side so model drift cannot penalize it on C1.
   if (lengthClass === "short") criteria[0].score = null;
 
-  let earned = 0;
-  let possible = 0;
-  for (const criterion of criteria) {
-    if (criterion.score == null) continue;
-    const weight = RUBRIC_CRITERIA.find((item) => item.id === criterion.id)?.weight;
-    if (!weight) return null;
-    earned += criterion.score * weight;
-    possible += 3 * weight;
-  }
-  if (possible === 0) return null;
-  const score = Math.round(((earned / possible) * 45) * 10) / 10;
-  const band = bandFor(score);
+  const total = rubricTotal(criteria);
+  if (!total) return null;
+  const { score, band } = total;
 
   const fixes = raw.fixes
     .filter((fix): fix is string => typeof fix === "string")

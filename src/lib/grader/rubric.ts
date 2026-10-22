@@ -127,3 +127,35 @@ export function getRubricCriterion(
 ): RubricCriterionInfo | undefined {
   return RUBRIC_CRITERIA.find((c) => c.id === id);
 }
+
+/** The band a /45 total falls in, as the grader's verdict names it. */
+export function rubricBand(score: number): string {
+  if (score >= 38) return "Exemplary";
+  if (score >= 28) return "Strong";
+  if (score >= 18) return "Standard";
+  if (score >= 8) return "Persuasive";
+  return "Opaque assertion";
+}
+
+/**
+ * The weighted /45 total of per-criterion 0–3 scores, rescaled when some
+ * criteria are N/A (null): (points earned / points possible) × 45, one
+ * decimal. Null when nothing was scored. Shared by the LLM grader and the
+ * instructor grade so both totals mean the same thing.
+ */
+export function rubricTotal(
+  criteria: { id: string; score: number | null }[],
+): { score: number; band: string } | null {
+  let earned = 0;
+  let possible = 0;
+  for (const criterion of criteria) {
+    if (criterion.score == null) continue;
+    const weight = getRubricCriterion(criterion.id)?.weight;
+    if (!weight) continue;
+    earned += criterion.score * weight;
+    possible += 3 * weight;
+  }
+  if (possible === 0) return null;
+  const score = Math.round((earned / possible) * 45 * 10) / 10;
+  return { score, band: rubricBand(score) };
+}

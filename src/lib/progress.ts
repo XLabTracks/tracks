@@ -168,6 +168,7 @@ export const getExerciseSubmissionMap = cache(async (userId: string) => {
   const rows = await prisma.submission.findMany({
     where: { userId, kind: "exercise" },
     select: {
+      id: true,
       contentId: true,
       responseJson: true,
       status: true,

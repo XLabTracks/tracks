@@ -5,6 +5,7 @@ import { CheckCircle2, Circle } from "lucide-react";
 import { requireUser } from "@/lib/auth";
 import { getClassroom } from "@/lib/classrooms";
 import {
+  assignedModuleItems,
   assignmentDone,
   assignmentItemDone,
   formatDueDate,
@@ -16,6 +17,8 @@ import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { StudentCell } from "@/components/classrooms/student-cell";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { getItemWritingExerciseIds } from "@/components/mdx/lesson-content";
+import { getWrittenWorkCounts } from "@/lib/instructor-grades";
 
 export const metadata: Metadata = { title: "Assignment" };
 
@@ -43,6 +46,24 @@ export default async function AssignmentDetailPage({
   const completion = await getAssignmentCompletion(
     students.map((s) => s.userId),
     [assignment],
+  );
+  // The writing the assigned items ask for, and each student's progress on
+  // it; the student page is where it is read and graded.
+  const writingIds = [
+    ...new Set(
+      (
+        await Promise.all(
+          assignment.items
+            .flatMap((item) => assignedModuleItems(item.id))
+            .map(getItemWritingExerciseIds),
+        )
+      ).flat(),
+    ),
+  ];
+  const written = await getWrittenWorkCounts(
+    classroom.id,
+    students.map((s) => s.userId),
+    writingIds,
   );
   const emptySet = new Set<string>();
   const doneStudents = students.filter((s) =>
@@ -140,6 +161,9 @@ export default async function AssignmentDetailPage({
               <tr>
                 <th className="px-4 py-3 text-left font-medium">Student</th>
                 <th className="px-4 py-3 text-left font-medium">Items done</th>
+                {writingIds.length > 0 && (
+                  <th className="px-4 py-3 text-left font-medium">Writing</th>
+                )}
                 <th className="px-4 py-3 text-left font-medium">Status</th>
               </tr>
             </thead>
@@ -177,6 +201,21 @@ export default async function AssignmentDetailPage({
                         </span>
                       </div>
                     </td>
+                    {writingIds.length > 0 && (
+                      <td className="px-4 py-3">
+                        <Link
+                          href={`/classrooms/${classroom.id}/students/${s.userId}#written-work`}
+                          className="text-xs underline-offset-4 hover:underline"
+                        >
+                          {written.get(s.userId)?.submitted ?? 0}/
+                          {writingIds.length} submitted
+                          <span className="text-muted-foreground">
+                            {" "}
+                            · {written.get(s.userId)?.graded ?? 0} graded
+                          </span>
+                        </Link>
+                      </td>
+                    )}
                     <td className="px-4 py-3">
                       {done ? (
                         <span className="flex items-center gap-1.5">

@@ -40,6 +40,8 @@ import { TransparencyFeedback } from "@/components/exercises/transparency-feedba
 import { feedbackToHtml } from "@/lib/grader/feedback-html";
 import { parseGraderReport, parseVerdict } from "@/lib/grader/parse";
 import { getGraderKeyView } from "@/lib/grader/grading-key";
+import { getGradesForSubmission } from "@/lib/instructor-grades";
+import { InstructorFeedback } from "@/components/exercises/instructor-feedback";
 
 // Preloaded props for TransparencyFeedback from a previously graded row, so
 // a stored grade survives reloads. The report's <analysis> block never
@@ -252,6 +254,11 @@ export async function Exercise({ id }: ExerciseProps) {
       return <WritingExerciseCard exercise={exercise} promptHtml={promptHtml} />;
     }
     const submission = submissions.get(exercise.id) ?? null;
+    // Instructor feedback is an extra on a lesson that must render without
+    // the database: a failed read hides it rather than the lesson.
+    const instructorGrades = submission
+      ? await getGradesForSubmission(submission.id).catch(() => [])
+      : [];
     return (
       <>
         {/* Keyed on the submission's lifecycle, not its updatedAt: submit and
@@ -274,6 +281,16 @@ export async function Exercise({ id }: ExerciseProps) {
           onSubmit={submitWriting.bind(null, exercise.id, "exercise", exercise.format)}
           onReopen={reopenWriting.bind(null, exercise.id, "exercise")}
         />
+        {instructorGrades.length > 0 && (
+          <div className="not-prose my-6 space-y-3">
+            {instructorGrades.map((grade) => (
+              <InstructorFeedback
+                key={`${grade.classroomName}:${grade.updatedAt.toISOString()}`}
+                grade={grade}
+              />
+            ))}
+          </div>
+        )}
         {submission?.status === "submitted" &&
           (exercise.sampleAnswer ? (
             <aside className="not-prose border-border bg-muted/40 my-6 rounded-xl border p-5">

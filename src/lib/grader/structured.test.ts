@@ -39,7 +39,7 @@ describe("parseStructuredGrade", () => {
     const grade = parseStructuredGrade(JSON.stringify(raw), "short");
     expect(grade?.criteria[0].score).toBeNull();
     expect(grade?.score).toBe(45);
-    expect(grade?.band).toBe("GiveWell-tier");
+    expect(grade?.band).toBe("Exemplary");
   });
 
   it("rejects duplicate/missing criteria, invalid scores and empty fixes", () => {

@@ -4466,3 +4466,41 @@ carry `<Src>` lines here instead.
 
 The dozen author–date parentheticals in the Sastry `<SourceQuote>` a few
 lines below are reproduced text and stay exactly as their authors wrote them.
+
+## 2026-10-22 — 2.1.2's appraisal is three exercises, not one
+
+Course owner: "i need this to be separate exercises just do 3 exercises
+instead of 1."
+
+`v-hw-trusted-statement-appraise` asked four numbered questions in one free
+response box, so a learner wrote one undifferentiated answer to all of them
+and the answer key arrived in one lump at the end.
+
+It is three now, split along the seams the answer key already had:
+
+1. `v-hw-trusted-statement-appraise` keeps questions 1 and 2 — what the
+   Attestation Result supports, and the RATS roles. Both read the result as
+   given, and the key's "Answer 1 — Scope of the result" and "Answer 2 —
+   Roles" travel with them unchanged.
+2. `v-hw-trusted-statement-permission` is question 3, the stack F → G
+   transition, with "Recognition, identity, and permission".
+3. `v-hw-trusted-statement-anomaly` is question 4, the power discrepancy,
+   with "An anomaly and a follow-up".
+
+No prompt or answer text was rewritten. The only edits are the ones the
+split forces: the two single-question prompts lose their leading "3." and
+"4.", and their answer-key headings lose "Answer 3 — " and "Answer 4 — ",
+which would otherwise number answers that are now the only answer in their
+box. The first id is kept, so a learner who already wrote into that box
+still has their work, attached to the questions it covers.
+
+The memo-desk slot `m2-1-attestation` had to become a grouped slot: the
+test that every writing exercise the track declares has exactly one slot is
+what stops a written output going unreachable from the desk, and it caught
+the two new ids immediately. A grouped slot carries its own brief (each step
+takes its brief from its own prompt), and the slot had none, because a
+single-task slot derives it from the task. **Its brief is therefore the
+original four-question prompt, verbatim** — the text the desk was already
+showing for this slot before the split, so nothing on the desk changed and
+nothing was invented. A one-sentence group brief from the author would read
+better, and is the author's to write.

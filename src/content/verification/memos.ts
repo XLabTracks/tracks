@@ -332,8 +332,22 @@ export const memoSlots: MemoSlot[] = [
     title: "Hardware Attestation Exercise",
     status: "specified",
     lesson: "hardware-trusted-statement",
-    task: "v-hw-trusted-statement-appraise",
-    brief: null,
+    steps: [
+      {
+        task: "v-hw-trusted-statement-appraise",
+        title: "Scope of the Result, and the Roles",
+      },
+      {
+        task: "v-hw-trusted-statement-permission",
+        title: "Recognition, Identity, and Permission",
+      },
+      {
+        task: "v-hw-trusted-statement-anomaly",
+        title: "An Anomaly and a Follow-Up",
+      },
+    ],
+    brief:
+      "1. Does the Attestation Result support the operator's conclusion? State the strongest claim it does support.\n2. Identify the Attester, Verifier, Reference Value Provider, Relying Party, and regulatory-response actor.\n3. At noon NVIDIA publishes a signed reference manifest for stack G. Device identity certificates remain valid, and the regulator continues to permit stack F until Friday. Explain what each fact establishes and how the inspectorate should assess a fresh report from a GPU still running F.\n4. Separate power records show consumption above the operator's estimate for the eight declared GPUs. How should this affect the inspectorate's assessment? Propose one follow-up check and explain what it could establish.",
     audience: null,
     words: 0,
   },

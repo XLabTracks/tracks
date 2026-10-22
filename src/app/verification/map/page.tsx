@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { getCurrentUserOrSignedOut } from "@/lib/auth";
+import { getTrackCompletionSet } from "@/lib/progress";
+import { completedVerificationUnits } from "@/lib/verification/completion-stats";
 import { SkillMapHost } from "@/components/verification/skill-map-host";
 
 /* Skill map — one of the course's own pages.
@@ -15,7 +18,23 @@ import { SkillMapHost } from "@/components/verification/skill-map-host";
 
 export const metadata: Metadata = { title: "Skill Map" };
 
-export default function Page() {
+/* The rings are filled from the learner's LessonProgress rows, mapped to the
+ * outline's unit ids. The figure's own runtime keeps a device store of
+ * completed units from the days of the static module player; nothing writes
+ * it any more, so left to itself the map draws every ring empty. Guarded like
+ * every other progress read on a reading surface: a failed query costs the
+ * rings, not the page. */
+async function completedUnits(): Promise<string[]> {
+  const user = await getCurrentUserOrSignedOut();
+  if (!user) return [];
+  const completed = await getTrackCompletionSet(user.id, "verification").catch(
+    () => new Set<string>(),
+  );
+  return [...completedVerificationUnits(completed)];
+}
+
+export default async function Page() {
+  const units = await completedUnits();
   return (
     <>
       <link rel="stylesheet" href="/verification/platform.css" precedence="high" />
@@ -35,7 +54,7 @@ export default function Page() {
           </div>
         </header>
 
-        <SkillMapHost />
+        <SkillMapHost units={units} />
       </main>
     </>
   );

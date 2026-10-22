@@ -44,8 +44,33 @@ window.VT = (function () {
     listeners.forEach(fn => fn(state));
   }
 
-  const isDone = id => Object.prototype.hasOwnProperty.call(state.units, id);
-  const doneUnits = () => Object.keys(state.units);
+  /* Units the SERVER says are complete, kept beside the device store and
+     never written into it.
+
+     The course is read in the app now, and the app's Mark complete writes a
+     LessonProgress row keyed on a content id (v-intuitions), not a unit id
+     in here — which is why `completeUnit` below has no caller left and the
+     skill map's rings sat empty for everybody. The page hands this layer the
+     unit ids derived from that table (completedVerificationUnits), so the
+     map reads real progress.
+
+     It is not persisted and not synced: it is derived from the account's own
+     rows, re-derived on every load, and writing it to localStorage would
+     both store a derived value and push app-derived units into the account's
+     progress document through sync.js. */
+  let serverUnits = Object.create(null);
+
+  function setServerUnits(units) {
+    serverUnits = Object.create(null);
+    (Array.isArray(units) ? units : []).forEach(id => { serverUnits[id] = true; });
+    listeners.forEach(fn => fn(state));
+  }
+
+  const isDone = id =>
+    Object.prototype.hasOwnProperty.call(state.units, id) ||
+    Object.prototype.hasOwnProperty.call(serverUnits, id);
+  const doneUnits = () =>
+    Object.keys(Object.assign(Object.create(null), serverUnits, state.units));
   const onChange = fn => { listeners.push(fn); return fn; };
 
   function reset() {
@@ -340,9 +365,12 @@ window.VT = (function () {
   const fracText = p =>
     Math.round(p.done * 100) / 100 + '/' + p.total;
 
+  if (Array.isArray(window.VT_SERVER_UNITS)) setServerUnits(window.VT_SERVER_UNITS);
+
   return {
     isDone: isDone,
     doneUnits: doneUnits,
+    setServerUnits: setServerUnits,
     completeUnit: completeUnit,
     uncompleteUnit: uncompleteUnit,
     reset: reset,

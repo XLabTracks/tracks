@@ -16,8 +16,15 @@ import {
   tracks,
   type Track,
 } from "@/lib/content";
-import { getCompletedLessonIds, getSubmission } from "@/lib/progress";
+import {
+  getCompletedLessonIds,
+  getExerciseSubmissionMap,
+  getSubmission,
+  type ExerciseSubmissionMap,
+} from "@/lib/progress";
+import { getTrackWritingTasks } from "@/components/mdx/lesson-content";
 import { OptionalPrefix } from "@/components/content/optional-tag";
+import { StudentWrittenWork } from "@/components/classrooms/student-written-work";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import {
   Accordion,
@@ -53,6 +60,12 @@ export default async function StudentDetailPage({
     ? [getTrackById(classroom.trackId)].filter((t): t is Track => Boolean(t))
     : tracks;
 
+  // One query for every piece of writing this learner has saved, shared by
+  // each track's section below; a failed read costs the writing, not the page.
+  const writtenWork: ExerciseSubmissionMap = await getExerciseSubmissionMap(
+    sid,
+  ).catch((): ExerciseSubmissionMap => new Map());
+
   const trackData = await Promise.all(
     trackList.map(async (track) => {
       const outline = getTrackOutline(track.slug)!;
@@ -82,7 +95,8 @@ export default async function StudentDetailPage({
           return { module, items, assessment, submission };
         }),
       );
-      return { track, progress, completed, modules };
+      const writingTasks = await getTrackWritingTasks(track.id);
+      return { track, progress, completed, modules, writingTasks };
     }),
   );
 
@@ -114,7 +128,7 @@ export default async function StudentDetailPage({
       </div>
 
       <div className="mt-8 space-y-8">
-        {trackData.map(({ track, progress, completed, modules }) => (
+        {trackData.map(({ track, progress, completed, modules, writingTasks }) => (
           <section key={track.id}>
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold">{track.title}</h2>
@@ -198,6 +212,11 @@ export default async function StudentDetailPage({
                 </AccordionItem>
               ))}
             </Accordion>
+
+            <StudentWrittenWork
+              tasks={writingTasks}
+              submissions={writtenWork}
+            />
           </section>
         ))}
       </div>

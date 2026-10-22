@@ -16,8 +16,10 @@ import {
   getGuideForModule,
   getModulesForTrack,
   getTrackById,
+  tracks,
 } from "@/lib/content";
 import { getTrackProgress } from "@/lib/progress";
+import { getTrackRequiredWritingIds } from "@/components/mdx/lesson-content";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import {
   CopyJoinCode,
@@ -222,8 +224,19 @@ export default async function ClassroomPage({
   // `track` is null-guarded above: a classroom scoped to a since-removed
   // track (stale trackId) falls back to the all-tracks roster instead of an
   // empty content-id universe rendering every row as 0/0.
+  const rosterWritingIds = track
+    ? await getTrackRequiredWritingIds(track.id)
+    : (
+        await Promise.all(
+          tracks.map((candidate) => getTrackRequiredWritingIds(candidate.id)),
+        )
+      ).flat();
   const [roster, assignments] = await Promise.all([
-    getClassroomRoster(classroom.memberships, track ? classroom.trackId : null),
+    getClassroomRoster(
+      classroom.memberships,
+      track ? classroom.trackId : null,
+      rosterWritingIds,
+    ),
     // Null means the Assignment table hasn't been migrated yet — the section
     // below tells the instructor which migration is owed.
     getClassroomAssignments(classroom.id),
@@ -459,6 +472,7 @@ export default async function ClassroomPage({
               <tr>
                 <th className="px-4 py-3 text-left font-medium">Student</th>
                 <th className="px-4 py-3 text-left font-medium">Progress</th>
+                <th className="px-4 py-3 text-left font-medium">Writing</th>
                 <th className="px-4 py-3 text-left font-medium">Assessments</th>
                 <th className="px-4 py-3 text-left font-medium">Last active</th>
                 <th className="px-4 py-3" />
@@ -482,6 +496,9 @@ export default async function ClassroomPage({
                         {row.completed}/{row.total}
                       </span>
                     </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    {row.writingSubmitted}/{row.writingRequired}
                   </td>
                   <td className="px-4 py-3">{row.assessmentsSubmitted}</td>
                   <td className="text-muted-foreground px-4 py-3">

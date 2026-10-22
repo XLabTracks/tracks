@@ -94,3 +94,53 @@ go against earlier teammates' decisions on purpose — review before merging.
   paragraph and the writing paragraph), the landing overview's notebook
   paragraph and the desk's own intro all say the Skill Map and the memo
   desk open from the notebook.
+
+## 2026-10-22 — the desk is embedded in the lesson that asks for the writing
+
+Course owner: "embed memo desk into the modules."
+
+`memo-desk.js` was built for this and had never been wired to it. Its
+header has said so from the start — "Mount with `VTMemoDesk.mount(host,
+{slots, hash})` — the standalone page mounts every slot, a unit page mounts
+only the ones its own unit asks for" — and the mount body already filters
+`ALL` by `opts.slots`, refuses to own the location hash when `hash: false`,
+and hides the slot rail when a mount has fewer than two slots. What existed
+instead was `<MemoDesk lesson/>` rendering a card that restated the slot's
+brief, reader, budget and criteria and then sent the learner to
+`/verification/memo-desk` to do the writing.
+
+So the card is gone and the desk itself is what the marker renders. The
+brief, the reader, the budget and the criteria now appear once — the desk's
+own `renderBrief` and check rail print them — and the learner writes in the
+lesson. One `<MemoDesk/>` mounts one desk for all of its lesson's slots, so
+the five lessons with a desk-drafted slot get one each.
+
+What is unchanged: `PageSlot` still serves a slot with an `href`
+(`m4-capstone` → the capstone workspace), because that slot's drafting
+surface is not this desk and its card's copy is the author's. Drafts stay
+`memo-store.js`'s, under the same key, so a draft written on the standalone
+desk opens in the lesson and the other way round, and the desk page is
+untouched.
+
+The inline mount loads three files, not the desk page's seven:
+`memo-desk.js` reads only `VERIFICATION_MEMOS`, `VTMemoStore` and
+(optionally) `VTNotebook`, so `platform.js`, `data/course.js`,
+`data/skills.js` and `data/chrome.js` are the page chrome's and stay there.
+Keeping `platform.js` off a lesson also keeps `sync.js` from subscribing to
+a progress store the app does not write.
+
+Two things the embed had to fix in `memo-desk.css`, both found by driving it
+rather than by a test, since nothing under `public/verification/` is
+typechecked or run:
+
+- `input::placeholder, textarea::placeholder` was a bare rule. A React
+  `precedence` stylesheet hoists into `<head>` and stays for the life of the
+  document, so once a lesson with a desk had been visited that rule applied
+  to every input in the app. Scoped to `.desk`. `prose-scope.test.ts` now
+  fails on any unanchored selector in the two sheets a lesson can load.
+- `.desk`'s `250px minmax(0,1fr) 300px` keys on **viewport** width, so in an
+  832px lesson column on a wide screen it spent 550px on rails and left the
+  writing surface about 240px — and because a single-slot mount hides the
+  slot rail, and a `display:none` grid item leaves its track behind, the
+  editor landed in the 250px track meant for the rail it had just hidden.
+  `.desk-inline` is one column with the rails in flow.

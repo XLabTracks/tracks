@@ -358,7 +358,29 @@ window.VERIFICATION_MEMOS = [
     "unit": "2.1",
     "title": "Hardware Attestation Exercise",
     "status": "specified",
-    "task": "v-hw-trusted-statement-appraise",
+    "steps": [
+      {
+        "task": "v-hw-trusted-statement-appraise",
+        "title": "Scope of the Result, and the Roles",
+        "brief": "1. Does the Attestation Result support the operator's conclusion? State the strongest claim it does support.\n2. Identify the Attester, Verifier, Reference Value Provider, Relying Party, and regulatory-response actor.",
+        "words": 0,
+        "href": "/tracks/verification/verification-infrastructure/hardware-trusted-statement#v-hw-trusted-statement-appraise"
+      },
+      {
+        "task": "v-hw-trusted-statement-permission",
+        "title": "Recognition, Identity, and Permission",
+        "brief": "At noon NVIDIA publishes a signed reference manifest for stack G. Device identity certificates remain valid, and the regulator continues to permit stack F until Friday. Explain what each fact establishes and how the inspectorate should assess a fresh report from a GPU still running F.",
+        "words": 0,
+        "href": "/tracks/verification/verification-infrastructure/hardware-trusted-statement#v-hw-trusted-statement-permission"
+      },
+      {
+        "task": "v-hw-trusted-statement-anomaly",
+        "title": "An Anomaly and a Follow-Up",
+        "brief": "Separate power records show consumption above the operator's estimate for the eight declared GPUs. How should this affect the inspectorate's assessment? Propose one follow-up check and explain what it could establish.",
+        "words": 0,
+        "href": "/tracks/verification/verification-infrastructure/hardware-trusted-statement#v-hw-trusted-statement-anomaly"
+      }
+    ],
     "brief": "1. Does the Attestation Result support the operator's conclusion? State the strongest claim it does support.\n2. Identify the Attester, Verifier, Reference Value Provider, Relying Party, and regulatory-response actor.\n3. At noon NVIDIA publishes a signed reference manifest for stack G. Device identity certificates remain valid, and the regulator continues to permit stack F until Friday. Explain what each fact establishes and how the inspectorate should assess a fresh report from a GPU still running F.\n4. Separate power records show consumption above the operator's estimate for the eight declared GPUs. How should this affect the inspectorate's assessment? Propose one follow-up check and explain what it could establish.",
     "audience": null,
     "words": 0,

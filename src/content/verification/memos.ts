@@ -335,7 +335,11 @@ export const memoSlots: MemoSlot[] = [
     steps: [
       {
         task: "v-hw-trusted-statement-appraise",
-        title: "Scope of the Result, and the Roles",
+        title: "Scope of the Result",
+      },
+      {
+        task: "v-hw-trusted-statement-roles",
+        title: "Roles",
       },
       {
         task: "v-hw-trusted-statement-permission",

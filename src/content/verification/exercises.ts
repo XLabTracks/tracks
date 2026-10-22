@@ -187,9 +187,18 @@ export const verificationExercises: Exercise[] = [
     type: "writing-prompt",
     format: "free-form",
     prompt:
-      "1. Does the Attestation Result support the operator's conclusion? State the strongest claim it does support.\n2. Identify the Attester, Verifier, Reference Value Provider, Relying Party, and regulatory-response actor.",
+      "Does the Attestation Result support the operator's conclusion? State the strongest claim it does support.",
     sampleAnswer:
-      "**Answer 1 — Scope of the result**\n\nNo. Assuming the stated checks and measurement process are sound, the result supports the narrower claim that eight identified GPU attesters supplied fresh Evidence around 09:00 and their selected measured states satisfied the verifier's checks against the stated references.\n\nIt does not establish a complete site inventory, cluster topology, the presence or operation of M, the work performed, or continuity throughout Monday. The absence of those claims is not itself proof of a violation. It limits what this result establishes.\n\n**Answer 2 — Roles**\n\n- **Attesters:** the protected attestation environments of the eight GPUs.\n- **Verifier:** NVIDIA Remote Attestation Service.\n- **Reference Value Provider:** NVIDIA, supplying the relevant manifests. NVIDIA also provides manufacturer endorsements and device-certification infrastructure, a distinct function.\n- **Relying Party:** the National Compute Inspectorate.\n- **Regulatory-response actor:** whichever institution the regime empowers to order remediation, inspection, suspension, or sanction. The scenario does not specify whether the inspectorate has all these powers.",
+      "**Scope of the result**\n\nNo. Assuming the stated checks and measurement process are sound, the result supports the narrower claim that eight identified GPU attesters supplied fresh Evidence around 09:00 and their selected measured states satisfied the verifier's checks against the stated references.\n\nIt does not establish a complete site inventory, cluster topology, the presence or operation of M, the work performed, or continuity throughout Monday. The absence of those claims is not itself proof of a violation. It limits what this result establishes.",
+  },
+  {
+    id: "v-hw-trusted-statement-roles",
+    type: "writing-prompt",
+    format: "free-form",
+    prompt:
+      "Identify the Attester, Verifier, Reference Value Provider, Relying Party, and regulatory-response actor.",
+    sampleAnswer:
+      "**Roles**\n\n- **Attesters:** the protected attestation environments of the eight GPUs.\n- **Verifier:** NVIDIA Remote Attestation Service.\n- **Reference Value Provider:** NVIDIA, supplying the relevant manifests. NVIDIA also provides manufacturer endorsements and device-certification infrastructure, a distinct function.\n- **Relying Party:** the National Compute Inspectorate.\n- **Regulatory-response actor:** whichever institution the regime empowers to order remediation, inspection, suspension, or sanction. The scenario does not specify whether the inspectorate has all these powers.",
   },
   {
     id: "v-hw-trusted-statement-permission",

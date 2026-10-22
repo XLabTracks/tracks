@@ -361,10 +361,17 @@ window.VERIFICATION_MEMOS = [
     "steps": [
       {
         "task": "v-hw-trusted-statement-appraise",
-        "title": "Scope of the Result, and the Roles",
-        "brief": "1. Does the Attestation Result support the operator's conclusion? State the strongest claim it does support.\n2. Identify the Attester, Verifier, Reference Value Provider, Relying Party, and regulatory-response actor.",
+        "title": "Scope of the Result",
+        "brief": "Does the Attestation Result support the operator's conclusion? State the strongest claim it does support.",
         "words": 0,
         "href": "/tracks/verification/verification-infrastructure/hardware-trusted-statement#v-hw-trusted-statement-appraise"
+      },
+      {
+        "task": "v-hw-trusted-statement-roles",
+        "title": "Roles",
+        "brief": "Identify the Attester, Verifier, Reference Value Provider, Relying Party, and regulatory-response actor.",
+        "words": 0,
+        "href": "/tracks/verification/verification-infrastructure/hardware-trusted-statement#v-hw-trusted-statement-roles"
       },
       {
         "task": "v-hw-trusted-statement-permission",

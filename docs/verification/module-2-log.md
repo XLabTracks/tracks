@@ -4504,3 +4504,17 @@ original four-question prompt, verbatim** — the text the desk was already
 showing for this slot before the split, so nothing on the desk changed and
 nothing was invented. A one-sentence group brief from the author would read
 better, and is the author's to write.
+
+## 2026-10-22 — four, not three
+
+Course owner, on seeing the split above: the first card still held two
+questions, and that was the thing to fix. Each of 2.1.2's four appraisal
+questions is its own exercise now.
+
+`v-hw-trusted-statement-appraise` keeps question 1 alone (the scope of the
+result) and `v-hw-trusted-statement-roles` takes question 2 (the RATS
+roles); `permission` and `anomaly` are unchanged. Their two answer-key
+sections lose the "Answer 1 — " and "Answer 2 — " prefixes for the same
+reason the other two did, each now being the only answer in its box. The
+memo-desk group gains a fourth step. Nothing else moved: no prompt or
+answer text was rewritten, and the first id is still the first id.

@@ -4518,3 +4518,40 @@ sections lose the "Answer 1 — " and "Answer 2 — " prefixes for the same
 reason the other two did, each now being the only answer in its box. The
 memo-desk group gains a fourth step. Nothing else moved: no prompt or
 answer text was rewritten, and the first id is still the first id.
+
+## 2026-10-22 — the rest of 2.1's multi-question exercises are split too
+
+Course owner, after 2.1.2: do the same wherever one exercise asks several
+questions. Six more, 22 cards where there were six:
+
+| Was | Questions | Lesson |
+| --- | --- | --- |
+| `v-hw-claim-chip-security` | 3 | 2.1.1 |
+| `v-hw-accounting-reconcile` | 4 | 2.1.3 |
+| `v-hw-measuring-job-j` | 4 | 2.1.4 |
+| `v-hw-authorization-suspension` | 4 | 2.1.5 |
+| `v-hw-trust-three-reports` | 4 | 2.1.6 |
+| `v-hw-training-claims-audit` | 3 | 2.1.7 |
+
+Each keeps its original id for question 1 and takes `-2`, `-3`, `-4` for
+the rest — the numeric-suffix idiom `v-task-intuitions-5…11` already uses,
+and keeping the first id means a learner who had written into the old box
+still has their work. Nothing is rewritten: the questions lose their leading
+`1.` / `**1.**` / `**1. `, and the answer keys lose their bare `**Answer N**`
+heading lines, which would otherwise number the only answer in a box.
+
+Each memo-desk slot becomes a grouped slot, as 2.1.2's did, with the
+original multi-question prompt verbatim as the group brief. Step titles are
+lifted from each question's own bold lead sentence where it has one, and
+from its first sentence where it does not — the author's words either way,
+capped at 88 characters.
+
+**`v-hw-measuring-paper-critique` is deliberately NOT split.** Its four
+questions would separate cleanly, but its answer key is not written per
+question: it is five cross-cutting notes — what counts as a defensible
+verdict, the paper's headline numbers, the source citation, what a good
+briefing does, and what "zero-overhead" has to cover. Deciding which note
+belongs to which question is an editorial judgement over the author's key,
+not a mechanical split, so it stays whole until somebody who owns the
+content decides. It is the one exercise in 2.1 that still asks four
+questions in one box.

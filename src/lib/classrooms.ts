@@ -1,3 +1,4 @@
+import { cache } from "react";
 import type { ClassroomRole } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import {
@@ -57,7 +58,7 @@ export async function requireInstructor(
   }
 }
 
-export async function getClassroom(classroomId: string) {
+export const getClassroom = cache(async (classroomId: string) => {
   return prisma.classroom.findUnique({
     where: { id: classroomId },
     include: {
@@ -71,7 +72,7 @@ export async function getClassroom(classroomId: string) {
       },
     },
   });
-}
+});
 
 export interface RosterRow {
   userId: string;

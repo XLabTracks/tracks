@@ -144,3 +144,49 @@ typechecked or run:
   slot rail, and a `display:none` grid item leaves its track behind, the
   editor landed in the 250px track meant for the rail it had just hidden.
   `.desk-inline` is one column with the rails in flow.
+
+## 2026-10-22 — an instructor can read the memo drafts
+
+Course owner, on the previous round's open question: "да memo это работа,
+подними их тоже" — the memos are work, so surface them.
+
+They were the one piece of written course work an instructor could not see,
+because they are the one piece that is not a `Submission` row. The desk's
+drafts belong to `memo-store.js` and reach the account as the `memos` store
+of the single `VerificationState` document, which until now only its owner
+could read, through `/api/verification/state`.
+
+The classroom's student page now reads them. Three things about how:
+
+- **The query takes the memos key alone.** `getMemoDrafts` is a raw
+  `SELECT "data" -> 'memos'`, not a Prisma `select: { data: true }`, so the
+  notebook, the highlights, the field map and the widget store never leave
+  Postgres for an instructor's request — the standing rule is submissions
+  yes, notes no, and the cheapest way to keep it is to never fetch them.
+  `state-read.test.ts` fails if the statement grows past that key.
+- **Drafts are shown as drafts.** The desk has no hand-in step at all; it
+  autosaves and that is the whole lifecycle. The submitted/withheld line
+  that governs the writing exercises therefore cannot be drawn here, so the
+  section says in one line that everything under it is a working draft.
+- **Writing whose slot has left the outline is still shown**, after the
+  known slots and labelled "slot retired" — the same decision `memo-desk.js`
+  already made for its own legacy drafts. A slot id changing must not make a
+  learner's work vanish from the room.
+
+`**bold**` renders as bold in a memo body and nowhere else. The desk tells
+the writer to use it and its skim test reads those lines, so on a memo the
+markers are the structure; the writing exercises are free prose and their
+text stays exactly as typed. It splits a string and wraps alternate pieces
+in an element — no HTML is built, so learner input cannot inject.
+
+Seen working against a local Postgres with a seeded cohort: both drafts and
+the retired slot render with their letterhead and both desk questions, the
+submitted exercise shows its text and its grade, the unsubmitted one shows
+only that a draft exists, and the notebook, highlights, field map and widget
+sentinels planted in the same document appear nowhere in the response.
+
+One thing found on the way: the facilitator view printed `Optional:` twice
+on the tasks whose prompt opens with the word, since the row also carries
+`OptionalPrefix` from `exercise.optional`. The lessons mark those in the
+prompt text and print no prefix. The row keeps the component and drops the
+word from the text.

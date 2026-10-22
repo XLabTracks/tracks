@@ -94,12 +94,39 @@ describe("callGrader", () => {
     expect(fetch).toHaveBeenCalledTimes(2);
   });
 
+  it("names a withdrawn model as this site's misconfiguration, not a retry", async () => {
+    for (const status of [400, 404, 422]) {
+      stubFetch(async () =>
+        Response.json(
+          { error: { message: `${status}: not a valid model ID` } },
+          { status },
+        ),
+      );
+      const result = await callGrader(...CALL);
+      expect(result).toMatchObject({ ok: false, errorCode: `http_${status}` });
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error).toContain("misconfigured");
+        expect(result.error).not.toContain("Try again");
+      }
+    }
+  });
+
+  it("names a rejected key as a key problem", async () => {
+    for (const status of [401, 403]) {
+      stubFetch(async () => new Response("no", { status }));
+      const result = await callGrader(...CALL);
+      expect(result.ok).toBe(false);
+      if (!result.ok) expect(result.error).toContain("API key");
+    }
+  });
+
   it("keeps status, empty-body, token-cutoff and network error paths", async () => {
-    stubFetch(async () => new Response("nope", { status: 400 }));
+    stubFetch(async () => new Response("nope", { status: 402 }));
     expect(await callGrader(...CALL)).toMatchObject({
       ok: false,
-      error: "Grading service error (400).",
-      errorCode: "http_400",
+      error: "Grading service error (402).",
+      errorCode: "http_402",
     });
 
     stubFetch(async () => Response.json({ choices: [] }));

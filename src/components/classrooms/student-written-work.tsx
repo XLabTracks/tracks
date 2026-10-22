@@ -1,14 +1,9 @@
 import { PenLine } from "lucide-react";
-import { getExerciseById } from "@/lib/content";
-import { isWritingExercise, type WritingSection } from "@/lib/content/types";
+import { writingSections } from "@/lib/content/writing-response";
 import type { TrackWritingTask } from "@/components/mdx/lesson-content";
 import type { ExerciseSubmissionMap } from "@/lib/progress";
 import { OptionalPrefix } from "@/components/content/optional-tag";
 import { Badge } from "@/components/ui/badge";
-
-const DEFAULT_SECTIONS: WritingSection[] = [
-  { id: "response", label: "Response" },
-];
 
 const STATUS_WORD = {
   draft: "Draft",
@@ -102,11 +97,7 @@ function Task({
   task: TrackWritingTask;
   row: ReturnType<ExerciseSubmissionMap["get"]>;
 }) {
-  const exercise = getExerciseById(task.exerciseId);
-  const sections =
-    exercise && isWritingExercise(exercise)
-      ? (exercise.sections ?? DEFAULT_SECTIONS)
-      : DEFAULT_SECTIONS;
+  const sections = writingSections(task.exerciseId, "exercise");
   const open = row?.status === "submitted" || row?.status === "graded";
   const values = (row?.responseJson ?? {}) as Record<string, string>;
 

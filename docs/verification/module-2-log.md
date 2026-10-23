@@ -4466,3 +4466,92 @@ carry `<Src>` lines here instead.
 
 The dozen author–date parentheticals in the Sastry `<SourceQuote>` a few
 lines below are reproduced text and stay exactly as their authors wrote them.
+
+## 2026-10-22 — 2.1.2's appraisal is three exercises, not one
+
+Course owner: "i need this to be separate exercises just do 3 exercises
+instead of 1."
+
+`v-hw-trusted-statement-appraise` asked four numbered questions in one free
+response box, so a learner wrote one undifferentiated answer to all of them
+and the answer key arrived in one lump at the end.
+
+It is three now, split along the seams the answer key already had:
+
+1. `v-hw-trusted-statement-appraise` keeps questions 1 and 2 — what the
+   Attestation Result supports, and the RATS roles. Both read the result as
+   given, and the key's "Answer 1 — Scope of the result" and "Answer 2 —
+   Roles" travel with them unchanged.
+2. `v-hw-trusted-statement-permission` is question 3, the stack F → G
+   transition, with "Recognition, identity, and permission".
+3. `v-hw-trusted-statement-anomaly` is question 4, the power discrepancy,
+   with "An anomaly and a follow-up".
+
+No prompt or answer text was rewritten. The only edits are the ones the
+split forces: the two single-question prompts lose their leading "3." and
+"4.", and their answer-key headings lose "Answer 3 — " and "Answer 4 — ",
+which would otherwise number answers that are now the only answer in their
+box. The first id is kept, so a learner who already wrote into that box
+still has their work, attached to the questions it covers.
+
+The memo-desk slot `m2-1-attestation` had to become a grouped slot: the
+test that every writing exercise the track declares has exactly one slot is
+what stops a written output going unreachable from the desk, and it caught
+the two new ids immediately. A grouped slot carries its own brief (each step
+takes its brief from its own prompt), and the slot had none, because a
+single-task slot derives it from the task. **Its brief is therefore the
+original four-question prompt, verbatim** — the text the desk was already
+showing for this slot before the split, so nothing on the desk changed and
+nothing was invented. A one-sentence group brief from the author would read
+better, and is the author's to write.
+
+## 2026-10-22 — four, not three
+
+Course owner, on seeing the split above: the first card still held two
+questions, and that was the thing to fix. Each of 2.1.2's four appraisal
+questions is its own exercise now.
+
+`v-hw-trusted-statement-appraise` keeps question 1 alone (the scope of the
+result) and `v-hw-trusted-statement-roles` takes question 2 (the RATS
+roles); `permission` and `anomaly` are unchanged. Their two answer-key
+sections lose the "Answer 1 — " and "Answer 2 — " prefixes for the same
+reason the other two did, each now being the only answer in its box. The
+memo-desk group gains a fourth step. Nothing else moved: no prompt or
+answer text was rewritten, and the first id is still the first id.
+
+## 2026-10-22 — the rest of 2.1's multi-question exercises are split too
+
+Course owner, after 2.1.2: do the same wherever one exercise asks several
+questions. Six more, 22 cards where there were six:
+
+| Was | Questions | Lesson |
+| --- | --- | --- |
+| `v-hw-claim-chip-security` | 3 | 2.1.1 |
+| `v-hw-accounting-reconcile` | 4 | 2.1.3 |
+| `v-hw-measuring-job-j` | 4 | 2.1.4 |
+| `v-hw-authorization-suspension` | 4 | 2.1.5 |
+| `v-hw-trust-three-reports` | 4 | 2.1.6 |
+| `v-hw-training-claims-audit` | 3 | 2.1.7 |
+
+Each keeps its original id for question 1 and takes `-2`, `-3`, `-4` for
+the rest — the numeric-suffix idiom `v-task-intuitions-5…11` already uses,
+and keeping the first id means a learner who had written into the old box
+still has their work. Nothing is rewritten: the questions lose their leading
+`1.` / `**1.**` / `**1. `, and the answer keys lose their bare `**Answer N**`
+heading lines, which would otherwise number the only answer in a box.
+
+Each memo-desk slot becomes a grouped slot, as 2.1.2's did, with the
+original multi-question prompt verbatim as the group brief. Step titles are
+lifted from each question's own bold lead sentence where it has one, and
+from its first sentence where it does not — the author's words either way,
+capped at 88 characters.
+
+**`v-hw-measuring-paper-critique` is deliberately NOT split.** Its four
+questions would separate cleanly, but its answer key is not written per
+question: it is five cross-cutting notes — what counts as a defensible
+verdict, the paper's headline numbers, the source citation, what a good
+briefing does, and what "zero-overhead" has to cover. Deciding which note
+belongs to which question is an editorial judgement over the author's key,
+not a mechanical split, so it stays whole until somebody who owns the
+content decides. It is the one exercise in 2.1 that still asks four
+questions in one box.

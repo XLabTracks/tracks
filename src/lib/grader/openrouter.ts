@@ -59,6 +59,19 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+/** The upstream's own description of a failure, for the server log only. */
+async function errorDetail(response: Response): Promise<string | null> {
+  try {
+    const body = (await response.clone().json()) as {
+      error?: { message?: unknown };
+    };
+    const message = body?.error?.message;
+    return typeof message === "string" ? message.slice(0, 300) : null;
+  } catch {
+    return null;
+  }
+}
+
 function telemetryFrom(
   startedAt: number,
   body?: ChatCompletionBody,
@@ -174,9 +187,29 @@ export async function callGrader(
         await sleep(250 * (attempt + 1));
         continue;
       }
+      // A 4xx here is this deployment's configuration, not the learner's
+      // doing, and it is the shape a withdrawn model slug arrives in. The
+      // provider's own sentence goes to the server log, where an operator
+      // can read it; the reader is told which kind of failure it was so a
+      // dead model stops reading as "try again later" forever.
+      const detail = await errorDetail(lastResponse);
+      if (detail) {
+        console.error(
+          "[grader] upstream rejected the request",
+          JSON.stringify({ status: lastResponse.status, models, detail }),
+        );
+      }
+      const configuration =
+        lastResponse.status === 400 ||
+        lastResponse.status === 404 ||
+        lastResponse.status === 422;
       return {
         ok: false,
-        error: `Grading service error (${lastResponse.status}).`,
+        error: configuration
+          ? "Feedback is misconfigured on this site — the grading model it asks for is unavailable. This is not something you can fix; please report it."
+          : lastResponse.status === 401 || lastResponse.status === 403
+            ? "The grading service rejected this site's API key."
+            : `Grading service error (${lastResponse.status}).`,
         errorCode: `http_${lastResponse.status}`,
         telemetry: telemetryFrom(startedAt, undefined, lastResponse),
       };

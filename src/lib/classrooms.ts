@@ -1,3 +1,4 @@
+import { cache } from "react";
 import type { ClassroomRole } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import {
@@ -57,7 +58,7 @@ export async function requireInstructor(
   }
 }
 
-export async function getClassroom(classroomId: string) {
+export const getClassroom = cache(async (classroomId: string) => {
   return prisma.classroom.findUnique({
     where: { id: classroomId },
     include: {
@@ -71,7 +72,7 @@ export async function getClassroom(classroomId: string) {
       },
     },
   });
-}
+});
 
 export interface RosterRow {
   userId: string;
@@ -84,6 +85,8 @@ export interface RosterRow {
   percent: number;
   lastActive: Date | null;
   assessmentsSubmitted: number;
+  writingSubmitted: number;
+  writingRequired: number;
 }
 
 export interface RosterMember {
@@ -95,11 +98,14 @@ export interface RosterMember {
 /**
  * Aggregated per-member progress for the instructor roster. Scoped to the
  * classroom's track when set, otherwise across all tracks. Takes the already
- * loaded members to avoid re-querying the classroom.
+ * loaded members to avoid re-querying the classroom, and the required writing
+ * ids from the caller because enumerating them walks the lesson MDX modules —
+ * the page already has to await that, and this module stays free of them.
  */
 export async function getClassroomRoster(
   members: RosterMember[],
   trackId: string | null,
+  requiredWritingIds: string[] = [],
 ): Promise<RosterRow[]> {
   const userIds = members.map((m) => m.userId);
 
@@ -117,7 +123,7 @@ export async function getClassroomRoster(
   );
   const total = requiredContentIds.size;
 
-  const [progress, submissions] = await Promise.all([
+  const [progress, submissions, writing] = await Promise.all([
     prisma.lessonProgress.findMany({
       where: { userId: { in: userIds }, lessonId: { in: scopeContentIds } },
       select: { userId: true, lessonId: true, status: true, lastViewedAt: true },
@@ -131,6 +137,17 @@ export async function getClassroomRoster(
       },
       select: { userId: true },
     }),
+    requiredWritingIds.length
+      ? prisma.submission.findMany({
+          where: {
+            userId: { in: userIds },
+            kind: "exercise",
+            status: { in: ["submitted", "graded"] },
+            contentId: { in: requiredWritingIds },
+          },
+          select: { userId: true },
+        })
+      : Promise.resolve([] as { userId: string }[]),
   ]);
 
   const completedByUser = new Map<string, number>();
@@ -148,6 +165,10 @@ export async function getClassroomRoster(
   for (const row of submissions) {
     submittedByUser.set(row.userId, (submittedByUser.get(row.userId) ?? 0) + 1);
   }
+  const writingByUser = new Map<string, number>();
+  for (const row of writing) {
+    writingByUser.set(row.userId, (writingByUser.get(row.userId) ?? 0) + 1);
+  }
 
   return members.map((m) => {
     const completed = completedByUser.get(m.userId) ?? 0;
@@ -162,6 +183,8 @@ export async function getClassroomRoster(
       percent: total ? Math.round((completed / total) * 100) : 0,
       lastActive: lastActiveByUser.get(m.userId) ?? null,
       assessmentsSubmitted: submittedByUser.get(m.userId) ?? 0,
+      writingSubmitted: writingByUser.get(m.userId) ?? 0,
+      writingRequired: requiredWritingIds.length,
     };
   });
 }

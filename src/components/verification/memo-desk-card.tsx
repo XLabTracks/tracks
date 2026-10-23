@@ -1,12 +1,11 @@
 import { ArrowUpRight, PenLine } from "lucide-react";
-import { OptionalPrefix } from "@/components/content/optional-tag";
-import {
-  memoCardSlotsForLesson,
-  memoGenreLabels,
-  type MemoSlot,
-} from "@/content/verification/memos";
+import { memoCardSlotsForLesson, type MemoSlot } from "@/content/verification/memos";
+import { getCurrentUserOrSignedOut } from "@/lib/auth";
+import { getSharedNotes } from "@/lib/submission-notes-read";
+import { FacilitatorFeedback } from "@/components/learn/facilitator-feedback";
+import { MemoDeskHost } from "@/components/verification/memo-desk-host";
 
-export function MemoDesk({ lesson }: { lesson: string }) {
+export async function MemoDesk({ lesson }: { lesson: string }) {
   const slots = memoCardSlotsForLesson(lesson);
   if (!slots.length) {
     return (
@@ -15,15 +14,22 @@ export function MemoDesk({ lesson }: { lesson: string }) {
       </div>
     );
   }
+  const elsewhere = slots.filter((slot) => slot.href);
+  const here = slots.filter((slot) => !slot.href);
+
+  const user = await getCurrentUserOrSignedOut();
+  const shared = user ? await getSharedNotes(user.id) : null;
+  const feedback = shared
+    ? slots.flatMap((slot) => shared.get(slot.id) ?? [])
+    : [];
+
   return (
-    <div className="not-prose my-6 space-y-3">
-      {slots.map((slot) =>
-        slot.href ? (
-          <PageSlot key={slot.id} slot={slot} href={slot.href} />
-        ) : (
-          <Slot key={slot.id} slot={slot} />
-        )
-      )}
+    <div className="not-prose my-6 space-y-3" data-widget>
+      {feedback.length > 0 && <FacilitatorFeedback notes={feedback} />}
+      {elsewhere.map((slot) => (
+        <PageSlot key={slot.id} slot={slot} href={slot.href!} />
+      ))}
+      {here.length > 0 && <MemoDeskHost slots={here.map((slot) => slot.id)} />}
     </div>
   );
 }
@@ -46,72 +52,6 @@ function PageSlot({ slot, href }: { slot: MemoSlot; href: string }) {
       >
         Open the capstone workspace
         <ArrowUpRight className="size-4" aria-hidden />
-      </a>
-    </section>
-  );
-}
-
-function Slot({ slot }: { slot: MemoSlot }) {
-  return (
-    <section className="panel text-sm">
-      <p className="text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1 eyebrow">
-        <PenLine className="size-3.5" aria-hidden />
-        Written output · <span className="normal-case">{slot.unit}</span>
-        {slot.genre && slot.genre !== "memo" ? (
-          <span>· {memoGenreLabels[slot.genre]}</span>
-        ) : null}
-      </p>
-
-      <h3 className="mt-1.5 text-lg font-semibold">
-        {slot.optional ? <OptionalPrefix /> : null}
-        {slot.title}
-      </h3>
-
-      {slot.brief ? (
-        <p className="mt-2 leading-relaxed">{slot.brief}</p>
-      ) : (
-        <p className="text-muted-foreground mt-2 leading-relaxed">
-          {slot.gap} Draft into it anyway if you like — the brief will appear
-          here once it exists.
-        </p>
-      )}
-
-      {slot.brief && slot.gap ? (
-        <p className="text-muted-foreground mt-2 text-sm leading-relaxed">{slot.gap}</p>
-      ) : null}
-
-      <dl className="text-muted-foreground mt-3 flex flex-wrap gap-x-6 gap-y-1 text-sm">
-        <div className="flex gap-1.5">
-          <dt>Budget</dt>
-          <dd className="text-foreground">about {slot.words} words</dd>
-        </div>
-        {slot.audience ? (
-          <div className="flex gap-1.5">
-            <dt>Reader</dt>
-            <dd className="text-foreground">{slot.audience}</dd>
-          </div>
-        ) : null}
-      </dl>
-
-      {slot.criteria?.length ? (
-        <>
-          <p className="text-muted-foreground mt-3 eyebrow">
-            Judged on
-          </p>
-          <ul className="mt-1 list-disc space-y-0.5 pl-5 text-sm leading-relaxed">
-            {slot.criteria.map((criterion) => (
-              <li key={criterion}>{criterion}</li>
-            ))}
-          </ul>
-        </>
-      ) : null}
-
-      <a
-        href={`/verification/memo-desk#${slot.id}`}
-        className="border-border hover:bg-muted mt-4 inline-flex min-h-11 items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-semibold no-underline! transition-colors select-none lg:min-h-0 lg:py-1.5"
-      >
-        Draft it on the Memo Desk
-        <ArrowUpRight className="size-3.5" aria-hidden />
       </a>
     </section>
   );

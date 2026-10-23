@@ -49,6 +49,7 @@ and says so — but none of them *work*, either.
 | `20260812193000_grading_attempts.sql` | Reasoning-transparency LLM feedback | Grading fails closed with a database-upgrade message; no unmetered call is made |
 | `20260820120000_assignments.sql` | Classroom assignments (`/classrooms/[id]` and its `assignments/*` subpages) | Instructors are told the migration is owed, students see no assignments section, and creating one reports the same rather than pretending to save |
 | `20261022120000_instructor_grades.sql` | Instructor rubric grades on students' writing (the student page's Written work section, and the feedback card under a learner's answer) | Instructors are told the migration is owed and saving a grade reports the same; learners see no instructor feedback |
+| `20261022120000_submission_notes.sql` | Instructors' annotations on a learner's work, private or sent back (`/classrooms/[id]/students/[sid]`, and the learner's own lesson, assessment and memo pages) | The instructor's view says the migration is owed instead of offering a box that cannot save; no learner is shown feedback that does not exist |
 
 Secrets those same features need, set with `wrangler secret put`:
 

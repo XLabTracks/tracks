@@ -1062,3 +1062,27 @@ whose opener is thirty words) read whole; 0.0, 0.4 and 4.1.1 keep their
 `unchunked` opt-out. The empty-page problem that ended the first regime is
 guarded by the same rule: a break goes before content, never before an
 optional fold on its own.
+
+## 2026-10-22 — the primer drill bench moves to 0.4
+
+Course owner: "optional drill bench / should be optional / move drill from
+0.2 to 0.4."
+
+`drills-primers` — inspection games, credible commitment, two-level games —
+sat at the end of 0.2 Building Verification Intuitions behind its own
+`Drill Bench` page break. It is now the last section of 0.4 Strategic
+Foundations, before that unit's Written Output, which is where its subject
+matter already lives: 0.4's pathways are strategic actors and credible
+commitments, detection and response, and international bargaining with
+domestic implementation.
+
+Being optional came with the move rather than from a second marker. 0.4 is
+`optional: true` in `curriculum.ts`, so the item page prints `Optional:` in
+front of the lesson's own h1 and the sidebar row carries it too — and the
+house rule is to say it once, so the drill's heading stays plain
+`## Drill Bench` rather than repeating the word one level down. 0.4 is also
+`unchunked: true`, so the moved block carries no `PageBreak`; the marker 0.2
+had would have been dead there.
+
+The bench's own copy is unchanged and its storage key is untouched, so a
+learner mid-deck keeps their committed steps.

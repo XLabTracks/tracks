@@ -182,3 +182,46 @@ weight pushed a title that just fit into a third line and a "…". The clamps
 are gone (both tracks' sidebar, one component); titles wrap in full. Two
 widget labels that truncated a name (`what-do-they-say`, `mechanism-sort`)
 wrap now too.
+
+## 2026-10-22 — the rings read the account's progress, not the dead device store
+
+Course owner: "skill tree is not updating based on progress."
+
+It never could. `platform.js` derives every ring from one set of completed
+unit ids in `localStorage` under `vt-progress`, written by `VT.completeUnit`
+— which the static module player called from its unit pager. That player is
+a redirect now (`/verification/module?u=` → the app page), so
+`completeUnit` has had **no caller at all** since, and the store it owns can
+only hold what somebody completed on the old static pages. Everyone who has
+read the course in the app has an empty one, and `skillProgress` returned
+`frac: 0` for all 31 nodes.
+
+The app's Mark complete writes a `LessonProgress` row keyed on a content id
+(`v-intuitions`), not on an outline unit (`0.2`). The join between the two
+already existed and is already tested: `completedVerificationUnits` in
+`src/lib/verification/completion-stats.ts`, which the completion page uses
+for its skills counter. So `/verification/map` now resolves the signed-in
+learner's completed content ids on the server, maps them to unit ids, and
+hands them to the figure's runtime through a new `VT.setServerUnits`.
+`SkillMapHost` calls it inside the `onReady` the loader already gives it, so
+the seed is in place before `map.mount()` reads a single rung.
+
+Server units sit in their own object beside the device store and are
+**never** written into it: they are derived from the account's own rows and
+re-derived on every load, and persisting them would both store a derived
+value — the one thing the file's own header forbids — and push app-derived
+units into the account's `progress` document through `sync.js`. `isDone` is
+the union of the two; `doneUnits` likewise.
+
+Two surfaces deliberately unchanged. The landing page mounts the same figure
+plain (`landing.js`: "no progress, no filters beyond the module chips"), so
+it shows no rings by design. The notebook's Skill Map view bails unless
+`SKILLS`, `VT` and `VTSkillMap` are all loaded, which is true only on the
+pages that load them through `LegacyScripts` — it inherits the fix on
+`/verification/map` and is still inert elsewhere.
+
+`skill-map-progress.test.ts` executes `platform.js` in a stubbed context and
+pins the behaviour: a server unit fills a rung, a node completes from server
+units with no device store at all, the set replaces rather than accumulates,
+the union holds, a seed set before the script ran is picked up, and
+`localStorage` is never written.

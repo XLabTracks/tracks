@@ -6,6 +6,8 @@ const PUBLIC = join(__dirname, "../../../public/verification");
 
 const STANDALONE_SHEETS = ["page.css", "platform.css"];
 
+const SHEETS_A_LESSON_LOADS = ["platform.css", "memo-desk.css"];
+
 function selectorsIn(css: string): string[] {
   const withoutComments = css.replace(/\/\*[\s\S]*?\*\//g, "");
   const out: string[] = [];
@@ -26,6 +28,18 @@ describe("the standalone pages' `prose` cannot reach the lesson column", () => {
         (selector) => /(^|[\s>+~])\.prose\b/.test(selector) && !selector.includes(".wrap"),
       );
       expect(unscoped).toEqual([]);
+    });
+  }
+
+  for (const sheet of SHEETS_A_LESSON_LOADS) {
+    it(`${sheet} anchors every selector on a class, id or attribute`, () => {
+      const css = readFileSync(join(PUBLIC, sheet), "utf8");
+      const loose = selectorsIn(css).filter(
+        (selector) =>
+          !/[.#[]|:root/.test(selector) &&
+          !/^(?:from|to|\d+%)$/.test(selector),
+      );
+      expect(loose).toEqual([]);
     });
   }
 

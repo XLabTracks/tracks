@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CheckCircle2, Circle, FileText } from "lucide-react";
-import { requireUser } from "@/lib/auth";
+import { getCurrentUser, requireUser } from "@/lib/auth";
 import { getClassroom } from "@/lib/classrooms";
 import {
   getAssessmentForModule,
@@ -16,8 +16,22 @@ import {
   tracks,
   type Track,
 } from "@/lib/content";
-import { getCompletedLessonIds, getSubmission } from "@/lib/progress";
+import {
+  getCompletedLessonIds,
+  getExerciseSubmissionMap,
+  getSubmission,
+  type ExerciseSubmissionMap,
+} from "@/lib/progress";
+import { getTrackWritingTasks } from "@/components/mdx/lesson-content";
+import { getMemoDrafts } from "@/lib/verification/state-read";
+import type { MemoDraft } from "@/lib/verification/memo-drafts";
+import {
+  getNotesForStudent,
+  type InstructorNote,
+} from "@/lib/submission-notes-read";
 import { OptionalPrefix } from "@/components/content/optional-tag";
+import { StudentMemoDrafts } from "@/components/classrooms/student-memo-drafts";
+import { StudentWrittenWork } from "@/components/classrooms/student-written-work";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import {
   Accordion,
@@ -30,7 +44,26 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { WrittenWork } from "@/components/classrooms/written-work";
 
-export const metadata: Metadata = { title: "Student progress" };
+/* The gate runs here as well as in the page. A static `metadata` export
+   flushes the document head before the component can throw, which commits a
+   200 for a page whose body is the 404 — and this one carries a learner's
+   writing and their instructors' private annotations, so it should answer a
+   stranger with a status that says nothing. getClassroom is cache()-wrapped
+   per request, so asking twice costs one query. */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string; sid: string }>;
+}): Promise<Metadata> {
+  const { id, sid } = await params;
+  const user = await getCurrentUser();
+  if (!user) notFound();
+  const classroom = await getClassroom(id);
+  const viewer = classroom?.memberships.find((m) => m.userId === user.id);
+  if (viewer?.role !== "instructor") notFound();
+  if (!classroom?.memberships.some((m) => m.userId === sid)) notFound();
+  return { title: "Student progress" };
+}
 
 export default async function StudentDetailPage({
   params,
@@ -53,6 +86,30 @@ export default async function StudentDetailPage({
   const trackList: Track[] = classroom.trackId
     ? [getTrackById(classroom.trackId)].filter((t): t is Track => Boolean(t))
     : tracks;
+
+  // One query for every piece of writing this learner has saved, shared by
+  // each track's section below; a failed read costs the writing, not the page.
+  const writtenWork: ExerciseSubmissionMap = await getExerciseSubmissionMap(
+    sid,
+  ).catch((): ExerciseSubmissionMap => new Map());
+
+  // The memo desk's drafts are course work too, and they are the one piece of
+  // it kept in VerificationState rather than a Submission row. Only when the
+  // room reaches the Verification track: nothing else in the graph has a desk.
+  const memoDrafts: MemoDraft[] | null = trackList.some(
+    (track) => track.id === "verification",
+  )
+    ? await getMemoDrafts(sid)
+    : [];
+
+  // Null here means the annotations table is not migrated: the sections say
+  // so once, rather than offering a box under every piece of work that could
+  // not save.
+  const notes: Map<string, InstructorNote[]> | null = await getNotesForStudent(
+    classroom.id,
+    sid,
+    user.id,
+  );
 
   const trackData = await Promise.all(
     trackList.map(async (track) => {
@@ -83,7 +140,8 @@ export default async function StudentDetailPage({
           return { module, items, assessment, submission };
         }),
       );
-      return { track, progress, completed, modules };
+      const writingTasks = await getTrackWritingTasks(track.id);
+      return { track, progress, completed, modules, writingTasks };
     }),
   );
 
@@ -114,8 +172,16 @@ export default async function StudentDetailPage({
         </div>
       </div>
 
+      {notes === null && (
+        <p className="border-border text-muted-foreground mt-6 rounded-lg border border-dashed p-3 text-sm">
+          Annotations are off: the database needs{" "}
+          <code>db/migrations/20261022120000_submission_notes.sql</code>{" "}
+          applied. Everything below still reads.
+        </p>
+      )}
+
       <div className="mt-8 space-y-8">
-        {trackData.map(({ track, progress, completed, modules }) => (
+        {trackData.map(({ track, progress, completed, modules, writingTasks }) => (
           <section key={track.id}>
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold">{track.title}</h2>
@@ -199,6 +265,23 @@ export default async function StudentDetailPage({
                 </AccordionItem>
               ))}
             </Accordion>
+
+            <StudentWrittenWork
+              tasks={writingTasks}
+              submissions={writtenWork}
+              classroomId={classroom.id}
+              studentId={sid}
+              notes={notes}
+            />
+
+            {track.id === "verification" && (
+              <StudentMemoDrafts
+                drafts={memoDrafts}
+                classroomId={classroom.id}
+                studentId={sid}
+                notes={notes}
+              />
+            )}
           </section>
         ))}
       </div>

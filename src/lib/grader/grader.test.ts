@@ -31,9 +31,9 @@ describe("classifyLength", () => {
       expect(modelFor(cls)).toBeTruthy();
       expect(modelsFor(cls)[0]).toBe(modelFor(cls));
     }
-    expect(modelFor("short")).toBe("openai/gpt-oss-120b:free");
+    expect(modelFor("short")).toBe("nvidia/nemotron-3-super-120b-a12b:free");
     expect(modelsFor("short")).toEqual([
-      "openai/gpt-oss-120b:free",
+      "nvidia/nemotron-3-super-120b-a12b:free",
       "openrouter/free",
     ]);
     expect(outputTokensFor("short")).toBeLessThan(outputTokensFor("long"));

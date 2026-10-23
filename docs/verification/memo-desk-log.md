@@ -94,3 +94,140 @@ go against earlier teammates' decisions on purpose — review before merging.
   paragraph and the writing paragraph), the landing overview's notebook
   paragraph and the desk's own intro all say the Skill Map and the memo
   desk open from the notebook.
+
+## 2026-10-22 — the desk is embedded in the lesson that asks for the writing
+
+Course owner: "embed memo desk into the modules."
+
+`memo-desk.js` was built for this and had never been wired to it. Its
+header has said so from the start — "Mount with `VTMemoDesk.mount(host,
+{slots, hash})` — the standalone page mounts every slot, a unit page mounts
+only the ones its own unit asks for" — and the mount body already filters
+`ALL` by `opts.slots`, refuses to own the location hash when `hash: false`,
+and hides the slot rail when a mount has fewer than two slots. What existed
+instead was `<MemoDesk lesson/>` rendering a card that restated the slot's
+brief, reader, budget and criteria and then sent the learner to
+`/verification/memo-desk` to do the writing.
+
+So the card is gone and the desk itself is what the marker renders. The
+brief, the reader, the budget and the criteria now appear once — the desk's
+own `renderBrief` and check rail print them — and the learner writes in the
+lesson. One `<MemoDesk/>` mounts one desk for all of its lesson's slots, so
+the five lessons with a desk-drafted slot get one each.
+
+What is unchanged: `PageSlot` still serves a slot with an `href`
+(`m4-capstone` → the capstone workspace), because that slot's drafting
+surface is not this desk and its card's copy is the author's. Drafts stay
+`memo-store.js`'s, under the same key, so a draft written on the standalone
+desk opens in the lesson and the other way round, and the desk page is
+untouched.
+
+The inline mount loads three files, not the desk page's seven:
+`memo-desk.js` reads only `VERIFICATION_MEMOS`, `VTMemoStore` and
+(optionally) `VTNotebook`, so `platform.js`, `data/course.js`,
+`data/skills.js` and `data/chrome.js` are the page chrome's and stay there.
+Keeping `platform.js` off a lesson also keeps `sync.js` from subscribing to
+a progress store the app does not write.
+
+Two things the embed had to fix in `memo-desk.css`, both found by driving it
+rather than by a test, since nothing under `public/verification/` is
+typechecked or run:
+
+- `input::placeholder, textarea::placeholder` was a bare rule. A React
+  `precedence` stylesheet hoists into `<head>` and stays for the life of the
+  document, so once a lesson with a desk had been visited that rule applied
+  to every input in the app. Scoped to `.desk`. `prose-scope.test.ts` now
+  fails on any unanchored selector in the two sheets a lesson can load.
+- `.desk`'s `250px minmax(0,1fr) 300px` keys on **viewport** width, so in an
+  832px lesson column on a wide screen it spent 550px on rails and left the
+  writing surface about 240px — and because a single-slot mount hides the
+  slot rail, and a `display:none` grid item leaves its track behind, the
+  editor landed in the 250px track meant for the rail it had just hidden.
+  `.desk-inline` is one column with the rails in flow.
+
+## 2026-10-22 — an instructor can read the memo drafts
+
+Course owner, on the previous round's open question: "да memo это работа,
+подними их тоже" — the memos are work, so surface them.
+
+They were the one piece of written course work an instructor could not see,
+because they are the one piece that is not a `Submission` row. The desk's
+drafts belong to `memo-store.js` and reach the account as the `memos` store
+of the single `VerificationState` document, which until now only its owner
+could read, through `/api/verification/state`.
+
+The classroom's student page now reads them. Three things about how:
+
+- **The query takes the memos key alone.** `getMemoDrafts` is a raw
+  `SELECT "data" -> 'memos'`, not a Prisma `select: { data: true }`, so the
+  notebook, the highlights, the field map and the widget store never leave
+  Postgres for an instructor's request — the standing rule is submissions
+  yes, notes no, and the cheapest way to keep it is to never fetch them.
+  `state-read.test.ts` fails if the statement grows past that key.
+- **Drafts are shown as drafts.** The desk has no hand-in step at all; it
+  autosaves and that is the whole lifecycle. The submitted/withheld line
+  that governs the writing exercises therefore cannot be drawn here, so the
+  section says in one line that everything under it is a working draft.
+- **Writing whose slot has left the outline is still shown**, after the
+  known slots and labelled "slot retired" — the same decision `memo-desk.js`
+  already made for its own legacy drafts. A slot id changing must not make a
+  learner's work vanish from the room.
+
+`**bold**` renders as bold in a memo body and nowhere else. The desk tells
+the writer to use it and its skim test reads those lines, so on a memo the
+markers are the structure; the writing exercises are free prose and their
+text stays exactly as typed. It splits a string and wraps alternate pieces
+in an element — no HTML is built, so learner input cannot inject.
+
+Seen working against a local Postgres with a seeded cohort: both drafts and
+the retired slot render with their letterhead and both desk questions, the
+submitted exercise shows its text and its grade, the unsubmitted one shows
+only that a draft exists, and the notebook, highlights, field map and widget
+sentinels planted in the same document appear nowhere in the response.
+
+One thing found on the way: the facilitator view printed `Optional:` twice
+on the tasks whose prompt opens with the word, since the row also carries
+`OptionalPrefix` from `exercise.optional`. The lessons mark those in the
+prompt text and print no prefix. The row keeps the component and drops the
+word from the text.
+
+## 2026-10-22 — a facilitator can annotate, privately or back to the learner
+
+Course owner: "добавь опцию фасилитатору делать аннотации сабмишенов
+(приватно и отправляя обратно студенту)."
+
+`SubmissionNote` carries both, and the difference is per note rather than
+per instructor, because the two things somebody writes about one piece of
+work are different documents: a private read of how a learner is doing, and
+the sentence they are given back. Each note says which it is in words beside
+a glyph, never by colour alone.
+
+`targetId` is a string content id with no FK — a writing exercise, an
+assessment, or a **memo-desk slot**. That is why it does not point at
+`Submission.id`: the memos are course work and have no Submission row, and
+the owner had just ruled that they are work. `targetKind` names the register
+and the action validates against it: the exercise and assessment registers
+are closed and checked against the content graph, while a memo id is only
+bounded in shape — a learner's store may still hold a slot the outline has
+dropped, and their facilitator has to be able to write about what is on the
+screen.
+
+Where the learner reads it: under the writing exercise in the lesson, under
+the end-of-module assessment, and above the memo desk embedded in the
+lesson. Never the private ones — `getSharedNotes` filters on the column, so
+a private note is not fetched for a learner's page at all. The author's name
+and their classroom travel with every shared note, because feedback from
+nobody reads differently from feedback from a person, and a learner in two
+cohorts needs to know which one sent it.
+
+Found and fixed on the way: `/classrooms/[id]/students/[sid]` answered a
+stranger with **200** and the title "Student progress" before rendering the
+404 body — the static `metadata` export flushed the head, the trap this
+repo had already written down for `/verification/applications`. The gate now
+runs in `generateMetadata`, and `getClassroom` is `cache()`-wrapped so
+asking twice costs one query. That alone did not fix the status, because
+`src/app/classrooms/loading.tsx` put a Suspense boundary over the whole
+subtree and a streamed response has already sent its 200. The skeleton is
+four list rows — the shape of the classrooms index and of nothing else under
+it — so it moved into a `(index)` route group with that page. Verified: the
+index still streams its skeleton, and a non-instructor now gets a real 404.

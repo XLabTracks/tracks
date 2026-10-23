@@ -122,9 +122,19 @@ export async function getLessonCitations(
   return Array.isArray(mdxModule?.citations) ? mdxModule.citations : [];
 }
 
+/** One writing task a track asks for, and the lesson whose body asks for it. */
+export interface TrackWritingTask {
+  exerciseId: string;
+  lessonId: string;
+  lessonTitle: string;
+  moduleId: string;
+  prompt: string;
+  optional: boolean;
+}
+
 /**
- * The written work a track requires: the ids of every non-optional writing
- * exercise embedded in its lessons, in reading order.
+ * Every writing exercise embedded in a track's lessons, in reading order,
+ * optional ones included.
  *
  * Read from the same `sections` export the sidebar navigates by, so the list
  * is whatever the bodies actually ask for — an exercise that is moved, added
@@ -132,21 +142,40 @@ export async function getLessonCitations(
  * lesson modules are statically bundled and cached, so this walks imports,
  * not the filesystem, and works on the worker.
  */
-export async function getTrackRequiredWritingIds(
+export async function getTrackWritingTasks(
   trackId: string
-): Promise<string[]> {
-  const ids: string[] = [];
+): Promise<TrackWritingTask[]> {
+  const tasks: TrackWritingTask[] = [];
   for (const mod of getModulesForTrack(trackId)) {
     for (const item of getItemsForModule(mod.id)) {
       if (item.kind !== "lesson") continue;
       for (const exercise of await lessonWritingExercises(
         item.lesson.contentRef
       )) {
-        if (!exercise.optional) ids.push(exercise.id);
+        tasks.push({
+          exerciseId: exercise.id,
+          lessonId: item.lesson.id,
+          lessonTitle: item.lesson.title,
+          moduleId: mod.id,
+          prompt: exercise.prompt,
+          optional: exercise.optional === true,
+        });
       }
     }
   }
-  return ids;
+  return tasks;
+}
+
+/**
+ * The written work a track *requires*: the same walk with the optional tasks
+ * dropped. The completion page counts against this; the facilitator's view of
+ * a learner lists all of them.
+ */
+export async function getTrackRequiredWritingIds(
+  trackId: string
+): Promise<string[]> {
+  const tasks = await getTrackWritingTasks(trackId);
+  return tasks.filter((task) => !task.optional).map((task) => task.exerciseId);
 }
 
 /** The writing exercises a lesson body embeds, in reading order. */

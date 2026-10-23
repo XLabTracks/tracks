@@ -25,6 +25,23 @@
   .slot-rail { max-height: 42vh; overflow-y: auto; }
 }
 
+/* The desk embedded in a lesson, where the column is the reading column and
+   not the viewport.
+
+   The three-track grid above keys on viewport width, so on a wide screen it
+   applied inside an 832px lesson column and spent 550px of it on two fixed
+   rails, leaving the writing surface about 240px. Worse, a single-slot mount
+   hides the slot rail, and a display:none grid item leaves its track behind —
+   so the editor landed in the 250px track meant for the rail it had just
+   hidden. One column, rails in flow under the writing. */
+.desk.desk-inline { grid-template-columns: minmax(0, 1fr); }
+.desk.desk-inline .slot-rail,
+.desk.desk-inline .check-rail {
+  position: static;
+  max-height: none;
+  overflow: visible;
+}
+
 /* ---------- slot rail ---------- */
 
 .slot-rail h2, .check-rail h2 {
@@ -301,7 +318,7 @@ textarea.body-in {
   line-height: 1.7;
   resize: vertical;
 }
-input::placeholder, textarea::placeholder { color: var(--muted-foreground); opacity: .8; }
+.desk input::placeholder, .desk textarea::placeholder { color: var(--muted-foreground); opacity: .8; }
 
 .desk-tools {
   display: flex;

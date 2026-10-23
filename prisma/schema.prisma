@@ -40,6 +40,8 @@ model User {
   createdClassrooms  Classroom[]           @relation("ClassroomCreatedBy")
   createdAssignments Assignment[]          @relation("AssignmentCreatedBy")
   instructorGrades   InstructorGrade[]     @relation("InstructorGradeGrader")
+  notesReceived      SubmissionNote[]      @relation("SubmissionNoteStudent")
+  notesWritten       SubmissionNote[]      @relation("SubmissionNoteAuthor")
   apiKeys            UserApiKey[]
   reviewCards        ReviewCard[]
   highlights         Highlight[]
@@ -342,6 +344,7 @@ model Classroom {
   apiKeys     ClassroomApiKey[]
   assignments Assignment[]
   grades      InstructorGrade[]
+  notes       SubmissionNote[]
 }
 
 model ClassroomMembership {
@@ -355,6 +358,43 @@ model ClassroomMembership {
 
   @@unique([classroomId, userId])
   @@index([userId])
+}
+
+enum SubmissionNoteVisibility {
+  private_note // only the classroom's instructors
+  shared // the learner sees it on their own work
+}
+
+// An instructor's annotation on one piece of a learner's work.
+//
+// `targetId` is a string content id with no FK, the LessonProgress.lessonId
+// convention — a writing exercise or assessment id, or a memo-desk slot id,
+// which is why it does not point at Submission.id: the memos are course work
+// and have no Submission row. `targetKind` says which register the id is in
+// and the action validates it against that register before writing.
+//
+// Visibility is per note rather than per instructor, because the two things
+// an instructor writes about one piece of work are different documents: a
+// private read of how someone is doing, and the sentence they get back.
+model SubmissionNote {
+  id          String                   @id @default(cuid())
+  classroomId String
+  classroom   Classroom                @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+  studentId   String
+  student     User                     @relation("SubmissionNoteStudent", fields: [studentId], references: [id], onDelete: Cascade)
+  // Kept for display in multi-instructor rooms; the author's departure must
+  // not take their feedback with it.
+  authorId    String?
+  author      User?                    @relation("SubmissionNoteAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  targetId    String
+  targetKind  String
+  body        String
+  visibility  SubmissionNoteVisibility @default(private_note)
+  createdAt   DateTime                 @default(now())
+  updatedAt   DateTime                 @updatedAt
+
+  @@index([classroomId, studentId])
+  @@index([studentId, visibility])
 }
 
 // An instructor's assignment to a classroom: a selection of module items

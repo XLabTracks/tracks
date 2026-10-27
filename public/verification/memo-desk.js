@@ -718,11 +718,16 @@ window.VTMemoDesk = (function () {
     F.date.focus();
   });
 
+  /* `change` as well as `input`: browser autofill of the letterhead fires one
+     without the other in several engines, and the check rail then went on
+     saying "Still blank: To, From, Date, Subject" over four filled lines. */
   Object.keys(F).forEach(function (k) {
-    F[k].addEventListener('input', function () {
+    var refresh = function () {
       save(); budget(); lint();
       if (!el('paneSkim').hidden) skim();
-    });
+    };
+    F[k].addEventListener('input', refresh);
+    F[k].addEventListener('change', refresh);
   });
   el('modeWrite').addEventListener('click', function () { setMode(false); });
   el('modeSkim').addEventListener('click', function () { setMode(true); });

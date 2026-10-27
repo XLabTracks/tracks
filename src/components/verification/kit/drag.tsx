@@ -31,6 +31,9 @@ interface DragCtx extends DragState {
   announce: (msg: string) => void;
 }
 
+const EDGE_BAND = 84;
+const EDGE_SPEED = 16;
+
 const Ctx = createContext<DragCtx | null>(null);
 
 function useDragCtx(): DragCtx {
@@ -71,6 +74,7 @@ export function DragProvider({
     active: boolean;
     pointerId: number;
   } | null>(null);
+  const scrollFrame = useRef<number | null>(null);
 
   const announce = useCallback((msg: string) => {
     if (liveRef.current) liveRef.current.textContent = msg;
@@ -138,6 +142,33 @@ export function DragProvider({
   );
 
   useEffect(() => {
+    function zoneAt(x: number, y: number): string | null {
+      return (
+        document
+          .elementFromPoint(x, y)
+          ?.closest<HTMLElement>("[data-drop-zone]")?.dataset.dropZone ?? null
+      );
+    }
+
+    function autoScroll() {
+      scrollFrame.current = null;
+      const d = drag.current;
+      if (!d || !d.active) return;
+      const height = window.innerHeight;
+      const top = d.lastY;
+      const bottom = height - d.lastY;
+      let dy = 0;
+      if (top < EDGE_BAND) dy = -EDGE_SPEED * (1 - Math.max(top, 0) / EDGE_BAND);
+      else if (bottom < EDGE_BAND)
+        dy = EDGE_SPEED * (1 - Math.max(bottom, 0) / EDGE_BAND);
+      if (dy !== 0) {
+        const before = window.scrollY;
+        window.scrollBy(0, dy);
+        if (window.scrollY !== before) setOverZone(zoneAt(d.lastX, d.lastY));
+      }
+      scrollFrame.current = requestAnimationFrame(autoScroll);
+    }
+
     function move(e: PointerEvent) {
       const d = drag.current;
       if (!d || d.pointerId !== e.pointerId) return;
@@ -149,24 +180,26 @@ export function DragProvider({
         d.active = true;
         const label = labels.current.get(d.id) ?? d.id;
         setState((s) => ({ ...s, draggingId: d.id, draggingLabel: label, armedId: null }));
+        if (scrollFrame.current === null) {
+          scrollFrame.current = requestAnimationFrame(autoScroll);
+        }
       }
       if (ghost.current) {
         ghost.current.style.transform = `translate(${e.clientX - d.grabX}px, ${e.clientY - d.grabY}px)`;
       }
-      const el = document
-        .elementFromPoint(e.clientX, e.clientY)
-        ?.closest<HTMLElement>("[data-drop-zone]");
-      setOverZone(el?.dataset.dropZone ?? null);
+      setOverZone(zoneAt(e.clientX, e.clientY));
     }
     function up(e: PointerEvent) {
       const d = drag.current;
       if (!d || d.pointerId !== e.pointerId) return;
+      if (scrollFrame.current !== null) {
+        cancelAnimationFrame(scrollFrame.current);
+        scrollFrame.current = null;
+      }
       if (d.active) {
-        const el = document
-          .elementFromPoint(e.clientX, e.clientY)
-          ?.closest<HTMLElement>("[data-drop-zone]");
-        if (el?.dataset.dropZone) {
-          onDrop(d.id, el.dataset.dropZone);
+        const zone = zoneAt(e.clientX, e.clientY);
+        if (zone) {
+          onDrop(d.id, zone);
           announce(`Placed ${labels.current.get(d.id) ?? d.id}.`);
         }
         setState({ armedId: null, draggingId: null, draggingLabel: null, overZone: null });
@@ -180,6 +213,10 @@ export function DragProvider({
       window.removeEventListener("pointermove", move);
       window.removeEventListener("pointerup", up);
       window.removeEventListener("pointercancel", up);
+      if (scrollFrame.current !== null) {
+        cancelAnimationFrame(scrollFrame.current);
+        scrollFrame.current = null;
+      }
     };
   }, [onDrop, announce, setOverZone]);
 

@@ -378,6 +378,26 @@ describe("extractDocumentText", () => {
     }
   });
 
+  /**
+   * Swallowing the reader's own error once cost two CI rounds chasing a
+   * corrupt-file report that was really "Iterator is not defined" from an
+   * engine too old for the bundled pdf.js.
+   */
+  it("keeps the underlying failure as the error's cause", async () => {
+    let thrown: unknown;
+    try {
+      await extractDocumentText(
+        fileOf(new TextEncoder().encode("not a pdf at all"), "memo.pdf"),
+      );
+    } catch (error) {
+      thrown = error;
+    }
+    expect(thrown).toBeInstanceOf(DocumentReadError);
+    const failure = thrown as DocumentReadError;
+    expect(failure.code).toBe("unreadable");
+    expect(failure.cause).toBeDefined();
+  });
+
   it("every failure carries a message written for the learner", async () => {
     const error = new DocumentReadError("no-text");
     expect(error.message).toMatch(/Paste the text in instead/);

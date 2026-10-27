@@ -44,8 +44,14 @@ export const documentReadMessages: Record<DocumentReadFailure, string> = {
 
 export class DocumentReadError extends Error {
   readonly code: DocumentReadFailure;
-  constructor(code: DocumentReadFailure) {
-    super(documentReadMessages[code]);
+  /**
+   * The underlying failure, kept because the learner-facing message cannot
+   * carry it. Swallowing it once cost two CI rounds chasing a corrupt-file
+   * report that was really `Iterator is not defined` from an engine too old
+   * for the bundled pdf.js.
+   */
+  constructor(code: DocumentReadFailure, cause?: unknown) {
+    super(documentReadMessages[code], cause === undefined ? undefined : { cause });
     this.name = "DocumentReadError";
     this.code = code;
   }
@@ -93,8 +99,8 @@ async function docxText(bytes: Uint8Array): Promise<string> {
   let entry: Uint8Array | null;
   try {
     entry = await readZipEntry(bytes, "word/document.xml");
-  } catch {
-    throw new DocumentReadError("unreadable");
+  } catch (error) {
+    throw new DocumentReadError("unreadable", error);
   }
   // A .docx without that part is not a Word document — most often a .zip or a
   // Pages/ODT file wearing the extension.
@@ -135,8 +141,8 @@ async function pdfText(bytes: Uint8Array): Promise<string> {
     const pdf = await getDocumentProxy(bytes);
     const { text } = await extractText(pdf, { mergePages: true });
     return Array.isArray(text) ? text.join("\n") : text;
-  } catch {
-    throw new DocumentReadError("unreadable");
+  } catch (error) {
+    throw new DocumentReadError("unreadable", error);
   }
 }
 

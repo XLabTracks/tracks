@@ -405,14 +405,20 @@ window.VTMemoDesk = (function () {
     }).join('');
   }
 
-  /* What this deliverable is worth outside the course. The sentences are
+  /* What this deliverable is worth outside the course. The sentence is
      single-sourced in src/lib/content/work-sample-note.ts and handed over on
      window by MemoDeskHost — the desk prints what it is given and holds no
-     copy of its own. */
+     copy of its own.
+
+     Course owner: policy briefs and memos only. So it is off for an essay or
+     a map, off for an output written elsewhere, and off until a slot has a
+     real brief to write against — a line calling every written output a
+     writing sample would be worth nothing where it is true. That leaves 2.3
+     and 4.1. */
   function workSampleNote(s) {
-    var notes = window.VT_WORK_SAMPLE_NOTES;
-    if (!notes) return '';
-    return notes[(s && s.genre) || 'memo'] || '';
+    if (!s || elsewhere(s) || !s.brief) return '';
+    if (s.genre && s.genre !== 'memo') return '';
+    return window.VT_WORK_SAMPLE_NOTE || '';
   }
 
   function renderBrief(s) {

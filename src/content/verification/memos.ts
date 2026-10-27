@@ -549,6 +549,20 @@ export function memoSlotTasks(slot: MemoSlot): MemoStep[] {
   return slot.task ? [{ task: slot.task, title: slot.title }] : [];
 }
 
+const genreByTask = new Map<string, MemoGenre>(
+  memoSlots.flatMap((slot) =>
+    slot.genre
+      ? memoSlotTasks(slot).map(
+          (step) => [step.task, slot.genre!] as [string, MemoGenre],
+        )
+      : [],
+  ),
+);
+
+export function memoGenreForTask(task: string): MemoGenre | undefined {
+  return genreByTask.get(task);
+}
+
 const writingById = new Map<string, WritingExercise>(
   verificationExercises
     .filter(isWritingExercise)

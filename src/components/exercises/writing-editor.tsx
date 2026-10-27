@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { DocumentImport } from "@/components/exercises/document-import";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import {
@@ -129,6 +130,21 @@ export function WritingEditor({
   const setField = (id: string, value: string) =>
     setValues((prev) => ({ ...prev, [id]: value }));
 
+  /**
+   * Imported text fills an empty box and is appended to one that already has
+   * writing in it. Appending rather than replacing is deliberate: setting a
+   * textarea's value from script is not undoable with Ctrl+Z, so a replace
+   * would be a one-click way to lose a draft with no way back.
+   */
+  const importInto = (id: string, text: string) =>
+    setValues((prev) => {
+      const existing = prev[id] ?? "";
+      return {
+        ...prev,
+        [id]: existing.trim() ? `${existing.trimEnd()}\n\n${text}` : text,
+      };
+    });
+
   const submit = () => {
     if (!onSubmit) return;
     startSubmitTransition(async () => {
@@ -176,9 +192,21 @@ export function WritingEditor({
     <div className="space-y-4">
       {sections.map((section) => (
         <div key={section.id} className="space-y-1.5">
-          <Label htmlFor={`w-${section.id}`} className="leading-snug">
-            {section.label}
-          </Label>
+          <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+            <Label htmlFor={`w-${section.id}`} className="leading-snug">
+              {section.label}
+            </Label>
+            {/* One box means an essay or a long question — the case where a
+                learner has already written the thing in Word. A deliverable
+                split into several short fields is not that, so it keeps the
+                plain label. */}
+            {!multiSection && !isSubmitted && (
+              <DocumentImport
+                onText={(text) => importInto(section.id, text)}
+                appending={Boolean((values[section.id] ?? "").trim())}
+              />
+            )}
+          </div>
           {section.guidance && (
             <p className="text-muted-foreground text-xs">{section.guidance}</p>
           )}

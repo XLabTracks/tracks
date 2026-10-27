@@ -143,8 +143,15 @@ window.VTMemoDesk = (function () {
         '<div class="budget"><span class="mono" id="wordCount">0 words</span>',
           '<div class="bbar"><i id="budgetBar" style="width:0%"></i></div></div>',
         '<button type="button" class="tool" id="exportBtn">Export .md</button>',
+        /* Hidden until the app publishes VTDocImport: the reader is TypeScript
+           in the bundle, so a desk served without it must not offer a button
+           that cannot work. */
+        '<button type="button" class="tool" id="importBtn" hidden>Import .docx or .pdf</button>',
+        '<input type="file" id="importFile" hidden tabindex="-1" aria-hidden="true"',
+        ' accept=".docx,.pdf,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document">',
         '<button type="button" class="tool" id="clearBtn">Clear this draft</button>',
       '</div>',
+      '<p class="desk-note" id="importNote" hidden></p>',
       /* Where somebody is about to type an opinion, say where it goes. The
          drafts sit in this browser under memo-store.js's key AND ride to the
          account of a signed-in learner on sync.js, with the notebook and the
@@ -398,6 +405,16 @@ window.VTMemoDesk = (function () {
     }).join('');
   }
 
+  /* What this deliverable is worth outside the course. The sentences are
+     single-sourced in src/lib/content/work-sample-note.ts and handed over on
+     window by MemoDeskHost — the desk prints what it is given and holds no
+     copy of its own. */
+  function workSampleNote(s) {
+    var notes = window.VT_WORK_SAMPLE_NOTES;
+    if (!notes) return '';
+    return notes[(s && s.genre) || 'memo'] || '';
+  }
+
   function renderBrief(s) {
     el('slotTitle').textContent =
       s.unit + ' — ' + (s.optional ? 'Optional: ' : '') + s.title;
@@ -407,6 +424,8 @@ window.VTMemoDesk = (function () {
 
     var host = el('slotBrief');
     var out = '';
+    var sample = workSampleNote(s);
+    if (sample) out += '<p class="work-sample">' + esc(sample) + '</p>';
     if (s.brief) {
       out +=
         '<div class="brief"><p class="bk">The outline’s brief</p>' + briefHtml(s.brief) + '<dl>' +
@@ -733,6 +752,53 @@ window.VTMemoDesk = (function () {
   el('modeSkim').addEventListener('click', function () { setMode(true); });
   el('deckBtn').addEventListener('click', drawCard);
   el('exportBtn').addEventListener('click', exportMd);
+
+  /* Reading a .docx or .pdf the learner already wrote. The parsing is the
+     app's (window.VTDocImport, published by MemoDeskHost) and happens in this
+     browser — the file is never uploaded, only the text it yields, through the
+     same autosave a typed draft takes.
+
+     It appends rather than replaces: setting a textarea's value from script
+     cannot be undone with Ctrl+Z, so replacing would be a one-tap way to lose
+     a draft. */
+  var importBtn = el('importBtn');
+  var importFile = el('importFile');
+  var importNote = el('importNote');
+  var docImport = window.VTDocImport;
+  if (importBtn && importFile && docImport && docImport.read) {
+    importBtn.hidden = false;
+    importBtn.addEventListener('click', function () { importFile.click(); });
+    importFile.addEventListener('change', function () {
+      var file = importFile.files && importFile.files[0];
+      // Clear first: the same file picked twice must fire again.
+      importFile.value = '';
+      if (!file) return;
+      importBtn.disabled = true;
+      importBtn.textContent = 'Reading…';
+      importNote.hidden = true;
+      docImport.read(file).then(function (result) {
+        var had = F.body.value.trim();
+        F.body.value = had
+          ? F.body.value.replace(/\s+$/, '') + '\n\n' + result.text
+          : result.text;
+        // Hand it to the desk's own input path, which saves, counts and lints.
+        F.body.dispatchEvent(new Event('input', { bubbles: true }));
+        var words = result.text.trim() ? result.text.trim().split(/\s+/).length : 0;
+        importNote.textContent =
+          words + (words === 1 ? ' word' : ' words') + ' read from ' + file.name +
+          (had ? ', added at the end of your draft.' : '.') +
+          (result.truncated ? ' The file was longer than one draft can hold, so the end was left out.' : '');
+        importNote.hidden = false;
+      }).catch(function (error) {
+        importNote.textContent =
+          (error && error.message) || 'That file could not be read. Paste the text in instead.';
+        importNote.hidden = false;
+      }).then(function () {
+        importBtn.disabled = false;
+        importBtn.textContent = 'Import .docx or .pdf';
+      });
+    });
+  }
 
   // Two-tap clear: a one-tap wipe of a draft nobody backed up is a trap.
   var clearBtn = el('clearBtn');

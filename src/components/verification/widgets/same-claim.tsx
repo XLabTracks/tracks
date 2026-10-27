@@ -230,7 +230,7 @@ export function SameClaim({
               )}
               aria-live="polite"
             >
-              {comparisonWords} / {CLAIM_COMPARISON_MAX_WORDS} words
+              {comparisonWords} words · max {CLAIM_COMPARISON_MAX_WORDS}
             </p>
           </section>
 

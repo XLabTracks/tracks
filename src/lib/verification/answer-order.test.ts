@@ -9,6 +9,14 @@ import { DRILLS_FOUNDATIONS } from "./data/drills-foundations";
 import { DRILLS_GAMES } from "./data/drills-games";
 import { DRILLS_INTEL_ASSESSMENT } from "./data/drills-intel-assessment";
 import { DRILLS_PRIMERS } from "./data/drills-primers";
+import {
+  CLOUD_CONCEPT_ROWS,
+  CLOUD_CONCEPTS,
+  CLOUD_MATCH_CONCLUSIONS,
+  CLOUD_MATCH_ROWS,
+  CLOUD_PIPELINE_GAPS,
+  CLOUD_PIPELINE_OPTIONS,
+} from "./data/cloud-evidence-drill";
 import { QUICK_QUESTIONS } from "./data/policy-quick-check";
 import { QUIZ } from "./data/protocol-actors";
 import type { DrillDeck, DrillStep } from "./data/drills";
@@ -136,6 +144,7 @@ describe("every answer surface goes through the shuffle", () => {
     "src/components/verification/widgets/whistleblower-levers.tsx",
     "src/components/verification/kit/drill-deck.tsx",
     "src/components/verification/kit/sort-board.tsx",
+    "src/components/verification/widgets/cloud-evidence-drill.tsx",
     "src/components/mdx/reader/check.tsx",
   ];
 
@@ -154,5 +163,49 @@ describe("every answer surface goes through the shuffle", () => {
       const src = readFileSync(path.join(process.cwd(), file), "utf8");
       expect(src, file).toMatch(/\{\s*item[^}]*,\s*from\s*\}/);
     }
+  });
+});
+
+describe("a matcher never solves on the diagonal", () => {
+  const BANKS: {
+    id: string;
+    seed: string;
+    options: readonly string[];
+    answers: readonly string[];
+  }[] = [
+    {
+      id: "cloud match",
+      seed: "cloud-evidence:match",
+      options: CLOUD_MATCH_CONCLUSIONS.map((o) => o.id),
+      answers: CLOUD_MATCH_ROWS.map((r) => r.answerId),
+    },
+    {
+      id: "cloud pipeline",
+      seed: "cloud-evidence:pipeline",
+      options: CLOUD_PIPELINE_OPTIONS,
+      answers: CLOUD_PIPELINE_GAPS.map((g) => g.answer),
+    },
+    {
+      id: "cloud concepts",
+      seed: "cloud-evidence:concepts",
+      options: CLOUD_CONCEPTS,
+      answers: CLOUD_CONCEPT_ROWS.map((r) => r.answer),
+    },
+  ];
+
+  it.each(BANKS)("$id: row n's answer is not shown option n", (bank) => {
+    const shown = shuffleAnswerOptions(bank.seed, bank.options, (o) => o).map(
+      (s) => s.item,
+    );
+    const onDiagonal = bank.answers.filter(
+      (answer, row) => shown[row] === answer,
+    ).length;
+    expect(onDiagonal, `${bank.id} shown order: ${shown.join(" | ")}`).toBeLessThan(
+      bank.answers.length,
+    );
+  });
+
+  it.each(BANKS)("$id: every answer is actually in the bank", (bank) => {
+    for (const answer of bank.answers) expect(bank.options).toContain(answer);
   });
 });

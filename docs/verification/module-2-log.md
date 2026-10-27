@@ -4555,3 +4555,59 @@ belongs to which question is an editorial judgement over the author's key,
 not a mechanical split, so it stays whole until somebody who owns the
 content decides. It is the one exercise in 2.1 that still asks four
 questions in one box.
+
+## 2026-10-27 — bug reports from the cohort, first batch
+
+### 2.2.4's matchers solved on the diagonal
+
+Two readers reported it independently ("answer ordered by question number so
+trivially easy"). All three matching tasks in `cloud-evidence-drill` listed
+their options in exactly the row order of their answers:
+`CLOUD_MATCH_CONCLUSIONS` against `CLOUD_MATCH_ROWS`, `CLOUD_CONCEPTS`
+against `CLOUD_CONCEPT_ROWS`, and `CLOUD_PIPELINE_OPTIONS` whose first five
+terms were the five gaps' answers in order, distractors parked at the end.
+Row n's answer was option n in all three. Shuffled at the display layer with
+`shuffleAnswerOptions` seeded per task, which is free here because every one
+of them stores the chosen option's id or text rather than its index.
+
+The shuffle rule has a test that promises "every answer surface goes through
+the shuffle", and it did not catch this: its list of surfaces is hand-kept
+and this widget was never added. It is added now, and beside it a test that
+computes the **shown** order of the three banks and fails if row n's answer
+is still at position n. That is the defect that actually happens; the
+allowlist only catches the file somebody remembered to list.
+
+### `[breakable,boxrule=1pt,…]` printed as body text in 2.2
+
+Three reports, one of them "I can't read it at all". Heim et al.'s key-terms
+boxes carry `fonttitle=\bfseries` in their tcolorbox option list.
+`\bfseries` is a font *switch*, so unified-latex gives it everything after
+it as content — including the option list's closing `]`. `peelBracketOptions`
+looked for a top-level string node containing `]`, found none, peeled
+nothing, and the whole option list rendered as text with the box body bolded
+by the stray switch.
+
+The peeler descends now: when no top-level `]` is found it looks inside the
+node that swallowed it, discards that node (a font switch among the options
+is part of the options, not styling for the body), and keeps the tail that
+followed the bracket. The `title=` is recovered too, which is how those
+boxes get their heading back. Converter v32; all twelve artifacts rebuilt in
+the same commit, and no `Paper.edits` snippet tripwire moved.
+
+### "200 / 200 words"
+
+A reader could not tell whether 200 was the floor or the ceiling, because
+six widgets printed `{n} / {max} words` while the app's own editor prints
+`{n} words · min X · max Y`. Those six now use the editor's wording. Which
+tasks have a minimum at all is a content question and is untouched.
+
+### "Both parts are required" on an answer that had both parts
+
+2.2.4's odd-one-out grades a free sentence by requiring a word from each of
+three lists — actor, activity, contrast — and said "Both parts are required"
+whenever it failed, including when both parts were plainly filled in. The
+message now distinguishes the two cases: a missing half still reads as
+missing, a complete answer that did not land is told what the sentence has
+to contrast. The activity and contrast lists also gained the words a reader
+actually writes (`use`, `used`, `measure`, `rest`, `than`, `not`, `only`),
+tested against four plain wordings that used to fail.

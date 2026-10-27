@@ -272,7 +272,7 @@ export function InferTheSystem({
               )}
               aria-live="polite"
             >
-              {changeWords} / {SECOND_STEP_MAX_WORDS} words
+              {changeWords} words · max {SECOND_STEP_MAX_WORDS}
             </p>
           </section>
         </div>

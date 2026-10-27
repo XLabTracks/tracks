@@ -110,7 +110,7 @@ export function PacketTasks({ onComplete }: VerificationWidgetProps) {
                   words > task.maxWords && "text-defect",
                 )}
               >
-                {words} / {task.maxWords} words
+                {words} words · max {task.maxWords}
               </p>
               <Button
                 size="sm"

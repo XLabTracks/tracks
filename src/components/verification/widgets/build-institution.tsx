@@ -184,7 +184,7 @@ export function BuildInstitution({
               )}
               aria-live="polite"
             >
-              {words} / {EXPLANATION_MAX_WORDS} words
+              {words} words · max {EXPLANATION_MAX_WORDS}
             </p>
             <Button
               size="sm"

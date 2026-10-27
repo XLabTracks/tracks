@@ -3,7 +3,7 @@
 import { useCallback, useRef } from "react";
 
 import { LegacyScripts } from "@/components/verification/legacy-scripts";
-import { workSampleNotesByGenre } from "@/lib/content/work-sample-note";
+import { workSampleNote } from "@/lib/content/work-sample-note";
 import {
   extractDocumentText,
   type ImportedDocument,
@@ -18,7 +18,7 @@ type MemoDeskApi = {
 
 type DeskGlobals = {
   VTMemoDesk?: MemoDeskApi;
-  VT_WORK_SAMPLE_NOTES?: Record<string, string>;
+  VT_WORK_SAMPLE_NOTE?: string;
   VTDocImport?: { read: (file: File) => Promise<ImportedDocument> };
 };
 
@@ -44,7 +44,7 @@ export function MemoDeskHost({ slots }: { slots?: string[] }) {
     const runtime = window as unknown as DeskGlobals;
     const desk = runtime.VTMemoDesk;
     if (!desk) return;
-    runtime.VT_WORK_SAMPLE_NOTES = workSampleNotesByGenre();
+    runtime.VT_WORK_SAMPLE_NOTE = workSampleNote;
     runtime.VTDocImport = { read: (file) => extractDocumentText(file) };
     mounted.current = true;
     desk.mount(host, slots ? { slots, hash: false } : undefined);

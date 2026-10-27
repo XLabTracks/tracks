@@ -1086,3 +1086,29 @@ had would have been dead there.
 
 The bench's own copy is unchanged and its storage key is untouched, so a
 learner mid-deck keeps their committed steps.
+
+## 2026-10-27 — ASI and IAEA open their own cards
+
+Two reviewers asked for the same thing on different pages: spell the acronym
+out where a reader first meets it. Both are glossary entries now, so the
+first running-text occurrence in a lesson carries the dashed underline and
+opens the hover card — the mechanism the course already uses for its jargon,
+rather than a parenthetical repeated on every page.
+
+**ASI** needed no new copy. `superintelligence` was already an entry with
+`autoGloss` on; its aliases were `superintelligent` alone, so the acronym the
+course actually writes never triggered it. `ASI` and `artificial
+superintelligence` are aliases now, pointing at the definition that was
+already there. The matcher is word-boundary guarded, so a three-letter alias
+cannot fire inside `basis`.
+
+**IAEA** is a new entry, and none of it is written by us. The heading does
+the expansion — `International Atomic Energy Agency (IAEA)` — and the
+definition is the sentence 0.3 already reproduces verbatim from the IAEA's
+own publication, carried with the `source` field that links it, the same
+shape the `scheming` entry uses for its Redwood lift. Swap the sentence for
+your own if you would rather; what the entry must not do is invent one.
+
+Reproduced prose stays undecorated: the plugin never descends into JSX, so
+0.3's `<SourceQuote>` blocks are untouched and only the lesson's own framing
+sentence carries the trigger.

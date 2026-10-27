@@ -291,7 +291,7 @@ window.VERIFICATION_MEMOS = [
     "title": "Financial and Procurement Intelligence Exercise",
     "status": "specified",
     "task": "v-intel-finint-smuggling",
-    "brief": "Free response. From Epoch's estimate: name the two evidence streams it is built on and what each one actually observes. Then say which of the three streams in the table above the estimate uses, and what that tells you about what is public. Finally: which one enforcement action, if it had not happened, would have removed the most evidence from the estimate?",
+    "brief": "Free response. From Epoch's estimate: name the two evidence streams it is built on and what each one actually observes. Then say which of the three streams in the table at the start of this lesson the estimate uses, and what that tells you about what is public. Finally: which one enforcement action, if it had not happened, would have removed the most evidence from the estimate?",
     "audience": null,
     "words": 0,
     "href": "/tracks/verification/verification-infrastructure/intelligence-finint#v-intel-finint-smuggling"

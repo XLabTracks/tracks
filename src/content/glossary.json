@@ -231,6 +231,22 @@
       "autoGloss": true
     },
     {
+      "id": "iaea",
+      "term": "International Atomic Energy Agency (IAEA)",
+      "aliases": [
+        "IAEA"
+      ],
+      "definition": "The IAEA plays a crucial independent verification role, aimed at assuring the international community that nuclear material, facilities and other items subject to safeguards are used only for peaceful purposes.",
+      "seeAlso": [
+        "non-proliferation"
+      ],
+      "autoGloss": true,
+      "source": {
+        "label": "IAEA Safeguards: Serving Nuclear Non-Proliferation (IAEA, 2024)",
+        "url": "https://www.iaea.org/sites/default/files/18/09/sg-serving-nuclear-non-proliferation.pdf"
+      }
+    },
+    {
       "id": "handoff",
       "term": "handoff",
       "aliases": [
@@ -307,7 +323,9 @@
       "id": "superintelligence",
       "term": "superintelligence",
       "aliases": [
-        "superintelligent"
+        "superintelligent",
+        "ASI",
+        "artificial superintelligence"
       ],
       "definition": "AI vastly more capable than humans across the board.",
       "seeAlso": [
@@ -490,15 +508,24 @@
     {
       "id": "securitization",
       "term": "securitization",
-      "aliases": ["securitize", "securitizes", "securitized", "securitizing"],
+      "aliases": [
+        "securitize",
+        "securitizes",
+        "securitized",
+        "securitizing"
+      ],
       "definition": "Treating an issue as an existential threat, and thus a top policy priority. In the Copenhagen School's account (Buzan, Wæver, and de Wilde), an actor securitizes an issue by casting it as an existential threat to something a community values — and that framing, once an audience accepts it, unlocks powers that ordinary politics would refuse.",
-      "seeAlso": ["x-risk"],
+      "seeAlso": [
+        "x-risk"
+      ],
       "autoGloss": true
     },
     {
       "id": "goodharts-law",
       "term": "Goodhart's Law",
-      "aliases": ["Goodhart"],
+      "aliases": [
+        "Goodhart"
+      ],
       "definition": "When a measure becomes a target, it ceases to be a good measure. Once actors are judged by a proxy rather than by the goal it stands in for, they optimize the proxy itself, and the correlation that made it worth measuring breaks down — compliance on paper alongside erosion of the goal in fact.",
       "autoGloss": true
     }

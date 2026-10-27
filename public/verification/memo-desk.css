@@ -130,6 +130,17 @@
   color: var(--muted-foreground);
 }
 
+/* What the format is worth outside the course, above the brief it belongs to.
+   Quiet and italic: it frames the task, it is not part of it. */
+.work-sample {
+  margin-top: 14px;
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  font-style: italic;
+  color: var(--muted-foreground);
+}
+.work-sample + .brief { margin-top: 10px; }
+
 .brief {
   margin-top: 14px;
   padding: 14px 16px;

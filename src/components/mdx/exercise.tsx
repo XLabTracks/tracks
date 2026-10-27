@@ -1,4 +1,5 @@
 import { getExerciseById } from "@/lib/content";
+import { workSampleNoteForExercise } from "@/lib/content/work-sample-note";
 import {
   isChoiceExercise,
   isWritingExercise,
@@ -251,9 +252,16 @@ export async function Exercise({ id }: ExerciseProps) {
 
   if (isWritingExercise(exercise)) {
     const promptHtml = writingPromptHtml(exercise.prompt);
+    const workSample = workSampleNoteForExercise(exercise);
     const { user, submissions } = await getViewerSubmissions();
     if (!user) {
-      return <WritingExerciseCard exercise={exercise} promptHtml={promptHtml} />;
+      return (
+        <WritingExerciseCard
+          exercise={exercise}
+          promptHtml={promptHtml}
+          workSample={workSample}
+        />
+      );
     }
     const submission = submissions.get(exercise.id) ?? null;
     // Instructor feedback is an extra on a lesson that must render without
@@ -277,6 +285,7 @@ export async function Exercise({ id }: ExerciseProps) {
           }
           exercise={exercise}
           promptHtml={promptHtml}
+          workSample={workSample}
           initialValues={(submission?.responseJson as WritingValues | null) ?? undefined}
           submitted={submission?.status === "submitted"}
           onSaveDraft={saveWritingDraft.bind(null, exercise.id, "exercise", exercise.format)}

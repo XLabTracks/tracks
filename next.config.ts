@@ -19,6 +19,11 @@ const nextConfig: NextConfig = {
     // require happens at runtime in workerd instead of at bundle time.
     "pg",
     "pg-cloudflare",
+    // The PDF reader runs in the learner's browser and nowhere else — it is
+    // dynamically imported from an event handler, so no server path can reach
+    // it. External keeps ~1.5MB of pdf.js out of the worker, which has a
+    // bundle ceiling and would only ever carry it as dead weight.
+    "unpdf",
   ],
   async redirects() {
     // The course's own pages were hand-written .html under public/verification/

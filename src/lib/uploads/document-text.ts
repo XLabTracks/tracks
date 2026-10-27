@@ -102,8 +102,35 @@ async function docxText(bytes: Uint8Array): Promise<string> {
   return docxDocumentText(new TextDecoder("utf-8").decode(entry));
 }
 
+/**
+ * pdf.js calls `Promise.withResolvers`, which Safari gained in 17.4, Chrome in
+ * 119 and Node in 22 — so on a browser a year or two old the reader throws on
+ * import and every PDF looks corrupt. Four lines here is the difference
+ * between "that file could not be read" and it working.
+ */
+function ensurePromiseWithResolvers(): void {
+  const target = Promise as unknown as {
+    withResolvers?: <T>() => {
+      promise: Promise<T>;
+      resolve: (value: T | PromiseLike<T>) => void;
+      reject: (reason?: unknown) => void;
+    };
+  };
+  if (typeof target.withResolvers === "function") return;
+  target.withResolvers = function withResolvers<T>() {
+    let resolve!: (value: T | PromiseLike<T>) => void;
+    let reject!: (reason?: unknown) => void;
+    const promise = new Promise<T>((res, rej) => {
+      resolve = res;
+      reject = rej;
+    });
+    return { promise, resolve, reject };
+  };
+}
+
 async function pdfText(bytes: Uint8Array): Promise<string> {
   try {
+    ensurePromiseWithResolvers();
     const { extractText, getDocumentProxy } = await import("unpdf");
     const pdf = await getDocumentProxy(bytes);
     const { text } = await extractText(pdf, { mergePages: true });

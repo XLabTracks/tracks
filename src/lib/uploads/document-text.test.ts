@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { deflateRawSync } from "node:zlib";
 
 import { docxDocumentText, decodeXmlText } from "@/lib/uploads/docx-text";
@@ -356,6 +356,26 @@ describe("extractDocumentText", () => {
     await expect(
       extractDocumentText(fileOf(new TextEncoder().encode("plain text"), "memo.pdf")),
     ).rejects.toMatchObject({ code: "unreadable" });
+  });
+
+  /**
+   * Node 20 and Safari before 17.4 have no Promise.withResolvers, which pdf.js
+   * calls — without the shim every PDF reads as corrupt there. Simulated by
+   * removing it and re-importing, rather than asserting on this runtime.
+   */
+  it("reads a .pdf on a runtime without Promise.withResolvers", async () => {
+    const target = Promise as unknown as { withResolvers?: unknown };
+    const original = target.withResolvers;
+    delete target.withResolvers;
+    vi.resetModules();
+    try {
+      const fresh = await import("@/lib/uploads/document-text");
+      const result = await fresh.extractDocumentText(pdfFile(["Still readable"]));
+      expect(result.text).toBe("Still readable");
+    } finally {
+      target.withResolvers = original;
+      vi.resetModules();
+    }
   });
 
   it("every failure carries a message written for the learner", async () => {

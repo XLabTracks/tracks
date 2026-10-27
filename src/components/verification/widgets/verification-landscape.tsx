@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -33,6 +33,16 @@ type Sel =
 export function VerificationLandscape(_: VerificationWidgetProps) {
   void _;
   const [sel, setSel] = useState<Sel>(null);
+  const detailRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = detailRef.current;
+    if (!sel || !el) return;
+    const box = el.getBoundingClientRect();
+    if (box.top >= 0 && box.bottom <= window.innerHeight) return;
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    el.scrollIntoView({ block: "nearest", behavior: still ? "auto" : "smooth" });
+  }, [sel]);
 
   return (
     <div className="verification-landscape not-prose bg-card border-border my-6 rounded-xl border p-4 sm:p-5">
@@ -134,6 +144,7 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
       </div>
 
       <div
+        ref={detailRef}
         key={
           sel === null
             ? "none"

@@ -4611,3 +4611,54 @@ missing, a complete answer that did not land is told what the sentence has
 to contrast. The activity and contrast lists also gained the words a reader
 actually writes (`use`, `used`, `measure`, `rest`, `than`, `not`, `only`),
 tested against four plain wordings that used to fail.
+
+## 2026-10-27 — cohort bug reports, second batch
+
+**A pointer drag could not reach a zone below the fold** (2.1.6).
+`kit/drag.tsx` moved the ghost and read the drop zone under the pointer and
+did nothing else, so on a laptop-height screen the board's lower zones were
+unreachable except by dropping a card a row at a time. Holding within 84px
+of either viewport edge now pulls the page, faster the closer the pointer
+is, and the hovered zone is re-read on every step because the page moves
+under a pointer that has not. Measured: held at the bottom edge for 1.2s,
+the page came up 882px where it used to come up none. All four consumers of
+the primitive get it — `policy-scoping`, `anatomy-drill`,
+`report-constructor`, `sort-board`.
+
+**The map's card said "Click to pin" and did not pin** (1.2.1). The click
+dispatched `select`, which fills the panel below the map; the tooltip itself
+was pure hover, so it kept following the pointer and vanished at the map's
+edge — exactly what the reader described. Clicking a country now pins the
+card where it stands: hover stops moving it, leaving the map stops clearing
+it, and clicking it again or pressing Escape releases it. Escape is bound on
+the window while pinned, because the widget's own keydown handler only fires
+when focus is inside it and a reader who clicked a country has focus nowhere
+near.
+
+**The field map's detail panel was off screen on a laptop** (0.1). A reader
+clicked through the Hardware-mechanisms column and "did not think anything
+was happening" because the panel that changes sits below the grid. Selecting
+a tile now brings the panel into view when it is not already visible, with
+`block: "nearest"` so the page moves as little as it can, and without
+animation under `prefers-reduced-motion`. Measured at 1280×660: the panel's
+top went from 1042px (off screen) to 311px.
+
+**"the table above" pointed at nothing** (2.3.4). The three-stream table is
+on the lesson's first page and the exercise on its third, so under the parts
+reader the reference resolves to nothing on screen. Changed to "the table at
+the start of this lesson" — three words, same meaning, and the only edit to
+authored prose in this batch.
+
+**The memo check calling a filled letterhead blank** (2.3.7) could not be
+reproduced: filling To/From/Date/Subject through ordinary input events flips
+the rail to "Letterhead complete" immediately. One real path to the reported
+symptom was closed anyway — the fields re-ran the check on `input` only, and
+browser autofill fires `change` without `input` in several engines, which
+would leave "Still blank: To, From, Date, Subject" standing over four filled
+lines. Both events refresh it now.
+
+**"This table appears broken on smaller screens"** (2.2.4) also could not be
+reproduced: at 390px and 768px that lesson has zero horizontal overflow and
+no element wider than the viewport. The report came from the same session as
+the LaTeX-markup reports next door, which are fixed; this one stays open
+until somebody sees it again with a screenshot.

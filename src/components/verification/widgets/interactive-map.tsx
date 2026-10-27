@@ -147,6 +147,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
     y: number;
     rw: number;
     rh: number;
+    pinned?: boolean;
   } | null>(null);
 
   const canHover = useCanHover();
@@ -269,16 +270,42 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
       panMovedRef.current = false;
       return;
     }
-    if (id && CMAP[id]) dispatch({ type: "select", id });
-    else dispatch({ type: "clearSelection" });
+    if (id && CMAP[id]) {
+      dispatch({ type: "select", id });
+      setTip((current) =>
+        current && current.id === id
+          ? current.pinned
+            ? { ...current, pinned: false }
+            : { ...current, pinned: true }
+          : current,
+      );
+    } else {
+      dispatch({ type: "clearSelection" });
+      setTip((current) => (current?.pinned ? null : current));
+    }
   };
 
   const onKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Escape") dispatch({ type: "escape" });
+    if (e.key !== "Escape") return;
+    if (tip?.pinned) {
+      setTip(null);
+      return;
+    }
+    dispatch({ type: "escape" });
   };
 
+  const pinnedTip = tip?.pinned === true;
+  useEffect(() => {
+    if (!pinnedTip) return;
+    const release = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setTip(null);
+    };
+    window.addEventListener("keydown", release);
+    return () => window.removeEventListener("keydown", release);
+  }, [pinnedTip]);
+
   const onSvgMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
-    if (!canHover) return;
+    if (!canHover || tip?.pinned) return;
     const target = e.target as Element;
     const st = stageRef.current;
     if (!st) return;
@@ -384,7 +411,9 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                 onPointerUp={endPan}
                 onPointerCancel={endPan}
                 onMouseMove={onSvgMouseMove}
-                onMouseLeave={() => setTip(null)}
+                onMouseLeave={() =>
+                  setTip((current) => (current?.pinned ? current : null))
+                }
                 onClick={(e) => {
                   const id =
                     (e.target as Element).getAttribute?.("data-id") ??
@@ -505,7 +534,10 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                 <div
                   ref={tipRef}
                   role="tooltip"
-                  className="border-border bg-card shadow-soft pointer-events-none absolute z-20 w-64 rounded-lg border p-3"
+                  className={cn(
+                    "border-border bg-card shadow-soft pointer-events-none absolute z-20 w-64 rounded-lg border p-3",
+                    tip.pinned && "border-foreground/40",
+                  )}
                   style={tipPos(tip, tipSize)}
                 >
                   <p className="text-sm font-semibold">{tipCountry.name}</p>
@@ -518,7 +550,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                     {tipCountry.verif}
                   </p>
                   <p className="text-muted-foreground/80 mt-1.5 text-4xs">
-                    Click to pin
+                    {tip.pinned ? "Pinned — click it again, or press Escape, to release" : "Click to pin"}
                   </p>
                 </div>
               )}

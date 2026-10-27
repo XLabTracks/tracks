@@ -213,7 +213,7 @@ export function MissingBoard({
               )}
               aria-live="polite"
             >
-              {finalWords} / {BOARD_FINAL_MAX_WORDS} words
+              {finalWords} words · max {BOARD_FINAL_MAX_WORDS}
             </p>
           </section>
         </div>

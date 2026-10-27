@@ -86,9 +86,55 @@ function descriptionReplacement(env: Ast.Environment): Ast.Node {
 }
 
 /**
+ * Child node lists of one node, in document order: a macro's arguments and
+ * any environment/group body.
+ */
+function childLists(node: Ast.Node): Ast.Node[][] {
+  const out: Ast.Node[][] = [];
+  const args = (node as { args?: { content?: Ast.Node[] }[] }).args;
+  if (Array.isArray(args)) {
+    for (const arg of args) if (Array.isArray(arg?.content)) out.push(arg.content);
+  }
+  const content = (node as { content?: unknown }).content;
+  if (Array.isArray(content)) out.push(content as Ast.Node[]);
+  return out;
+}
+
+/**
+ * Everything after the first `]` inside this node, or null when the node
+ * holds no `]`.
+ *
+ * The node itself is discarded by the caller: a node that swallowed the
+ * option list's closing bracket is part of the option list (a font switch
+ * among the options), not styling the body that follows it.
+ */
+function tailAfterBracket(node: Ast.Node): Ast.Node[] | null {
+  if (node.type === "string") {
+    const at = node.content.indexOf("]");
+    if (at === -1) return null;
+    const rest = node.content.slice(at + 1);
+    return rest ? [{ ...node, content: rest }] : [];
+  }
+  for (const list of childLists(node)) {
+    for (let i = 0; i < list.length; i++) {
+      const tail = tailAfterBracket(list[i]);
+      if (tail === null) continue;
+      return [...tail, ...list.slice(i + 1)];
+    }
+  }
+  return null;
+}
+
+/**
  * Peel ONE leading [...] option list of any length (mdframed option lists run
  * to a dozen key=value pairs), returning its raw text — groups included, so
  * braced option values (title={…, …}) survive. Mutates `content`.
+ *
+ * The closing bracket is not always a top-level string. A font switch inside
+ * the list (`fonttitle=\bfseries`) takes everything after it as its content,
+ * so the `]` ends up nested — and the whole option list then rendered as body
+ * text, which is how `[breakable,boxrule=1pt,…]` reached readers of Heim et
+ * al. in 2.2. So the search descends when it has to.
  */
 function peelBracketOptions(content: Ast.Node[]): string {
   while (
@@ -106,6 +152,18 @@ function peelBracketOptions(content: Ast.Node[]): string {
     if (node.type === "string" && node.content.includes("]")) {
       return rawText(content.splice(0, i + 1));
     }
+    if (node.type === "string") continue;
+    const raw = rawText(content.slice(0, i + 1));
+    const tail = tailAfterBracket(node);
+    if (tail === null) continue;
+    content.splice(0, i + 1, ...tail);
+    const close = raw.indexOf("]");
+    const options = close === -1 ? raw : raw.slice(0, close + 1);
+    // The swallowing macro prints back as `\\textbf{…`, whose unclosed brace
+    // would make every option after it look like one braced value — and
+    // `title=` inside another key's value is deliberately not a title. The
+    // brace is an artefact of the switch, so drop the openers.
+    return options.replace(/\\[a-zA-Z@]+\s*\{/g, "");
   }
   return "";
 }

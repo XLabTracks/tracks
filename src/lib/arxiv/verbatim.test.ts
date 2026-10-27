@@ -163,6 +163,32 @@ describe("tcolorbox titles through the full converter", () => {
     expect(html).toContain("Plain body.");
   });
 
+  it("peels an option list whose ] was swallowed by a font switch", () => {
+    const { html } = convert(
+      DOC(
+        "\\begin{tcolorbox}[breakable,boxrule=1pt,colback=lightgray," +
+          "width=\\linewidth,fonttitle=\\bfseries,parbox=false," +
+          "title=Key terms used in this section]" +
+          "Body text.\\end{tcolorbox}",
+      ),
+    );
+    expect(html).not.toContain("boxrule");
+    expect(html).not.toContain("parbox=false");
+    expect(html).toContain("Body text.");
+    expect(html).toContain("Key terms used in this section");
+  });
+
+  it("peels the same list on the mdframed path", () => {
+    const { html } = convert(
+      DOC(
+        "\\begin{mdframed}[linecolor=lightblue,fonttitle=\\bfseries," +
+          "everyline=true]Framed body.\\end{mdframed}",
+      ),
+    );
+    expect(html).not.toContain("everyline");
+    expect(html).toContain("Framed body.");
+  });
+
   it("fabricates no chip from a nested title= on the direct tcolorbox path", () => {
     const { html } = convert(
       DOC(

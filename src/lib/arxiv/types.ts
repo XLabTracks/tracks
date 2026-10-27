@@ -99,8 +99,12 @@
  * v31: biblatex submissions synthesize a numeric `thebibliography` from their
  *      `.bib` database instead of leaking internal citation keys when their
  *      Biber-format `.bbl` cannot be parsed.
+ * v32: an option list whose closing bracket was swallowed by a font switch
+ *      (`fonttitle=\bfseries`) is peeled like any other, instead of printing
+ *      `[breakable,boxrule=1pt,…]` as body text and bolding the box — which
+ *      is what Heim et al.'s key-terms boxes did in 2.2.
  */
-export const CONVERTER_VERSION = 31;
+export const CONVERTER_VERSION = 32;
 
 export interface ConversionWarning {
   /** Stable machine code, e.g. "unknown-macro", "katex-error". */

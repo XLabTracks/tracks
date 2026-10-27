@@ -1,6 +1,12 @@
 "use client";
 
-import { useRef, useState, type CSSProperties, type ReactNode } from "react";
+import {
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
 import {
   closestCenter,
   DndContext,
@@ -33,6 +39,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { shuffleAnswerOptions } from "@/lib/shuffle";
 import {
   CLOUD_AVAILABLE_DATA,
   CLOUD_CASE_OPTIONS,
@@ -51,7 +58,10 @@ import {
   CLOUD_TRUE_FALSE,
   type CloudSource,
 } from "@/lib/verification/data/cloud-evidence-drill";
-import { explainsOddCloudObservable } from "@/lib/verification/engines/cloud-evidence-drill";
+import {
+  answeredOddCloudObservable,
+  explainsOddCloudObservable,
+} from "@/lib/verification/engines/cloud-evidence-drill";
 import type { VerificationWidgetProps } from "../kit/types";
 
 type Verdict = "correct" | "wrong" | null;
@@ -428,7 +438,11 @@ function OddOneOutTask({ onSolved }: SolveProps) {
         verdict={verdict}
         disabled={!itemId || principle.trim().length < 28}
         onCheck={check}
-        wrong="Both parts are required. Identify the item, then distinguish the kind of evidence it records from the kind measured by the other three."
+        wrong={
+          answeredOddCloudObservable(itemId, principle)
+            ? "Not yet. Say in the sentence what the odd item records — who controls the account — and what the other three measure, so the contrast between the two kinds of evidence is explicit."
+            : "Both parts are required. Identify the item, then distinguish the kind of evidence it records from the kind measured by the other three."
+        }
         correct="The beneficial-ownership record concerns who controls the account. The other three are technical metrics of account activity."
         sources={[CLOUD_SOURCES.randMetrics, CLOUD_SOURCES.kyc]}
       />
@@ -509,6 +523,15 @@ function AvailableDataTask({ onSolved }: SolveProps) {
 }
 
 function MatchingTask({ onSolved }: SolveProps) {
+  const conclusions = useMemo(
+    () =>
+      shuffleAnswerOptions(
+        "cloud-evidence:match",
+        CLOUD_MATCH_CONCLUSIONS,
+        (option) => option.text,
+      ),
+    [],
+  );
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [verdict, setVerdict] = useState<Verdict>(null);
   const complete = CLOUD_MATCH_ROWS.every((row) => answers[row.id]);
@@ -549,7 +572,7 @@ function MatchingTask({ onSolved }: SolveProps) {
               className="border-border bg-card mt-2 w-full rounded-md border px-3 py-2"
             >
               <option value="">Choose a conclusion</option>
-              {CLOUD_MATCH_CONCLUSIONS.map((option) => (
+              {conclusions.map(({ item: option }) => (
                 <option key={option.id} value={option.id}>
                   {option.text}
                 </option>
@@ -575,6 +598,15 @@ function MatchingTask({ onSolved }: SolveProps) {
 }
 
 function PipelineTask({ onSolved }: SolveProps) {
+  const terms = useMemo(
+    () =>
+      shuffleAnswerOptions(
+        "cloud-evidence:pipeline",
+        CLOUD_PIPELINE_OPTIONS,
+        (option) => option,
+      ),
+    [],
+  );
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [verdict, setVerdict] = useState<Verdict>(null);
   const complete = CLOUD_PIPELINE_GAPS.every((gap) => answers[gap.id]);
@@ -614,7 +646,7 @@ function PipelineTask({ onSolved }: SolveProps) {
                 className="border-border bg-card rounded-md border px-3 py-2"
               >
                 <option value="">Choose a term</option>
-                {CLOUD_PIPELINE_OPTIONS.map((option) => (
+                {terms.map(({ item: option }) => (
                   <option key={option} value={option}>
                     {option}
                   </option>
@@ -897,6 +929,15 @@ function SequenceDragPreview({
 }
 
 function ConceptTask({ onSolved }: SolveProps) {
+  const mechanisms = useMemo(
+    () =>
+      shuffleAnswerOptions(
+        "cloud-evidence:concepts",
+        CLOUD_CONCEPTS,
+        (concept) => concept,
+      ),
+    [],
+  );
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [verdict, setVerdict] = useState<Verdict>(null);
   const complete = CLOUD_CONCEPT_ROWS.every((row) => answers[row.id]);
@@ -951,7 +992,7 @@ function ConceptTask({ onSolved }: SolveProps) {
                 className="border-border bg-card rounded-md border px-3 py-2"
               >
                 <option value="">Choose a mechanism</option>
-                {CLOUD_CONCEPTS.map((concept) => (
+                {mechanisms.map(({ item: concept }) => (
                   <option key={concept} value={concept}>
                     {concept}
                   </option>

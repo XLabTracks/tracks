@@ -284,7 +284,7 @@ export function StandardOfProof({
               )}
               aria-live="polite"
             >
-              {finalWords} / {PROOF_FINAL_MAX_WORDS} words
+              {finalWords} words · max {PROOF_FINAL_MAX_WORDS}
             </p>
           </section>
 

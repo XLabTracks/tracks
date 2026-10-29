@@ -18,6 +18,7 @@ import {
 } from "@/lib/reading/focus-reading";
 import { MIN_PARTS, planParts } from "@/lib/reading/lesson-parts";
 import { PartsProgress } from "@/components/learn/parts-progress";
+import { formatDuration } from "@/lib/content/duration";
 import {
   PagerCard,
   PartPager,
@@ -313,7 +314,7 @@ export function LessonPartsReader({
           >
             {[
               estimatedMinutes
-                ? `Estimated time: ${estimatedMinutes} mins`
+                ? `Estimated time: ${formatDuration(estimatedMinutes)}`
                 : null,
               active && whole
                 ? `single page view, ${parts.length} parts`

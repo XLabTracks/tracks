@@ -28,6 +28,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { OptionalPrefix } from "@/components/content/optional-tag";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { formatDuration } from "@/lib/content/duration";
 import {
   Card,
   CardDescription,
@@ -153,7 +154,8 @@ export default async function ModulePage({
                       </span>
                       {estimatedMinutes && (
                         <span className="text-muted-foreground flex items-center gap-1 text-xs">
-                          <Clock className="size-3.5" aria-hidden /> {estimatedMinutes}m
+                          <Clock className="size-3.5" aria-hidden />{" "}
+                          {formatDuration(estimatedMinutes)}
                         </span>
                       )}
                     </Link>

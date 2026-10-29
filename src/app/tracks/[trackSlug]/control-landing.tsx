@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CourseOverview } from "@/components/verification/course-overview";
 import { controlOverview } from "@/content/control-overview";
+import { formatDuration } from "@/lib/content/duration";
 import {
   LANDING_ACTIONS,
   LANDING_BAND_PAD as BAND_PAD,
@@ -27,13 +28,6 @@ import {
 } from "@/components/landing/landing";
 
 /** "~4¾ h" from minutes (nearest quarter-hour); "~40 min" under an hour. */
-function formatDuration(minutes: number): string {
-  if (minutes < 60) return `~${minutes} min`;
-  const quarters = Math.round(minutes / 15);
-  const frac = ["", "¼", "½", "¾"][quarters % 4];
-  return `~${Math.floor(quarters / 4)}${frac} h`;
-}
-
 /** "reading + exercises + demo", from what the paper's edits actually splice in. */
 function itemKindLabel(item: ModuleItem): string {
   if (item.kind === "lesson") return "lesson";

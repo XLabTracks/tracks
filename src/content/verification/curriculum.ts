@@ -208,7 +208,7 @@ export const verificationLessons: Lesson[] = [
     title:
       "3.0 A System Overview for Near-Term, Low-Trust AI Compute Verification",
     contentRef: "verification/covert-system-overview",
-    estimatedMinutes: 15,
+    estimatedMinutes: 180,
   },
   {
     id: "v-capstone-together",

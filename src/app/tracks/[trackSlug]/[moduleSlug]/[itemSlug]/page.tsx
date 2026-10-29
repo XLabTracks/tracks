@@ -75,6 +75,7 @@ import {
   type HighlightRow,
 } from "@/lib/highlights/types";
 import { getVerificationExerciseForLesson } from "@/lib/verification/exercises";
+import { formatDuration } from "@/lib/content/duration";
 
 export async function generateMetadata({
   params,
@@ -230,7 +231,7 @@ async function LessonItemPage({
         {lesson.estimatedMinutes && !chunked ? (
           <p className="text-muted-foreground mt-2 flex items-center gap-1.5 text-sm">
             <Clock className="size-3.5" aria-hidden /> Estimated time:{" "}
-            {lesson.estimatedMinutes} mins
+            {formatDuration(lesson.estimatedMinutes)}
           </p>
         ) : null}
       </header>

@@ -231,3 +231,33 @@ subtree and a streamed response has already sent its 200. The skeleton is
 four list rows — the shape of the classrooms index and of nothing else under
 it — so it moved into a `(index)` route group with that page. Verified: the
 index still streams its skeleton, and a non-instructor now gets a real 404.
+
+## 2026-11-20 — two slots deleted on the owner's instruction
+
+The course owner removed `m4-0-ranking-memo` (4.1 Defended-Ranking Memo)
+and `m3-written-output` (3.x Written Output). Both were desk-drafted slots,
+and each was the only reason its lesson carried a `<MemoDesk/>` card, so
+`capstone-feasibility.mdx` and `covert-system-overview.mdx` lost theirs —
+`memos.test.ts` fails a lesson that embeds a card it owes nothing for.
+
+**Module 3 now has no written output at all.** The earlier entry above says
+`m3-written-output` was "still owed upstream", and the slot's own `gap`
+said the module anatomy gives every module one output while the outline
+never says which Module 3's is. That is no longer being waited for. The
+placeholder had reached learners as a task they could not do: a cohort
+member wrote "Not sure what this is for." into it, six words of eight
+hundred. An empty module is not a defect here — nothing gates on it.
+
+Two consequences to know before anything is rebuilt on top of this:
+
+- **Drafts written into either slot are now unreachable.** They are not
+  deleted — `vt-memo-desk.v1` and the account's `memos` store key on the
+  slot id — but nothing renders a slot the registry no longer lists. One
+  cohort member had a 174-word draft in 4.1.
+- **The work-sample line now prints on one slot, not two.** Its rule is
+  unchanged (a desk-written memo slot with a real brief); 4.1 was one of the
+  two that met it, so only 2.3 does now. `work-sample-note.test.ts` names
+  the surviving unit.
+
+Slot ids are permanent: if either comes back, it comes back under its own
+id, and the drafts above reappear with it.

@@ -340,30 +340,6 @@ window.VERIFICATION_MEMOS = [
     "href": "/tracks/verification/verification-infrastructure/intelligence-action#v-intel-debates"
   },
   {
-    "id": "m3-written-output",
-    "module": 3,
-    "unit": "3.x",
-    "title": "Written Output",
-    "status": "unspecified",
-    "brief": null,
-    "audience": null,
-    "words": 800,
-    "gap": "The track’s module anatomy gives every module one written output. Module 3 is the one module for which the outline never says which."
-  },
-  {
-    "id": "m4-0-ranking-memo",
-    "module": 4,
-    "unit": "4.1",
-    "title": "Defended-Ranking Memo",
-    "status": "specified",
-    "brief": "Produce the defended-ranking memo: a recommended mechanism portfolio for one named policy goal, with residual blind spots and their owners — the artifact the 4.2 capstone receives. Defend the ranking against both your own initial guesses and the field’s published ratings.",
-    "audience": "Whoever acts on the 4.2 capstone — the portfolio is handed forward, not filed.",
-    "words": 900,
-    "criteria": [
-      "Judged against the rubric"
-    ]
-  },
-  {
     "id": "m4-capstone",
     "module": 4,
     "unit": "4.2",

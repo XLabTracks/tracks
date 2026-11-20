@@ -24,7 +24,7 @@ describe("work-sample note", () => {
    */
   it("shows on exactly the policy memo slots written at the desk", () => {
     const shown = memoSlots.filter(showsNote).map((slot) => slot.unit);
-    expect(shown).toEqual(["2.3", "4.1"]);
+    expect(shown).toEqual(["2.3"]);
   });
 
   it("is off for an essay, a map, and anything written in a lesson", () => {

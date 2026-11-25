@@ -70,7 +70,7 @@ const AUTHORED =
   "[&_li]:leading-relaxed " +
   "[&_.say]:mt-2.5 [&_.say]:block [&_.say]:rounded-lg [&_.say]:border [&_.say]:border-border " +
   "[&_.say]:bg-muted/50 [&_.say]:px-3.5 [&_.say]:py-2.5 [&_.say]:text-sm [&_.say]:italic " +
-  "[&_.mt]:mr-1 [&_.mt]:text-3xs [&_.mt]:font-semibold [&_.mt]:tracking-[0.08em] [&_.mt]:uppercase [&_.mt]:text-brand-ink " +
+  "[&_.mt]:mr-1 [&_.mt]:text-3xs [&_.mt]:font-semibold [&_.mt]:tracking-[0.14em] [&_.mt]:uppercase [&_.mt]:text-brand-ink " +
   "[&_p.mt]:mt-0 [&_p.mt]:mb-1";
 
 const PLAN_BY_ID = new Map(SESSION_PLANS.map((p) => [p.id, p]));
@@ -266,7 +266,7 @@ function TileButton({
         dangerouslySetInnerHTML={{ __html: tile.desc }}
       />
       {tile.timing && (
-        <span className="text-muted-foreground mt-2 block text-4xs font-semibold tracking-[0.06em] uppercase">
+        <span className="eyebrow text-muted-foreground mt-2 block font-semibold">
           {tile.timing}
         </span>
       )}
@@ -316,7 +316,7 @@ function Lifecycle({
           <span
             className={cn(
               "text-muted-foreground mt-1.5 block text-4xs",
-              "font-semibold tracking-[0.06em] uppercase",
+              "eyebrow font-semibold",
             )}
           >
             {PHASE_LABEL[s.phase]}
@@ -332,9 +332,9 @@ function ResourceGrid({ boxes }: { boxes: ResBox[] }) {
     <div className="my-4 grid gap-3 sm:grid-cols-2">
       {boxes.map((box) => (
         <div key={box.heading} className="panel">
-          <h4 className="text-brand-ink eyebrow font-bold">
+          <p className="text-brand-ink eyebrow font-bold">
             {box.heading}
-          </h4>
+          </p>
           <ul className="mt-2.5 space-y-2.5">
             {box.items.map((it, i) => (
               <li

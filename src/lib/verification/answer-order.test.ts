@@ -139,7 +139,7 @@ describe("the shuffle actually spreads the answers", () => {
 describe("every answer surface goes through the shuffle", () => {
   const SURFACES = [
     "src/lib/content/exercise-view.ts",
-    "src/components/verification/widgets/policy-quick-check.tsx",
+    "src/components/verification/widgets/human-reporting-protection.tsx",
     "src/components/verification/widgets/protocol-actors.tsx",
     "src/components/verification/widgets/whistleblower-levers.tsx",
     "src/components/verification/kit/drill-deck.tsx",

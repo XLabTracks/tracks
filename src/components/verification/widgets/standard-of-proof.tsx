@@ -108,7 +108,7 @@ export function StandardOfProof({
     <div className="not-prose my-6 space-y-4">
       <div className="bg-background sticky top-0 z-10 rounded-xl">
         <section className="border-primary/40 bg-primary/5 rounded-xl border p-4">
-          <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+          <p className="eyebrow text-muted-foreground">
             The allegation, common to all four cases
           </p>
           <p className="mt-2 leading-relaxed font-medium">
@@ -141,11 +141,11 @@ export function StandardOfProof({
             <p className="text-sm font-semibold">
               {item.letter} · {item.title}
             </p>
-            <p className="text-muted-foreground mt-2 text-[11px] tracking-[0.12em] uppercase">
+            <p className="eyebrow text-muted-foreground mt-2">
               The institution
             </p>
             <p className="mt-1 text-sm leading-relaxed">{item.institution}</p>
-            <p className="text-muted-foreground mt-2 text-[11px] tracking-[0.12em] uppercase">
+            <p className="eyebrow text-muted-foreground mt-2">
               The evidence
             </p>
             <ul className="mt-1 list-disc space-y-1 pl-5 text-sm leading-relaxed">
@@ -186,7 +186,7 @@ export function StandardOfProof({
 
             <div className="mt-3">
               <label
-                className="text-muted-foreground text-[11px] tracking-[0.12em] uppercase"
+                className="eyebrow text-muted-foreground"
                 htmlFor={`proof-${item.id}`}
               >
                 Your analysis
@@ -242,9 +242,9 @@ export function StandardOfProof({
       {saved.submitted ? (
         <div className="space-y-4">
           <section className="panel">
-            <h4 className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+            <p className="eyebrow text-muted-foreground">
               After submission
-            </h4>
+            </p>
             <p className="mt-2 text-sm leading-relaxed">{PROOF_REVEAL_GRID}</p>
             <p className="mt-3 text-sm leading-relaxed">
               {PROOF_SELF_CHECK_LEAD}

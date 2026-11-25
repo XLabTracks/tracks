@@ -43,9 +43,9 @@ import {
   type MapEdge,
 } from "./actor-board";
 
-const STEPS: { id: EdgeStep; name: string; beeck: string }[] = [
-  { id: "edges", name: "Draw the edges", beeck: "Political analysis" },
-  { id: "map", name: "Read the map", beeck: "Political analysis · Actions" },
+const STEPS: { id: EdgeStep; name: string }[] = [
+  { id: "edges", name: "Draw the edges" },
+  { id: "map", name: "Read the map" },
 ];
 
 const STEP_IDS = STEPS.map((s) => s.id);
@@ -123,7 +123,7 @@ export function ActorEdges({ onComplete }: VerificationWidgetProps) {
           {stepIndex + 1}. {step.name}
         </h4>
         <p className="text-muted-foreground text-xs">
-          Step {stepIndex + 1} of {STEPS.length} · {step.beeck}
+          Step {stepIndex + 1} of {STEPS.length}
         </p>
       </div>
       <SegMeter

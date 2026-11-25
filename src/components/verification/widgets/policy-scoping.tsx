@@ -303,7 +303,7 @@ function CardsPhase({
     <div>
       <p className="text-muted-foreground mb-3 text-sm leading-relaxed">{C.cardsKicker}</p>
 
-      <p className="text-muted-foreground mb-1.5 text-xs tracking-[0.12em] uppercase">
+      <p className="eyebrow text-muted-foreground mb-1.5">
         {C.rampTop}
       </p>
 
@@ -378,7 +378,7 @@ function CardsPhase({
         })}
       </div>
 
-      <p className="text-muted-foreground mt-1.5 text-xs tracking-[0.12em] uppercase">
+      <p className="eyebrow text-muted-foreground mt-1.5">
         {C.rampBottom}
       </p>
 
@@ -530,7 +530,7 @@ function SortPhase({
           </p>
 
           <div className="border-border mb-5 rounded-lg border p-3">
-            <p className="text-muted-foreground mb-2 text-xs tracking-[0.15em] uppercase">
+            <p className="eyebrow text-muted-foreground mb-2">
               {C.trayLabel}
             </p>
             <div className="flex flex-wrap gap-2">
@@ -708,7 +708,7 @@ function SortPhase({
           </div>
 
           <div>
-            <p className="text-muted-foreground mb-2 text-4xs tracking-[0.15em] uppercase">
+            <p className="eyebrow text-muted-foreground mb-2">
               {C.exerciseLabel}
             </p>
             <div className="flex flex-col gap-2">
@@ -750,7 +750,7 @@ function SortPhase({
 
           {anyVerdict && (
             <div className="flex flex-col gap-1.5">
-              <p className="text-muted-foreground text-4xs tracking-[0.15em] uppercase">
+              <p className="eyebrow text-muted-foreground">
                 {C.resultsLabel}
               </p>
               {BUCKETS.map((b) => {
@@ -760,7 +760,7 @@ function SortPhase({
                     <div key={b.id} className="border-border bg-muted/30 rounded-lg border p-2">
                       <div className="flex items-center gap-2">
                         <span className="text-xs font-semibold">{b.name}</span>
-                        <span className="text-muted-foreground ml-auto flex-none text-4xs tracking-[0.1em] uppercase">
+                        <span className="eyebrow text-muted-foreground ml-auto flex-none">
                           moved — recheck
                         </span>
                       </div>
@@ -772,7 +772,7 @@ function SortPhase({
                       <span className="text-xs font-semibold">{b.name}</span>
                       <span
                         className={cn(
-                          "ml-auto flex-none text-4xs tracking-[0.1em] uppercase",
+                          "eyebrow ml-auto flex-none",
                           VERDICT_TEXT[pl.verdict],
                         )}
                       >
@@ -796,7 +796,7 @@ function SortPhase({
 
           {excUnlocked && (
             <div className="border-border bg-muted/30 rounded-lg border p-3">
-              <p className="text-muted-foreground mb-2 text-4xs tracking-[0.15em] uppercase">
+              <p className="eyebrow text-muted-foreground mb-2">
                 {C.excLabel}
               </p>
               <p className="text-muted-foreground mb-3 text-sm leading-relaxed">
@@ -913,7 +913,7 @@ function ChipTip({
         {v && placement.cell ? (
           <span className="mt-1 block">
             <span
-              className={cn("block text-4xs tracking-[0.1em] uppercase", VERDICT_TEXT[v])}
+              className={cn("eyebrow block", VERDICT_TEXT[v])}
             >
               {verdictLabel(v)}
             </span>

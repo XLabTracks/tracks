@@ -11,7 +11,7 @@ import {
 
 const WIDGET = path.join(
   process.cwd(),
-  "src/components/verification/widgets/policy-on-paper.tsx",
+  "src/components/verification/widgets/human-institutions-judgment.tsx",
 );
 
 describe("policy-on-paper", () => {

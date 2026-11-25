@@ -238,7 +238,7 @@ function ChainCell({
           : "border-border bg-card",
       )}
     >
-      <p className="text-muted-foreground text-4xs tracking-[0.14em] uppercase">
+      <p className="eyebrow text-muted-foreground">
         {tag}
       </p>
       <p className="mt-1 text-sm font-medium">{body}</p>
@@ -360,7 +360,7 @@ function NotebookSection({
                 !active && "cursor-default",
               )}
             >
-              <span className="text-muted-foreground text-4xs tracking-[0.1em] uppercase">
+              <span className="eyebrow text-muted-foreground">
                 {TAGS[c.tag]}
               </span>
               <span className="mt-1 block text-sm font-semibold">
@@ -566,7 +566,7 @@ function ThreadBoard({
                   </button>
                   <div className="flex items-start justify-between gap-2 pr-6">
                     <span className="text-sm font-semibold">{c.title}</span>
-                    <span className="text-muted-foreground shrink-0 text-4xs tracking-[0.08em] uppercase">
+                    <span className="eyebrow text-muted-foreground shrink-0">
                       {TAGS[c.tag]}
                     </span>
                   </div>

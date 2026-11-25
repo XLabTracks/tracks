@@ -129,9 +129,9 @@ export function BuildInstitution({
 
       {GROUPS.map((group) => (
         <section key={group} className="space-y-2">
-          <h4 className="text-muted-foreground eyebrow">
+          <p className="text-muted-foreground eyebrow">
             {group}
-          </h4>
+          </p>
           <div className="grid gap-2">
             {PROVISIONS.filter((p) => p.group === group).map((provision) => (
               <Card
@@ -206,9 +206,9 @@ export function BuildInstitution({
       {evaluation ? (
         <div className="space-y-4">
           <section className="space-y-2">
-            <h4 className="text-muted-foreground eyebrow">
+            <p className="text-muted-foreground eyebrow">
               What your institution does, and what it leaves undecided
-            </h4>
+            </p>
             {TESTS.map((test) => {
               const result = evaluation.results.find((r) => r.id === test.id)!;
               return (
@@ -253,9 +253,9 @@ export function BuildInstitution({
           </section>
 
           <section className="space-y-2">
-            <h4 className="text-muted-foreground eyebrow">
+            <p className="text-muted-foreground eyebrow">
               Two institutions that work, and what each costs
-            </h4>
+            </p>
             {SAMPLE_DESIGNS.map((design) => (
               <article
                 key={design.ids.join("")}

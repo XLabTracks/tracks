@@ -104,12 +104,12 @@ const EvidenceTaxonomies = dynamic<VerificationWidgetProps>(
   { loading: WidgetLoading },
 );
 const ConstructCase = dynamic<VerificationWidgetProps>(
-  () => import("./construct-case").then((module) => module.ConstructCase),
+  () => import("./human-insiders").then((module) => module.ConstructCase),
   { loading: WidgetLoading },
 );
 const PolicyQuickCheck = dynamic<VerificationWidgetProps>(
   () =>
-    import("./policy-quick-check").then((module) => module.PolicyQuickCheck),
+    import("./human-reporting-protection").then((module) => module.PolicyQuickCheck),
   { loading: WidgetLoading },
 );
 const WhistleblowerLevers = dynamic<VerificationWidgetProps>(
@@ -120,11 +120,11 @@ const WhistleblowerLevers = dynamic<VerificationWidgetProps>(
   { loading: WidgetLoading },
 );
 const SameClaim = dynamic<VerificationWidgetProps>(
-  () => import("./same-claim").then((module) => module.SameClaim),
+  () => import("./human-audits-inspections").then((module) => module.SameClaim),
   { loading: WidgetLoading },
 );
 const PolicyOnPaper = dynamic<VerificationWidgetProps>(
-  () => import("./policy-on-paper").then((module) => module.PolicyOnPaper),
+  () => import("./human-institutions-judgment").then((module) => module.PolicyOnPaper),
   { loading: WidgetLoading },
 );
 const CloudEvidenceDrill = dynamic<VerificationWidgetProps>(

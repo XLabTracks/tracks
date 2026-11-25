@@ -21,10 +21,10 @@ interface Saved {
 
 const EMPTY: Saved = { values: {}, submitted: false };
 
-const DOT: Record<"ok" | "warn" | "bad", string> = {
-  ok: "mt-2 size-1.5 shrink-0 rounded-full bg-[var(--ok,theme(colors.emerald.600))]",
-  warn: "mt-2 size-1.5 shrink-0 rounded-full bg-amber-500",
-  bad: "mt-2 size-1.5 shrink-0 rounded-full bg-[var(--no,theme(colors.red.600))]",
+const MARK: Record<"ok" | "warn" | "bad", { glyph: string; word: string; tone: string }> = {
+  ok: { glyph: "\u2713", word: "Satisfied", tone: "text-comply" },
+  warn: { glyph: "\u2022", word: "Worth a look", tone: "text-muted-foreground" },
+  bad: { glyph: "\u2715", word: "Not yet", tone: "text-defect" },
 };
 
 export function countWords(text: string): number {
@@ -175,15 +175,23 @@ export function ConstructedResponse({
       {checks && !saved.submitted && started ? (
         <section className="panel">
           <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-            <h4 className="text-muted-foreground eyebrow">
+            <p className="text-muted-foreground eyebrow">
               Desk checks
-            </h4>
+            </p>
             <p className="text-muted-foreground text-xs">Rules, not marking.</p>
           </div>
           <div className="mt-3 space-y-2">
             {checks(saved.values).map((row) => (
               <p key={row.id} className="flex gap-2.5 text-sm leading-relaxed">
-                <span aria-hidden className={DOT[row.severity]} />
+                <span
+                  className={cn(
+                    "w-3 shrink-0 text-center leading-relaxed select-none",
+                    MARK[row.severity].tone,
+                  )}
+                >
+                  <span aria-hidden>{MARK[row.severity].glyph}</span>
+                  <span className="sr-only">{MARK[row.severity].word}: </span>
+                </span>
                 <span>{row.message}</span>
               </p>
             ))}

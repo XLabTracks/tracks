@@ -1480,7 +1480,7 @@ function StakeholderCard({
       />
 
       <div className="flex items-center gap-2.5">
-        <span className="border-border bg-muted text-foreground grid size-8 shrink-0 place-items-center rounded-full border text-xs font-bold">
+        <span className="text-muted-foreground w-7 shrink-0 text-xs font-semibold tracking-wider tabular-nums">
           {stk.glyph}
         </span>
         <span>

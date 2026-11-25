@@ -81,7 +81,7 @@ export function HumanPolicyDecisionLab({
   return (
     <section className="not-prose border-border bg-card shadow-soft my-6 overflow-hidden rounded-xl border text-sm">
       <header className="border-border border-b p-5 sm:p-6">
-        <p className="text-muted-foreground text-xs font-medium tracking-[0.01em] uppercase">
+        <p className="eyebrow text-muted-foreground font-medium">
           {lab.eyebrow}
         </p>
         <h3 className="mt-3 text-2xl font-semibold tracking-tight">
@@ -131,7 +131,7 @@ function PhaseRail({
         <li
           key={phase.id}
           className={cn(
-            "border-border rounded-md border px-2 py-2 text-center text-4xs font-medium tracking-[0.01em] uppercase",
+            "eyebrow border-border rounded-md border px-2 py-2 text-center font-medium",
             index === active && "border-primary bg-primary/5 text-brand-ink",
             index < active && "bg-muted/45 text-foreground",
             index > active && "text-muted-foreground"
@@ -172,7 +172,7 @@ function DecisionStep({
   return (
     <div>
       <section className="border-border bg-muted/15 border-b p-5 sm:p-6">
-        <p className="text-brand-ink text-xs font-medium tracking-[0.01em] uppercase">
+        <p className="eyebrow text-brand-ink font-medium">
           Case file
         </p>
         <h4 className="mt-2 text-xl font-semibold">{lab.caseTitle}</h4>
@@ -184,7 +184,7 @@ function DecisionStep({
       <section className="p-5 sm:p-6">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-muted-foreground text-xs font-medium uppercase">
+            <p className="eyebrow text-muted-foreground font-medium">
               Decision {stepIndex + 1} of {stepCount} · {step.label}
             </p>
             <h4 className="mt-2 max-w-3xl text-lg leading-snug font-semibold">
@@ -314,7 +314,7 @@ function CompletedFile({
           aria-hidden
         />
         <div>
-          <p className="text-brand-ink text-xs font-medium tracking-[0.01em] uppercase">
+          <p className="eyebrow text-brand-ink font-medium">
             Completed file
           </p>
           <h4 className="mt-2 text-xl font-semibold">{lab.artifactTitle}</h4>
@@ -330,7 +330,7 @@ function CompletedFile({
             key={phase.id}
             className="border-border rounded-lg border p-4"
           >
-            <p className="text-muted-foreground text-xs font-medium tracking-[0.01em] uppercase">
+            <p className="eyebrow text-muted-foreground font-medium">
               {phaseIndex + 1} · {phase.label}
             </p>
             <ul className="mt-3 space-y-2">

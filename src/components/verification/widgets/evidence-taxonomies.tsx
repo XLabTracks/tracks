@@ -138,7 +138,7 @@ export function EvidenceTaxonomies(_: VerificationWidgetProps) {
           {selected ? (
             <div className="border-border bg-background rounded-lg border p-4 xl:sticky xl:top-24">
               <div className="flex items-start justify-between gap-3">
-                <p className="text-muted-foreground text-4xs tracking-[0.12em] uppercase">
+                <p className="eyebrow text-muted-foreground">
                   Mechanism
                 </p>
                 <Button
@@ -158,7 +158,7 @@ export function EvidenceTaxonomies(_: VerificationWidgetProps) {
                 {selected.description}
               </p>
               <div className="border-border mt-4 border-t pt-3">
-                <p className="text-muted-foreground text-4xs tracking-[0.12em] uppercase">
+                <p className="eyebrow text-muted-foreground">
                   Placement in this map
                 </p>
                 <p className="mt-1.5 font-medium">
@@ -203,7 +203,7 @@ export function EvidenceTaxonomies(_: VerificationWidgetProps) {
 function List({ title, items }: { title: string; items: string[] }) {
   return (
     <div>
-      <p className="text-muted-foreground text-4xs tracking-[0.12em] uppercase">
+      <p className="eyebrow text-muted-foreground">
         {title}
       </p>
       <ul className="mt-2 space-y-2">

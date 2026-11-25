@@ -167,7 +167,7 @@ export function ActorMap(_: VerificationWidgetProps) {
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-2">
                   {selected.kind === "public" ? <Building2 className="size-4" /> : <Users className="size-4" />}
-                  <span className="text-muted-foreground text-4xs tracking-[0.12em] uppercase">
+                  <span className="eyebrow text-muted-foreground">
                     {selected.kind} actor
                   </span>
                 </div>
@@ -233,7 +233,7 @@ function PostureLegend() {
 }
 
 function Detail({ label, children }: { label: string; children: React.ReactNode }) {
-  return <div className="border-border mt-4 border-t pt-3"><p className="text-muted-foreground mb-2 text-4xs tracking-[0.12em] uppercase">{label}</p><div className="text-sm leading-relaxed">{children}</div></div>;
+  return <div className="border-border mt-4 border-t pt-3"><p className="eyebrow text-muted-foreground mb-2">{label}</p><div className="text-sm leading-relaxed">{children}</div></div>;
 }
 
 function Muted({ children }: { children: React.ReactNode }) {

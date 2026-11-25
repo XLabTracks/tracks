@@ -126,7 +126,7 @@ function BakerQuote({ quote }: { quote: DisanalysisQuote }) {
       {quote.blocks.map((b, i) => (
         <div key={i} className="space-y-2 [&+&]:mt-3">
           {b.label ? (
-            <p className="text-muted-foreground text-xs tracking-[0.12em] uppercase">
+            <p className="eyebrow text-muted-foreground">
               {b.label}
             </p>
           ) : null}

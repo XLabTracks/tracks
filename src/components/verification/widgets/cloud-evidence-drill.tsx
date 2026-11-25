@@ -117,7 +117,7 @@ export function CloudEvidenceDrill({
   return (
     <section className="not-prose border-border bg-card shadow-soft my-6 overflow-hidden rounded-xl border text-sm">
       <header className="border-border border-b p-5 sm:p-6">
-        <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+        <p className="eyebrow text-muted-foreground font-medium">
           30 minutes
         </p>
         <h3 className="mt-3 text-2xl font-semibold tracking-tight">
@@ -149,7 +149,7 @@ export function CloudEvidenceDrill({
             aria-atomic="true"
           >
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <p className="text-muted-foreground text-xs font-medium uppercase">
+              <p className="eyebrow text-muted-foreground font-medium">
                 Task {taskIndex + 1} of {CLOUD_TASKS.length} · {task.time}
               </p>
               <h4 className="text-base font-semibold">{task.title}</h4>
@@ -291,7 +291,7 @@ function TrueFalseTask({ onSolved }: SolveProps) {
         Determine whether each statement is true or false. Mark all six.
       </Prompt>
       {verdict === "correct" ? (
-        <p className="border-emerald-600/30 bg-emerald-500/6 mt-3 rounded-lg border px-3 py-2.5 font-medium">
+        <p className="border-comply/30 bg-comply/6 mt-3 rounded-lg border px-3 py-2.5 font-medium">
           All six statements are marked correctly. The full explanations remain
           available below.
         </p>
@@ -304,7 +304,7 @@ function TrueFalseTask({ onSolved }: SolveProps) {
                 "border-border bg-background rounded-lg border p-2.5",
                 verdict &&
                   (answers[item.id] === item.answer
-                    ? "border-emerald-600/35"
+                    ? "border-comply/35"
                     : "border-destructive/40")
               )}
             >
@@ -880,8 +880,8 @@ function SortableSequenceItem({
       >
         <GripVertical className="size-5" aria-hidden />
       </button>
-      <span className="text-muted-foreground flex size-7 shrink-0 items-center justify-center rounded-full border">
-        {index + 1}
+      <span className="text-muted-foreground w-5 shrink-0 text-right text-xs tabular-nums">
+        {index + 1}.
       </span>
       <span className="min-w-0 flex-1 leading-relaxed">{text}</span>
       <span className="flex shrink-0 gap-1">
@@ -920,8 +920,8 @@ function SequenceDragPreview({
       <span className="text-brand-ink flex size-11 shrink-0 items-center justify-center">
         <GripVertical className="size-5" aria-hidden />
       </span>
-      <span className="text-muted-foreground flex size-7 shrink-0 items-center justify-center rounded-full border">
-        {position}
+      <span className="text-muted-foreground w-5 shrink-0 text-right text-xs tabular-nums">
+        {position}.
       </span>
       <span className="min-w-0 flex-1 leading-relaxed font-medium">{text}</span>
     </div>
@@ -1239,11 +1239,11 @@ function CheckRow({
         <div
           role="status"
           aria-live="polite"
-          className="border-emerald-600/30 bg-emerald-500/6 rounded-lg border px-3 py-2.5"
+          className="border-comply/30 bg-comply/6 rounded-lg border px-3 py-2.5"
         >
           <div className="flex gap-3">
             <CheckCircle2
-              className="mt-0.5 size-5 shrink-0 text-emerald-600"
+              className="mt-0.5 size-5 shrink-0 text-comply"
               aria-hidden
             />
             <div>
@@ -1323,7 +1323,7 @@ function Finish({ onRestart }: { onRestart: () => void }) {
   return (
     <section className="p-6 sm:p-8">
       <div className="mx-auto max-w-2xl text-center">
-        <CheckCircle2 className="mx-auto size-9 text-emerald-600" aria-hidden />
+        <CheckCircle2 className="mx-auto size-9 text-comply" aria-hidden />
         <h4 className="mt-4 text-2xl font-semibold">Problem set complete</h4>
         <p className="text-muted-foreground mt-3 leading-relaxed">
           Provider-held records can associate an account with a verified

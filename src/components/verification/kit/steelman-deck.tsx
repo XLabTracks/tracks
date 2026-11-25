@@ -31,9 +31,9 @@ export function SteelmanDeck({
   return (
     <section className="panel">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-        <h4 className="text-muted-foreground eyebrow">
+        <p className="text-muted-foreground eyebrow">
           {label}
-        </h4>
+        </p>
         <p className="text-muted-foreground text-xs">
           Contested claims get challenged, not narrated.
         </p>

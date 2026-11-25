@@ -4,11 +4,11 @@ import { join } from "node:path";
 import {
   memoCardSlotsForLesson,
   memoGenreLabels,
-  memoModules,
   memoSlots,
   memoSlotTasks,
   memoTaskExercise,
 } from "@/content/verification/memos";
+import { verificationModules } from "@/content/verification/curriculum";
 import { verificationExercises } from "@/content/verification/exercises";
 import { verificationLessons } from "@/content/verification/curriculum";
 import { isWritingExercise } from "@/lib/content/types";
@@ -129,8 +129,9 @@ describe("verification written outputs", () => {
   it("slot ids are unique and modules are in range", () => {
     const ids = memoSlots.map((slot) => slot.id);
     expect(new Set(ids).size).toBe(ids.length);
+    const byOrder = [...verificationModules].sort((a, b) => a.order - b.order);
     for (const slot of memoSlots) {
-      expect(memoModules[slot.module], `${slot.id} has module ${slot.module}`).toBeTruthy();
+      expect(byOrder[slot.module], `${slot.id} has module ${slot.module}`).toBeTruthy();
     }
   });
 

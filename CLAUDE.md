@@ -639,14 +639,18 @@ add must reduce the duplication, never widen it.
   to decode. That is the same requirement the colour rules already make — never
   shape or hue alone.
 - **A widget is not prose and must not be measured like it.** The reading
-  measure (`app-bridge.css`, 64ch) applies to authored sentences; a widget
-  keeps the full lesson width. The guard is `[data-widget]`, the marker
-  `verification-widget-host` puts where authored markdown stops — the rule for
-  direct children always had it, the descendant rule did not, and an exercise
-  built as an `<ol>` of question cards therefore rendered at 644px inside the
-  798 it had been given. Guard on `[data-widget]` and NOT on `.not-prose`: a
-  fold or a callout holding authored sentences is still reading, and exempting
-  it widens that prose past the measure.
+  measure was 64ch on prose and 34ch on headings; it is **withdrawn**, on the
+  course owner’s instruction that the text take the full width the sidebar
+  leaves — every one of those rules in `app-bridge.css` now reads
+  `max-inline-size: none`, and the comment above them records the decision and
+  the cost (about 125 characters a line at 1700px). `--vt-measure` is kept so
+  one value brings it back. The `[data-widget]` guard therefore separates
+  nothing today, and that is the only reason it looks redundant: keep it.
+  When the measure returns it is the rule that stops a widget being measured
+  like prose — the descendant rule lacked it once, and an exercise built as an
+  `<ol>` of question cards rendered at 644px inside the 798 it had been given.
+  Guard on `[data-widget]` and NOT on `.not-prose`: a fold or a callout
+  holding authored sentences is still reading.
 - **The tap-target floor beats a utility `min-w-*`, so never size a widget
   control with one.** `app-bridge.css` gives every control inside
   `[data-widget]` `min-inline-size: 44px` under `(max-width: 720px), (pointer:
@@ -900,14 +904,19 @@ verification:capstones` (`-- --check` covers both; never hand-edit either).
   sheet. The status and difficulty vocabulary is `src/lib/verification/bank.ts`,
   and `bank.test.ts` parses `VT.bank` out of `platform.js` and fails when the
   two describe the same brief differently.
-- **The drill benches are placed, not orphaned.** Eleven benches / 69 steps
-  came over from `tracksprogramplayground/verification-drills.*` as four decks
-  in `src/lib/verification/data/drills-*.ts`, with the judgements in
-  `engines/drills.ts` and one renderer in `kit/drill-deck.tsx` (commit, reveal,
-  Continue — never auto-advance). Each deck is a menu of its module's benches
-  and is placed by `<VerificationExercise id="drills-…"/>`: primers in 0.2,
-  foundations+actors+spine in 1.2, the four evidence-stream benches at the end
-  of module 2, and evasion+regime+position in 4.1. They are bridged, so a deck
+- **Two of the drill decks are placed; two are not, and that is deliberate.**
+  Eleven benches came over from `tracksprogramplayground/verification-drills.*`
+  as four decks in `src/lib/verification/data/drills-*.ts`, with the judgements
+  in `engines/drills.ts` and one renderer in `kit/drill-deck.tsx` (commit,
+  reveal, Continue — never auto-advance). A deck is placed by
+  `<VerificationExercise id="drills-…"/>`. **Placed:** primers (0.4, moved there
+  from 0.2), games (4.1), and the later `drills-intel-assessment` (2.3).
+  **Not placed:** `drills-foundations` (3 benches) and `drills-supply-chain`
+  (4) — stood down on 2026-08-18 and when 2.4.4’s lab replaced it, and
+  retired from the registry rather than left registered-but-unplaced, which is
+  the state `widgets.test.ts` forbids. Nothing was deleted: the authored steps,
+  their widget and their renderer are all still in the repo, so re-placing a
+  deck is one registry entry and one embed. Placed decks are bridged, so a deck
   reports complete when the last step of its last bench is committed; progress
   is per deck in `v-drills:<deck>:v1`.
 - **The reader blocks are MDX components** (`src/components/mdx/reader/`):

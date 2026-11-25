@@ -11,12 +11,11 @@ window.COURSE = {
   "modules": [
     {
       "n": 0,
-      "slug": "foundations",
-      "title": "Foundations",
+      "slug": "why-verification",
+      "title": "Why Are We Teaching This?",
       "glyph": "✧",
       "week": "week 1",
       "status": "drafted",
-      "goal": "Why Are We Teaching This?",
       "summary": "The oldest problem in arms control, applied to AI: when you sign a mutual agreement, how do you know the other party will uphold it? Opens with the welcome and the course's own framing, then the case that ASI risk warrants an agreement at all, why successful prevention is invisible, the intuitions a verification regime runs on, and seven decades of arms-control precedent.",
       "units": [
         {
@@ -76,12 +75,11 @@ window.COURSE = {
     },
     {
       "n": 1,
-      "slug": "policy-and-actors",
-      "title": "Policy and Actors",
+      "slug": "policy-scoping",
+      "title": "Policy Scoping & Actors",
       "glyph": "❖",
       "week": "weeks 2–3",
       "status": "drafted",
-      "goal": "Policy Scoping & Actors",
       "summary": "What kind of policy are we trying to verify, and who does a treaty rely upon, apply to, and constrain? Compute versus capability thresholds, the effectiveness/feasibility pair, the anatomy of a pause agreement, and the actor map across the compute supply chain.",
       "units": [
         {
@@ -133,12 +131,11 @@ window.COURSE = {
     },
     {
       "n": 2,
-      "slug": "evidence-streams",
-      "title": "Evidence Streams",
+      "slug": "verification-infrastructure",
+      "title": "Verification Infrastructure and Evidence Streams",
       "glyph": "⚙",
       "week": "weeks 4–8",
       "status": "notes complete",
-      "goal": "Verification Infrastructure and Evidence Streams",
       "summary": "The four buckets of mechanism — hardware, cloud, intelligence, and human evidence — each judged by the claims it can test, the evidence it produces, what it costs to implement, and how it fails.",
       "units": [
         {
@@ -218,11 +215,10 @@ window.COURSE = {
     {
       "n": 3,
       "slug": "covert-development",
-      "title": "Covert Development",
+      "title": "Architecture and Limitations of Low-Trust AI Compute Verification",
       "glyph": "⚠",
       "week": "week 9",
       "status": "taxonomy complete",
-      "goal": "Architecture and Limitations of Low-Trust AI Compute Verification",
       "summary": "How the requirements of an international AI agreement might be translated into a technical verification system: the assumptions, design choices, and unresolved problems involved in verifying AI compute use under conditions of limited trust between the parties.",
       "units": [
         {
@@ -240,11 +236,10 @@ window.COURSE = {
     {
       "n": 4,
       "slug": "capstone",
-      "title": "Trust Without Trust",
+      "title": "Capstone",
       "glyph": "✦",
       "week": "week 10",
       "status": "framing complete",
-      "goal": "Capstone",
       "summary": "Putting it all together — then the feasibility judgments the capstone runs on: the four metrics, and how to do the research they ask for, from a practising AI governance researcher. Then the capstone itself: layer the imperfect mechanisms into a regime you can defend, and say where to go from here.",
       "units": [
         {

@@ -128,8 +128,8 @@ const exerciseById = new Map(
 const curriculumSrc = fs.readFileSync(CURRICULUM, "utf8");
 const lessons = records(curriculumSrc, "verificationLessons");
 const modules = [...block(curriculumSrc, "verificationModules", "[", "]").matchAll(
-  /id:\s*"([^"]+)",\s*\n\s*slug:\s*"([^"]+)"/g,
-)].map((m) => ({ id: m[1], slug: m[2] }));
+  /id:\s*"([^"]+)",\s*\n\s*slug:\s*"([^"]+)",[\s\S]*?title:\s*"((?:[^"\\]|\\.)*)"/g,
+)].map((m) => ({ id: m[1], slug: m[2], title: JSON.parse(`"${m[3]}"`) }));
 const moduleSlug = new Map(modules.map((m) => [m.id, m.slug]));
 
 /** The page a lesson lives on, by its contentRef stem. */
@@ -143,10 +143,13 @@ function lessonHref(stem) {
 
 /* ---------- the slots ---------- */
 
-const memoModules = [...block(src, "memoModules", "[", "]").matchAll(/"([^"]+)"/g)].map(
-  (m) => m[1],
-);
-if (memoModules.length !== 5) fail(`memoModules parsed ${memoModules.length} names, expected 5`);
+// The desk's module names come from the course, not from a list beside it.
+// memos.ts carried its own five and they disagreed with the track's on four
+// of the five, so the desk called module 3 something the curriculum never says.
+const memoModules = modules.map((m) => m.title);
+if (memoModules.length !== 5) {
+  fail(`read ${memoModules.length} module titles from curriculum.ts, expected 5`);
+}
 
 /** A lesson task resolved against its exercise: brief, budget, link. */
 function resolveTask(slotId, task, lesson) {

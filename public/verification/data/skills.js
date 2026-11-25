@@ -29,10 +29,10 @@ window.SKILLS = {
      static site's module chrome. The app track names its modules differently
      (curriculum.ts); verificationUnitOfLesson is the join. */
   moduleNames: [
-    "Foundations",
-    "Policy and Actors",
-    "Evidence Streams",
-    "Covert Development",
+    "Why Are We Teaching This?",
+    "Policy Scoping & Actors",
+    "Verification Infrastructure and Evidence Streams",
+    "Architecture and Limitations of Low-Trust AI Compute Verification",
     "Capstone",
   ],
   compoundRung: "2.1–2.4",

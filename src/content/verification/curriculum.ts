@@ -638,11 +638,11 @@ export const verificationUnitMeta: Record<
 
 export const verificationModuleMeta: Record<
   string,
-  { n: number; slug: string; title: string; glyph: string; week: string; status: string }
+  { n: number; glyph: string; week: string; status: string }
 > = {
-  "v-why": { n: 0, slug: "foundations", title: "Foundations", glyph: "✧", week: "week 1", status: "drafted" },
-  "v-scoping": { n: 1, slug: "policy-and-actors", title: "Policy and Actors", glyph: "❖", week: "weeks 2–3", status: "drafted" },
-  "v-infrastructure": { n: 2, slug: "evidence-streams", title: "Evidence Streams", glyph: "⚙", week: "weeks 4–8", status: "notes complete" },
-  "v-covert": { n: 3, slug: "covert-development", title: "Covert Development", glyph: "⚠", week: "week 9", status: "taxonomy complete" },
-  "v-capstone": { n: 4, slug: "capstone", title: "Trust Without Trust", glyph: "✦", week: "week 10", status: "framing complete" },
+  "v-why": { n: 0, glyph: "✧", week: "week 1", status: "drafted" },
+  "v-scoping": { n: 1, glyph: "❖", week: "weeks 2–3", status: "drafted" },
+  "v-infrastructure": { n: 2, glyph: "⚙", week: "weeks 4–8", status: "notes complete" },
+  "v-covert": { n: 3, glyph: "⚠", week: "week 9", status: "taxonomy complete" },
+  "v-capstone": { n: 4, glyph: "✦", week: "week 10", status: "framing complete" },
 };

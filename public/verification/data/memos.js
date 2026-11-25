@@ -7,11 +7,11 @@
    outline's own words; `status` says how much of each one exists; a slot
    with `task` is answered in the lesson at `href`, not drafted on the desk. */
 window.VERIFICATION_MEMO_MODULES = [
-  "Why Verification?",
-  "Actors",
-  "Verification Infrastructure",
-  "Scheming and Evasion",
-  "Trust Without Trust"
+  "Why Are We Teaching This?",
+  "Policy Scoping & Actors",
+  "Verification Infrastructure and Evidence Streams",
+  "Architecture and Limitations of Low-Trust AI Compute Verification",
+  "Capstone"
 ];
 
 window.VERIFICATION_MEMOS = [

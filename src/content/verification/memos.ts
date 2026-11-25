@@ -36,14 +36,6 @@ export interface MemoSlot {
   criteria?: string[];
 }
 
-export const memoModules = [
-  "Why Verification?",
-  "Actors",
-  "Verification Infrastructure",
-  "Scheming and Evasion",
-  "Trust Without Trust",
-];
-
 export const memoSlots: MemoSlot[] = [
   {
     id: "m0-welcome-note",

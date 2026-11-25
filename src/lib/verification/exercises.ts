@@ -23,6 +23,7 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "theories-of-change", title: "Theory of Change for Your Favorite AI Safety Organization", bridged: false },
   { id: "packet-tasks", title: "Tasks on the Document Packet", bridged: true },
   { id: "treaty-workspace", title: "Anatomy of a (Pause) Agreement", bridged: true },
+  { id: "detection-game", title: "The Detection Game", bridged: false },
   { id: "compute-verification", title: "Questions on the Cankaya Working Paper", bridged: true },
   { id: "drills-primers", title: "Drill Bench: Primers", bridged: true },
   { id: "drills-games", title: "Drill Bench: Evasion, Regime, Position", bridged: true },

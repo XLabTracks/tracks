@@ -91,6 +91,10 @@ const ComputeVerificationQuestions = dynamic<VerificationWidgetProps>(
     import("./compute-verification").then((module) => module.ComputeVerificationQuestions),
   { loading: WidgetLoading },
 );
+const DetectionGame = dynamic<VerificationWidgetProps>(
+  () => import("./detection-game").then((module) => module.DetectionGame),
+  { loading: WidgetLoading },
+);
 const TreatyWorkspace = dynamic<VerificationWidgetProps>(
   () => import("./treaty-workspace").then((module) => module.TreatyWorkspace),
   { loading: WidgetLoading },
@@ -180,6 +184,7 @@ export const verificationWidgets: Record<
   "mechanism-sort-reveal": MechanismSortReveal,
   "packet-tasks": PacketTasks,
   "treaty-workspace": TreatyWorkspace,
+  "detection-game": DetectionGame,
   "compute-verification": ComputeVerificationQuestions,
   "what-do-they-say": WhatDoTheySay,
   "types-of-ai": TypesOfAi,

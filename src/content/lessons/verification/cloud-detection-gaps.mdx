@@ -26,6 +26,16 @@ Do not turn the BLOOM calculation into a timeless threshold recommendation. Its 
 
 </ReadingCard>
 
+<PageBreak title="The Detection Game" />
+
+## Play the Detection Game
+
+The report defines a game between a provider and a customer who wants to train
+without being reported, and works it through for BLOOM. Set the rule yourself
+and see what the customer does about it.
+
+<VerificationExercise id="detection-game" />
+
 RAND shows how evasion depends on what a rule measures and how activity is
 grouped. Carnegie then asks what broader coverage would cost—and whether it
 would push users toward providers or jurisdictions beyond the rule.
@@ -48,3 +58,89 @@ Read these parts in the original article:
 Extract the decisions the technical readings do not settle: which users and activities are covered, who bears the compliance burden, how evasion shifts across jurisdictions, and what over-broad coverage costs.
 
 </ReadingCard>
+
+<PageBreak title="What the Readings Leave Open" />
+
+## What the Technical Readings Do Not Settle
+
+RAND asks what a rule can measure. Carnegie asks who a rule covers, who pays
+to enforce it, and what it costs when the answer is wrong. Work through these
+once you have read the three sections above.
+
+<Check
+  id="cloud-carnegie-loopholes"
+  q="The article identifies two ways a Chinese company can legally reach U.S.-controlled compute. Which pair?"
+  options={[
+    "Smuggling chips across a border, or buying them through a shell company",
+    "Buying chips outright, or leasing them from a third-country cloud",
+    "Leasing compute from a third-country cloud, or leasing it from a U.S.-based cloud",
+    "Using open-weight models, or fine-tuning a model somebody else trained",
+  ]}
+  answer={2}
+  why="See “What Do Cloud Controls Attempt to Solve?”. Both are legal leases rather than purchases, which is why controls written around the movement of hardware do not reach them."
+/>
+
+<Check
+  id="cloud-carnegie-bis-domestic"
+  q="Why does the Bureau of Industry and Security have few tools against remote access to compute sitting inside the United States?"
+  options={[
+    "A sale to a U.S. company operating in the United States is not an export, even when its parent is foreign",
+    "Congress has never given BIS any authority touching cloud services",
+    "The chips in U.S. data centers are not of U.S. origin",
+    "Cloud providers are exempt from export control as critical infrastructure",
+  ]}
+  answer={0}
+  why="See “What Do Cloud Controls Attempt to Solve?”. BIS does hold authority over foreign data centers that use U.S. chips, through licence conditions on chip exports — it has simply not exercised it. The domestic gap is a matter of definition, not of missing power."
+/>
+
+<Check
+  id="cloud-carnegie-both-loopholes"
+  q="The article argues the two loopholes should be closed together rather than one at a time. On what grounds?"
+  options={[
+    "Closing either one alone would exceed the authority Congress has granted",
+    "The two loopholes are used by different industries",
+    "Partial controls would breach commitments to allied governments",
+    "Restricting only foreign data centers would push Chinese firms toward renting from U.S.-based ones",
+  ]}
+  answer={3}
+  why="See the close of “What Do Cloud Controls Attempt to Solve?”. A rule that moves demand rather than stopping it has not solved the problem it was written for."
+/>
+
+<Check
+  id="cloud-carnegie-kyc-burden"
+  q="If remote-access rules depend on know-your-customer checks, who does the article expect to carry that burden in practice?"
+  options={[
+    "The Bureau of Industry and Security, once its budget is raised to match",
+    "Cloud providers, whose costs rise and who may lose foreign business to Chinese alternatives",
+    "Renters, through a licence fee charged at sign-up",
+    "Allied governments, under a shared compliance regime",
+  ]}
+  answer={1}
+  why="See “The Case Against Cloud Controls”. The Government Accountability Office finds BIS already stretched by hardware compliance alone, so the vetting falls to providers — and the article warns that foreign-owned data centers may cut their dependence on U.S. chips in response."
+/>
+
+<Check
+  id="cloud-carnegie-intelligence"
+  q="The article gives one security argument for leaving Chinese access to U.S. cloud services open. Which?"
+  options={[
+    "U.S. providers would otherwise lose the revenue to European competitors",
+    "It keeps Chinese developers dependent on U.S. technical standards",
+    "It gives U.S. intelligence a channel of visibility into Chinese AI developers",
+    "It satisfies obligations to the World Trade Organization",
+  ]}
+  answer={2}
+  why="See “The Case Against Cloud Controls”. Providers say they do not monitor workloads but have the technical capability, and the Foreign Intelligence Surveillance Act lets the government collect from U.S. providers on foreigners abroad. The article leaves open whether that intelligence is worth the security cost."
+/>
+
+<Check
+  id="cloud-carnegie-same-move"
+  q="The article names an evasion move the game above also turns on. Which?"
+  options={[
+    "Spreading a training workload across several data center clusters so that no single total looks large",
+    "Training on hardware too old to fall under any threshold",
+    "Routing traffic through a virtual private network so the model weights cannot be read",
+    "Registering the account in a country that has no export controls of its own",
+  ]}
+  answer={0}
+  why="See “Cloud Controls Must Contend With ‘Who’ and ‘What’ They Restrict”. It is the move the game lets you make: split the run so no account’s reading crosses the line. Shell companies and virtual private networks appear there too, but they hide who is renting rather than how much is being used."
+/>
